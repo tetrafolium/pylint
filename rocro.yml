@@ -1,5 +1,9 @@
 inspecode:
 
+  experimental:
+    runtime:
+      python: 3.7
+
   autopep8:
     auto-fix: true
     thresholds: { num-issues: 999 }
@@ -27,7 +31,14 @@ inspecode:
     thresholds: { num-issues: 999 }
 
   pycodestyle:
-    thresholds: { num-issues: 999 }
+    options:
+      --ignore: # 4405 issues without this option.
+        E501    # 1861 issues
+        E261    #  848 issues
+        E302    #  797 issues
+        E231    #  164 issues
+        E305    #  148 issues
+    thresholds: { num-issues: 999 }   # 587 issues ??
 
   pyflakes:
     thresholds: { num-issues: 999 }
