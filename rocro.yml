@@ -33,11 +33,11 @@ inspecode:
   pycodestyle:
     options:
       --ignore: # 4405 issues without this option.
-        E501    # 1861 issues
-        E261    #  848 issues
-        E302    #  797 issues
-        E231    #  164 issues
-        E305    #  148 issues
+      - E501    # 1861 issues
+      - E261    #  848 issues
+      - E302    #  797 issues
+      - E231    #  164 issues
+      - E305    #  148 issues
     thresholds: { num-issues: 999 }   # 587 issues ??
 
   pyflakes:
