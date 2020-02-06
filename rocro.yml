@@ -17,13 +17,14 @@ inspecode:
       - E501    # 1844 issues
       - E261    #  848 issues
       - E302    #  797 issues
+      - W503    #  371 issues
       - F401    #  248 issues
       - F841    #  171 issues
       - E231    #  164 issues
       - E305    #  148 issues
       - F821    #  138 issues
       - F811    #  108 issues
-    thresholds: { num-issues: 726 }
+    thresholds: { num-issues: 787 }
 
   grep:
     thresholds: { num-issues: 10 }
