@@ -67,8 +67,10 @@ inspecode:
   ###      codec = lookup(encoding)
   ###  LookupError: unknown encoding: IBO-8859-1
   ###------------------------------------------------
-  #pylint:
-  #  thresholds: { num-issues: 999 }
+  pylint:
+    options:
+      --py3k:
+    thresholds: { num-issues: 999 }
 
   pytest:
     thresholds: { num-issues: 3 }
