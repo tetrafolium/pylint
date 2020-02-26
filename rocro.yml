@@ -17,6 +17,12 @@ inspecode:
   cpd:
     thresholds: { num-issues: 5 }
 
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 2]
+  ##  $ pyenv global 2.7.16
+  ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
+  ##  cannot resolve dependencies
+  ##----------------------------------------------------------------------------
   flake8:
     options:
       --ignore:
@@ -31,6 +37,8 @@ inspecode:
       - F821    #  138 issues
       - F811    #  108 issues
     thresholds: { num-issues: 787 }
+      # 870 issues, when runtime python: 2
+      # 787 issues, when runtime python: 3
 
   grep:
     thresholds: { num-issues: 10 }
@@ -46,11 +54,14 @@ inspecode:
 
   nose2:
     thresholds: { num-issues: 20 }
+      # 22 issues, when runtime python: 2
+      # 20 issues, when runtime python: 3
 
   prospector:
     thresholds: { num-issues: 106 }
-      # 106 isseus on SaaS
-      # 107 isseus on Errorprise
+      # 186 issues on SaaS (runtime python: 2)
+      # 106 isseus on SaaS (runtime python: 3)
+      # 107 isseus on Errorprise (runtime python: 3)
 
   pycodestyle:
     options:
@@ -65,20 +76,39 @@ inspecode:
 
   pyflakes:
     thresholds: { num-issues: 347 }
+      # 396 issues, when runtime python: 2
+      # 347 issues, when runtime python: 3
 
   ##----------------------------------------------------------------------------
-  ## [runtime python 3]
+  ## [runtime python: 2]
+  ##  $ pyenv global 2.7.16
+  ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
+  ##  cannot resolve dependencies
+  ##
+  ##  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --py3k --jobs=1 ${INPUT}
+  ##  RuntimeError: maximum recursion depth exceeded
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 3]
   ##  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --jobs=1 ${INPUT}
   ##  Traceback (most recent call last):
   ##    File "/opt/pyenv/versions/3.7.3/lib/python3.7/tokenize.py", line 397, in find_cookie
   ##      codec = lookup(encoding)
   ##  LookupError: unknown encoding: IBO-8859-1
   ##----------------------------------------------------------------------------
-  #pylint:
-  #  options:
-  #    --py3k:
-  #  thresholds: { num-issues: 999 }
+  pylint:
+    options: [ --py3k ]
+    thresholds: { num-issues: 999 }
+      # 242 issues, when runtime python: 2
+      # 347 issues, when runtime python: 3
 
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 2]
+  ##  $ pyenv global 2.7.16
+  ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
+  ##  cannot resolve dependencies
+  ##
+  ##  ImportError while loading conftest '/home/rocro/src/github.com/tetrafolium/pylint/tests/conftest.py'.
+  ##----------------------------------------------------------------------------
   pytest:
     thresholds: { num-issues: 3 }
 
@@ -91,12 +121,12 @@ inspecode:
   #unused:
   #  thresholds: { num-issues: 999 }
 
-  ##----------------------------------------------------------------------------
-  ## [on prod]
-  ##  - detects 486 issues
-  ## [on staging]
-  ##  - detects 493 issues
-  ##----------------------------------------------------------------------------
   yapf:
     auto-fix: true
     thresholds: { num-issues: 486 }
+      # (runtime python: 2)
+      #   504 issues on staging
+      #   497 issues on prod
+      # (runtime python: 3)
+      #   493 issues on staging
+      #   486 issues on prod
