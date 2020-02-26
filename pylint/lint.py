@@ -1372,7 +1372,7 @@ def check_parallel(linter, jobs, files):
     linter.reporter = None
 
     # The linter is inherited by all the pool's workers, i.e. the linter
-    # is identical to the linter object here. This is requred so that
+    # is identical to the linter object here. This is required so that
     # a custom PyLinter object can be used.
     with multiprocessing.Pool(jobs,
                               initializer=_worker_initialize,

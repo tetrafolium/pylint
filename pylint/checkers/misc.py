@@ -143,7 +143,7 @@ class EncodingChecker(BaseChecker):
                                             if p_rep.action == "disable"):
                             values.extend(pragma_repr.messages)
                     except PragmaParserError:
-                        # Printing usefull informations dealing with this error is done in lint.py
+                        # Printing useful informations dealing with this error is done in lint.py
                         pass
                     values = [_val.upper() for _val in values]
                     if set(values) & set(self.config.notes):
