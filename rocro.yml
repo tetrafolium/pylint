@@ -4,9 +4,12 @@ inspecode:
     runtime:
       python: 2
 
-  autopep8:
-    auto-fix: true
-    thresholds: { num-issues: 444 }
+  ##----------------------------------------------------------------------------
+  ## [on staging] SyntaxError -> abort
+  ##----------------------------------------------------------------------------
+  #autopep8:
+  #  auto-fix: true
+  #  thresholds: { num-issues: 444 }
 
   cpd:
     thresholds: { num-issues: 5 }
@@ -24,7 +27,9 @@ inspecode:
       - E305    #  148 issues
       - F821    #  138 issues
       - F811    #  108 issues
-    thresholds: { num-issues: 787 }
+    thresholds: { num-issues: 870 }
+      # 870 issues, when runtime python: 2
+      # 787 issues, when runtime python: 3
 
   grep:
     thresholds: { num-issues: 10 }
@@ -39,12 +44,15 @@ inspecode:
     thresholds: { num-issues: 24 }
 
   nose2:
-    thresholds: { num-issues: 20 }
+    thresholds: { num-issues: 22 }
+      # 22 issues, when runtime python: 2
+      # 20 issues, when runtime python: 3
 
   prospector:
-    thresholds: { num-issues: 106 }
-      # 106 isseus on SaaS
-      # 107 isseus on Errorprise
+    thresholds: { num-issues: 186 }
+      # 186 issues on SaaS (runtime python: 2)
+      # 106 isseus on SaaS (runtime python: 3)
+      # 107 isseus on Errorprise (runtime python: 3)
 
   pycodestyle:
     options:
@@ -58,22 +66,41 @@ inspecode:
     thresholds: { num-issues: 645 }
 
   pyflakes:
-    thresholds: { num-issues: 347 }
+    thresholds: { num-issues: 396 }
+      # 396 issues, when runtime python: 2
+      # 347 issues, when runtime python: 3
 
-  ###------------------------------------------------
-  ###  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --jobs=1 ${INPUT}
-  ###  Traceback (most recent call last):
-  ###    File "/opt/pyenv/versions/3.7.3/lib/python3.7/tokenize.py", line 397, in find_cookie
-  ###      codec = lookup(encoding)
-  ###  LookupError: unknown encoding: IBO-8859-1
-  ###------------------------------------------------
-  pylint:
-    options:
-      --py3k:
-    thresholds: { num-issues: 999 }
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 2]
+  ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
+  ##  cannot resolve dependencies
+  ##
+  ##  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --py3k --jobs=1 ${INPUT}
+  ##  RuntimeError: maximum recursion depth exceeded
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 3]
+  ##  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --jobs=1 ${INPUT}
+  ##  Traceback (most recent call last):
+  ##    File "/opt/pyenv/versions/3.7.3/lib/python3.7/tokenize.py", line 397, in find_cookie
+  ##      codec = lookup(encoding)
+  ##  LookupError: unknown encoding: IBO-8859-1
+  ##----------------------------------------------------------------------------
+  #pylint:
+  #  options:
+  #    --py3k:
+  #  thresholds: { num-issues: 242 }
+  #    # 242 issues, when runtime python: 2
+  #    # 347 issues, when runtime python: 3
 
-  pytest:
-    thresholds: { num-issues: 3 }
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 2]
+  ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
+  ##  cannot resolve dependencies
+  ##
+  ##  ImportError while loading conftest '/home/rocro/src/github.com/tetrafolium/pylint/tests/conftest.py'.
+  ##----------------------------------------------------------------------------
+  #pytest:
+  #  thresholds: { num-issues: 3 }
 
   ###------------------------------------------------
   ###  unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
@@ -86,4 +113,6 @@ inspecode:
 
   yapf:
     auto-fix: true
-    thresholds: { num-issues: 486 }
+    thresholds: { num-issues: 493 }
+      # 493 issues, when runtime python: 2
+      # 486 issues, when runtime python: 3
