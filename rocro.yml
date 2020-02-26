@@ -2,11 +2,17 @@ inspecode:
 
   experimental:
     runtime:
-      python: 3.7
+      python: 3
 
-  autopep8:
-    auto-fix: true
-    thresholds: { num-issues: 444 }
+  ##----------------------------------------------------------------------------
+  ## [on prod]
+  ##  - Succeeded, detects 444 issues
+  ## [on staging]
+  ##  - occurs SyntaxError (unexpected EOF while parsing) and abort.
+  ##----------------------------------------------------------------------------
+  #autopep8:
+  #  auto-fix: true
+  #  thresholds: { num-issues: 444 }
 
   cpd:
     thresholds: { num-issues: 5 }
@@ -60,30 +66,37 @@ inspecode:
   pyflakes:
     thresholds: { num-issues: 347 }
 
-  ###------------------------------------------------
-  ###  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --jobs=1 ${INPUT}
-  ###  Traceback (most recent call last):
-  ###    File "/opt/pyenv/versions/3.7.3/lib/python3.7/tokenize.py", line 397, in find_cookie
-  ###      codec = lookup(encoding)
-  ###  LookupError: unknown encoding: IBO-8859-1
-  ###------------------------------------------------
-  pylint:
-    options:
-      --py3k:
-    thresholds: { num-issues: 999 }
+  ##----------------------------------------------------------------------------
+  ## [runtime python 3]
+  ##  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --jobs=1 ${INPUT}
+  ##  Traceback (most recent call last):
+  ##    File "/opt/pyenv/versions/3.7.3/lib/python3.7/tokenize.py", line 397, in find_cookie
+  ##      codec = lookup(encoding)
+  ##  LookupError: unknown encoding: IBO-8859-1
+  ##----------------------------------------------------------------------------
+  #pylint:
+  #  options:
+  #    --py3k:
+  #  thresholds: { num-issues: 999 }
 
   pytest:
     thresholds: { num-issues: 3 }
 
-  ###------------------------------------------------
-  ###  unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
-  ###
-  ###  Possibly Unused failed because the tags file had an invalid encoding.
-  ###  Convert the tags file to UTF-8 and try again.
-  ###------------------------------------------------
+  ##----------------------------------------------------------------------------
+  ##  unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
+  ##
+  ##  Possibly Unused failed because the tags file had an invalid encoding.
+  ##  Convert the tags file to UTF-8 and try again.
+  ##----------------------------------------------------------------------------
   #unused:
   #  thresholds: { num-issues: 999 }
 
+  ##----------------------------------------------------------------------------
+  ## [on prod]
+  ##  - detects 486 issues
+  ## [on staging]
+  ##  - detects 493 issues
+  ##----------------------------------------------------------------------------
   yapf:
     auto-fix: true
     thresholds: { num-issues: 486 }
