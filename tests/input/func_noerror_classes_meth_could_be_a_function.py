@@ -7,12 +7,18 @@ like factory method pattern
 """
 __revision__ = 1
 
+
 class XAsub(object):
     pass
+
+
 class XBsub(XAsub):
     pass
+
+
 class XCsub(XAsub):
     pass
+
 
 class Aimpl(object):
     # disable "method could be a function" on classes which are not overriding
@@ -22,12 +28,12 @@ class Aimpl(object):
     def makex(self):
         return XAsub()
 
-class Bimpl(Aimpl):
 
+class Bimpl(Aimpl):
     def makex(self):
         return XBsub()
 
-class Cimpl(Aimpl):
 
+class Cimpl(Aimpl):
     def makex(self):
         return XCsub()

@@ -45,12 +45,14 @@ for i in {x for x in range(1, 100, 2)}:
 for i in {x: 10 - x for x in range(10)}:
     pass
 
+
 # generators
 def powers_of_two():
     k = 0
     while k < 10:
-        yield 2 ** k
+        yield 2**k
         k += 1
+
 
 for i in powers_of_two():
     pass
@@ -58,9 +60,11 @@ for i in powers_of_two():
 for i in powers_of_two:  # [not-an-iterable]
     pass
 
+
 # check for custom iterators
 class A(object):
     pass
+
 
 class B(object):
     def __iter__(self):
@@ -72,8 +76,10 @@ class B(object):
     def next(self):
         return 1
 
+
 class C(object):
     "old-style iterator"
+
     def __getitem__(self, k):
         if k > 10:
             raise IndexError
@@ -81,6 +87,7 @@ class C(object):
 
     def __len__(self):
         return 10
+
 
 for i in C():
     print(i)
@@ -116,16 +123,18 @@ for i in 8.5:  # [not-an-iterable]
 for i in 10:  # [not-an-iterable]
     pass
 
-
 # skip uninferable instances
 from some_missing_module import Iterable
+
 
 class MyClass(Iterable):
     pass
 
+
 m = MyClass()
 for i in m:
     print(i)
+
 
 # skip checks if statement is inside mixin/base/abstract class
 class ManagedAccessViewMixin(object):
@@ -141,6 +150,7 @@ class ManagedAccessViewMixin(object):
         for requirement in klasses:
             print(requirement)
 
+
 class BaseType(object):
     valid_values = None
 
@@ -154,6 +164,7 @@ class BaseType(object):
                     return True
             return False
 
+
 class AbstractUrlMarkManager(object):
     def __init__(self):
         self._lineparser = None
@@ -164,6 +175,7 @@ class AbstractUrlMarkManager(object):
 
     def _init_lineparser(self):
         raise NotImplementedError
+
 
 # class is not named as abstract
 # but still is deduceably abstract
@@ -180,7 +192,6 @@ class UrlMarkManager(object):
 
 
 class HasDynamicGetattr(object):
-
     def __init__(self):
         self._obj = []
 

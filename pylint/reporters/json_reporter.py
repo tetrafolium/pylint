@@ -5,7 +5,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """JSON reporter"""
 import html
 import json
@@ -28,19 +27,17 @@ class JSONReporter(BaseReporter):
 
     def handle_message(self, msg):
         """Manage message of different type and in the context of path."""
-        self.messages.append(
-            {
-                "type": msg.category,
-                "module": msg.module,
-                "obj": msg.obj,
-                "line": msg.line,
-                "column": msg.column,
-                "path": msg.path,
-                "symbol": msg.symbol,
-                "message": html.escape(msg.msg or "", quote=False),
-                "message-id": msg.msg_id,
-            }
-        )
+        self.messages.append({
+            "type": msg.category,
+            "module": msg.module,
+            "obj": msg.obj,
+            "line": msg.line,
+            "column": msg.column,
+            "path": msg.path,
+            "symbol": msg.symbol,
+            "message": html.escape(msg.msg or "", quote=False),
+            "message-id": msg.msg_id,
+        })
 
     def display_messages(self, layout):
         """Launch layouts display"""

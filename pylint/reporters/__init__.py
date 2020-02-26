@@ -15,9 +15,7 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """utilities methods and classes for reporters"""
-
 
 from pylint import utils
 from pylint.reporters.base_reporter import BaseReporter
@@ -31,4 +29,6 @@ def initialize(linter):
     utils.register_plugins(linter, __path__[0])
 
 
-__all__ = ["BaseReporter", "ReportsHandlerMixIn", "JSONReporter", "CollectingReporter"]
+__all__ = [
+    "BaseReporter", "ReportsHandlerMixIn", "JSONReporter", "CollectingReporter"
+]

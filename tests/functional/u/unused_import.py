@@ -11,16 +11,18 @@ import re, html.parser  # [unused-import]
 DATA = Counter()
 # pylint: disable=self-assigning-variable
 from fake import SomeName, SomeOtherName  # [unused-import]
+
+
 class SomeClass(object):
-    SomeName = SomeName # https://bitbucket.org/logilab/pylint/issue/475
+    SomeName = SomeName  # https://bitbucket.org/logilab/pylint/issue/475
     SomeOtherName = 1
     SomeOtherName = SomeOtherName
+
 
 from never import __all__
 # pylint: disable=wrong-import-order,ungrouped-imports
 import typing
 from typing import TYPE_CHECKING
-
 
 if typing.TYPE_CHECKING:
     import collections
@@ -34,6 +36,7 @@ def get_ordered_dict() -> 'collections.OrderedDict':
 
 def get_itertools_obj() -> 'itertools.count':
     return []
+
 
 def use_html_parser() -> 'html.parser.HTMLParser':
     return html.parser.HTMLParser

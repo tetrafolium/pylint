@@ -5,7 +5,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Micro reports objects.
 
 A micro report is a tree of layout and content objects.
@@ -60,7 +59,6 @@ class BaseLayout(VNode):
     attributes
     * children : components in this table (i.e. the table's cells)
     """
-
     def __init__(self, children=(), **kwargs):
         super(BaseLayout, self).__init__(**kwargs)
         for child in children:
@@ -95,7 +93,6 @@ class Text(VNode):
     attributes :
     * data : the text value as an encoded or unicode string
     """
-
     def __init__(self, data, escaped=True, **kwargs):
         super(Text, self).__init__(**kwargs)
         # if isinstance(data, unicode):
@@ -127,13 +124,12 @@ class Section(BaseLayout):
     a description may also be given to the constructor, it'll be added
     as a first paragraph
     """
-
     def __init__(self, title=None, description=None, **kwargs):
         super(Section, self).__init__(**kwargs)
         if description:
             self.insert(0, Paragraph([Text(description)]))
         if title:
-            self.insert(0, Title(children=(title,)))
+            self.insert(0, Title(children=(title, )))
 
 
 class EvaluationSection(Section):
@@ -178,7 +174,6 @@ class Table(BaseLayout):
     * cheaders : the first col's elements are table's header
     * title : the table's optional title
     """
-
     def __init__(self, cols, title=None, rheaders=0, cheaders=0, **kwargs):
         super(Table, self).__init__(**kwargs)
         assert isinstance(cols, int)

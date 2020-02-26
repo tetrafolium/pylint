@@ -4,8 +4,8 @@
 
 _OK = True
 
-class MyClass(object):
 
+class MyClass(object):
     class Klass(object):
         def __init__(self):
             self.var2 = 'var'
@@ -22,8 +22,10 @@ class MyClass(object):
 
     def _getter(self):
         return self.a_str
+
     def _setter(self, val):
         self.a_str = val
+
     var2 = property(_getter, _setter)
 
     def some_method(self):
@@ -31,27 +33,33 @@ class MyClass(object):
             var = 1
             test = 'bar'
             var = 'baz'  # [redefined-variable-type]
+
         self.var = 1  # the rule checks for redefinitions in the scope of a function or method
         test = 'foo'
         myint = 2
         myint = False  # [redefined-variable-type]
+
 
 _OK = "This is OK"  # [redefined-variable-type]
 
 if _OK:
     SOME_FLOAT = 1.
 
+
 def dummy_function():
     return 2
+
 
 def other_function():
     instance = MyClass()
     instance = True  # [redefined-variable-type]
 
+
 SOME_FLOAT = dummy_function()  # [redefined-variable-type]
 
 A_GLOB = None
 A_GLOB = [1, 2, 3]
+
 
 def func2(x):
     if x:

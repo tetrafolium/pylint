@@ -14,7 +14,6 @@
 # Copyright (c) 2018 Mariatta Wijaya <mariatta@python.org>
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """checker for use of Python logging
 """
 import string
@@ -71,7 +70,6 @@ MSGS = {
     ),
 }
 
-
 CHECKED_CONVENIENCE_FUNCTIONS = {
     "critical",
     "debug",
@@ -96,12 +94,10 @@ def is_method_call(func, types=(), methods=()):
       bool: true if the node represents a method call for the given type and
       method names, False otherwise.
     """
-    return (
-        isinstance(func, astroid.BoundMethod)
-        and isinstance(func.bound, astroid.Instance)
-        and (func.bound.name in types if types else True)
-        and (func.name in methods if methods else True)
-    )
+    return (isinstance(func, astroid.BoundMethod)
+            and isinstance(func.bound, astroid.Instance)
+            and (func.bound.name in types if types else True)
+            and (func.name in methods if methods else True))
 
 
 class LoggingChecker(checkers.BaseChecker):
@@ -115,21 +111,28 @@ class LoggingChecker(checkers.BaseChecker):
         (
             "logging-modules",
             {
-                "default": ("logging",),
-                "type": "csv",
-                "metavar": "<comma separated list>",
-                "help": "Logging modules to check that the string format "
+                "default": ("logging", ),
+                "type":
+                "csv",
+                "metavar":
+                "<comma separated list>",
+                "help":
+                "Logging modules to check that the string format "
                 "arguments are in logging function parameter format.",
             },
         ),
         (
             "logging-format-style",
             {
-                "default": "old",
-                "type": "choice",
-                "metavar": "<old (%) or new ({) or fstr (f'')>",
+                "default":
+                "old",
+                "type":
+                "choice",
+                "metavar":
+                "<old (%) or new ({) or fstr (f'')>",
                 "choices": ["old", "new", "fstr"],
-                "help": "Format style used to check logging format string. "
+                "help":
+                "Format style used to check logging format string. "
                 "`old` means using % formatting, `new` is for `{}` formatting,"
                 "and `fstr` is for f-strings.",
             },
@@ -150,7 +153,8 @@ class LoggingChecker(checkers.BaseChecker):
         if self._format_style == "old":
             format_style_help = " and pass the % parameters as arguments"
 
-        self._format_style_args = (format_styles[self._format_style], format_style_help)
+        self._format_style_args = (format_styles[self._format_style],
+                                   format_style_help)
 
         self._logging_modules = set(logging_mods)
         self._from_imports = {}
@@ -178,13 +182,10 @@ class LoggingChecker(checkers.BaseChecker):
     @check_messages(*MSGS)
     def visit_call(self, node):
         """Checks calls to logging methods."""
-
         def is_logging_name():
-            return (
-                isinstance(node.func, astroid.Attribute)
-                and isinstance(node.func.expr, astroid.Name)
-                and node.func.expr.name in self._logging_names
-            )
+            return (isinstance(node.func, astroid.Attribute)
+                    and isinstance(node.func.expr, astroid.Name)
+                    and node.func.expr.name in self._logging_names)
 
         def is_logger_class():
             try:
@@ -192,12 +193,9 @@ class LoggingChecker(checkers.BaseChecker):
                     if isinstance(inferred, astroid.BoundMethod):
                         parent = inferred._proxied.parent
                         if isinstance(parent, astroid.ClassDef) and (
-                            parent.qname() == "logging.Logger"
-                            or any(
-                                ancestor.qname() == "logging.Logger"
-                                for ancestor in parent.ancestors()
-                            )
-                        ):
+                                parent.qname() == "logging.Logger"
+                                or any(ancestor.qname() == "logging.Logger"
+                                       for ancestor in parent.ancestors())):
                             return True, inferred._proxied.name
             except astroid.exceptions.InferenceError:
                 pass
@@ -233,10 +231,8 @@ class LoggingChecker(checkers.BaseChecker):
             emit = binop.op == "%"
             if binop.op == "+":
                 total_number_of_strings = sum(
-                    1
-                    for operand in (binop.left, binop.right)
-                    if self._is_operand_literal_str(utils.safe_infer(operand))
-                )
+                    1 for operand in (binop.left, binop.right)
+                    if self._is_operand_literal_str(utils.safe_infer(operand)))
                 emit = total_number_of_strings > 0
             if emit:
                 self.add_message("logging-not-lazy", node=node)
@@ -244,9 +240,8 @@ class LoggingChecker(checkers.BaseChecker):
             self._check_call_func(node.args[format_pos])
         elif isinstance(node.args[format_pos], astroid.Const):
             self._check_format_string(node, format_pos)
-        elif isinstance(
-            node.args[format_pos], (astroid.FormattedValue, astroid.JoinedStr)
-        ):
+        elif isinstance(node.args[format_pos],
+                        (astroid.FormattedValue, astroid.JoinedStr)):
             if self._format_style != "fstr":
                 self.add_message(
                     "logging-format-interpolation",
@@ -270,13 +265,12 @@ class LoggingChecker(checkers.BaseChecker):
         """
         func = utils.safe_infer(node.func)
         types = ("str", "unicode")
-        methods = ("format",)
-        if is_method_call(func, types, methods) and not is_complex_format_str(
-            func.bound
-        ):
-            self.add_message(
-                "logging-format-interpolation", node=node, args=self._format_style_args
-            )
+        methods = ("format", )
+        if is_method_call(func, types,
+                          methods) and not is_complex_format_str(func.bound):
+            self.add_message("logging-format-interpolation",
+                             node=node,
+                             args=self._format_style_args)
 
     def _check_format_string(self, node, format_arg):
         """Checks that format string tokens match the supplied arguments.
@@ -285,7 +279,7 @@ class LoggingChecker(checkers.BaseChecker):
           node (astroid.node_classes.NodeNG): AST node to be checked.
           format_arg (int): Index of the format string in the node arguments.
         """
-        num_args = _count_supplied_tokens(node.args[format_arg + 1 :])
+        num_args = _count_supplied_tokens(node.args[format_arg + 1:])
         if not num_args:
             # If no args were supplied the string is not interpolated and can contain
             # formatting characters - it's used verbatim. Don't check any further.
@@ -299,8 +293,7 @@ class LoggingChecker(checkers.BaseChecker):
             try:
                 if self._format_style == "old":
                     keyword_args, required_num_args, _, _ = utils.parse_format_string(
-                        format_string
-                    )
+                        format_string)
                     if keyword_args:
                         # Keyword checking on logging strings is complicated by
                         # special keywords - out of scope.
@@ -313,11 +306,10 @@ class LoggingChecker(checkers.BaseChecker):
                     ) = utils.parse_format_method_string(format_string)
 
                     keyword_args_cnt = len(
-                        set(k for k, l in keyword_arguments if not isinstance(k, int))
-                    )
-                    required_num_args = (
-                        keyword_args_cnt + implicit_pos_args + explicit_pos_args
-                    )
+                        set(k for k, l in keyword_arguments
+                            if not isinstance(k, int)))
+                    required_num_args = (keyword_args_cnt + implicit_pos_args +
+                                         explicit_pos_args)
                 else:
                     self.add_message(
                         "logging-format-interpolation",
@@ -350,9 +342,8 @@ def is_complex_format_str(node):
         bool: True if inferred string uses complex formatting, False otherwise
     """
     inferred = utils.safe_infer(node)
-    if inferred is None or not (
-        isinstance(inferred, astroid.Const) and isinstance(inferred.value, str)
-    ):
+    if inferred is None or not (isinstance(inferred, astroid.Const)
+                                and isinstance(inferred.value, str)):
         return True
     try:
         parsed = list(string.Formatter().parse(inferred.value))

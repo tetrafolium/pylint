@@ -3,7 +3,6 @@
 # pylint: disable=no-init,expression-not-assigned, useless-object-inheritance
 # pylint: disable=missing-parentheses-for-call-in-test, unnecessary-comprehension
 
-
 import collections
 
 
@@ -12,71 +11,71 @@ def function():
 
 
 class Class(object):
-
     def method(self):
         pass
 
 
 instance = Class()
 
-if collections: # [using-constant-test]
+if collections:  # [using-constant-test]
     pass
 
 # GenExpr
-if (node for node in range(10)): # [using-constant-test]
+if (node for node in range(10)):  # [using-constant-test]
     pass
 
-if lambda: None: # [using-constant-test]
+if lambda: None:  # [using-constant-test]
     pass
 
-if function: # [using-constant-test]
+if function:  # [using-constant-test]
     pass
 
-if Class: # [using-constant-test]
+if Class:  # [using-constant-test]
     pass
 
-if 2: # [using-constant-test]
+if 2:  # [using-constant-test]
     pass
 
-if True: # [using-constant-test]
+if True:  # [using-constant-test]
     pass
 
-if '': # [using-constant-test]
+if '':  # [using-constant-test]
     pass
 
-if b'': # [using-constant-test]
+if b'':  # [using-constant-test]
     pass
 
-if 2.0: # [using-constant-test]
+if 2.0:  # [using-constant-test]
     pass
 
-if {}: # [using-constant-test]
+if {}:  # [using-constant-test]
     pass
 
-if {1, 2, 3}: # [using-constant-test]
+if {1, 2, 3}:  # [using-constant-test]
     pass
 
-if (1, 2, 3): # [using-constant-test]
+if (1, 2, 3):  # [using-constant-test]
     pass
 
-if (): # [using-constant-test]
+if ():  # [using-constant-test]
     pass
 
 # Generator
 generator = function()
-if generator: # [using-constant-test]
+if generator:  # [using-constant-test]
     pass
 
-if 1 if 2 else 3: # [using-constant-test]
+if 1 if 2 else 3:  # [using-constant-test]
     pass
+
 
 def test_comprehensions():
-    [data for data in range(100) if abs] # [using-constant-test]
-    [data for data in range(100) if 1] # [using-constant-test]
-    (data for data in range(100) if abs) # [using-constant-test]
-    (data for data in range(100) if 1) # [using-constant-test]
-    {data for data in range(100) if abs} # [using-constant-test]
-    {data: 1 for data in range(100) if abs} # [using-constant-test]
+    [data for data in range(100) if abs]  # [using-constant-test]
+    [data for data in range(100) if 1]  # [using-constant-test]
+    (data for data in range(100) if abs)  # [using-constant-test]
+    (data for data in range(100) if 1)  # [using-constant-test]
+    {data for data in range(100) if abs}  # [using-constant-test]
+    {data: 1 for data in range(100) if abs}  # [using-constant-test]
 
 
 # UnboundMethod / Function
@@ -86,7 +85,6 @@ if Class.method:  # [using-constant-test]
 # BoundMethod
 if instance.method:  # [using-constant-test]
     pass
-
 
 # For these, we require to do inference, even though the result can be a
 # constant value. For some of them, we could determine that the test
@@ -125,10 +123,12 @@ if tuple():
 if [1, 2, 3][:1]:
     pass
 
+
 def test(*args):
     if args:
         return 42
     return None
+
 
 def test_good_comprehension_checks():
     [data for data in range(100)]

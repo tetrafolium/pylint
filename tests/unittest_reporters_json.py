@@ -7,7 +7,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Test for the JSON reporter."""
 
 import json
@@ -34,19 +33,19 @@ def test_simple_json_output():
     # we call this method because we didn't actually run the checkers
     reporter.display_messages(None)
 
-    expected_result = [
-        [
-            ("column", 0),
-            ("line", 1),
-            ("message", "Line too long (1/2)"),
-            ("message-id", "C0301"),
-            ("module", "0123"),
-            ("obj", ""),
-            ("path", "0123"),
-            ("symbol", "line-too-long"),
-            ("type", "convention"),
-        ]
-    ]
+    expected_result = [[
+        ("column", 0),
+        ("line", 1),
+        ("message", "Line too long (1/2)"),
+        ("message-id", "C0301"),
+        ("module", "0123"),
+        ("obj", ""),
+        ("path", "0123"),
+        ("symbol", "line-too-long"),
+        ("type", "convention"),
+    ]]
     report_result = json.loads(output.getvalue())
-    report_result = [sorted(report_result[0].items(), key=lambda item: item[0])]
+    report_result = [
+        sorted(report_result[0].items(), key=lambda item: item[0])
+    ]
     assert report_result == expected_result

@@ -13,7 +13,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Pylint plugin for checking in Sphinx, Google, or Numpy style docstrings
 """
 import astroid
@@ -76,7 +75,9 @@ class DocstringParameterChecker(BaseChecker):
             "Missing return documentation",
             "missing-return-doc",
             "Please add documentation about what this method returns.",
-            {"old_names": [("W9007", "old-missing-returns-doc")]},
+            {
+                "old_names": [("W9007", "old-missing-returns-doc")]
+            },
         ),
         "W9012": (
             "Missing return type documentation",
@@ -89,7 +90,9 @@ class DocstringParameterChecker(BaseChecker):
             "Missing yield documentation",
             "missing-yield-doc",
             "Please add documentation about what this generator yields.",
-            {"old_names": [("W9009", "old-missing-yields-doc")]},
+            {
+                "old_names": [("W9009", "old-missing-yields-doc")]
+            },
         ),
         "W9014": (
             "Missing yield type documentation",
@@ -102,13 +105,17 @@ class DocstringParameterChecker(BaseChecker):
             '"%s" missing in parameter documentation',
             "missing-param-doc",
             "Please add parameter declarations for all parameters.",
-            {"old_names": [("W9003", "old-missing-param-doc")]},
+            {
+                "old_names": [("W9003", "old-missing-param-doc")]
+            },
         ),
         "W9016": (
             '"%s" missing in parameter type documentation',
             "missing-type-doc",
             "Please add parameter type declarations for all parameters.",
-            {"old_names": [("W9004", "old-missing-type-doc")]},
+            {
+                "old_names": [("W9004", "old-missing-type-doc")]
+            },
         ),
         "W9017": (
             '"%s" differing in parameter documentation',
@@ -126,10 +133,14 @@ class DocstringParameterChecker(BaseChecker):
         (
             "accept-no-param-doc",
             {
-                "default": True,
-                "type": "yn",
-                "metavar": "<y or n>",
-                "help": "Whether to accept totally missing parameter "
+                "default":
+                True,
+                "type":
+                "yn",
+                "metavar":
+                "<y or n>",
+                "help":
+                "Whether to accept totally missing parameter "
                 "documentation in the docstring of a function that has "
                 "parameters.",
             },
@@ -137,10 +148,14 @@ class DocstringParameterChecker(BaseChecker):
         (
             "accept-no-raise-doc",
             {
-                "default": True,
-                "type": "yn",
-                "metavar": "<y or n>",
-                "help": "Whether to accept totally missing raises "
+                "default":
+                True,
+                "type":
+                "yn",
+                "metavar":
+                "<y or n>",
+                "help":
+                "Whether to accept totally missing raises "
                 "documentation in the docstring of a function that "
                 "raises an exception.",
             },
@@ -148,10 +163,14 @@ class DocstringParameterChecker(BaseChecker):
         (
             "accept-no-return-doc",
             {
-                "default": True,
-                "type": "yn",
-                "metavar": "<y or n>",
-                "help": "Whether to accept totally missing return "
+                "default":
+                True,
+                "type":
+                "yn",
+                "metavar":
+                "<y or n>",
+                "help":
+                "Whether to accept totally missing return "
                 "documentation in the docstring of a function that "
                 "returns a statement.",
             },
@@ -159,20 +178,28 @@ class DocstringParameterChecker(BaseChecker):
         (
             "accept-no-yields-doc",
             {
-                "default": True,
-                "type": "yn",
-                "metavar": "<y or n>",
-                "help": "Whether to accept totally missing yields "
+                "default":
+                True,
+                "type":
+                "yn",
+                "metavar":
+                "<y or n>",
+                "help":
+                "Whether to accept totally missing yields "
                 "documentation in the docstring of a generator.",
             },
         ),
         (
             "default-docstring-type",
             {
-                "type": "choice",
-                "default": "default",
-                "choices": list(utils.DOCSTRING_TYPES),
-                "help": "If the docstring type cannot be guessed "
+                "type":
+                "choice",
+                "default":
+                "default",
+                "choices":
+                list(utils.DOCSTRING_TYPES),
+                "help":
+                "If the docstring type cannot be guessed "
                 "the specified docstring type will be used.",
             },
         ),
@@ -189,7 +216,8 @@ class DocstringParameterChecker(BaseChecker):
         :param node: Node for a function or method definition in the AST
         :type node: :class:`astroid.scoped_nodes.Function`
         """
-        node_doc = utils.docstringify(node.doc, self.config.default_docstring_type)
+        node_doc = utils.docstringify(node.doc,
+                                      self.config.default_docstring_type)
         self.check_functiondef_params(node, node_doc)
         self.check_functiondef_returns(node, node_doc)
         self.check_functiondef_yields(node, node_doc)
@@ -200,48 +228,43 @@ class DocstringParameterChecker(BaseChecker):
             class_node = checker_utils.node_frame_class(node)
             if class_node is not None:
                 class_doc = utils.docstringify(
-                    class_node.doc, self.config.default_docstring_type
-                )
-                self.check_single_constructor_params(class_doc, node_doc, class_node)
+                    class_node.doc, self.config.default_docstring_type)
+                self.check_single_constructor_params(class_doc, node_doc,
+                                                     class_node)
 
                 # __init__ or class docstrings can have no parameters documented
                 # as long as the other documents them.
-                node_allow_no_param = (
-                    class_doc.has_params()
-                    or class_doc.params_documented_elsewhere()
-                    or None
-                )
-                class_allow_no_param = (
-                    node_doc.has_params()
-                    or node_doc.params_documented_elsewhere()
-                    or None
-                )
+                node_allow_no_param = (class_doc.has_params() or
+                                       class_doc.params_documented_elsewhere()
+                                       or None)
+                class_allow_no_param = (node_doc.has_params() or
+                                        node_doc.params_documented_elsewhere()
+                                        or None)
 
-                self.check_arguments_in_docstring(
-                    class_doc, node.args, class_node, class_allow_no_param
-                )
+                self.check_arguments_in_docstring(class_doc, node.args,
+                                                  class_node,
+                                                  class_allow_no_param)
 
-        self.check_arguments_in_docstring(
-            node_doc, node.args, node, node_allow_no_param
-        )
+        self.check_arguments_in_docstring(node_doc, node.args, node,
+                                          node_allow_no_param)
 
     def check_functiondef_returns(self, node, node_doc):
-        if (not node_doc.supports_yields and node.is_generator()) or node.is_abstract():
+        if (not node_doc.supports_yields
+                and node.is_generator()) or node.is_abstract():
             return
 
         return_nodes = node.nodes_of_class(astroid.Return)
         if (node_doc.has_returns() or node_doc.has_rtype()) and not any(
-            utils.returns_something(ret_node) for ret_node in return_nodes
-        ):
+                utils.returns_something(ret_node)
+                for ret_node in return_nodes):
             self.add_message("redundant-returns-doc", node=node)
 
     def check_functiondef_yields(self, node, node_doc):
         if not node_doc.supports_yields or node.is_abstract():
             return
 
-        if (
-            node_doc.has_yields() or node_doc.has_yields_type()
-        ) and not node.is_generator():
+        if (node_doc.has_yields()
+                or node_doc.has_yields_type()) and not node.is_generator():
             self.add_message("redundant-yields-doc", node=node)
 
     def visit_raise(self, node):
@@ -261,7 +284,8 @@ class DocstringParameterChecker(BaseChecker):
             if property_:
                 func_node = property_
 
-        doc = utils.docstringify(func_node.doc, self.config.default_docstring_type)
+        doc = utils.docstringify(func_node.doc,
+                                 self.config.default_docstring_type)
         if not doc.is_valid():
             if doc.doc:
                 self._handle_no_raise_doc(expected_excs, func_node)
@@ -270,7 +294,10 @@ class DocstringParameterChecker(BaseChecker):
         found_excs_full_names = doc.exceptions()
 
         # Extract just the class name, e.g. "error" from "re.error"
-        found_excs_class_names = {exc.split(".")[-1] for exc in found_excs_full_names}
+        found_excs_class_names = {
+            exc.split(".")[-1]
+            for exc in found_excs_full_names
+        }
         missing_excs = expected_excs - found_excs_class_names
         self._add_raise_message(missing_excs, func_node)
 
@@ -282,13 +309,15 @@ class DocstringParameterChecker(BaseChecker):
         if not isinstance(func_node, astroid.FunctionDef):
             return
 
-        doc = utils.docstringify(func_node.doc, self.config.default_docstring_type)
+        doc = utils.docstringify(func_node.doc,
+                                 self.config.default_docstring_type)
         if not doc.is_valid() and self.config.accept_no_return_doc:
             return
 
         is_property = checker_utils.decorated_with_property(func_node)
 
-        if not (doc.has_returns() or (doc.has_property_returns() and is_property)):
+        if not (doc.has_returns() or
+                (doc.has_property_returns() and is_property)):
             self.add_message("missing-return-doc", node=func_node)
 
         if func_node.returns:
@@ -302,7 +331,8 @@ class DocstringParameterChecker(BaseChecker):
         if not isinstance(func_node, astroid.FunctionDef):
             return
 
-        doc = utils.docstringify(func_node.doc, self.config.default_docstring_type)
+        doc = utils.docstringify(func_node.doc,
+                                 self.config.default_docstring_type)
         if not doc.is_valid() and self.config.accept_no_yields_doc:
             return
 
@@ -344,13 +374,12 @@ class DocstringParameterChecker(BaseChecker):
         :param set expected_argument_names: Expected argument names
         :param NodeNG warning_node: The node to be analyzed
         """
-        missing_argument_names = (
-            expected_argument_names - found_argument_names
-        ) - not_needed_names
+        missing_argument_names = (expected_argument_names -
+                                  found_argument_names) - not_needed_names
         if missing_argument_names:
             self.add_message(
                 message_id,
-                args=(", ".join(sorted(missing_argument_names)),),
+                args=(", ".join(sorted(missing_argument_names)), ),
                 node=warning_node,
             )
 
@@ -377,21 +406,21 @@ class DocstringParameterChecker(BaseChecker):
         :param NodeNG warning_node: The node to be analyzed
         """
         differing_argument_names = (
-            (expected_argument_names ^ found_argument_names)
-            - not_needed_names
-            - expected_argument_names
-        )
+            (expected_argument_names ^ found_argument_names) -
+            not_needed_names - expected_argument_names)
 
         if differing_argument_names:
             self.add_message(
                 message_id,
-                args=(", ".join(sorted(differing_argument_names)),),
+                args=(", ".join(sorted(differing_argument_names)), ),
                 node=warning_node,
             )
 
-    def check_arguments_in_docstring(
-        self, doc, arguments_node, warning_node, accept_no_param_doc=None
-    ):
+    def check_arguments_in_docstring(self,
+                                     doc,
+                                     arguments_node,
+                                     warning_node,
+                                     accept_no_param_doc=None):
         """Check that all parameters in a function, method or class constructor
         on the one hand and the parameters mentioned in the parameter
         documentation (e.g. the Sphinx tags 'param' and 'type') on the other
@@ -436,8 +465,10 @@ class DocstringParameterChecker(BaseChecker):
 
         # Collect the function arguments.
         expected_argument_names = {arg.name for arg in arguments_node.args}
-        expected_argument_names.update(arg.name for arg in arguments_node.kwonlyargs)
-        not_needed_type_in_docstring = self.not_needed_param_in_docstring.copy()
+        expected_argument_names.update(arg.name
+                                       for arg in arguments_node.kwonlyargs)
+        not_needed_type_in_docstring = self.not_needed_param_in_docstring.copy(
+        )
 
         if arguments_node.vararg is not None:
             expected_argument_names.add(arguments_node.vararg)
@@ -493,9 +524,9 @@ class DocstringParameterChecker(BaseChecker):
 
     def check_single_constructor_params(self, class_doc, init_doc, class_node):
         if class_doc.has_params() and init_doc.has_params():
-            self.add_message(
-                "multiple-constructor-doc", args=(class_node.name,), node=class_node
-            )
+            self.add_message("multiple-constructor-doc",
+                             args=(class_node.name, ),
+                             node=class_node)
 
     def _handle_no_raise_doc(self, excs, node):
         if self.config.accept_no_raise_doc:
@@ -522,9 +553,9 @@ class DocstringParameterChecker(BaseChecker):
         if not missing_excs:
             return
 
-        self.add_message(
-            "missing-raises-doc", args=(", ".join(sorted(missing_excs)),), node=node
-        )
+        self.add_message("missing-raises-doc",
+                         args=(", ".join(sorted(missing_excs)), ),
+                         node=node)
 
 
 def register(linter):

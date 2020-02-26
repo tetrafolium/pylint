@@ -7,7 +7,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """
   %prog [options] <packages>
 
@@ -63,7 +62,8 @@ OPTIONS = (
             action="store",
             metavar="<ancestor>",
             type="int",
-            help="show <ancestor> generations of ancestor classes not in <projects>",
+            help=
+            "show <ancestor> generations of ancestor classes not in <projects>",
         ),
     ),
     (
@@ -81,7 +81,8 @@ OPTIONS = (
             action="store",
             metavar="<association_level>",
             type="int",
-            help="show <association_level> levels of associated classes not in <projects>",
+            help=
+            "show <association_level> levels of associated classes not in <projects>",
         ),
     ),
     (
@@ -135,11 +136,15 @@ this disables -f values",
     (
         "ignore",
         {
-            "type": "csv",
-            "metavar": "<file[,file...]>",
-            "dest": "black_list",
-            "default": ("CVS",),
-            "help": "Add files or directories to the blacklist. They "
+            "type":
+            "csv",
+            "metavar":
+            "<file[,file...]>",
+            "dest":
+            "black_list",
+            "default": ("CVS", ),
+            "help":
+            "Add files or directories to the blacklist. They "
             "should be base names, not paths.",
         },
     ),
@@ -159,13 +164,13 @@ this disables -f values",
 def _check_graphviz_available(output_format):
     """check if we need graphviz for different output format"""
     try:
-        subprocess.call(["dot", "-V"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.call(["dot", "-V"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
     except OSError:
-        print(
-            "The output format '%s' is currently not available.\n"
-            "Please install 'Graphviz' to have other output formats "
-            "than 'dot' or 'vcg'." % output_format
-        )
+        print("The output format '%s' is currently not available.\n"
+              "Please install 'Graphviz' to have other output formats "
+              "than 'dot' or 'vcg'." % output_format)
         sys.exit(32)
 
 

@@ -1,5 +1,6 @@
 # pylint: disable=too-few-public-methods, missing-docstring,no-init, useless-object-inheritance
 
+
 class PluginBase(object):
     subclasses = []
 

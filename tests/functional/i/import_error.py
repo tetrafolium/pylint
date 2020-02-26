@@ -1,6 +1,6 @@
 """ Test that import errors are detected. """
 # pylint: disable=invalid-name, unused-import, no-absolute-import, bare-except, broad-except, wrong-import-order, wrong-import-position
-import totally_missing # [import-error]
+import totally_missing  # [import-error]
 
 try:
     import maybe_missing
@@ -13,10 +13,9 @@ except (ImportError, SyntaxError):
     maybe_missing_1 = None
 
 try:
-    import maybe_missing_2 # [import-error]
+    import maybe_missing_2  # [import-error]
 except ValueError:
     maybe_missing_2 = None
-
 
 try:
     if maybe_missing:
@@ -25,4 +24,4 @@ except ImportError:
     pass
 
 # pylint: disable=no-name-in-module
-from functional.s.syntax_error import toto # [syntax-error]
+from functional.s.syntax_error import toto  # [syntax-error]

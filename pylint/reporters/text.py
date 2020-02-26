@@ -12,7 +12,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Plain text reporters:
 
 :text: the default one grouping messages by module
@@ -132,7 +131,8 @@ class TextReporter(BaseReporter):
         self._template = None
 
     def on_set_current_module(self, module, filepath):
-        self._template = str(self.linter.config.msg_template or self.line_format)
+        self._template = str(self.linter.config.msg_template
+                             or self.line_format)
 
     def write_message(self, msg):
         """Convenience method to write a formated message with class default template"""
@@ -196,7 +196,8 @@ class ColorizedTextReporter(TextReporter):
 
     def __init__(self, output=None, color_mapping=None):
         TextReporter.__init__(self, output)
-        self.color_mapping = color_mapping or dict(ColorizedTextReporter.COLOR_MAPPING)
+        self.color_mapping = color_mapping or dict(
+            ColorizedTextReporter.COLOR_MAPPING)
         ansi_terms = ["xterm-16color", "xterm-256color"]
         if os.environ.get("TERM") not in ansi_terms:
             if sys.platform == "win32":
@@ -221,11 +222,11 @@ class ColorizedTextReporter(TextReporter):
         if msg.module not in self._modules:
             color, style = self._get_decoration("S")
             if msg.module:
-                modsep = colorize_ansi(
-                    "************* Module %s" % msg.module, color, style
-                )
+                modsep = colorize_ansi("************* Module %s" % msg.module,
+                                       color, style)
             else:
-                modsep = colorize_ansi("************* %s" % msg.module, color, style)
+                modsep = colorize_ansi("************* %s" % msg.module, color,
+                                       style)
             self.writeln(modsep)
             self._modules.add(msg.module)
         color, style = self._get_decoration(msg.C)
@@ -234,8 +235,7 @@ class ColorizedTextReporter(TextReporter):
             **{
                 attr: colorize_ansi(getattr(msg, attr), color, style)
                 for attr in ("msg", "symbol", "category", "C")
-            }
-        )
+            })
         self.write_message(msg)
 
 

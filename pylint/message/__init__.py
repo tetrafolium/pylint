@@ -36,7 +36,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """All the classes related to Message handling."""
 
 from pylint.message.message import Message

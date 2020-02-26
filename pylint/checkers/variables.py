@@ -31,7 +31,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """variables checkers for Python code
 """
 import collections
@@ -58,66 +57,65 @@ IGNORED_ARGUMENT_NAMES = re.compile("_.*|^ignored_|^unused_")
 # by astroid. Unfortunately this also messes up our explicit checks
 # for `abc`
 METACLASS_NAME_TRANSFORMS = {"_py_abc": "abc"}
-TYPING_TYPE_CHECKS_GUARDS = frozenset({"typing.TYPE_CHECKING", "TYPE_CHECKING"})
+TYPING_TYPE_CHECKS_GUARDS = frozenset(
+    {"typing.TYPE_CHECKING", "TYPE_CHECKING"})
 BUILTIN_RANGE = "builtins.range"
 TYPING_MODULE = "typing"
-TYPING_NAMES = frozenset(
-    {
-        "Any",
-        "Callable",
-        "ClassVar",
-        "Generic",
-        "Optional",
-        "Tuple",
-        "Type",
-        "TypeVar",
-        "Union",
-        "AbstractSet",
-        "ByteString",
-        "Container",
-        "ContextManager",
-        "Hashable",
-        "ItemsView",
-        "Iterable",
-        "Iterator",
-        "KeysView",
-        "Mapping",
-        "MappingView",
-        "MutableMapping",
-        "MutableSequence",
-        "MutableSet",
-        "Sequence",
-        "Sized",
-        "ValuesView",
-        "Awaitable",
-        "AsyncIterator",
-        "AsyncIterable",
-        "Coroutine",
-        "Collection",
-        "AsyncGenerator",
-        "AsyncContextManager",
-        "Reversible",
-        "SupportsAbs",
-        "SupportsBytes",
-        "SupportsComplex",
-        "SupportsFloat",
-        "SupportsInt",
-        "SupportsRound",
-        "Counter",
-        "Deque",
-        "Dict",
-        "DefaultDict",
-        "List",
-        "Set",
-        "FrozenSet",
-        "NamedTuple",
-        "Generator",
-        "AnyStr",
-        "Text",
-        "Pattern",
-        "BinaryIO",
-    }
-)
+TYPING_NAMES = frozenset({
+    "Any",
+    "Callable",
+    "ClassVar",
+    "Generic",
+    "Optional",
+    "Tuple",
+    "Type",
+    "TypeVar",
+    "Union",
+    "AbstractSet",
+    "ByteString",
+    "Container",
+    "ContextManager",
+    "Hashable",
+    "ItemsView",
+    "Iterable",
+    "Iterator",
+    "KeysView",
+    "Mapping",
+    "MappingView",
+    "MutableMapping",
+    "MutableSequence",
+    "MutableSet",
+    "Sequence",
+    "Sized",
+    "ValuesView",
+    "Awaitable",
+    "AsyncIterator",
+    "AsyncIterable",
+    "Coroutine",
+    "Collection",
+    "AsyncGenerator",
+    "AsyncContextManager",
+    "Reversible",
+    "SupportsAbs",
+    "SupportsBytes",
+    "SupportsComplex",
+    "SupportsFloat",
+    "SupportsInt",
+    "SupportsRound",
+    "Counter",
+    "Deque",
+    "Dict",
+    "DefaultDict",
+    "List",
+    "Set",
+    "FrozenSet",
+    "NamedTuple",
+    "Generator",
+    "AnyStr",
+    "Text",
+    "Pattern",
+    "BinaryIO",
+})
 
 
 def _is_from_future_import(stmt, name):
@@ -128,7 +126,8 @@ def _is_from_future_import(stmt, name):
         return None
 
     for local_node in module.locals.get(name, []):
-        if isinstance(local_node, astroid.ImportFrom) and local_node.modname == FUTURE:
+        if isinstance(local_node,
+                      astroid.ImportFrom) and local_node.modname == FUTURE:
             return True
     return None
 
@@ -136,8 +135,8 @@ def _is_from_future_import(stmt, name):
 def in_for_else_branch(parent, stmt):
     """Returns True if stmt in inside the else branch for a parent For stmt."""
     return isinstance(parent, astroid.For) and any(
-        else_stmt.parent_of(stmt) or else_stmt == stmt for else_stmt in parent.orelse
-    )
+        else_stmt.parent_of(stmt) or else_stmt == stmt
+        for else_stmt in parent.orelse)
 
 
 @lru_cache(maxsize=1000)
@@ -203,11 +202,11 @@ def _detect_global_scope(node, frame, defframe):
         # the `->` part of annotations. The same goes
         # for annotations of function arguments, they'll have
         # their parent the Arguments node.
-        if not isinstance(node.parent, (astroid.FunctionDef, astroid.Arguments)):
+        if not isinstance(node.parent,
+                          (astroid.FunctionDef, astroid.Arguments)):
             return False
-    elif any(
-        not isinstance(f, (astroid.ClassDef, astroid.Module)) for f in (frame, defframe)
-    ):
+    elif any(not isinstance(f, (astroid.ClassDef, astroid.Module))
+             for f in (frame, defframe)):
         # Not interested in other frames, since they are already
         # not in a global scope.
         return False
@@ -219,7 +218,8 @@ def _detect_global_scope(node, frame, defframe):
         # share a global scope.
         parent_scope = current_scope
         while parent_scope:
-            if not isinstance(parent_scope, (astroid.ClassDef, astroid.Module)):
+            if not isinstance(parent_scope,
+                              (astroid.ClassDef, astroid.Module)):
                 break_scopes.append(parent_scope)
                 break
             if parent_scope.parent:
@@ -254,10 +254,9 @@ def _fix_dot_imports(not_consumed):
     names = {}
     for name, stmts in not_consumed.items():
         if any(
-            isinstance(stmt, astroid.AssignName)
-            and isinstance(stmt.assign_type(), astroid.AugAssign)
-            for stmt in stmts
-        ):
+                isinstance(stmt, astroid.AssignName)
+                and isinstance(stmt.assign_type(), astroid.AugAssign)
+                for stmt in stmts):
             continue
         for stmt in stmts:
             if not isinstance(stmt, (astroid.ImportFrom, astroid.Import)):
@@ -271,10 +270,8 @@ def _fix_dot_imports(not_consumed):
                     second_name = name
                 else:
                     name_matches_dotted_import = False
-                    if (
-                        import_module_name.startswith(name)
-                        and import_module_name.find(".") > -1
-                    ):
+                    if (import_module_name.startswith(name)
+                            and import_module_name.find(".") > -1):
                         name_matches_dotted_import = True
 
                     if name_matches_dotted_import or name in imports:
@@ -348,10 +345,8 @@ def _has_locals_call_after_node(stmt, scope):
     )
     for call in scope.nodes_of_class(astroid.Call, skip_klass=skip_nodes):
         inferred = utils.safe_infer(call.func)
-        if (
-            utils.is_builtin_object(inferred)
-            and getattr(inferred, "name", None) == "locals"
-        ):
+        if (utils.is_builtin_object(inferred)
+                and getattr(inferred, "name", None) == "locals"):
             if stmt.lineno < call.lineno:
                 return True
     return False
@@ -457,14 +452,18 @@ MSGS = {
         "left side has %d label(s), right side has %d value(s)",
         "unbalanced-tuple-unpacking",
         "Used when there is an unbalanced tuple unpacking in assignment",
-        {"old_names": [("E0632", "old-unbalanced-tuple-unpacking")]},
+        {
+            "old_names": [("E0632", "old-unbalanced-tuple-unpacking")]
+        },
     ),
     "E0633": (
         "Attempting to unpack a non-sequence%s",
         "unpacking-non-sequence",
         "Used when something which is not "
         "a sequence is used in an unpack assignment",
-        {"old_names": [("W0633", "old-unpacking-non-sequence")]},
+        {
+            "old_names": [("W0633", "old-unpacking-non-sequence")]
+        },
     ),
     "W0640": (
         "Cell variable %s defined in loop",
@@ -488,37 +487,26 @@ MSGS = {
     ),
 }
 
-
-ScopeConsumer = collections.namedtuple(
-    "ScopeConsumer", "to_consume consumed scope_type"
-)
+ScopeConsumer = collections.namedtuple("ScopeConsumer",
+                                       "to_consume consumed scope_type")
 
 
 class NamesConsumer:
     """
     A simple class to handle consumed, to consume and scope type info of node locals
     """
-
     def __init__(self, node, scope_type):
         self._atomic = ScopeConsumer(copy.copy(node.locals), {}, scope_type)
 
     def __repr__(self):
-        msg = "\nto_consume : {:s}\n".format(
-            ", ".join(
-                [
-                    "{}->{}".format(key, val)
-                    for key, val in self._atomic.to_consume.items()
-                ]
-            )
-        )
-        msg += "consumed : {:s}\n".format(
-            ", ".join(
-                [
-                    "{}->{}".format(key, val)
-                    for key, val in self._atomic.consumed.items()
-                ]
-            )
-        )
+        msg = "\nto_consume : {:s}\n".format(", ".join([
+            "{}->{}".format(key, val)
+            for key, val in self._atomic.to_consume.items()
+        ]))
+        msg += "consumed : {:s}\n".format(", ".join([
+            "{}->{}".format(key, val)
+            for key, val in self._atomic.consumed.items()
+        ]))
         msg += "scope_type : {:s}\n".format(self._atomic.scope_type)
         return msg
 
@@ -550,21 +538,15 @@ class NamesConsumer:
         name = node.name
         parent_node = node.parent
         found_node = self.to_consume.get(name)
-        if (
-            found_node
-            and isinstance(parent_node, astroid.Assign)
-            and parent_node == found_node[0].parent
-        ):
+        if (found_node and isinstance(parent_node, astroid.Assign)
+                and parent_node == found_node[0].parent):
             lhs = found_node[0].parent.targets[0]
             if lhs.name == name:  # this name is defined in this very statement
                 found_node = None
 
-        if (
-            found_node
-            and isinstance(parent_node, astroid.For)
-            and parent_node.iter == node
-            and parent_node.target in found_node
-        ):
+        if (found_node and isinstance(parent_node, astroid.For)
+                and parent_node.iter == node
+                and parent_node.target in found_node):
             found_node = None
         return found_node
 
@@ -589,20 +571,28 @@ class VariablesChecker(BaseChecker):
         (
             "init-import",
             {
-                "default": 0,
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": "Tells whether we should check for unused import in "
+                "default":
+                0,
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help":
+                "Tells whether we should check for unused import in "
                 "__init__ files.",
             },
         ),
         (
             "dummy-variables-rgx",
             {
-                "default": "_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_",
-                "type": "regexp",
-                "metavar": "<regexp>",
-                "help": "A regular expression matching the name of dummy "
+                "default":
+                "_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_",
+                "type":
+                "regexp",
+                "metavar":
+                "<regexp>",
+                "help":
+                "A regular expression matching the name of dummy "
                 "variables (i.e. expected to not be used).",
             },
         ),
@@ -610,9 +600,12 @@ class VariablesChecker(BaseChecker):
             "additional-builtins",
             {
                 "default": (),
-                "type": "csv",
-                "metavar": "<comma separated list>",
-                "help": "List of additional names supposed to be defined in "
+                "type":
+                "csv",
+                "metavar":
+                "<comma separated list>",
+                "help":
+                "List of additional names supposed to be defined in "
                 "builtins. Remember that you should avoid defining new builtins "
                 "when possible.",
             },
@@ -621,9 +614,12 @@ class VariablesChecker(BaseChecker):
             "callbacks",
             {
                 "default": ("cb_", "_cb"),
-                "type": "csv",
-                "metavar": "<callbacks>",
-                "help": "List of strings which can identify a callback "
+                "type":
+                "csv",
+                "metavar":
+                "<callbacks>",
+                "help":
+                "List of strings which can identify a callback "
                 "function by name. A callback name must start or "
                 "end with one of those strings.",
             },
@@ -638,29 +634,40 @@ class VariablesChecker(BaseChecker):
                     "builtins",
                     "io",
                 ),
-                "type": "csv",
-                "metavar": "<comma separated list>",
-                "help": "List of qualified module names which can have objects "
+                "type":
+                "csv",
+                "metavar":
+                "<comma separated list>",
+                "help":
+                "List of qualified module names which can have objects "
                 "that can redefine builtins.",
             },
         ),
         (
             "ignored-argument-names",
             {
-                "default": IGNORED_ARGUMENT_NAMES,
-                "type": "regexp",
-                "metavar": "<regexp>",
-                "help": "Argument names that match this expression will be "
+                "default":
+                IGNORED_ARGUMENT_NAMES,
+                "type":
+                "regexp",
+                "metavar":
+                "<regexp>",
+                "help":
+                "Argument names that match this expression will be "
                 "ignored. Default to name with leading underscore.",
             },
         ),
         (
             "allow-global-unused-variables",
             {
-                "default": True,
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": "Tells whether unused global variables should be treated as a violation.",
+                "default":
+                True,
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help":
+                "Tells whether unused global variables should be treated as a violation.",
             },
         ),
     )
@@ -688,8 +695,7 @@ class VariablesChecker(BaseChecker):
         for variable in assigned_to:
             for outer_for, outer_variables in self._loop_variables:
                 if variable in outer_variables and not in_for_else_branch(
-                    outer_for, node
-                ):
+                        outer_for, node):
                     self.add_message(
                         "redefined-outer-name",
                         args=(variable, outer_for.fromlineno),
@@ -709,11 +715,13 @@ class VariablesChecker(BaseChecker):
         checks globals doesn't overrides builtins
         """
         self._to_consume = [NamesConsumer(node, "module")]
-        self._postponed_evaluation_enabled = is_postponed_evaluation_enabled(node)
+        self._postponed_evaluation_enabled = is_postponed_evaluation_enabled(
+            node)
 
         for name, stmts in node.locals.items():
             if utils.is_builtin(name) and not utils.is_inside_except(stmts[0]):
-                if self._should_ignore_redefined_builtin(stmts[0]) or name == "__doc__":
+                if self._should_ignore_redefined_builtin(
+                        stmts[0]) or name == "__doc__":
                     continue
                 self.add_message("redefined-builtin", args=name, node=stmts[0])
 
@@ -804,10 +812,8 @@ class VariablesChecker(BaseChecker):
         """visit function: update consumption analysis variable and check locals
         """
         self._to_consume.append(NamesConsumer(node, "function"))
-        if not (
-            self.linter.is_message_enabled("redefined-outer-name")
-            or self.linter.is_message_enabled("redefined-builtin")
-        ):
+        if not (self.linter.is_message_enabled("redefined-outer-name")
+                or self.linter.is_message_enabled("redefined-builtin")):
             return
         globs = node.root().globals
         for name, stmt in node.items():
@@ -815,31 +821,28 @@ class VariablesChecker(BaseChecker):
                 continue
             if name in globs and not isinstance(stmt, astroid.Global):
                 definition = globs[name][0]
-                if (
-                    isinstance(definition, astroid.ImportFrom)
-                    and definition.modname == FUTURE
-                ):
+                if (isinstance(definition, astroid.ImportFrom)
+                        and definition.modname == FUTURE):
                     # It is a __future__ directive, not a symbol.
                     continue
 
                 # Do not take in account redefined names for the purpose
                 # of type checking.:
                 if any(
-                    isinstance(definition.parent, astroid.If)
-                    and definition.parent.test.as_string() in TYPING_TYPE_CHECKS_GUARDS
-                    for definition in globs[name]
-                ):
+                        isinstance(definition.parent, astroid.If)
+                        and definition.parent.test.as_string() in
+                        TYPING_TYPE_CHECKS_GUARDS
+                        for definition in globs[name]):
                     continue
 
                 line = definition.fromlineno
                 if not self._is_name_ignored(stmt, name):
-                    self.add_message(
-                        "redefined-outer-name", args=(name, line), node=stmt
-                    )
+                    self.add_message("redefined-outer-name",
+                                     args=(name, line),
+                                     node=stmt)
 
-            elif utils.is_builtin(name) and not self._should_ignore_redefined_builtin(
-                stmt
-            ):
+            elif utils.is_builtin(
+                    name) and not self._should_ignore_redefined_builtin(stmt):
                 # do not print Redefining builtin for additional builtins
                 self.add_message("redefined-builtin", args=name, node=stmt)
 
@@ -854,11 +857,9 @@ class VariablesChecker(BaseChecker):
                 self._store_type_annotation_node(argument_annotation)
 
         not_consumed = self._to_consume.pop().to_consume
-        if not (
-            self.linter.is_message_enabled("unused-variable")
-            or self.linter.is_message_enabled("possibly-unused-variable")
-            or self.linter.is_message_enabled("unused-argument")
-        ):
+        if not (self.linter.is_message_enabled("unused-variable")
+                or self.linter.is_message_enabled("possibly-unused-variable")
+                or self.linter.is_message_enabled("unused-argument")):
             return
 
         # Don't check arguments of function which are only raising an exception.
@@ -870,10 +871,13 @@ class VariablesChecker(BaseChecker):
         if is_method and node.is_abstract():
             return
 
-        global_names = _flattened_scope_names(node.nodes_of_class(astroid.Global))
-        nonlocal_names = _flattened_scope_names(node.nodes_of_class(astroid.Nonlocal))
+        global_names = _flattened_scope_names(
+            node.nodes_of_class(astroid.Global))
+        nonlocal_names = _flattened_scope_names(
+            node.nodes_of_class(astroid.Nonlocal))
         for name, stmts in not_consumed.items():
-            self._check_is_unused(name, node, stmts[0], global_names, nonlocal_names)
+            self._check_is_unused(name, node, stmts[0], global_names,
+                                  nonlocal_names)
 
     visit_asyncfunctiondef = visit_functiondef
     leave_asyncfunctiondef = leave_functiondef
@@ -904,18 +908,17 @@ class VariablesChecker(BaseChecker):
 
             not_defined_locally_by_import = not any(
                 isinstance(local, astroid.node_classes.Import)
-                for local in locals_.get(name, ())
-            )
+                for local in locals_.get(name, ()))
             if not assign_nodes and not_defined_locally_by_import:
-                self.add_message("global-variable-not-assigned", args=name, node=node)
+                self.add_message("global-variable-not-assigned",
+                                 args=name,
+                                 node=node)
                 default_message = False
                 continue
 
             for anode in assign_nodes:
-                if (
-                    isinstance(anode, astroid.AssignName)
-                    and anode.name in module.special_attributes
-                ):
+                if (isinstance(anode, astroid.AssignName)
+                        and anode.name in module.special_attributes):
                     self.add_message("redefined-builtin", args=name, node=node)
                     break
                 if anode.frame() is module:
@@ -924,7 +927,9 @@ class VariablesChecker(BaseChecker):
             else:
                 if not_defined_locally_by_import:
                     # global undefined at the module scope
-                    self.add_message("global-variable-undefined", args=name, node=node)
+                    self.add_message("global-variable-undefined",
+                                     args=name,
+                                     node=node)
                     default_message = False
 
         if default_message:
@@ -953,11 +958,8 @@ class VariablesChecker(BaseChecker):
         # if the name node is used as a function default argument's value or as
         # a decorator, then start from the parent frame of the function instead
         # of the function frame - and thus open an inner class scope
-        if (
-            utils.is_default_argument(node)
-            or utils.is_func_decorator(node)
-            or utils.is_ancestor_name(frame, node)
-        ):
+        if (utils.is_default_argument(node) or utils.is_func_decorator(node)
+                or utils.is_ancestor_name(frame, node)):
             start_index = len(self._to_consume) - 2
         else:
             start_index = len(self._to_consume) - 1
@@ -971,11 +973,9 @@ class VariablesChecker(BaseChecker):
             # the globals one in function members when there are some common
             # names. The only exception is when the starting scope is a
             # comprehension and its direct outer scope is a class
-            if (
-                current_consumer.scope_type == "class"
-                and i != start_index
-                and not (base_scope_type == "comprehension" and i == start_index - 1)
-            ):
+            if (current_consumer.scope_type == "class" and i != start_index
+                    and not (base_scope_type == "comprehension"
+                             and i == start_index - 1)):
                 if self._ignore_class_scope(node):
                     continue
 
@@ -984,10 +984,10 @@ class VariablesChecker(BaseChecker):
             # avoid the case where there are homonyms inside function scope and
             #  comprehension current scope (avoid bug #1731)
             if name in current_consumer.consumed and not (
-                current_consumer.scope_type == "comprehension"
-                and self._has_homonym_in_upper_function_scope(node, i)
-            ):
-                defnode = utils.assign_parent(current_consumer.consumed[name][0])
+                    current_consumer.scope_type == "comprehension"
+                    and self._has_homonym_in_upper_function_scope(node, i)):
+                defnode = utils.assign_parent(
+                    current_consumer.consumed[name][0])
                 self._check_late_binding_closure(node, defnode)
                 self._loopvar_name(node, name)
                 break
@@ -1004,21 +1004,14 @@ class VariablesChecker(BaseChecker):
                 defstmt = defnode.statement()
                 defframe = defstmt.frame()
                 # The class reuses itself in the class scope.
-                recursive_klass = (
-                    frame is defframe
-                    and defframe.parent_of(node)
-                    and isinstance(defframe, astroid.ClassDef)
-                    and node.name == defframe.name
-                )
+                recursive_klass = (frame is defframe
+                                   and defframe.parent_of(node)
+                                   and isinstance(defframe, astroid.ClassDef)
+                                   and node.name == defframe.name)
 
-                if (
-                    recursive_klass
-                    and utils.is_inside_lambda(node)
-                    and (
-                        not utils.is_default_argument(node)
-                        or node.scope().parent.scope() is not defframe
-                    )
-                ):
+                if (recursive_klass and utils.is_inside_lambda(node)
+                        and (not utils.is_default_argument(node)
+                             or node.scope().parent.scope() is not defframe)):
                     # Self-referential class references are fine in lambda's --
                     # As long as they are not part of the default argument directly
                     # under the scope of the parent self-referring class.
@@ -1057,75 +1050,67 @@ class VariablesChecker(BaseChecker):
                 if use_outer_definition:
                     continue
 
-                if (
-                    maybee0601
-                    and not utils.is_defined_before(node)
-                    and not astroid.are_exclusive(stmt, defstmt, ("NameError",))
-                ):
+                if (maybee0601 and not utils.is_defined_before(node)
+                        and not astroid.are_exclusive(stmt, defstmt,
+                                                      ("NameError", ))):
 
                     # Used and defined in the same place, e.g `x += 1` and `del x`
                     defined_by_stmt = defstmt is stmt and isinstance(
-                        node, (astroid.DelName, astroid.AssignName)
-                    )
-                    if (
-                        recursive_klass
-                        or defined_by_stmt
-                        or annotation_return
-                        or isinstance(defstmt, astroid.Delete)
-                    ):
+                        node, (astroid.DelName, astroid.AssignName))
+                    if (recursive_klass or defined_by_stmt or annotation_return
+                            or isinstance(defstmt, astroid.Delete)):
                         if not utils.node_ignores_exception(node, NameError):
 
                             # Handle postponed evaluation of annotations
-                            if not (
-                                self._postponed_evaluation_enabled
-                                and isinstance(
-                                    stmt,
-                                    (
-                                        astroid.AnnAssign,
-                                        astroid.FunctionDef,
-                                        astroid.Arguments,
-                                    ),
-                                )
-                                and name in node.root().locals
-                            ):
-                                self.add_message(
-                                    "undefined-variable", args=name, node=node
-                                )
+                            if not (self._postponed_evaluation_enabled
+                                    and isinstance(
+                                        stmt,
+                                        (
+                                            astroid.AnnAssign,
+                                            astroid.FunctionDef,
+                                            astroid.Arguments,
+                                        ),
+                                    ) and name in node.root().locals):
+                                self.add_message("undefined-variable",
+                                                 args=name,
+                                                 node=node)
                     elif base_scope_type != "lambda":
                         # E0601 may *not* occurs in lambda scope.
 
                         # Handle postponed evaluation of annotations
-                        if not (
-                            self._postponed_evaluation_enabled
-                            and isinstance(
-                                stmt, (astroid.AnnAssign, astroid.FunctionDef)
-                            )
-                        ):
-                            self.add_message(
-                                "used-before-assignment", args=name, node=node
-                            )
+                        if not (self._postponed_evaluation_enabled
+                                and isinstance(
+                                    stmt,
+                                    (astroid.AnnAssign, astroid.FunctionDef))):
+                            self.add_message("used-before-assignment",
+                                             args=name,
+                                             node=node)
                     elif base_scope_type == "lambda":
                         # E0601 can occur in class-level scope in lambdas, as in
                         # the following example:
                         #   class A:
                         #      x = lambda attr: f + attr
                         #      f = 42
-                        if isinstance(frame, astroid.ClassDef) and name in frame.locals:
+                        if isinstance(
+                                frame,
+                                astroid.ClassDef) and name in frame.locals:
                             if isinstance(node.parent, astroid.Arguments):
                                 if stmt.fromlineno <= defstmt.fromlineno:
                                     # Doing the following is fine:
                                     #   class A:
                                     #      x = 42
                                     #      y = lambda attr=x: attr
-                                    self.add_message(
-                                        "used-before-assignment", args=name, node=node
-                                    )
+                                    self.add_message("used-before-assignment",
+                                                     args=name,
+                                                     node=node)
                             else:
-                                self.add_message(
-                                    "undefined-variable", args=name, node=node
-                                )
+                                self.add_message("undefined-variable",
+                                                 args=name,
+                                                 node=node)
                         elif current_consumer.scope_type == "lambda":
-                            self.add_message("undefined-variable", node=node, args=name)
+                            self.add_message("undefined-variable",
+                                             node=node,
+                                             args=name)
 
             current_consumer.mark_as_consumed(name, found_node)
             # check it's not a loop variable used outside the loop
@@ -1134,18 +1119,19 @@ class VariablesChecker(BaseChecker):
         else:
             # we have not found the name, if it isn't a builtin, that's an
             # undefined name !
-            if not (
-                name in astroid.Module.scope_attrs
-                or utils.is_builtin(name)
-                or name in self.config.additional_builtins
-            ):
+            if not (name in astroid.Module.scope_attrs
+                    or utils.is_builtin(name)
+                    or name in self.config.additional_builtins):
                 if not utils.node_ignores_exception(node, NameError):
-                    self.add_message("undefined-variable", args=name, node=node)
+                    self.add_message("undefined-variable",
+                                     args=name,
+                                     node=node)
 
     @utils.check_messages("no-name-in-module")
     def visit_import(self, node):
         """check modules attribute accesses"""
-        if not self._analyse_fallback_blocks and utils.is_from_fallback_block(node):
+        if not self._analyse_fallback_blocks and utils.is_from_fallback_block(
+                node):
             # No need to verify this, since ImportError is already
             # handled by the client code.
             return
@@ -1163,7 +1149,8 @@ class VariablesChecker(BaseChecker):
     @utils.check_messages("no-name-in-module")
     def visit_importfrom(self, node):
         """check modules attribute accesses"""
-        if not self._analyse_fallback_blocks and utils.is_from_fallback_block(node):
+        if not self._analyse_fallback_blocks and utils.is_from_fallback_block(
+                node):
             # No need to verify this, since ImportError is already
             # handled by the client code.
             return
@@ -1181,9 +1168,8 @@ class VariablesChecker(BaseChecker):
                 continue
             self._check_module_attrs(node, module, name.split("."))
 
-    @utils.check_messages(
-        "unbalanced-tuple-unpacking", "unpacking-non-sequence", "self-cls-assignment"
-    )
+    @utils.check_messages("unbalanced-tuple-unpacking",
+                          "unpacking-non-sequence", "self-cls-assignment")
     def visit_assign(self, node):
         """Check unbalanced tuple unpacking for assignments
         and unpacking non-sequences as well as in case self/cls
@@ -1226,7 +1212,9 @@ class VariablesChecker(BaseChecker):
     # Relying on other checker's options, which might not have been initialized yet.
     @decorators.cachedproperty
     def _analyse_fallback_blocks(self):
-        return get_global_option(self, "analyse-fallback-blocks", default=False)
+        return get_global_option(self,
+                                 "analyse-fallback-blocks",
+                                 default=False)
 
     @decorators.cachedproperty
     def _ignored_modules(self):
@@ -1234,18 +1222,20 @@ class VariablesChecker(BaseChecker):
 
     @decorators.cachedproperty
     def _allow_global_unused_variables(self):
-        return get_global_option(self, "allow-global-unused-variables", default=True)
+        return get_global_option(self,
+                                 "allow-global-unused-variables",
+                                 default=True)
 
     @staticmethod
     def _defined_in_function_definition(node, frame):
         in_annotation_or_default = False
-        if isinstance(frame, astroid.FunctionDef) and node.statement() is frame:
+        if isinstance(frame,
+                      astroid.FunctionDef) and node.statement() is frame:
             in_annotation_or_default = (
                 node in frame.args.annotations
                 or node in frame.args.kwonlyargs_annotations
-                or node is frame.args.varargannotation
-                or node is frame.args.kwargannotation
-            ) or frame.args.parent_of(node)
+                or node is frame.args.varargannotation or node is
+                frame.args.kwargannotation) or frame.args.parent_of(node)
         return in_annotation_or_default
 
     @staticmethod
@@ -1281,27 +1271,21 @@ class VariablesChecker(BaseChecker):
             # skip this lookup if name is assigned later in function scope/lambda
             # Note: the node.frame() is not the same as the `frame` argument which is
             # equivalent to frame.statement().scope()
-            forbid_lookup = (
-                isinstance(frame, astroid.FunctionDef)
-                or isinstance(node.frame(), astroid.Lambda)
-            ) and _assigned_locally(node)
+            forbid_lookup = (isinstance(
+                frame, astroid.FunctionDef) or isinstance(
+                    node.frame(), astroid.Lambda)) and _assigned_locally(node)
             if not forbid_lookup and defframe.root().lookup(name)[1]:
                 maybee0601 = False
                 use_outer_definition = stmt == defstmt and not isinstance(
-                    defnode, astroid.node_classes.Comprehension
-                )
+                    defnode, astroid.node_classes.Comprehension)
             # check if we have a nonlocal
             elif name in defframe.locals:
                 maybee0601 = not any(
                     isinstance(child, astroid.Nonlocal) and name in child.names
-                    for child in defframe.get_children()
-                )
+                    for child in defframe.get_children())
 
-        if (
-            base_scope_type == "lambda"
-            and isinstance(frame, astroid.ClassDef)
-            and name in frame.locals
-        ):
+        if (base_scope_type == "lambda" and isinstance(frame, astroid.ClassDef)
+                and name in frame.locals):
 
             # This rule verifies that if the definition node of the
             # checked name is an Arguments node and if the name
@@ -1317,22 +1301,17 @@ class VariablesChecker(BaseChecker):
             maybee0601 = not (
                 isinstance(defnode, astroid.Arguments)
                 and node in defnode.defaults
-                and frame.locals[name][0].fromlineno < defstmt.fromlineno
-            )
+                and frame.locals[name][0].fromlineno < defstmt.fromlineno)
         elif isinstance(defframe, astroid.ClassDef) and isinstance(
-            frame, astroid.FunctionDef
-        ):
+                frame, astroid.FunctionDef):
             # Special rule for function return annotations,
             # which uses the same name as the class where
             # the function lives.
             if node is frame.returns and defframe.parent_of(frame.returns):
                 maybee0601 = annotation_return = True
 
-            if (
-                maybee0601
-                and defframe.name in defframe.locals
-                and defframe.locals[name][0].lineno < frame.lineno
-            ):
+            if (maybee0601 and defframe.name in defframe.locals
+                    and defframe.locals[name][0].lineno < frame.lineno):
                 # Detect class assignments with the same
                 # name as the class. In this case, no warning
                 # should be raised.
@@ -1344,12 +1323,9 @@ class VariablesChecker(BaseChecker):
         else:
             maybee0601 = maybee0601 and stmt.fromlineno <= defstmt.fromlineno
             if maybee0601 and stmt.fromlineno == defstmt.fromlineno:
-                if (
-                    isinstance(defframe, astroid.FunctionDef)
-                    and frame is defframe
-                    and defframe.parent_of(node)
-                    and stmt is not defstmt
-                ):
+                if (isinstance(defframe, astroid.FunctionDef)
+                        and frame is defframe and defframe.parent_of(node)
+                        and stmt is not defstmt):
                     # Single statement function, with the statement on the
                     # same line as the function definition
                     maybee0601 = False
@@ -1358,10 +1334,9 @@ class VariablesChecker(BaseChecker):
             if isinstance(defstmt, (astroid.Import, astroid.ImportFrom)):
                 defstmt_parent = defstmt.parent
 
-                if (
-                    isinstance(defstmt_parent, astroid.If)
-                    and defstmt_parent.test.as_string() in TYPING_TYPE_CHECKS_GUARDS
-                ):
+                if (isinstance(defstmt_parent, astroid.If)
+                        and defstmt_parent.test.as_string() in
+                        TYPING_TYPE_CHECKS_GUARDS):
                     # Exempt those definitions that are used inside the type checking
                     # guard or that are defined in both type checking guard branches.
                     used_in_branch = defstmt_parent.parent_of(node)
@@ -1370,8 +1345,8 @@ class VariablesChecker(BaseChecker):
                     for definition in defstmt_parent.orelse:
                         if isinstance(definition, astroid.Assign):
                             defined_in_or_else = any(
-                                target.name == name for target in definition.targets
-                            )
+                                target.name == name
+                                for target in definition.targets)
                             if defined_in_or_else:
                                 break
 
@@ -1407,29 +1382,30 @@ class VariablesChecker(BaseChecker):
 
         name = node.name
         frame = node.statement().scope()
-        in_annotation_or_default = self._defined_in_function_definition(node, frame)
+        in_annotation_or_default = self._defined_in_function_definition(
+            node, frame)
         if in_annotation_or_default:
             frame_locals = frame.parent.scope().locals
         else:
             frame_locals = frame.locals
-        return not (
-            (isinstance(frame, astroid.ClassDef) or in_annotation_or_default)
-            and name in frame_locals
-        )
+        return not ((isinstance(frame, astroid.ClassDef)
+                     or in_annotation_or_default) and name in frame_locals)
 
     def _loopvar_name(self, node, name):
         # filter variables according to node's scope
         if not self.linter.is_message_enabled("undefined-loop-variable"):
             return
-        astmts = [stmt for stmt in node.lookup(name)[1] if hasattr(stmt, "assign_type")]
+        astmts = [
+            stmt for stmt in node.lookup(name)[1]
+            if hasattr(stmt, "assign_type")
+        ]
         # If this variable usage exists inside a function definition
         # that exists in the same loop,
         # the usage is safe because the function will not be defined either if
         # the variable is not defined.
         scope = node.scope()
         if isinstance(scope, astroid.FunctionDef) and any(
-            asmt.statement().parent_of(scope) for asmt in astmts
-        ):
+                asmt.statement().parent_of(scope) for asmt in astmts):
             return
 
         # filter variables according their respective scope test is_statement
@@ -1439,18 +1415,15 @@ class VariablesChecker(BaseChecker):
         # scope lookup rules would need to be changed to return the initial
         # assignment (which does not exist in code per se) as well as any later
         # modifications.
-        if (
-            not astmts
-            or (astmts[0].is_statement or astmts[0].parent)
-            and astmts[0].statement().parent_of(node)
-        ):
+        if (not astmts or (astmts[0].is_statement or astmts[0].parent)
+                and astmts[0].statement().parent_of(node)):
             _astmts = []
         else:
             _astmts = astmts[:1]
         for i, stmt in enumerate(astmts[1:]):
-            if astmts[i].statement().parent_of(stmt) and not in_for_else_branch(
-                astmts[i].statement(), stmt
-            ):
+            if astmts[i].statement().parent_of(
+                    stmt) and not in_for_else_branch(astmts[i].statement(),
+                                                     stmt):
                 continue
             _astmts.append(stmt)
         astmts = _astmts
@@ -1458,12 +1431,10 @@ class VariablesChecker(BaseChecker):
             return
 
         assign = astmts[0].assign_type()
-        if not (
-            isinstance(
-                assign, (astroid.For, astroid.Comprehension, astroid.GeneratorExp)
-            )
-            and assign.statement() is not node.statement()
-        ):
+        if not (isinstance(
+                assign,
+            (astroid.For, astroid.Comprehension, astroid.GeneratorExp))
+                and assign.statement() is not node.statement()):
             return
 
         # For functions we can do more by inferring the length of the itered object
@@ -1476,10 +1447,8 @@ class VariablesChecker(BaseChecker):
         except astroid.InferenceError:
             self.add_message("undefined-loop-variable", args=name, node=node)
         else:
-            if (
-                isinstance(inferred, astroid.Instance)
-                and inferred.qname() == BUILTIN_RANGE
-            ):
+            if (isinstance(inferred, astroid.Instance)
+                    and inferred.qname() == BUILTIN_RANGE):
                 # Consider range() objects safe, even if they might not yield any results.
                 return
 
@@ -1492,12 +1461,17 @@ class VariablesChecker(BaseChecker):
                 objects.FrozenSet,
             )
             if not isinstance(inferred, sequences):
-                self.add_message("undefined-loop-variable", args=name, node=node)
+                self.add_message("undefined-loop-variable",
+                                 args=name,
+                                 node=node)
                 return
 
-            elements = getattr(inferred, "elts", getattr(inferred, "items", []))
+            elements = getattr(inferred, "elts",
+                               getattr(inferred, "items", []))
             if not elements:
-                self.add_message("undefined-loop-variable", args=name, node=node)
+                self.add_message("undefined-loop-variable",
+                                 args=name,
+                                 node=node)
 
     def _check_is_unused(self, name, node, stmt, global_names, nonlocal_names):
         # pylint: disable=too-many-branches
@@ -1505,30 +1479,27 @@ class VariablesChecker(BaseChecker):
         if self._is_name_ignored(stmt, name):
             return
         # Ignore names that were added dynamically to the Function scope
-        if (
-            isinstance(node, astroid.FunctionDef)
-            and name == "__class__"
-            and len(node.locals["__class__"]) == 1
-            and isinstance(node.locals["__class__"][0], astroid.ClassDef)
-        ):
+        if (isinstance(node, astroid.FunctionDef) and name == "__class__"
+                and len(node.locals["__class__"]) == 1
+                and isinstance(node.locals["__class__"][0], astroid.ClassDef)):
             return
 
         # Ignore names imported by the global statement.
-        if isinstance(stmt, (astroid.Global, astroid.Import, astroid.ImportFrom)):
+        if isinstance(stmt,
+                      (astroid.Global, astroid.Import, astroid.ImportFrom)):
             # Detect imports, assigned to global statements.
             if global_names and _import_name_is_global(stmt, global_names):
                 return
 
         argnames = list(
-            itertools.chain(node.argnames(), [arg.name for arg in node.args.kwonlyargs])
-        )
+            itertools.chain(node.argnames(),
+                            [arg.name for arg in node.args.kwonlyargs]))
         # Care about functions with unknown argument (builtins)
         if name in argnames:
             self._check_unused_arguments(name, node, stmt, argnames)
         else:
-            if stmt.parent and isinstance(
-                stmt.parent, (astroid.Assign, astroid.AnnAssign)
-            ):
+            if stmt.parent and isinstance(stmt.parent,
+                                          (astroid.Assign, astroid.AnnAssign)):
                 if name in nonlocal_names:
                     return
 
@@ -1537,8 +1508,7 @@ class VariablesChecker(BaseChecker):
                 # Need the complete name, which we don't have in .locals.
                 if len(stmt.names) > 1:
                     import_names = next(
-                        (names for names in stmt.names if name in names), None
-                    )
+                        (names for names in stmt.names if name in names), None)
                 else:
                     import_names = stmt.names[0]
                 if import_names:
@@ -1576,11 +1546,9 @@ class VariablesChecker(BaseChecker):
 
     def _is_name_ignored(self, stmt, name):
         authorized_rgx = self.config.dummy_variables_rgx
-        if (
-            isinstance(stmt, astroid.AssignName)
-            and isinstance(stmt.parent, astroid.Arguments)
-            or isinstance(stmt, astroid.Arguments)
-        ):
+        if (isinstance(stmt, astroid.AssignName)
+                and isinstance(stmt.parent, astroid.Arguments)
+                or isinstance(stmt, astroid.Arguments)):
             regex = self.config.ignored_argument_names
         else:
             regex = authorized_rgx
@@ -1590,9 +1558,8 @@ class VariablesChecker(BaseChecker):
         is_method = node.is_method()
         klass = node.parent.frame()
         if is_method and isinstance(klass, astroid.ClassDef):
-            confidence = (
-                INFERENCE if utils.has_known_bases(klass) else INFERENCE_FAILURE
-            )
+            confidence = (INFERENCE if utils.has_known_bases(klass) else
+                          INFERENCE_FAILURE)
         else:
             confidence = HIGH
 
@@ -1605,15 +1572,14 @@ class VariablesChecker(BaseChecker):
             if overridden is not None and name in overridden.argnames():
                 return
             if node.name in utils.PYMETHODS and node.name not in (
-                "__init__",
-                "__new__",
+                    "__init__",
+                    "__new__",
             ):
                 return
         # Don't check callback arguments
         if any(
-            node.name.startswith(cb) or node.name.endswith(cb)
-            for cb in self.config.callbacks
-        ):
+                node.name.startswith(cb) or node.name.endswith(cb)
+                for cb in self.config.callbacks):
             return
         # Don't check arguments of singledispatch.register function.
         if utils.is_registered_in_singledispatch_function(node):
@@ -1627,14 +1593,15 @@ class VariablesChecker(BaseChecker):
         if utils.is_protocol_class(klass):
             return
 
-        self.add_message("unused-argument", args=name, node=stmt, confidence=confidence)
+        self.add_message("unused-argument",
+                         args=name,
+                         node=stmt,
+                         confidence=confidence)
 
     def _check_late_binding_closure(self, node, assignment_node):
         def _is_direct_lambda_call():
-            return (
-                isinstance(node_scope.parent, astroid.Call)
-                and node_scope.parent.func is node_scope
-            )
+            return (isinstance(node_scope.parent, astroid.Call)
+                    and node_scope.parent.func is node_scope)
 
         node_scope = node.scope()
         if not isinstance(node_scope, (astroid.Lambda, astroid.FunctionDef)):
@@ -1644,7 +1611,9 @@ class VariablesChecker(BaseChecker):
 
         if isinstance(assignment_node, astroid.Comprehension):
             if assignment_node.parent.parent_of(node.scope()):
-                self.add_message("cell-var-from-loop", node=node, args=node.name)
+                self.add_message("cell-var-from-loop",
+                                 node=node,
+                                 args=node.name)
         else:
             assign_scope = assignment_node.scope()
             maybe_for = assignment_node
@@ -1653,12 +1622,12 @@ class VariablesChecker(BaseChecker):
                     break
                 maybe_for = maybe_for.parent
             else:
-                if (
-                    maybe_for.parent_of(node_scope)
-                    and not _is_direct_lambda_call()
-                    and not isinstance(node_scope.statement(), astroid.Return)
-                ):
-                    self.add_message("cell-var-from-loop", node=node, args=node.name)
+                if (maybe_for.parent_of(node_scope)
+                        and not _is_direct_lambda_call() and not isinstance(
+                            node_scope.statement(), astroid.Return)):
+                    self.add_message("cell-var-from-loop",
+                                     node=node,
+                                     args=node.name)
 
     def _should_ignore_redefined_builtin(self, stmt):
         if not isinstance(stmt, astroid.ImportFrom):
@@ -1678,7 +1647,7 @@ class VariablesChecker(BaseChecker):
                  and if that scope is a function
         :rtype: bool
         """
-        for _consumer in self._to_consume[index - 1 :: -1]:
+        for _consumer in self._to_consume[index - 1::-1]:
             if _consumer.scope_type == "function" and node.name in _consumer.to_consume:
                 return True
         return False
@@ -1692,18 +1661,15 @@ class VariablesChecker(BaseChecker):
         if not isinstance(type_annotation, astroid.Subscript):
             return
 
-        if (
-            isinstance(type_annotation.value, astroid.Attribute)
-            and isinstance(type_annotation.value.expr, astroid.Name)
-            and type_annotation.value.expr.name == TYPING_MODULE
-        ):
+        if (isinstance(type_annotation.value, astroid.Attribute)
+                and isinstance(type_annotation.value.expr, astroid.Name)
+                and type_annotation.value.expr.name == TYPING_MODULE):
             self._type_annotation_names.append(TYPING_MODULE)
             return
 
         self._type_annotation_names.extend(
             annotation.name
-            for annotation in type_annotation.nodes_of_class(astroid.Name)
-        )
+            for annotation in type_annotation.nodes_of_class(astroid.Name))
 
     def _store_type_annotation_names(self, node):
         type_annotation = node.type_annotation
@@ -1720,30 +1686,27 @@ class VariablesChecker(BaseChecker):
         }
         scope = node.scope()
         nonlocals_with_same_name = any(
-            child
-            for child in scope.body
-            if isinstance(child, astroid.Nonlocal) and assign_names & set(child.names)
-        )
+            child for child in scope.body
+            if isinstance(child, astroid.Nonlocal) and assign_names
+            & set(child.names))
         if nonlocals_with_same_name:
             scope = node.scope().parent.scope()
 
-        if not (
-            isinstance(scope, astroid.scoped_nodes.FunctionDef)
-            and scope.is_method()
-            and "builtins.staticmethod" not in scope.decoratornames()
-        ):
+        if not (isinstance(scope, astroid.scoped_nodes.FunctionDef)
+                and scope.is_method()
+                and "builtins.staticmethod" not in scope.decoratornames()):
             return
         argument_names = scope.argnames()
         if not argument_names:
             return
         self_cls_name = argument_names[0]
         target_assign_names = (
-            target.name
-            for target in node.targets
-            if isinstance(target, astroid.node_classes.AssignName)
-        )
+            target.name for target in node.targets
+            if isinstance(target, astroid.node_classes.AssignName))
         if self_cls_name in target_assign_names:
-            self.add_message("self-cls-assignment", node=node, args=(self_cls_name))
+            self.add_message("self-cls-assignment",
+                             node=node,
+                             args=(self_cls_name))
 
     def _check_unpacking(self, inferred, node, targets):
         """ Check for unbalanced tuple unpacking
@@ -1755,11 +1718,9 @@ class VariablesChecker(BaseChecker):
             return
         if inferred is astroid.Uninferable:
             return
-        if (
-            isinstance(inferred.parent, astroid.Arguments)
-            and isinstance(node.value, astroid.Name)
-            and node.value.name == inferred.parent.vararg
-        ):
+        if (isinstance(inferred.parent, astroid.Arguments)
+                and isinstance(node.value, astroid.Name)
+                and node.value.name == inferred.parent.vararg):
             # Variable-length argument, we can't determine the length.
             return
         if isinstance(inferred, (astroid.Tuple, astroid.List)):
@@ -1767,7 +1728,9 @@ class VariablesChecker(BaseChecker):
             values = inferred.itered()
             if len(targets) != len(values):
                 # Check if we have starred nodes.
-                if any(isinstance(target, astroid.Starred) for target in targets):
+                if any(
+                        isinstance(target, astroid.Starred)
+                        for target in targets):
                     return
                 self.add_message(
                     "unbalanced-tuple-unpacking",
@@ -1783,7 +1746,7 @@ class VariablesChecker(BaseChecker):
             self.add_message(
                 "unpacking-non-sequence",
                 node=node,
-                args=(_get_unpacking_extra_info(node, inferred),),
+                args=(_get_unpacking_extra_info(node, inferred), ),
             )
 
     def _check_module_attrs(self, node, module, module_names):
@@ -1803,17 +1766,17 @@ class VariablesChecker(BaseChecker):
             except astroid.NotFoundError:
                 if module.name in self._ignored_modules:
                     return None
-                self.add_message(
-                    "no-name-in-module", args=(name, module.name), node=node
-                )
+                self.add_message("no-name-in-module",
+                                 args=(name, module.name),
+                                 node=node)
                 return None
             except astroid.InferenceError:
                 return None
         if module_names:
             modname = module.name if module else "__dict__"
-            self.add_message(
-                "no-name-in-module", node=node, args=(".".join(module_names), modname)
-            )
+            self.add_message("no-name-in-module",
+                             node=node,
+                             args=(".".join(module_names), modname))
             return None
         if isinstance(module, astroid.Module):
             return module
@@ -1835,9 +1798,10 @@ class VariablesChecker(BaseChecker):
                 continue
 
             if not isinstance(elt_name, astroid.Const) or not isinstance(
-                elt_name.value, str
-            ):
-                self.add_message("invalid-all-object", args=elt.as_string(), node=elt)
+                    elt_name.value, str):
+                self.add_message("invalid-all-object",
+                                 args=elt.as_string(),
+                                 node=elt)
                 continue
 
             elt_name = elt_name.value
@@ -1848,9 +1812,9 @@ class VariablesChecker(BaseChecker):
 
             if elt_name not in node.locals:
                 if not node.package:
-                    self.add_message(
-                        "undefined-all-variable", args=(elt_name,), node=elt
-                    )
+                    self.add_message("undefined-all-variable",
+                                     args=(elt_name, ),
+                                     node=elt)
                 else:
                     basename = os.path.splitext(node.file)[0]
                     if os.path.basename(basename) == "__init__":
@@ -1858,9 +1822,9 @@ class VariablesChecker(BaseChecker):
                         try:
                             modutils.file_from_modpath(name.split("."))
                         except ImportError:
-                            self.add_message(
-                                "undefined-all-variable", args=(elt_name,), node=elt
-                            )
+                            self.add_message("undefined-all-variable",
+                                             args=(elt_name, ),
+                                             node=elt)
                         except SyntaxError:
                             # don't yield a syntax-error warning,
                             # because it will be later yielded
@@ -1872,7 +1836,7 @@ class VariablesChecker(BaseChecker):
             return
         for name, nodes in not_consumed.items():
             for node in nodes:
-                self.add_message("unused-variable", args=(name,), node=node)
+                self.add_message("unused-variable", args=(name, ), node=node)
 
     def _check_imports(self, not_consumed):
         local_names = _fix_dot_imports(not_consumed)
@@ -1891,14 +1855,11 @@ class VariablesChecker(BaseChecker):
 
                 is_type_annotation_import = (
                     imported_name in self._type_annotation_names
-                    or as_name in self._type_annotation_names
-                )
-                if isinstance(stmt, astroid.Import) or (
-                    isinstance(stmt, astroid.ImportFrom) and not stmt.modname
-                ):
-                    if isinstance(stmt, astroid.ImportFrom) and SPECIAL_OBJ.search(
-                        imported_name
-                    ):
+                    or as_name in self._type_annotation_names)
+                if isinstance(stmt, astroid.Import) or (isinstance(
+                        stmt, astroid.ImportFrom) and not stmt.modname):
+                    if isinstance(stmt, astroid.ImportFrom
+                                  ) and SPECIAL_OBJ.search(imported_name):
                         # Filter special objects (__doc__, __all__) etc.,
                         # because they can be imported for exporting.
                         continue
@@ -1915,7 +1876,8 @@ class VariablesChecker(BaseChecker):
                         msg = "%s imported as %s" % (imported_name, as_name)
                     if not _is_type_checking_import(stmt):
                         self.add_message("unused-import", args=msg, node=stmt)
-                elif isinstance(stmt, astroid.ImportFrom) and stmt.modname != FUTURE:
+                elif isinstance(stmt,
+                                astroid.ImportFrom) and stmt.modname != FUTURE:
                     if SPECIAL_OBJ.search(imported_name):
                         # Filter special objects (__doc__, __all__) etc.,
                         # because they can be imported for exporting.
@@ -1931,15 +1893,20 @@ class VariablesChecker(BaseChecker):
                         continue
 
                     if imported_name == "*":
-                        self.add_message("unused-wildcard-import", args=name, node=stmt)
+                        self.add_message("unused-wildcard-import",
+                                         args=name,
+                                         node=stmt)
                     else:
                         if as_name is None:
-                            msg = "%s imported from %s" % (imported_name, stmt.modname)
+                            msg = "%s imported from %s" % (imported_name,
+                                                           stmt.modname)
                         else:
                             fields = (imported_name, stmt.modname, as_name)
                             msg = "%s imported from %s as %s" % fields
                         if not _is_type_checking_import(stmt):
-                            self.add_message("unused-import", args=msg, node=stmt)
+                            self.add_message("unused-import",
+                                             args=msg,
+                                             node=stmt)
         del self._to_consume
 
     def _check_metaclasses(self, node):
@@ -1948,7 +1915,8 @@ class VariablesChecker(BaseChecker):
 
         for child_node in node.get_children():
             if isinstance(child_node, astroid.ClassDef):
-                consumed.extend(self._check_classdef_metaclasses(child_node, node))
+                consumed.extend(
+                    self._check_classdef_metaclasses(child_node, node))
 
         # Pop the consumed items, in order to avoid having
         # unused-import and unused-variable false positives
@@ -1966,7 +1934,8 @@ class VariablesChecker(BaseChecker):
         name = None
         if isinstance(klass._metaclass, astroid.Name):
             name = klass._metaclass.name
-        elif isinstance(klass._metaclass, astroid.Attribute) and klass._metaclass.expr:
+        elif isinstance(klass._metaclass,
+                        astroid.Attribute) and klass._metaclass.expr:
             name = klass._metaclass.expr.name
         elif metaclass:
             name = metaclass.root().name
@@ -1985,20 +1954,18 @@ class VariablesChecker(BaseChecker):
             name = None
             if isinstance(klass._metaclass, astroid.Name):
                 name = klass._metaclass.name
-            elif (
-                isinstance(klass._metaclass, astroid.Attribute)
-                and klass._metaclass.expr
-            ):
+            elif (isinstance(klass._metaclass, astroid.Attribute)
+                  and klass._metaclass.expr):
                 name = klass._metaclass.expr.name
 
             if name is not None:
-                if not (
-                    name in astroid.Module.scope_attrs
-                    or utils.is_builtin(name)
-                    or name in self.config.additional_builtins
-                    or name in parent_node.locals
-                ):
-                    self.add_message("undefined-variable", node=klass, args=(name,))
+                if not (name in astroid.Module.scope_attrs
+                        or utils.is_builtin(name)
+                        or name in self.config.additional_builtins
+                        or name in parent_node.locals):
+                    self.add_message("undefined-variable",
+                                     node=klass,
+                                     args=(name, ))
 
         return consumed
 

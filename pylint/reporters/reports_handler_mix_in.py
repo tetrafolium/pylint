@@ -13,7 +13,6 @@ class ReportsHandlerMixIn:
     """a mix-in class containing all the reports and stats manipulation
     related methods for the main lint class
     """
-
     def __init__(self):
         self._reports = collections.defaultdict(list)
         self._reports_state = {}
@@ -53,7 +52,8 @@ class ReportsHandlerMixIn:
 
     def make_reports(self, stats, old_stats):
         """render registered reports"""
-        sect = Section("Report", "%s statements analysed." % (self.stats["statement"]))
+        sect = Section("Report",
+                       "%s statements analysed." % (self.stats["statement"]))
         for checker in self.report_order():
             for reportid, r_title, r_cb in self._reports[checker]:
                 if not self.report_is_enabled(reportid):

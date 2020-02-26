@@ -2,7 +2,7 @@
 # pylint: disable=missing-docstring,too-few-public-methods,no-init
 
 
-class Duplicates(str, str): # [duplicate-bases]
+class Duplicates(str, str):  # [duplicate-bases]
     pass
 
 

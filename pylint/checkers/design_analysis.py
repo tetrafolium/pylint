@@ -14,7 +14,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """check for signs of poor design"""
 
 import re
@@ -118,9 +117,8 @@ def _is_exempt_from_public_methods(node: astroid.ClassDef) -> bool:
         else:
             name = decorator.attrname
         if name in DATACLASSES_DECORATORS and (
-            root_locals.intersection(DATACLASSES_DECORATORS)
-            or DATACLASS_IMPORT in root_locals
-        ):
+                root_locals.intersection(DATACLASSES_DECORATORS)
+                or DATACLASS_IMPORT in root_locals):
             return True
     return False
 
@@ -140,7 +138,8 @@ def _count_boolean_expressions(bool_op):
 
 
 def _count_methods_in_class(node):
-    all_methods = sum(1 for method in node.methods() if not method.name.startswith("_"))
+    all_methods = sum(1 for method in node.methods()
+                      if not method.name.startswith("_"))
     # Special methods count towards the number of public methods,
     # but don't count towards there being too many methods.
     for method in node.mymethods():
@@ -155,7 +154,7 @@ class MisdesignChecker(BaseChecker):
     * size, complexity of functions, methods
     """
 
-    __implements__ = (IAstroidChecker,)
+    __implements__ = (IAstroidChecker, )
 
     # configuration section name
     name = "design"
@@ -185,10 +184,14 @@ class MisdesignChecker(BaseChecker):
         (
             "max-returns",
             {
-                "default": 6,
-                "type": "int",
-                "metavar": "<int>",
-                "help": "Maximum number of return / yield for function / "
+                "default":
+                6,
+                "type":
+                "int",
+                "metavar":
+                "<int>",
+                "help":
+                "Maximum number of return / yield for function / "
                 "method body.",
             },
         ),
@@ -204,10 +207,15 @@ class MisdesignChecker(BaseChecker):
         (
             "max-statements",
             {
-                "default": 50,
-                "type": "int",
-                "metavar": "<int>",
-                "help": "Maximum number of statements in function / method " "body.",
+                "default":
+                50,
+                "type":
+                "int",
+                "metavar":
+                "<int>",
+                "help":
+                "Maximum number of statements in function / method "
+                "body.",
             },
         ),
         (
@@ -232,30 +240,42 @@ class MisdesignChecker(BaseChecker):
         (
             "min-public-methods",
             {
-                "default": 2,
-                "type": "int",
-                "metavar": "<num>",
-                "help": "Minimum number of public methods for a class \
+                "default":
+                2,
+                "type":
+                "int",
+                "metavar":
+                "<num>",
+                "help":
+                "Minimum number of public methods for a class \
 (see R0903).",
             },
         ),
         (
             "max-public-methods",
             {
-                "default": 20,
-                "type": "int",
-                "metavar": "<num>",
-                "help": "Maximum number of public methods for a class \
+                "default":
+                20,
+                "type":
+                "int",
+                "metavar":
+                "<num>",
+                "help":
+                "Maximum number of public methods for a class \
 (see R0904).",
             },
         ),
         (
             "max-bool-expr",
             {
-                "default": 5,
-                "type": "int",
-                "metavar": "<num>",
-                "help": "Maximum number of boolean expressions in an if "
+                "default":
+                5,
+                "type":
+                "int",
+                "metavar":
+                "<num>",
+                "help":
+                "Maximum number of boolean expressions in an if "
                 "statement (see R0916).",
             },
         ),
@@ -281,7 +301,9 @@ class MisdesignChecker(BaseChecker):
 
     @decorators.cachedproperty
     def _ignored_argument_names(self):
-        return utils.get_global_option(self, "ignored-argument-names", default=None)
+        return utils.get_global_option(self,
+                                       "ignored-argument-names",
+                                       default=None)
 
     @check_messages(
         "too-many-ancestors",
@@ -310,9 +332,8 @@ class MisdesignChecker(BaseChecker):
     @check_messages("too-few-public-methods", "too-many-public-methods")
     def leave_classdef(self, node):
         """check number of public methods"""
-        my_methods = sum(
-            1 for method in node.mymethods() if not method.name.startswith("_")
-        )
+        my_methods = sum(1 for method in node.mymethods()
+                         if not method.name.startswith("_"))
 
         # Does the class contain less than n public methods ?
         # This checks only the methods defined in the current class,
@@ -365,8 +386,8 @@ class MisdesignChecker(BaseChecker):
             ignored_args_num = 0
             if ignored_argument_names:
                 ignored_args_num = sum(
-                    1 for arg in args if ignored_argument_names.match(arg.name)
-                )
+                    1 for arg in args
+                    if ignored_argument_names.match(arg.name))
 
             argnum = len(args) - ignored_args_num
             if argnum > self.config.max_args:
@@ -380,9 +401,9 @@ class MisdesignChecker(BaseChecker):
         # check number of local variables
         locnum = len(node.locals) - ignored_args_num
         if locnum > self.config.max_locals:
-            self.add_message(
-                "too-many-locals", node=node, args=(locnum, self.config.max_locals)
-            )
+            self.add_message("too-many-locals",
+                             node=node,
+                             args=(locnum, self.config.max_locals))
         # init new statements counter
         self._stmts.append(1)
 
@@ -456,7 +477,8 @@ class MisdesignChecker(BaseChecker):
         self._check_boolean_expressions(node)
         branches = 1
         # don't double count If nodes coming from some 'elif'
-        if node.orelse and (len(node.orelse) > 1 or not isinstance(node.orelse[0], If)):
+        if node.orelse and (len(node.orelse) > 1
+                            or not isinstance(node.orelse[0], If)):
             branches += 1
         self._inc_branch(node, branches)
         self._inc_all_stmts(branches)

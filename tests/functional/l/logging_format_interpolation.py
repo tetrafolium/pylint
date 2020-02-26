@@ -13,11 +13,16 @@ from uninferable import UNINFERABLE
 FORMAT_STR = '{0}, {1}'
 
 # Statements that should be flagged:
-renamed_logging.debug('{0}, {1}'.format(4, 5)) # [logging-format-interpolation]
-renamed_logging.log(renamed_logging.DEBUG, 'msg: {}'.format('Run!')) # [logging-format-interpolation]
-renamed_logging.debug(FORMAT_STR.format(4, 5)) # [logging-format-interpolation]
-renamed_logging.log(renamed_logging.DEBUG, FORMAT_STR.format(4, 5)) # [logging-format-interpolation]
-renamed_logging.info("Read {l} rows".format(l=123456789)) # [logging-format-interpolation]
+renamed_logging.debug('{0}, {1}'.format(4,
+                                        5))  # [logging-format-interpolation]
+renamed_logging.log(renamed_logging.DEBUG,
+                    'msg: {}'.format('Run!'))  # [logging-format-interpolation]
+renamed_logging.debug(FORMAT_STR.format(4,
+                                        5))  # [logging-format-interpolation]
+renamed_logging.log(renamed_logging.DEBUG,
+                    FORMAT_STR.format(4, 5))  # [logging-format-interpolation]
+renamed_logging.info(
+    "Read {l} rows".format(l=123456789))  # [logging-format-interpolation]
 
 # Statements that should not be flagged:
 renamed_logging.debug(format(66, 'x'))
@@ -31,6 +36,7 @@ renamed_logging.info(UNINFERABLE.format(l=123456789))
 
 class Logger(renamed_logging.Logger):
     pass
+
 
 custom_logger = Logger('three')
 

@@ -4,23 +4,30 @@ from __future__ import print_function
 
 import socket, binascii, abc, six
 
+
 class MyException(object):
     """Custom 'exception'."""
+
 
 class MySecondException(object):
     """Custom 'exception'."""
 
+
 class MyGoodException(Exception):
     """Custom exception."""
+
 
 class MySecondGoodException(MyGoodException):
     """Custom exception."""
 
+
 class SkipException(socket.error):
     """Not an exception for Python 2, but one in 3."""
 
+
 class SecondSkipException(SkipException):
     """Also a good exception."""
+
 
 try:
     1 + 1
@@ -56,7 +63,7 @@ except (None, list()):
 
 try:
     1 + 24
-except None: # [catching-non-exception]
+except None:  # [catching-non-exception]
     print("caught")
 
 EXCEPTION = None
@@ -82,7 +89,7 @@ except EXCEPTION_TUPLE:
 
 try:
     1 + 42
-except NON_EXCEPTION_TUPLE: # [catching-non-exception]
+except NON_EXCEPTION_TUPLE:  # [catching-non-exception]
     print("caught")
 
 from missing_import import UnknownError
@@ -100,12 +107,12 @@ except binascii.Error:
 
 try:
     1 + 45
-except object: # [catching-non-exception]
+except object:  # [catching-non-exception]
     print('caught')
 
 try:
     1 + 42
-except range: # [catching-non-exception]
+except range:  # [catching-non-exception]
     print('caught')
 
 

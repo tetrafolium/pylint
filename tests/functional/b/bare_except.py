@@ -2,5 +2,5 @@
 
 try:
     1 + "2"
-except: # [bare-except]
+except:  # [bare-except]
     pass

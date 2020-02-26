@@ -10,11 +10,11 @@ from __future__ import print_function
 
 import telnetlib
 
+
 class SeeTelnet(telnetlib.Telnet):
     """
     Extension of telnetlib.
     """
-
     def __init__(self, host=None, port=0):
         """
         Constructor.
@@ -38,6 +38,7 @@ class SeeTelnet(telnetlib.Telnet):
             if len(match) > maxLength:
                 maxLength = len(match)
 
+
 class Base(object):
     """bla bla"""
     dougloup_papa = None
@@ -45,9 +46,11 @@ class Base(object):
     def __init__(self):
         self._var = False
 
+
 class Derived(Base):
     """derived blabla"""
     dougloup_moi = None
+
     def Work(self):
         """do something"""
         # E0203 - Access to member '_var' before its definition
@@ -79,6 +82,7 @@ class QoSALConnection(object):
 
     def __init__(self):
         pass
+
 
 class DefinedOutsideInit(object):
     """use_attr is seen as the method defining attr because its in

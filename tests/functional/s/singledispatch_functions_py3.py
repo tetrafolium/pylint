@@ -12,7 +12,6 @@ my_single_dispatch = singledispatch
 
 
 class FakeSingleDispatch(object):
-
     @staticmethod
     def register(function):
         return function
@@ -20,7 +19,9 @@ class FakeSingleDispatch(object):
     def __call__(self, function):
         return function
 
+
 fake_singledispatch_decorator = FakeSingleDispatch()
+
 
 @singledispatch
 def func(arg):
@@ -57,20 +58,20 @@ def with_extra_arg(arg, verbose=False):
 
 @with_extra_arg.register(str)
 def _(arg, verbose=False):
-    unused = 42 # [unused-variable]
+    unused = 42  # [unused-variable]
     return arg[::-1]
 
 
 @fake_singledispatch_decorator
-def not_single_dispatch(arg): # [unused-argument]
+def not_single_dispatch(arg):  # [unused-argument]
     return 'not yet implemented'
 
 
 @fake_singledispatch_decorator.register(str)
-def bad_single_dispatch(arg): # [unused-argument]
+def bad_single_dispatch(arg):  # [unused-argument]
     return 42
 
 
 @fake_singledispatch_decorator.register(str)
-def bad_single_dispatch(arg): # [unused-argument, function-redefined]
+def bad_single_dispatch(arg):  # [unused-argument, function-redefined]
     return 24

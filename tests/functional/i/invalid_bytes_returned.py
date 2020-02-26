@@ -8,14 +8,12 @@ from missing import Missing
 
 class FirstGoodBytes(object):
     """__bytes__ returns <type 'bytes'>"""
-
     def __bytes__(self):
         return b"some bytes"
 
 
 class SecondGoodBytes(object):
     """__bytes__ returns <type 'bytes'>"""
-
     def __bytes__(self):
         return bytes("123", "ascii")
 
@@ -32,21 +30,18 @@ class ThirdGoodBytes(object):
 
 class FirstBadBytes(object):
     """ __bytes__ returns bytes """
-
     def __bytes__(self):  # [invalid-bytes-returned]
         return "123"
 
 
 class SecondBadBytes(object):
     """ __bytes__ returns int """
-
     def __bytes__(self):  # [invalid-bytes-returned]
         return 1
 
 
 class ThirdBadBytes(object):
     """ __bytes__ returns node which does not have 'value' in AST """
-
     def __bytes__(self):  # [invalid-bytes-returned]
         return lambda: b"some bytes"
 
@@ -59,6 +54,5 @@ class AmbiguousBytes(object):
 
 class AnotherAmbiguousBytes(object):
     """Potential uninferable return value"""
-
     def __bytes__(self):
         return bytes(Missing)

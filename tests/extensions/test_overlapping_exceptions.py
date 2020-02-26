@@ -1,6 +1,5 @@
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the pylint checker in :mod:`pylint.extensions.overlapping_exceptions
 """
 
@@ -27,17 +26,23 @@ def test_overlapping_exceptions(linter):
     msgs = linter.reporter.messages
 
     expected = [
-        (13, "Overlapping exceptions (SomeException and SomeException are the same)"),
+        (13,
+         "Overlapping exceptions (SomeException and SomeException are the same)"
+         ),
         (
             18,
             "Overlapping exceptions (SomeException is an ancestor class of SubclassException)",
         ),
-        (23, "Overlapping exceptions (SomeException and AliasException are the same)"),
+        (23,
+         "Overlapping exceptions (SomeException and AliasException are the same)"
+         ),
         (
             28,
             "Overlapping exceptions (AliasException is an ancestor class of SubclassException)",
         ),
-        (34, "Overlapping exceptions (SomeException and AliasException are the same)"),
+        (34,
+         "Overlapping exceptions (SomeException and AliasException are the same)"
+         ),
         (
             34,
             "Overlapping exceptions (SomeException is an ancestor class of SubclassException)",

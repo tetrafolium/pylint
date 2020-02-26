@@ -3,6 +3,7 @@
 """Test external access to protected class members."""
 from __future__ import print_function
 
+
 class MyClass(object):
     """Class with protected members."""
     _cls_protected = 5
@@ -22,6 +23,7 @@ class MyClass(object):
         """Docstring."""
         cls._cls_protected += 1
         print(cls._cls_protected)
+
     clsmeth = classmethod(clsmeth)
 
     def _private_method(self):
@@ -30,10 +32,10 @@ class MyClass(object):
 
 class Subclass(MyClass):
     """Subclass with protected members."""
-
     def __init__(self):
         MyClass._protected = 5
         super(Subclass, self)._private_method()
+
 
 INST = Subclass()
 INST.attr = 1

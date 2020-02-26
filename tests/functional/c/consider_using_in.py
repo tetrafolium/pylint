@@ -43,4 +43,5 @@ def oops():
     return 5 / 0
 
 
-some_value = value == 4 or value == 5 or value == oops() # We only look for names and constants
+some_value = value == 4 or value == 5 or value == oops(
+)  # We only look for names and constants

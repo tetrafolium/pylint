@@ -1,31 +1,34 @@
 # pylint: disable=missing-docstring
 
+
 class SomeException(Exception):
     pass
 
+
 class SubclassException(SomeException):
     pass
+
 
 AliasException = SomeException
 
 try:
     pass
-except (SomeException, SomeException): # [overlapping-except]
+except (SomeException, SomeException):  # [overlapping-except]
     pass
 
 try:
     pass
-except (SomeException, SubclassException): # [overlapping-except]
+except (SomeException, SubclassException):  # [overlapping-except]
     pass
 
 try:
     pass
-except (SomeException, AliasException): # [overlapping-except]
+except (SomeException, AliasException):  # [overlapping-except]
     pass
 
 try:
     pass
-except (AliasException, SubclassException): # [overlapping-except]
+except (AliasException, SubclassException):  # [overlapping-except]
     pass
 
 try:
@@ -36,10 +39,10 @@ except (SomeException, AliasException, SubclassException):
 
 try:
     pass
-except (ArithmeticError, FloatingPointError): # [overlapping-except]
+except (ArithmeticError, FloatingPointError):  # [overlapping-except]
     pass
 
 try:
     pass
-except (ValueError, UnicodeDecodeError): # [overlapping-except]
+except (ValueError, UnicodeDecodeError):  # [overlapping-except]
     pass

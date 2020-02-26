@@ -3,6 +3,7 @@
 
 import abc
 
+
 class Parent(object):
     """Abstract Base Class """
     __metaclass__ = abc.ABCMeta
@@ -11,6 +12,7 @@ class Parent(object):
     @abc.abstractmethod
     def prop(self):
         """ Abstract """
+
 
 class Child(Parent):
     """ No warning for the following. """

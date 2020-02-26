@@ -35,7 +35,7 @@ def k(flag):
 
 
 def j():
-    from collections import defaultdict # [import-outside-toplevel]
+    from collections import defaultdict  # [import-outside-toplevel]
 
 
 def m():

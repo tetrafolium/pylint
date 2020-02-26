@@ -3,25 +3,30 @@
 """
 from __future__ import print_function
 
+
 class Abcd(object):
     """dummy"""
     def __init__(self):
         self.abcd = 1
 
+
 class Cdef(Abcd):
     """dummy"""
-    def abcd(self): # [method-hidden]
+    def abcd(self):  # [method-hidden]
         """test
         """
         print(self)
+
 
 class AbcdMixin:
     def abcd(self):
         pass
 
+
 class Dabc(AbcdMixin, Abcd):
     def abcd(self):
         pass
+
 
 class CustomProperty:
     """dummy"""
@@ -35,6 +40,7 @@ class CustomProperty:
 
     def __set__(self, _, __):
         pass
+
 
 class Ddef:
     """dummy"""
@@ -73,8 +79,9 @@ class One:
         if one is not None:
             self.one = one
 
-    def one(self): # [method-hidden]
+    def one(self):  # [method-hidden]
         pass
+
 
 class Two(One):
     def one(self):

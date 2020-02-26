@@ -7,7 +7,6 @@ __revision__ = 0
 
 class Abcd(object):
     """dummy class"""
-
     def __init__(truc):
         """method without self"""
         print(1)
@@ -15,6 +14,7 @@ class Abcd(object):
     def abdc(yoo):
         """another test"""
         print(yoo)
+
     def edf(self):
         """just another method"""
         print('yapudju in', self)

@@ -29,16 +29,20 @@ finally:
 try:  # [max-try-statements]
     if "key_one" in MY_DICTIONARY:
         entered_if_body = True
-        print("This verifies that content inside of an if statement is counted too.")
+        print(
+            "This verifies that content inside of an if statement is counted too."
+        )
     else:
         entered_if_body = False
 
     while False:
-        print("This verifies that content inside of a while loop is counted too.")
+        print(
+            "This verifies that content inside of a while loop is counted too."
+        )
 
     for item in []:
-        print("This verifies that content inside of a for loop is counted too.")
-
+        print(
+            "This verifies that content inside of a for loop is counted too.")
 
 except KeyError:
     pass

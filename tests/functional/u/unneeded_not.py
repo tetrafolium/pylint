@@ -1,5 +1,6 @@
 """Check exceeding negations in boolean expressions trigger warnings"""
 
+
 # pylint: disable=singleton-comparison,too-many-branches,too-few-public-methods,undefined-variable
 # pylint: disable=literal-comparison, comparison-with-itself, useless-object-inheritance
 def unneeded_not():
@@ -41,7 +42,7 @@ def tolerated_statements():
     """This is ok"""
     bool_var = True
     someint = 2
-    if not(bool_var == False and someint == 1):
+    if not (bool_var == False and someint == 1):
         pass
     if 2 not in [3, 4]:
         pass

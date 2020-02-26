@@ -17,16 +17,18 @@ __revision__.lower()
 # +1:[pointless-string-statement]
 """inline doc string should use a separated message"""
 
-
-__revision__.lower();  # [unnecessary-semicolon]
+__revision__.lower()
+# [unnecessary-semicolon]
 
 list() and tuple()  # [expression-not-assigned]
+
 
 def to_be():
     """return 42"""
     return "42"
 
-ANSWER = to_be() # ok
+
+ANSWER = to_be()  # ok
 ANSWER == to_be()  # [expression-not-assigned]
 
 to_be() or not to_be()  # [expression-not-assigned]
@@ -34,6 +36,7 @@ to_be().title  # [expression-not-assigned]
 
 GOOD_ATTRIBUTE_DOCSTRING = 42
 """Module level attribute docstring is fine. """
+
 
 class ClassLevelAttributeTest(object):
     """ test attribute docstrings. """
@@ -45,7 +48,6 @@ class ClassLevelAttributeTest(object):
 
     # empty lines are good, too.
     """ Still a valid class level attribute docstring. """
-
     def __init__(self):
         self.attr = 42
         """ Good attribute docstring """

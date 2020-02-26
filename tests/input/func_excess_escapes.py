@@ -21,6 +21,7 @@ HIGH_UNICODE = u'\U0000abcd'
 QUOTES = '\'\"'
 LITERAL_NEWLINE = '\
 '
+
 ESCAPE_UNICODE = "\\\\n"
 
 # Bad docstring

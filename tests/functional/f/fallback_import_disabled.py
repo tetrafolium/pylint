@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring,unused-import
 try:
-    import urllib2 as urllib_request #@
+    import urllib2 as urllib_request  #@
     import urllib2 as urllib_error
     from urlparse import urlparse
 except ImportError:
