@@ -14,6 +14,12 @@ inspecode:
   cpd:
     thresholds: { num-issues: 5 }
 
+  ##----------------------------------------------------------------------------
+  ## [runtime python: 2]
+  ##  $ pyenv global 2.7.16
+  ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
+  ##  cannot resolve dependencies
+  ##----------------------------------------------------------------------------
   flake8:
     options:
       --ignore:
@@ -72,6 +78,7 @@ inspecode:
 
   ##----------------------------------------------------------------------------
   ## [runtime python: 2]
+  ##  $ pyenv global 2.7.16
   ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
   ##  cannot resolve dependencies
   ##
@@ -85,22 +92,22 @@ inspecode:
   ##      codec = lookup(encoding)
   ##  LookupError: unknown encoding: IBO-8859-1
   ##----------------------------------------------------------------------------
-  #pylint:
-  #  options:
-  #    --py3k:
-  #  thresholds: { num-issues: 242 }
-  #    # 242 issues, when runtime python: 2
-  #    # 347 issues, when runtime python: 3
+  pylint:
+    options: [ --py3k ]
+    thresholds: { num-issues: 242 }
+      # 242 issues, when runtime python: 2
+      # 347 issues, when runtime python: 3
 
   ##----------------------------------------------------------------------------
   ## [runtime python: 2]
+  ##  $ pyenv global 2.7.16
   ##  pylint requires Python '>=3.5.*' but the running Python is 2.7.16
   ##  cannot resolve dependencies
   ##
   ##  ImportError while loading conftest '/home/rocro/src/github.com/tetrafolium/pylint/tests/conftest.py'.
   ##----------------------------------------------------------------------------
-  #pytest:
-  #  thresholds: { num-issues: 3 }
+  pytest:
+    thresholds: { num-issues: 3 }
 
   ###------------------------------------------------
   ###  unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
