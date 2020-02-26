@@ -113,6 +113,10 @@ inspecode:
 
   yapf:
     auto-fix: true
-    thresholds: { num-issues: 493 }
-      # 493 issues, when runtime python: 2
-      # 486 issues, when runtime python: 3
+    thresholds: { num-issues: 497 }
+      # (runtime python: 2)
+      #   504 issues on staging
+      #   497 issues on prod
+      # (runtime python: 3)
+      #   493 issues on staging
+      #   486 issues on prod
