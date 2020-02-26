@@ -15,10 +15,8 @@
 # Copyright (c) 2018 Nick Drozd <nicholasdrozd@gmail.com>
 # Copyright (c) 2018 Anthony Sottile <asottile@umich.edu>
 
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Checker for string formatting operations.
 """
 
@@ -38,7 +36,8 @@ from pylint.checkers import BaseChecker, BaseTokenChecker, utils
 from pylint.checkers.utils import check_messages
 from pylint.interfaces import IAstroidChecker, IRawChecker, ITokenChecker
 
-_AST_NODE_STR_TYPES = ("__builtin__.unicode", "__builtin__.str", "builtins.str")
+_AST_NODE_STR_TYPES = ("__builtin__.unicode", "__builtin__.str",
+                       "builtins.str")
 # Prefixes for both strings and bytes literals per
 # https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals
 _PREFIXES = {
@@ -69,7 +68,8 @@ _PREFIXES = {
 }
 SINGLE_QUOTED_REGEX = re.compile("(%s)?'''" % "|".join(_PREFIXES))
 DOUBLE_QUOTED_REGEX = re.compile('(%s)?"""' % "|".join(_PREFIXES))
-QUOTE_DELIMITER_REGEX = re.compile("(%s)?(\"|')" % "|".join(_PREFIXES), re.DOTALL)
+QUOTE_DELIMITER_REGEX = re.compile("(%s)?(\"|')" % "|".join(_PREFIXES),
+                                   re.DOTALL)
 
 MSGS = {
     "E1300": (
@@ -244,7 +244,7 @@ class StringFormatChecker(BaseChecker):
     is valid and the arguments match the format string.
     """
 
-    __implements__ = (IAstroidChecker,)
+    __implements__ = (IAstroidChecker, )
     name = "string"
     msgs = MSGS
 
@@ -268,7 +268,8 @@ class StringFormatChecker(BaseChecker):
         left = node.left
         args = node.right
 
-        if not (isinstance(left, astroid.Const) and isinstance(left.value, str)):
+        if not (isinstance(left, astroid.Const)
+                and isinstance(left.value, str)):
             return
         format_string = left.value
         try:
@@ -307,9 +308,9 @@ class StringFormatChecker(BaseChecker):
                         if isinstance(key, str):
                             keys.add(key)
                         else:
-                            self.add_message(
-                                "bad-format-string-key", node=node, args=key
-                            )
+                            self.add_message("bad-format-string-key",
+                                             node=node,
+                                             args=key)
                     else:
                         # One of the keys was something other than a
                         # constant.  Since we can't tell what it is,
@@ -319,24 +320,23 @@ class StringFormatChecker(BaseChecker):
                 if not unknown_keys:
                     for key in required_keys:
                         if key not in keys:
-                            self.add_message(
-                                "missing-format-string-key", node=node, args=key
-                            )
+                            self.add_message("missing-format-string-key",
+                                             node=node,
+                                             args=key)
                 for key in keys:
                     if key not in required_keys:
-                        self.add_message(
-                            "unused-format-string-key", node=node, args=key
-                        )
+                        self.add_message("unused-format-string-key",
+                                         node=node,
+                                         args=key)
                 for key, arg in args.items:
                     if not isinstance(key, astroid.Const):
                         continue
                     format_type = required_key_types.get(key.value, None)
                     arg_type = utils.safe_infer(arg)
-                    if (
-                        format_type is not None
-                        and arg_type not in (None, astroid.Uninferable)
-                        and not arg_matches_format_type(arg_type, format_type)
-                    ):
+                    if (format_type is not None
+                            and arg_type not in (None, astroid.Uninferable)
+                            and not arg_matches_format_type(
+                                arg_type, format_type)):
                         self.add_message(
                             "bad-string-format-type",
                             node=node,
@@ -344,7 +344,9 @@ class StringFormatChecker(BaseChecker):
                         )
             elif isinstance(args, (OTHER_NODES, astroid.Tuple)):
                 type_name = type(args).__name__
-                self.add_message("format-needs-mapping", node=node, args=type_name)
+                self.add_message("format-needs-mapping",
+                                 node=node,
+                                 args=type_name)
             # else:
             # The RHS of the format specifier is a name or
             # expression.  It may be a mapping object, so
@@ -361,7 +363,8 @@ class StringFormatChecker(BaseChecker):
                 if hasattr(rhs_tuple, "elts"):
                     args_elts = rhs_tuple.elts
                     num_args = len(args_elts)
-            elif isinstance(args, (OTHER_NODES, (astroid.Dict, astroid.DictComp))):
+            elif isinstance(args,
+                            (OTHER_NODES, (astroid.Dict, astroid.DictComp))):
                 args_elts = [args]
                 num_args = 1
             else:
@@ -379,8 +382,8 @@ class StringFormatChecker(BaseChecker):
                         continue
                     arg_type = utils.safe_infer(arg)
                     if arg_type not in (
-                        None,
-                        astroid.Uninferable,
+                            None,
+                            astroid.Uninferable,
                     ) and not arg_matches_format_type(arg_type, format_type):
                         self.add_message(
                             "bad-string-format-type",
@@ -400,14 +403,13 @@ class StringFormatChecker(BaseChecker):
     @check_messages(*MSGS)
     def visit_call(self, node):
         func = utils.safe_infer(node.func)
-        if (
-            isinstance(func, astroid.BoundMethod)
-            and isinstance(func.bound, astroid.Instance)
-            and func.bound.name in ("str", "unicode", "bytes")
-        ):
+        if (isinstance(func, astroid.BoundMethod)
+                and isinstance(func.bound, astroid.Instance)
+                and func.bound.name in ("str", "unicode", "bytes")):
             if func.name in ("strip", "lstrip", "rstrip") and node.args:
                 arg = utils.safe_infer(node.args[0])
-                if not isinstance(arg, astroid.Const) or not isinstance(arg.value, str):
+                if not isinstance(arg, astroid.Const) or not isinstance(
+                        arg.value, str):
                     return
                 if len(arg.value) != len(set(arg.value)):
                     self.add_message(
@@ -419,15 +421,14 @@ class StringFormatChecker(BaseChecker):
                 self._check_new_format(node, func)
 
     def _detect_vacuous_formatting(self, node, positional_arguments):
-        counter = collections.Counter(
-            arg.name for arg in positional_arguments if isinstance(arg, astroid.Name)
-        )
+        counter = collections.Counter(arg.name for arg in positional_arguments
+                                      if isinstance(arg, astroid.Name))
         for name, count in counter.items():
             if count == 1:
                 continue
-            self.add_message(
-                "duplicate-string-formatting-argument", node=node, args=(name,)
-            )
+            self.add_message("duplicate-string-formatting-argument",
+                             node=node,
+                             args=(name, ))
 
     def _check_new_format(self, node, func):
         """Check the new string formatting. """
@@ -441,8 +442,7 @@ class StringFormatChecker(BaseChecker):
         #    fmt = 'some string {}'.format
         #    fmt('arg')
         if isinstance(node.func, astroid.Attribute) and not isinstance(
-            node.func.expr, astroid.Const
-        ):
+                node.func.expr, astroid.Const):
             return
         if node.starargs or node.kwargs:
             return
@@ -450,7 +450,8 @@ class StringFormatChecker(BaseChecker):
             strnode = next(func.bound.infer())
         except astroid.InferenceError:
             return
-        if not (isinstance(strnode, astroid.Const) and isinstance(strnode.value, str)):
+        if not (isinstance(strnode, astroid.Const)
+                and isinstance(strnode.value, str)):
             return
         try:
             call_site = CallSite.from_call(node)
@@ -459,15 +460,17 @@ class StringFormatChecker(BaseChecker):
 
         try:
             fields, num_args, manual_pos = utils.parse_format_method_string(
-                strnode.value
-            )
+                strnode.value)
         except utils.IncompleteFormatString:
             self.add_message("bad-format-string", node=node)
             return
 
         positional_arguments = call_site.positional_arguments
         named_arguments = call_site.keyword_arguments
-        named_fields = {field[0] for field in fields if isinstance(field[0], str)}
+        named_fields = {
+            field[0]
+            for field in fields if isinstance(field[0], str)
+        }
         if num_args and manual_pos:
             self.add_message("format-combined-specification", node=node)
             return
@@ -478,14 +481,14 @@ class StringFormatChecker(BaseChecker):
         if named_fields:
             for field in named_fields:
                 if field and field not in named_arguments:
-                    self.add_message(
-                        "missing-format-argument-key", node=node, args=(field,)
-                    )
+                    self.add_message("missing-format-argument-key",
+                                     node=node,
+                                     args=(field, ))
             for field in named_arguments:
                 if field not in named_fields:
-                    self.add_message(
-                        "unused-format-string-argument", node=node, args=(field,)
-                    )
+                    self.add_message("unused-format-string-argument",
+                                     node=node,
+                                     args=(field, ))
             # num_args can be 0 if manual_pos is not.
             num_args = num_args or manual_pos
             if positional_arguments or num_args:
@@ -542,7 +545,8 @@ class StringFormatChecker(BaseChecker):
                 # No need to check this key if it doesn't
                 # use attribute / item access
                 continue
-            if argument.parent and isinstance(argument.parent, astroid.Arguments):
+            if argument.parent and isinstance(argument.parent,
+                                              astroid.Arguments):
                 # Ignore any object coming from an argument,
                 # because we can't infer its value properly.
                 continue
@@ -556,10 +560,8 @@ class StringFormatChecker(BaseChecker):
                     try:
                         previous = previous.getattr(specifier)[0]
                     except astroid.NotFoundError:
-                        if (
-                            hasattr(previous, "has_dynamic_getattr")
-                            and previous.has_dynamic_getattr()
-                        ):
+                        if (hasattr(previous, "has_dynamic_getattr")
+                                and previous.has_dynamic_getattr()):
                             # Don't warn if the object has a custom __getattr__
                             break
                         path = get_access_path(key, parsed)
@@ -573,11 +575,12 @@ class StringFormatChecker(BaseChecker):
                     warn_error = False
                     if hasattr(previous, "getitem"):
                         try:
-                            previous = previous.getitem(astroid.Const(specifier))
+                            previous = previous.getitem(
+                                astroid.Const(specifier))
                         except (
-                            astroid.AstroidIndexError,
-                            astroid.AstroidTypeError,
-                            astroid.AttributeInferenceError,
+                                astroid.AstroidIndexError,
+                                astroid.AstroidTypeError,
+                                astroid.AttributeInferenceError,
                         ):
                             warn_error = True
                         except astroid.InferenceError:
@@ -595,9 +598,9 @@ class StringFormatChecker(BaseChecker):
                             warn_error = True
                     if warn_error:
                         path = get_access_path(key, parsed)
-                        self.add_message(
-                            "invalid-format-index", args=(specifier, path), node=node
-                        )
+                        self.add_message("invalid-format-index",
+                                         args=(specifier, path),
+                                         node=node)
                         break
 
                 try:
@@ -632,7 +635,9 @@ class StringConstantChecker(BaseTokenChecker):
             "String literals are implicitly concatenated in a "
             "literal iterable definition : "
             "maybe a comma is missing ?",
-            {"old_names": [("W1403", "implicit-str-concat-in-sequence")]},
+            {
+                "old_names": [("W1403", "implicit-str-concat-in-sequence")]
+            },
         ),
         "W1405": (
             "Quote delimiter %s is inconsistent with the rest of the file",
@@ -645,10 +650,14 @@ class StringConstantChecker(BaseTokenChecker):
         (
             "check-str-concat-over-line-jumps",
             {
-                "default": False,
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": "This flag controls whether the "
+                "default":
+                False,
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help":
+                "This flag controls whether the "
                 "implicit-str-concat should generate a warning "
                 "on implicit string concatenation in sequences defined over "
                 "several lines.",
@@ -657,10 +666,14 @@ class StringConstantChecker(BaseTokenChecker):
         (
             "check-quote-consistency",
             {
-                "default": False,
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": "This flag controls whether inconsistent-quotes generates a "
+                "default":
+                False,
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help":
+                "This flag controls whether inconsistent-quotes generates a "
                 "warning when the character used as a quote delimiter is used "
                 "inconsistently within a module.",
             },
@@ -695,16 +708,16 @@ class StringConstantChecker(BaseTokenChecker):
                 # We figure the next token, ignoring comments & newlines:
                 j = i + 1
                 while j < len(tokens) and tokens[j].type in (
-                    tokenize.NEWLINE,
-                    tokenize.NL,
-                    tokenize.COMMENT,
+                        tokenize.NEWLINE,
+                        tokenize.NL,
+                        tokenize.COMMENT,
                 ):
                     j += 1
                 next_token = tokens[j] if j < len(tokens) else None
                 if encoding != "ascii":
                     # We convert `tokenize` character count into a byte count,
                     # to match with astroid `.col_offset`
-                    start = (start[0], len(line[: start[1]].encode(encoding)))
+                    start = (start[0], len(line[:start[1]].encode(encoding)))
                 self.string_tokens[start] = (str_eval(token), next_token)
 
         if self.config.check_quote_consistency:
@@ -723,12 +736,12 @@ class StringConstantChecker(BaseTokenChecker):
         self.check_for_concatenated_strings(node.elts, "tuple")
 
     def visit_assign(self, node):
-        if isinstance(node.value, astroid.Const) and isinstance(node.value.value, str):
+        if isinstance(node.value, astroid.Const) and isinstance(
+                node.value.value, str):
             self.check_for_concatenated_strings([node.value], "assignment")
 
     def check_for_consistent_string_delimiters(
-        self, tokens: Iterable[tokenize.TokenInfo]
-    ) -> None:
+            self, tokens: Iterable[tokenize.TokenInfo]) -> None:
         """Adds a message for each string using inconsistent quote delimiters.
 
         Quote delimiters are used inconsistently if " and ' are mixed in a module's
@@ -742,7 +755,8 @@ class StringConstantChecker(BaseTokenChecker):
 
         # First, figure out which quote character predominates in the module
         for tok_type, token, _, _, _ in tokens:
-            if tok_type == tokenize.STRING and _is_quote_delimiter_chosen_freely(token):
+            if tok_type == tokenize.STRING and _is_quote_delimiter_chosen_freely(
+                    token):
                 string_delimiters[_get_quote_delimiter(token)] += 1
 
         if len(string_delimiters) > 1:
@@ -752,17 +766,16 @@ class StringConstantChecker(BaseTokenChecker):
                 if tok_type != tokenize.STRING:
                     continue
                 quote_delimiter = _get_quote_delimiter(token)
-                if (
-                    _is_quote_delimiter_chosen_freely(token)
-                    and quote_delimiter != most_common_delimiter
-                ):
-                    self.add_message(
-                        "inconsistent-quotes", line=start[0], args=(quote_delimiter,)
-                    )
+                if (_is_quote_delimiter_chosen_freely(token)
+                        and quote_delimiter != most_common_delimiter):
+                    self.add_message("inconsistent-quotes",
+                                     line=start[0],
+                                     args=(quote_delimiter, ))
 
     def check_for_concatenated_strings(self, elements, iterable_type):
         for elt in elements:
-            if not (isinstance(elt, Const) and elt.pytype() in _AST_NODE_STR_TYPES):
+            if not (isinstance(elt, Const)
+                    and elt.pytype() in _AST_NODE_STR_TYPES):
                 continue
             if elt.col_offset < 0:
                 # This can happen in case of escaped newlines
@@ -771,19 +784,17 @@ class StringConstantChecker(BaseTokenChecker):
                 # This may happen with Latin1 encoding
                 # cf. https://github.com/PyCQA/pylint/issues/2610
                 continue
-            matching_token, next_token = self.string_tokens[
-                (elt.lineno, elt.col_offset)
-            ]
+            matching_token, next_token = self.string_tokens[(elt.lineno,
+                                                             elt.col_offset)]
             # We detect string concatenation: the AST Const is the
             # combination of 2 string tokens
             if matching_token != elt.value and next_token is not None:
                 if next_token.type == tokenize.STRING and (
-                    next_token.start[0] == elt.lineno
-                    or self.config.check_str_concat_over_line_jumps
-                ):
-                    self.add_message(
-                        "implicit-str-concat", line=elt.lineno, args=(iterable_type,)
-                    )
+                        next_token.start[0] == elt.lineno
+                        or self.config.check_str_concat_over_line_jumps):
+                    self.add_message("implicit-str-concat",
+                                     line=elt.lineno,
+                                     args=(iterable_type, ))
 
     def process_string_token(self, token, start_row):
         quote_char = None
@@ -829,7 +840,7 @@ class StringConstantChecker(BaseTokenChecker):
             # There must be a next character; having a backslash at the end
             # of the string would be a SyntaxError.
             next_char = string_body[index + 1]
-            match = string_body[index : index + 2]
+            match = string_body[index:index + 2]
             if next_char in self.UNICODE_ESCAPE_CHARACTERS:
                 if "u" in prefix:
                     pass
@@ -839,14 +850,14 @@ class StringConstantChecker(BaseTokenChecker):
                     self.add_message(
                         "anomalous-unicode-escape-in-string",
                         line=start_row,
-                        args=(match,),
+                        args=(match, ),
                         col_offset=index,
                     )
             elif next_char not in self.ESCAPE_CHARACTERS:
                 self.add_message(
                     "anomalous-backslash-in-string",
                     line=start_row,
-                    args=(match,),
+                    args=(match, ),
                     col_offset=index,
                 )
             # Whether it was a valid escape or not, backslash followed by
@@ -896,8 +907,7 @@ def _is_long_string(string_token: str) -> bool:
     """
     return bool(
         SINGLE_QUOTED_REGEX.match(string_token)
-        or DOUBLE_QUOTED_REGEX.match(string_token)
-    )
+        or DOUBLE_QUOTED_REGEX.match(string_token))
 
 
 def _get_quote_delimiter(string_token: str) -> str:
@@ -918,7 +928,8 @@ def _get_quote_delimiter(string_token: str) -> str:
     """
     match = QUOTE_DELIMITER_REGEX.match(string_token)
     if not match:
-        raise ValueError("string token %s is not a well-formed string" % string_token)
+        raise ValueError("string token %s is not a well-formed string" %
+                         string_token)
     return match.group(2)
 
 
@@ -936,8 +947,5 @@ def _is_quote_delimiter_chosen_freely(string_token: str) -> bool:
     """
     quote_delimiter = _get_quote_delimiter(string_token)
     unchosen_delimiter = '"' if quote_delimiter == "'" else "'"
-    return bool(
-        quote_delimiter
-        and not _is_long_string(string_token)
-        and unchosen_delimiter not in str_eval(string_token)
-    )
+    return bool(quote_delimiter and not _is_long_string(string_token)
+                and unchosen_delimiter not in str_eval(string_token))

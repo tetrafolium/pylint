@@ -8,6 +8,7 @@ https://www.logilab.net/elo/ticket/5626 - name resolution bug inside classes
 
 from __future__ import print_function
 
+
 class Test(object):
     """test class"""
     ident = lambda x: x

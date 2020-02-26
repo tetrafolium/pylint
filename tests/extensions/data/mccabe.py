@@ -52,7 +52,9 @@ def f7():
         def c():
             """McCabe rating: 1"""
             pass
+
         c()
+
     b()
 
 

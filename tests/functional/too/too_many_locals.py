@@ -1,7 +1,8 @@
 # pylint: disable=missing-docstring
 from __future__ import print_function
 
-def function(arg1, arg2, arg3, arg4, arg5): # [too-many-locals]
+
+def function(arg1, arg2, arg3, arg4, arg5):  # [too-many-locals]
     arg6, arg7, arg8, arg9 = arg1, arg2, arg3, arg4
     print(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
     loc1, loc2, loc3, loc4, loc5, loc6, loc7 = arg1, arg2, arg3, arg4, arg5, \
@@ -9,7 +10,7 @@ def function(arg1, arg2, arg3, arg4, arg5): # [too-many-locals]
     print(loc1, loc2, loc3, loc4, loc5, loc6, loc7)
 
 
-def too_many_locals_function(): # [too-many-locals]
+def too_many_locals_function():  # [too-many-locals]
     """pylint will complains about too many local variables"""
     args0 = 0
     args1 = args0 * 1
@@ -29,7 +30,9 @@ def too_many_locals_function(): # [too-many-locals]
     args15 = args14 * 15
     return args15
 
-def too_many_arguments_function(arga, argu, argi, arge, argt, args): # [too-many-arguments]
+
+def too_many_arguments_function(arga, argu, argi, arge, argt,
+                                args):  # [too-many-arguments]
     """pylint will complains about too many arguments."""
     arga = argu
     arga += argi
@@ -38,8 +41,8 @@ def too_many_arguments_function(arga, argu, argi, arge, argt, args): # [too-many
     arga += args
     return arga
 
-def ignored_arguments_function(arga, argu, argi,
-                               _arge=0, _argt=1, _args=None):
+
+def ignored_arguments_function(arga, argu, argi, _arge=0, _argt=1, _args=None):
     """pylint will ignore _arge, _argt, _args.
 
     Consequently pylint will only coun 13 arguments.

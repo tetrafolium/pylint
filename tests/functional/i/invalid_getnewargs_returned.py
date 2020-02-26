@@ -8,14 +8,12 @@ from missing import Missing
 
 class FirstGoodGetNewArgs(object):
     """__getnewargs__ returns <type 'tuple'>"""
-
     def __getnewargs__(self):
         return (1, "2", 3)
 
 
 class SecondGoodGetNewArgs(object):
     """__getnewargs__ returns <type 'tuple'>"""
-
     def __getnewargs__(self):
         return tuple()
 
@@ -32,21 +30,18 @@ class ThirdGoodGetNewArgs(object):
 
 class FirstBadGetNewArgs(object):
     """ __getnewargs__ returns an integer """
-
     def __getnewargs__(self):  # [invalid-getnewargs-returned]
         return 1
 
 
 class SecondBadGetNewArgs(object):
     """ __getnewargs__ returns str """
-
     def __getnewargs__(self):  # [invalid-getnewargs-returned]
         return "(1, 2, 3)"
 
 
 class ThirdBadGetNewArgs(object):
     """ __getnewargs__ returns node which does not have 'value' in AST """
-
     def __getnewargs__(self):  # [invalid-getnewargs-returned]
         return lambda: tuple(1, 2)
 

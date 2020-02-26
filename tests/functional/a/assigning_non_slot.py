@@ -6,8 +6,10 @@ from collections import deque
 
 from missing import Unknown
 
+
 class Empty(object):
     """ empty """
+
 
 class Bad(object):
     """ missing not in slots. """
@@ -15,7 +17,8 @@ class Bad(object):
     __slots__ = ['member']
 
     def __init__(self):
-        self.missing = 42 # [assigning-non-slot]
+        self.missing = 42  # [assigning-non-slot]
+
 
 class Bad2(object):
     """ missing not in slots """
@@ -23,7 +26,8 @@ class Bad2(object):
 
     def __init__(self):
         self.deque = 42
-        self.missing = 42 # [assigning-non-slot]
+        self.missing = 42  # [assigning-non-slot]
+
 
 class Bad3(Bad):
     """ missing not found in slots """
@@ -33,8 +37,9 @@ class Bad3(Bad):
     def __init__(self):
         self.component = 42
         self.member = 24
-        self.missing = 42 # [assigning-non-slot]
+        self.missing = 42  # [assigning-non-slot]
         super(Bad3, self).__init__()
+
 
 class Good(Empty):
     """ missing not in slots, but Empty doesn't
@@ -45,6 +50,7 @@ class Good(Empty):
     def __init__(self):
         self.missing = 42
 
+
 class Good2(object):
     """ Using __dict__ in slots will be safe. """
 
@@ -53,6 +59,7 @@ class Good2(object):
     def __init__(self):
         self.comp = 4
         self.missing = 5
+
 
 class PropertyGood(object):
     """ Using properties is safe. """
@@ -71,6 +78,7 @@ class PropertyGood(object):
     def __init__(self):
         self.test = 42
 
+
 class PropertyGood2(object):
     """ Using properties in the body of the class is safe. """
     __slots__ = ['_value']
@@ -86,6 +94,7 @@ class PropertyGood2(object):
 
     def __init__(self):
         self.test = 24
+
 
 class UnicodeSlots(object):
     """Using unicode objects in __slots__ is okay.
@@ -129,7 +138,7 @@ def dont_emit_for_descriptors():
     # This should not emit, because attr is
     # a data descriptor
     inst.data_descriptor = 'foo'
-    inst.non_data_descriptor = 'lala' # [assigning-non-slot]
+    inst.non_data_descriptor = 'lala'  # [assigning-non-slot]
 
 
 class ClassWithSlots(object):
@@ -147,7 +156,7 @@ class ClassReassingingInvalidLayoutClass(object):
     __slots__ = []
 
     def release(self):
-        self.__class__ = ClassWithSlots # [assigning-non-slot]
+        self.__class__ = ClassWithSlots  # [assigning-non-slot]
 
 
 # pylint: disable=attribute-defined-outside-init

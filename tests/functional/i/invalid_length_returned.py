@@ -10,14 +10,12 @@ from missing import Missing
 
 class FirstGoodLen(object):
     """__len__ returns <type 'int'>"""
-
     def __len__(self):
         return 0
 
 
 class SecondGoodLen(object):
     """__len__ returns <type 'long'>"""
-
     def __len__(self):
         return sys.maxsize + 1
 
@@ -34,21 +32,18 @@ class ThirdGoodLen(object):
 
 class FirstBadLen(object):
     """ __len__ returns a negative integer """
-
     def __len__(self):  # [invalid-length-returned]
         return -1
 
 
 class SecondBadLen(object):
     """ __len__ returns non-int """
-
     def __len__(self):  # [invalid-length-returned]
         return 3.0
 
 
 class ThirdBadLen(object):
     """ __len__ returns node which does not have 'value' in AST """
-
     def __len__(self):  # [invalid-length-returned]
         return lambda: 3
 

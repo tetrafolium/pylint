@@ -8,7 +8,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """
 unit test for the extensions.diadefslib modules
 """
@@ -26,7 +25,8 @@ from unittest_pyreverse_writer import Config, get_project
 
 def _process_classes(classes):
     """extract class names of a list"""
-    return sorted([(isinstance(c.node, astroid.ClassDef), c.title) for c in classes])
+    return sorted([(isinstance(c.node, astroid.ClassDef), c.title)
+                   for c in classes])
 
 
 def _process_relations(relations):
@@ -34,7 +34,8 @@ def _process_relations(relations):
     result = []
     for rel_type, rels in relations.items():
         for rel in rels:
-            result.append((rel_type, rel.from_object.title, rel.to_object.title))
+            result.append(
+                (rel_type, rel.from_object.title, rel.to_object.title))
     result.sort()
     return result
 
@@ -93,9 +94,8 @@ class TestDefaultDiadefGenerator(object):
         assert keys == ["package", "class"]
         pd = dd[0]
         assert pd.title == "packages No Name"
-        modules = sorted(
-            [(isinstance(m.node, astroid.Module), m.title) for m in pd.objects]
-        )
+        modules = sorted([(isinstance(m.node, astroid.Module), m.title)
+                          for m in pd.objects])
         assert modules == [
             (True, "data"),
             (True, "data.clientmodule_test"),
@@ -167,8 +167,7 @@ def test_known_values2(HANDLER, PROJECT):
     HANDLER.config.classes = ["Specialization"]
     HANDLER.config.module_names = False
     cd = ClassDiadefGenerator(Linker(PROJECT), HANDLER).class_diagram(
-        PROJECT, "data.clientmodule_test.Specialization"
-    )
+        PROJECT, "data.clientmodule_test.Specialization")
     assert cd.title == "data.clientmodule_test.Specialization"
     classes = _process_classes(cd.objects)
     assert classes == [

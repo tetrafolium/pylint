@@ -10,11 +10,9 @@ from xml.etree import ElementTree
 ElementTree.nonexistant_function()  # [no-member]
 ElementTree.another.nonexistant.function()  # [no-member]
 
-
 import sys
 print(sys.stdout, 'hello world')
 print(sys.stdoout, 'bye bye world')  # [no-member]
-
 
 import re
 re.finditer('*', 'yo')
@@ -31,7 +29,7 @@ except ImportError:
     something = None
 
 try:
-    from collections import anything # [no-name-in-module]
+    from collections import anything  # [no-name-in-module]
 except ValueError:
     anything = None
 
@@ -41,12 +39,12 @@ except ImportError:
     pass
 
 try:
-    import collections.indeed_missing # [no-name-in-module]
+    import collections.indeed_missing  # [no-name-in-module]
 except ValueError:
     pass
 
 try:
-    import collections.emit # [no-name-in-module]
+    import collections.emit  # [no-name-in-module]
 except Exception:
     pass
 
@@ -57,10 +55,10 @@ except ImportError:
 
 try:
     if something:
-        import collections.emit2 # [no-name-in-module]
+        import collections.emit2  # [no-name-in-module]
 except Exception:
     pass
 
 from .no_self_use import Super
 from .no_self_use import lala  # [no-name-in-module]
-from .no_self_use.bla import lala1 # [no-name-in-module]
+from .no_self_use.bla import lala1  # [no-name-in-module]

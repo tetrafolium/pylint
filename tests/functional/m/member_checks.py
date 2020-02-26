@@ -2,14 +2,19 @@
 # pylint: disable=using-constant-test,expression-not-assigned, assigning-non-slot, unused-variable,pointless-statement, wrong-import-order, wrong-import-position,import-outside-toplevel
 from __future__ import print_function
 import six
+
+
 class Provider(object):
     """provide some attributes and method"""
     cattr = 4
+
     def __init__(self):
         self.attr = 4
+
     def method(self, val):
         """impressive method"""
         return self.attr * val
+
     def hophop(self):
         """hop method"""
         print('hop hop hop', self)
@@ -17,7 +22,6 @@ class Provider(object):
 
 class Client(object):
     """use provider class"""
-
     def __init__(self):
         self._prov = Provider()
         self._prov_attr = Provider.cattr
@@ -62,24 +66,24 @@ class Client(object):
         none = None
         print(none.whatever)
         # No misssing in the parents.
-        super(Client, self).misssing() # [no-member]
+        super(Client, self).misssing()  # [no-member]
 
 
 class Mixin(object):
     """No no-member should be emitted for mixins."""
 
+
 class Getattr(object):
     """no-member shouldn't be emitted for classes with dunder getattr."""
-
     def __getattr__(self, attr):
         return self.__dict__[attr]
 
 
 class Getattribute(object):
     """no-member shouldn't be emitted for classes with dunder getattribute."""
-
     def __getattribute__(self, attr):
         return 42
+
 
 print(object.__init__)
 print(property.__init__)
@@ -94,20 +98,20 @@ except AttributeError:
     pass
 
 try:
-    Client().indeed() # [no-member]
+    Client().indeed()  # [no-member]
 except ImportError:
     pass
 
 try:
     Client.missing()
 except AttributeError:
-    Client.missing() # [no-member]
+    Client.missing()  # [no-member]
 
 try:
     Client.missing()
 except AttributeError:
     try:
-        Client.missing() # [no-member]
+        Client.missing()  # [no-member]
     except ValueError:
         pass
 
@@ -121,19 +125,20 @@ try:
     Client().indeed()
 except AttributeError:
     try:
-        Client.missing() # [no-member]
+        Client.missing()  # [no-member]
     except Exception:
         pass
 
 
-class SuperChecks(str, str): # pylint: disable=duplicate-bases
+class SuperChecks(str, str):  # pylint: disable=duplicate-bases
     """Don't fail when the MRO is invalid."""
     def test(self):
         super(SuperChecks, self).lalala()
 
-type(Client()).ala # [no-member]
-type({}).bala # [no-member]
-type('').portocala # [no-member]
+
+type(Client()).ala  # [no-member]
+type({}).bala  # [no-member]
+type('').portocala  # [no-member]
 
 
 def socket_false_positive():
@@ -168,20 +173,21 @@ def no_conjugate_member(magic_flag):
 class NoDunderNameInInstance(object):
     """Emit a warning when accessing __name__ from an instance."""
     def __init__(self):
-        self.var = self.__name__ # [no-member]
+        self.var = self.__name__  # [no-member]
 
 
 class InvalidAccessBySlots(object):
     __slots__ = ('a', )
+
     def __init__(self):
-        var = self.teta # [no-member]
+        var = self.teta  # [no-member]
         self.teta = 24
 
 
 class MetaWithDynamicGetattr(type):
-
     def __getattr__(cls, attr):
         return attr
+
 
 @six.add_metaclass(MetaWithDynamicGetattr)
 class SomeClass(object):
@@ -190,14 +196,16 @@ class SomeClass(object):
 
 SomeClass.does_not_exist
 
+
 class ClassWithMangledAttribute(object):
     def __init__(self):
         self.name = 'Bug1643'
+
     def __bar(self):
         print(self.name + "xD")
 
-ClassWithMangledAttribute()._ClassWithMangledAttribute__bar()  # pylint: disable=protected-access
 
+ClassWithMangledAttribute()._ClassWithMangledAttribute__bar()  # pylint: disable=protected-access
 
 import enum
 
@@ -207,7 +215,6 @@ class Cls(enum.IntEnum):
 
 
 SOME_VALUE = Cls.Baz  # [no-member]
-
 
 
 # Does not crash when inferring the `append` attribute on the slice object

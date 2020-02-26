@@ -6,7 +6,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the pylint checker in :mod:`pylint.extensions.emptystring
 """
 
@@ -28,9 +27,8 @@ def disable(disable):
 
 
 def test_emptystring_message(linter):
-    elif_test = osp.join(
-        osp.dirname(osp.abspath(__file__)), "data", "empty_string_comparison.py"
-    )
+    elif_test = osp.join(osp.dirname(osp.abspath(__file__)), "data",
+                         "empty_string_comparison.py")
     linter.check([elif_test])
     msgs = linter.reporter.messages
     expected_lineno = [6, 9, 12, 15]

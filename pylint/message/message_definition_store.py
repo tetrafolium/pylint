@@ -10,11 +10,9 @@ from pylint.message.message_id_store import MessageIdStore
 
 
 class MessageDefinitionStore:
-
     """The messages store knows information about every possible message definition but has
     no particular state during analysis.
     """
-
     def __init__(self):
         self.message_id_store = MessageIdStore()
         # Primary registry for all active messages definitions.
@@ -71,8 +69,7 @@ class MessageDefinitionStore:
         for msgids_or_symbol in msgids_or_symbols:
             try:
                 for message_definition in self.get_message_definitions(
-                    msgids_or_symbol
-                ):
+                        msgids_or_symbol):
                     print(message_definition.format_help(checkerref=True))
                     print("")
             except UnknownMessageError as ex:
@@ -82,7 +79,8 @@ class MessageDefinitionStore:
 
     def list_messages(self):
         """Output full messages list documentation in ReST format. """
-        messages = sorted(self._messages_definitions.values(), key=lambda m: m.msgid)
+        messages = sorted(self._messages_definitions.values(),
+                          key=lambda m: m.msgid)
         for message in messages:
             if not message.may_be_emitted():
                 continue

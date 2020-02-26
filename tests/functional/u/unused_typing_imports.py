@@ -24,15 +24,15 @@ from typing import (
 )
 
 
-def func1(arg: Optional[Callable]=None):
+def func1(arg: Optional[Callable] = None):
     return arg
 
 
-def func2(*, arg: Optional[Iterable]=None):
+def func2(*, arg: Optional[Iterable] = None):
     return arg
 
 
-SOME_VALUE = [1] # type: List[Any]
+SOME_VALUE = [1]  # type: List[Any]
 for VALUE in [[1], [2], [3]]:  # type: Tuple[Any]
     print(VALUE)
 
@@ -45,7 +45,7 @@ class ContextManager:
         pass
 
 
-with ContextManager() as SOME_DICT: # type: Set[int]
+with ContextManager() as SOME_DICT:  # type: Set[int]
     print(SOME_DICT)
 
 
@@ -60,9 +60,10 @@ def typing_fully_qualified():
     return variable, other_variable
 
 
-def function(arg1,  # type: Iterable
-             arg2  # type: List
-            ):
+def function(
+    arg1,  # type: Iterable
+    arg2  # type: List
+):
     # type: (...) -> Sequence
     """docstring"""
     print(arg1, arg2)

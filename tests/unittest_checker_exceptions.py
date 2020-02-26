@@ -8,7 +8,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for pylint.checkers.exceptions."""
 import astroid
 
@@ -33,8 +32,7 @@ class TestExceptionsChecker(CheckerTestCase):
             self.checker.visit_raise(node)
 
     def test_bad_exception_context_function(self):
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def function():
             pass
 
@@ -42,8 +40,7 @@ class TestExceptionsChecker(CheckerTestCase):
             pass
         except function as exc:
             raise Exception from exc  #@
-        """
-        )
+        """)
         message = Message("bad-exception-context", node=node)
         with self.assertAddsMessages(message):
             self.checker.visit_raise(node)

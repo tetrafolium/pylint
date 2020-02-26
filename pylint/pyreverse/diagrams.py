@@ -7,7 +7,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """diagram objects
 """
 
@@ -24,7 +23,6 @@ class Figure:
 class Relationship(Figure):
     """a relation ship from an object in the diagram to another
     """
-
     def __init__(self, from_object, to_object, relation_type, name=None):
         Figure.__init__(self)
         self.from_object = from_object
@@ -36,7 +34,6 @@ class Relationship(Figure):
 class DiagramEntity(Figure):
     """a diagram object, i.e. a label associated to an astroid node
     """
-
     def __init__(self, title="No name", node=None):
         Figure.__init__(self)
         self.title = title
@@ -65,7 +62,11 @@ class ClassDiagram(Figure, FilterMixIn):
             key=lambda x: (x.from_object.fig_id, x.to_object.fig_id),
         )
 
-    def add_relationship(self, from_object, to_object, relation_type, name=None):
+    def add_relationship(self,
+                         from_object,
+                         to_object,
+                         relation_type,
+                         name=None):
         """create a relation ship
         """
         rel = Relationship(from_object, to_object, relation_type, name)
@@ -82,16 +83,12 @@ class ClassDiagram(Figure, FilterMixIn):
     def get_attrs(self, node):
         """return visible attributes, possibly with class name"""
         attrs = []
-        properties = [
-            (n, m)
-            for n, m in node.items()
-            if isinstance(m, astroid.FunctionDef) and decorated_with_property(m)
-        ]
+        properties = [(n, m) for n, m in node.items()
+                      if isinstance(m, astroid.FunctionDef)
+                      and decorated_with_property(m)]
         for node_name, associated_nodes in (
-            list(node.instance_attrs_type.items())
-            + list(node.locals_type.items())
-            + properties
-        ):
+                list(node.instance_attrs_type.items()) +
+                list(node.locals_type.items()) + properties):
             if not self.show_attr(node_name):
                 continue
             names = self.class_names(associated_nodes)
@@ -103,11 +100,8 @@ class ClassDiagram(Figure, FilterMixIn):
     def get_methods(self, node):
         """return visible methods"""
         methods = [
-            m
-            for m in node.values()
-            if isinstance(m, astroid.FunctionDef)
-            and not decorated_with_property(m)
-            and self.show_attr(m.name)
+            m for m in node.values() if isinstance(m, astroid.FunctionDef)
+            and not decorated_with_property(m) and self.show_attr(m.name)
         ]
         return sorted(methods, key=lambda n: n.name)
 
@@ -125,11 +119,8 @@ class ClassDiagram(Figure, FilterMixIn):
         for node in nodes:
             if isinstance(node, astroid.Instance):
                 node = node._proxied
-            if (
-                isinstance(node, astroid.ClassDef)
-                and hasattr(node, "name")
-                and not self.has_node(node)
-            ):
+            if (isinstance(node, astroid.ClassDef) and hasattr(node, "name")
+                    and not self.has_node(node)):
                 if node.name not in names:
                     node_name = node.name
                     names.append(node_name)
@@ -152,7 +143,9 @@ class ClassDiagram(Figure, FilterMixIn):
 
     def classes(self):
         """return all class nodes in the diagram"""
-        return [o for o in self.objects if isinstance(o.node, astroid.ClassDef)]
+        return [
+            o for o in self.objects if isinstance(o.node, astroid.ClassDef)
+        ]
 
     def classe(self, name):
         """return a class by its name, raise KeyError if not found
@@ -190,8 +183,7 @@ class ClassDiagram(Figure, FilterMixIn):
                     continue
             # associations link
             for name, values in list(node.instance_attrs_type.items()) + list(
-                node.locals_type.items()
-            ):
+                    node.locals_type.items()):
                 for value in values:
                     if value is astroid.Uninferable:
                         continue
@@ -199,7 +191,8 @@ class ClassDiagram(Figure, FilterMixIn):
                         value = value._proxied
                     try:
                         associated_obj = self.object_from_node(value)
-                        self.add_relationship(associated_obj, obj, "association", name)
+                        self.add_relationship(associated_obj, obj,
+                                              "association", name)
                     except KeyError:
                         continue
 

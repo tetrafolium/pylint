@@ -6,7 +6,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Unit tests for the config module."""
 
 import re
@@ -50,7 +49,8 @@ def test__csv_validator_spaces():
 
 def test__regexp_csv_validator_valid():
     pattern_strings = ["test_.*", "foo\\.bar", "^baz$"]
-    result = config._regexp_csv_validator(None, None, ",".join(pattern_strings))
+    result = config._regexp_csv_validator(None, None,
+                                          ",".join(pattern_strings))
     for i, regex in enumerate(result):
         assert isinstance(regex, RE_PATTERN_TYPE)
         assert regex.pattern == pattern_strings[i]

@@ -1,29 +1,32 @@
 # pylint: disable=missing-docstring, invalid-name, too-few-public-methods, no-self-use, useless-object-inheritance,import-outside-toplevel
 
+
 def test_regression_737():
-    import xml # [unused-import]
+    import xml  # [unused-import]
+
 
 def test_regression_923():
     import unittest.case  # [unused-import]
-    import xml as sql # [unused-import]
+    import xml as sql  # [unused-import]
+
 
 def test_unused_with_prepended_underscore():
     _foo = 42
     _ = 24
     __a = 24
     dummy = 24
-    _a_ = 42 # [unused-variable]
-    __a__ = 24 # [unused-variable]
+    _a_ = 42  # [unused-variable]
+    __a__ = 24  # [unused-variable]
     __never_used = 42
 
+
 def test_local_field_prefixed_with_unused_or_ignored():
-    flagged_local_field = 42 # [unused-variable]
+    flagged_local_field = 42  # [unused-variable]
     unused_local_field = 42
     ignored_local_field = 42
 
 
 class HasUnusedDunderClass(object):
-
     def test(self):
         __class__ = 42  # [unused-variable]
 
@@ -47,21 +50,22 @@ def locals_does_not_account_for_subscopes():
 
     def some_other_scope():
         return locals()
+
     return some_other_scope
 
 
 def unused_import_from():
-    from functools import wraps as abc # [unused-import]
-    from collections import namedtuple # [unused-import]
+    from functools import wraps as abc  # [unused-import]
+    from collections import namedtuple  # [unused-import]
 
 
 def unused_import_in_function(value):
-    from six import PY2, text_type # [unused-import]
+    from six import PY2, text_type  # [unused-import]
     return value.encode("utf-8") if PY2 else value
 
 
 def hello(arg):
-    my_var = 'something' # [unused-variable]
+    my_var = 'something'  # [unused-variable]
     if arg:
         return True
     raise Exception

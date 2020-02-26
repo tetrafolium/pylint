@@ -1,6 +1,7 @@
 # pylint: disable=too-few-public-methods, no-absolute-import,missing-docstring,import-error,wrong-import-position
 # pylint: disable=wrong-import-order, useless-object-inheritance,unnecessary-lambda
 
+
 def decorator(fun):
     """Decorator"""
     return fun
@@ -8,7 +9,6 @@ def decorator(fun):
 
 class DemoClass(object):
     """Test class for method invocations."""
-
     @staticmethod
     def static_method(arg):
         """static method."""
@@ -33,9 +33,11 @@ def function_1_arg(first_argument):
     """one argument function"""
     return first_argument
 
+
 def function_3_args(first_argument, second_argument, third_argument):
     """three arguments function"""
     return first_argument, second_argument, third_argument
+
 
 def function_default_arg(one=1, two=2):
     """fonction with default value"""
@@ -65,6 +67,7 @@ LAMBDA = lambda arg: 1
 
 LAMBDA()  # [no-value-for-parameter]
 
+
 def method_tests():
     """Method invocations."""
     demo = DemoClass()
@@ -80,25 +83,30 @@ def method_tests():
     demo.decorated_method()  # [no-value-for-parameter]
     DemoClass.decorated_method(demo)  # [no-value-for-parameter]
 
+
 # Test a regression (issue #234)
 import sys
+
 
 class Text(object):
     """ Regression """
 
-    if sys.version_info > (3,):
+    if sys.version_info > (3, ):
+
         def __new__(cls):
             """ empty """
             return object.__new__(cls)
     else:
+
         def __new__(cls):
             """ empty """
             return object.__new__(cls)
 
+
 Text()
 
-class TestStaticMethod(object):
 
+class TestStaticMethod(object):
     @staticmethod
     def test(first, second=None, **kwargs):
         return first, second, kwargs
@@ -107,19 +115,21 @@ class TestStaticMethod(object):
         self.test(42)
         self.test(42, second=34)
         self.test(42, 42)
-        self.test() # [no-value-for-parameter]
-        self.test(42, 42, 42) # [too-many-function-args]
+        self.test()  # [no-value-for-parameter]
+        self.test(42, 42, 42)  # [too-many-function-args]
 
 
 class TypeCheckConstructor(object):
     def __init__(self, first, second):
         self.first = first
         self.second = second
+
     def test(self):
-        type(self)(1, 2, 3) # [too-many-function-args]
+        type(self)(1, 2, 3)  # [too-many-function-args]
         # +1: [no-value-for-parameter,no-value-for-parameter]
         type(self)()
-        type(self)(1, lala=2) # [no-value-for-parameter,unexpected-keyword-arg]
+        type(self)(1,
+                   lala=2)  # [no-value-for-parameter,unexpected-keyword-arg]
         type(self)(1, 2)
         type(self)(first=1, second=2)
 
@@ -130,18 +140,22 @@ class Test(object):
 
     def test(self):
         self.lam(42)
-        self.lam() # [no-value-for-parameter]
-        self.lam(1, 2, 3) # [too-many-function-args]
+        self.lam()  # [no-value-for-parameter]
+        self.lam(1, 2, 3)  # [too-many-function-args]
 
-Test().lam() # [no-value-for-parameter]
+
+Test().lam()  # [no-value-for-parameter]
 
 # Don't emit a redundant-keyword-arg for this example,
 # it's perfectly valid
 
+
 class Issue642(object):
     attr = 0
+
     def __str__(self):
         return "{self.attr}".format(self=self)
+
 
 # These should not emit anything regarding the number of arguments,
 # since they have something invalid.
@@ -157,13 +171,16 @@ function_1_arg(5, 6, **{unknown: 1})
 function_1_arg(**{object: 1})
 function_1_arg(**{1: 2})
 
+
 def no_context_but_redefined(*args):
     args = [1]
     #+1: [no-value-for-parameter, no-value-for-parameter]
     expect_three(*list(args))
 
+
 def no_context_one_elem(*args):
-    expect_three(args) # [no-value-for-parameter, no-value-for-parameter]
+    expect_three(args)  # [no-value-for-parameter, no-value-for-parameter]
+
 
 # Don't emit no-value-for-parameter for this, since we
 # don't have the context at our disposal.
@@ -174,14 +191,18 @@ def expect_three(one, two, three):
 def no_context(*args):
     expect_three(*args)
 
+
 def no_context_two(*args):
     expect_three(*list(args))
+
 
 def no_context_three(*args):
     expect_three(*set(args))
 
+
 def compare_prices(arg):
     return set((arg, ))
+
 
 def find_problems2(prob_dates):
     for fff in range(10):
@@ -193,17 +214,14 @@ from collections import namedtuple
 
 def namedtuple_replace_issue_1036():
     cls = namedtuple('cls', 'a b c')
-    new_instance = cls(1, 2, 3)._replace(
-        a=24,
-        b=24,
-        c=42
-    )
+    new_instance = cls(1, 2, 3)._replace(a=24, b=24, c=42)
     # +1:[unexpected-keyword-arg,unexpected-keyword-arg]
     new_bad_instance = cls(1, 2, 3)._replace(d=24, e=32)
     return new_instance, new_bad_instance
 
 
 from functools import partial
+
 
 def some_func(first, second, third):
     return first + second + third

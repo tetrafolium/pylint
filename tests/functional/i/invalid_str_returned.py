@@ -8,14 +8,12 @@ from missing import Missing
 
 class FirstGoodStr(object):
     """__str__ returns <type 'str'>"""
-
     def __str__(self):
         return "some str"
 
 
 class SecondGoodStr(object):
     """__str__ returns <type 'str'>"""
-
     def __str__(self):
         return str(123)
 
@@ -32,21 +30,18 @@ class ThirdGoodStr(object):
 
 class FirstBadStr(object):
     """ __str__ returns bytes """
-
     def __str__(self):  # [invalid-str-returned]
         return b"123"
 
 
 class SecondBadStr(object):
     """ __str__ returns int """
-
     def __str__(self):  # [invalid-str-returned]
         return 1
 
 
 class ThirdBadStr(object):
     """ __str__ returns node which does not have 'value' in AST """
-
     def __str__(self):  # [invalid-str-returned]
         return lambda: "some str"
 
@@ -59,6 +54,5 @@ class AmbiguousStr(object):
 
 class AnotherAmbiguousStr(object):
     """Potential uninferable return value"""
-
     def __str__(self):
         return str(Missing)

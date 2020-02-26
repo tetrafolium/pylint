@@ -33,7 +33,7 @@ def not_used_before_assignment_2(a):
 
 
 def func(something):
-    return something ** 3
+    return something**3
 
 
 class FalsePositive(object):

@@ -6,14 +6,15 @@ def check_messages(*messages):
     docstring"""
     return messages
 
+
 def function2():
     """Test Ok"""
+
 
 class FFFF:
     """
     Test Docstring First Line Empty
     """
-
     def method1(self):
         '''
         Test Triple Single Quotes docstring

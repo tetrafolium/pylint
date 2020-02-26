@@ -72,15 +72,14 @@ class MultipleTypesChecker(BaseChecker):
                 redef_parent = redef_node.parent
                 if isinstance(orig_parent, astroid.If):
                     if orig_parent == redef_parent:
-                        if (
-                            redef_node in orig_parent.orelse
-                            and orig_node not in orig_parent.orelse
-                        ):
+                        if (redef_node in orig_parent.orelse
+                                and orig_node not in orig_parent.orelse):
                             orig_node, orig_type = redef_node, redef_type
                             continue
                     elif isinstance(
-                        redef_parent, astroid.If
-                    ) and redef_parent in orig_parent.nodes_of_class(astroid.If):
+                            redef_parent, astroid.If
+                    ) and redef_parent in orig_parent.nodes_of_class(
+                            astroid.If):
                         orig_node, orig_type = redef_node, redef_type
                         continue
                 orig_type = orig_type.replace(BUILTINS + ".", "")
@@ -103,8 +102,7 @@ class MultipleTypesChecker(BaseChecker):
         _type = node_type(node.value)
         if _type:
             self._assigns[-1].setdefault(target.as_string(), []).append(
-                (node, _type.pytype())
-            )
+                (node, _type.pytype()))
 
 
 def register(linter):

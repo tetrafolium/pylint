@@ -48,24 +48,27 @@ class BaseChecker(OptionsProviderMixIn):
 
     def __gt__(self, other):
         """Permit to sort a list of Checker by name."""
-        return "{}{}".format(self.name, self.msgs).__gt__(
-            "{}{}".format(other.name, other.msgs)
-        )
+        return "{}{}".format(self.name, self.msgs).__gt__("{}{}".format(
+            other.name, other.msgs))
 
     def __repr__(self):
         status = "Checker" if self.enabled else "Disabled checker"
         return "{} '{}' (responsible for '{}')".format(
-            status, self.name, "', '".join(self.msgs.keys())
-        )
+            status, self.name, "', '".join(self.msgs.keys()))
 
     def __str__(self):
         """This might be incomplete because multiple class inheriting BaseChecker
         can have the same name. Cf MessageHandlerMixIn.get_full_documentation()"""
-        return self.get_full_documentation(
-            msgs=self.msgs, options=self.options_and_values(), reports=self.reports
-        )
+        return self.get_full_documentation(msgs=self.msgs,
+                                           options=self.options_and_values(),
+                                           reports=self.reports)
 
-    def get_full_documentation(self, msgs, options, reports, doc=None, module=None):
+    def get_full_documentation(self,
+                               msgs,
+                               options,
+                               reports,
+                               doc=None,
+                               module=None):
         result = ""
         checker_title = "%s checker" % (self.name.replace("_", " ").title())
         if module:
@@ -77,7 +80,8 @@ class BaseChecker(OptionsProviderMixIn):
         result += "Verbatim name of the checker is ``%s``.\n\n" % self.name
         if doc:
             # Provide anchor to link against
-            result += get_rst_title("{} Documentation".format(checker_title), "^")
+            result += get_rst_title("{} Documentation".format(checker_title),
+                                    "^")
             result += "%s\n\n" % cleandoc(doc)
         # options might be an empty generator and not be False when casted to boolean
         options = list(options)
@@ -86,9 +90,9 @@ class BaseChecker(OptionsProviderMixIn):
             result += "%s\n" % get_rst_section(None, options)
         if msgs:
             result += get_rst_title("{} Messages".format(checker_title), "^")
-            for msgid, msg in sorted(
-                msgs.items(), key=lambda kv: (_MSG_ORDER.index(kv[0][0]), kv[1])
-            ):
+            for msgid, msg in sorted(msgs.items(),
+                                     key=lambda kv:
+                                     (_MSG_ORDER.index(kv[0][0]), kv[1])):
                 msg = self.create_message_definition_from_tuple(msgid, msg)
                 result += "%s\n" % msg.format_help(checkerref=False)
             result += "\n"
@@ -100,12 +104,17 @@ class BaseChecker(OptionsProviderMixIn):
         result += "\n"
         return result
 
-    def add_message(
-        self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None
-    ):
+    def add_message(self,
+                    msgid,
+                    line=None,
+                    node=None,
+                    args=None,
+                    confidence=None,
+                    col_offset=None):
         if not confidence:
             confidence = UNDEFINED
-        self.linter.add_message(msgid, line, node, args, confidence, col_offset)
+        self.linter.add_message(msgid, line, node, args, confidence,
+                                col_offset)
 
     def check_consistency(self):
         """Check the consistency of msgid.
@@ -122,11 +131,9 @@ class BaseChecker(OptionsProviderMixIn):
             if checker_id is not None and checker_id != message.msgid[1:3]:
                 error_msg = "Inconsistent checker part in message id "
                 error_msg += "'{}' (expected 'x{checker_id}xx' ".format(
-                    message.msgid, checker_id=checker_id
-                )
+                    message.msgid, checker_id=checker_id)
                 error_msg += "because we already had {existing_ids}).".format(
-                    existing_ids=existing_ids
-                )
+                    existing_ids=existing_ids)
                 raise InvalidMessageError(error_msg)
             checker_id = message.msgid[1:3]
             existing_ids.append(message.msgid)
@@ -168,7 +175,8 @@ class BaseChecker(OptionsProviderMixIn):
         for message_definition in self.messages:
             if message_definition.msgid == msgid:
                 return message_definition
-        error_msg = "MessageDefinition for '{}' does not exists. ".format(msgid)
+        error_msg = "MessageDefinition for '{}' does not exists. ".format(
+            msgid)
         error_msg += "Choose from {}.".format([m.msgid for m in self.messages])
         raise InvalidMessageError(error_msg)
 
@@ -181,7 +189,6 @@ class BaseChecker(OptionsProviderMixIn):
 
 class BaseTokenChecker(BaseChecker):
     """Base class for checkers that want to have access to the token stream."""
-
     def process_tokens(self, tokens):
         """Should be overridden by subclasses."""
         raise NotImplementedError()

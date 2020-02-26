@@ -1,1 +1,1 @@
-"a {} {".format(1) # [bad-format-string]
+"a {} {".format(1)  # [bad-format-string]

@@ -6,26 +6,27 @@ Check accessing Exception.message
 from unknown import ExtensionException
 __revision__ = 0
 
+
 class SubException(IndexError):
     """ empty """
 
-_ = IndexError("test").message # [exception-message-attribute]
-_ = ZeroDivisionError("error").message # [exception-message-attribute]
+
+_ = IndexError("test").message  # [exception-message-attribute]
+_ = ZeroDivisionError("error").message  # [exception-message-attribute]
 _ = ExtensionException("error").message
-_ = SubException("error").message # [exception-message-attribute]
+_ = SubException("error").message  # [exception-message-attribute]
 
 try:
     raise Exception('e')
 except Exception as exception:
-    _ = exception.message # [exception-message-attribute]
-    del exception.message # [exception-message-attribute]
-    exception.message += 'hello world' # [exception-message-attribute]
+    _ = exception.message  # [exception-message-attribute]
+    del exception.message  # [exception-message-attribute]
+    exception.message += 'hello world'  # [exception-message-attribute]
     exception.message = 'hello world'
 
 
 class CompatException(Exception):
     """An exception which should work on py2 and py3."""
-
     def __init__(self, message=''):
         super(CompatException, self).__init__()
         self.message = message

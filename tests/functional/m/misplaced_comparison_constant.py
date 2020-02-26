@@ -2,6 +2,7 @@
 
 # pylint: disable=singleton-comparison, missing-docstring, too-few-public-methods, useless-object-inheritance
 
+
 class MyClass(object):
     def __init__(self):
         self.attr = 1
@@ -9,8 +10,10 @@ class MyClass(object):
     def dummy_return(self):
         return self.attr
 
+
 def dummy_return():
     return 2
+
 
 def bad_comparisons():
     """this is not ok"""
@@ -26,8 +29,9 @@ def bad_comparisons():
             pass
         if 1 == instance.attr:  # [misplaced-comparison-constant]
             pass
-        if "aaa" == instance.attr: # [misplaced-comparison-constant]
+        if "aaa" == instance.attr:  # [misplaced-comparison-constant]
             pass
+
 
 def good_comparison():
     """this is ok"""

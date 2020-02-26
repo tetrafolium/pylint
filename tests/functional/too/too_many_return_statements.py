@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 
-def stupid_function(arg): # [too-many-return-statements]
+
+def stupid_function(arg):  # [too-many-return-statements]
     if arg == 1:
         return 1
     if arg == 2:

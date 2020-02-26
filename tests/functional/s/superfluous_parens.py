@@ -15,5 +15,5 @@ if (1) in (1, 2, 3):  # [superfluous-parens]
 if (1, 2) in (1, 2, 3):
     pass
 DICT = {'a': 1, 'b': 2}
-del(DICT['b'])  # [superfluous-parens]
+del (DICT['b'])  # [superfluous-parens]
 del DICT['a']

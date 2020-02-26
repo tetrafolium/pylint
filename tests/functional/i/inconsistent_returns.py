@@ -3,6 +3,7 @@
 import math
 import sys
 
+
 # These ones are consistent
 def explicit_returns(var):
     if var >= 0:
@@ -10,14 +11,17 @@ def explicit_returns(var):
     else:
         return None
 
+
 def explicit_returns2(var):
     if var < 0:
         return None
     return math.sqrt(var)
 
+
 def empty_implicit_returns(var):
     if var < 0:
         return
+
 
 def returns_in_exceptions():
     try:
@@ -27,11 +31,13 @@ def returns_in_exceptions():
     except (OSError, TypeError):
         return 2
 
+
 def returns_and_exceptions(var):
     if var < 10:
         return var**2
     else:
         raise ValueError("Incorrect value")
+
 
 def returns_and_exceptions_issue1770(var):
     try:
@@ -44,6 +50,7 @@ def returns_and_exceptions_issue1770(var):
     except AssertionError:
         return None
 
+
 def explicit_returns3(arg):
     if arg:
         return False
@@ -51,6 +58,7 @@ def explicit_returns3(arg):
         if arg < 3:
             print('arg < 3')
         return True
+
 
 def explicit_returns4(arg):
     if arg:
@@ -62,6 +70,7 @@ def explicit_returns4(arg):
             print('arg < 3')
         return True
 
+
 def explicit_returns5(arg):
     if arg:
         if arg > 2:
@@ -70,10 +79,13 @@ def explicit_returns5(arg):
     else:
         return True
 
+
 def nested_function():
     def dummy_return():
         return True
+
     return dummy_return
+
 
 def explicit_returns6(x, y, z):
     if x:  # pylint: disable=no-else-return
@@ -88,6 +100,7 @@ def explicit_returns6(x, y, z):
         d = 4
         return z
 
+
 def explicit_returns7(arg):
     if arg < 0:
         arg = 2 * arg
@@ -99,6 +112,7 @@ def explicit_returns7(arg):
         arg = 3 * arg
         return 'above 0'
 
+
 def bug_1772():
     """Don't check inconsistent return statements inside while loop"""
     counter = 1
@@ -107,11 +121,13 @@ def bug_1772():
         if counter == 100:
             return 7
 
+
 def bug_1771(var):
     if var == 1:
         sys.exit(1)
     else:
         return var * 2
+
 
 def bug_1771_with_user_config(var):
     # sys.getdefaultencoding is considered as a never
@@ -121,19 +137,24 @@ def bug_1771_with_user_config(var):
     else:
         return var * 2
 
+
 def bug_1794_inner_func_in_if(var):
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return None
+
         return None
     else:
         return None
+
 
 try:
     import ConfigParser as configparser
 except ImportError:
     import configparser
+
 
 # Due to the try/except import above, astroid cannot safely
 # infer the exception type. It doesn't matter here, because
@@ -146,6 +167,7 @@ def bug_1794(a):
             return a
     raise configparser.NoSectionError('toto')
 
+
 #pylint: disable = no-else-return
 def bug_1782_bis(val=3):
     if val == 3:
@@ -155,17 +177,20 @@ def bug_1782_bis(val=3):
     else:
         raise RuntimeError()
 
+
 # Next ones are not consistent
-def explicit_implicit_returns(var): # [inconsistent-return-statements]
+def explicit_implicit_returns(var):  # [inconsistent-return-statements]
     if var >= 0:
         return math.sqrt(var)
 
-def empty_explicit_returns(var): # [inconsistent-return-statements]
+
+def empty_explicit_returns(var):  # [inconsistent-return-statements]
     if var < 0:
         return
     return math.sqrt(var)
 
-def explicit_implicit_returns2(arg): # [inconsistent-return-statements]
+
+def explicit_implicit_returns2(arg):  # [inconsistent-return-statements]
     if arg:
         if arg > 2:
             print('arg > 2')
@@ -173,7 +198,8 @@ def explicit_implicit_returns2(arg): # [inconsistent-return-statements]
     else:
         return True
 
-def explicit_implicit_returns3(arg): # [inconsistent-return-statements]
+
+def explicit_implicit_returns3(arg):  # [inconsistent-return-statements]
     if arg:
         if arg > 2:
             print('arg > 2')
@@ -181,7 +207,9 @@ def explicit_implicit_returns3(arg): # [inconsistent-return-statements]
         else:
             return True
 
-def returns_missing_in_catched_exceptions(arg): # [inconsistent-return-statements]
+
+def returns_missing_in_catched_exceptions(
+    arg):  # [inconsistent-return-statements]
     try:
         arg = arg**2
         raise ValueError('test')
@@ -191,27 +219,32 @@ def returns_missing_in_catched_exceptions(arg): # [inconsistent-return-statement
     except (OSError, TypeError):
         return 2
 
-def complex_func(arg): # [inconsistent-return-statements]
+
+def complex_func(arg):  # [inconsistent-return-statements]
     for i in range(arg):
         if i > arg / 2:
             break
         else:
             return arg
 
+
 def inconsistent_returns_in_nested_function():
-    def not_consistent_returns_inner(arg): # [inconsistent-return-statements]
+    def not_consistent_returns_inner(arg):  # [inconsistent-return-statements]
         for i in range(arg):
             if i > arg / 2:
                 break
             else:
                 return arg
+
     return not_consistent_returns_inner
 
-def bug_1771_counter_example(var): # [inconsistent-return-statements]
+
+def bug_1771_counter_example(var):  # [inconsistent-return-statements]
     if var == 1:
         inconsistent_returns_in_nested_function()
     else:
         return var * 2
+
 
 class BlargException(Exception):
     pass
@@ -225,7 +258,8 @@ def blarg(someval):
     except BlargException:
         raise
 
-def bug_1772_counter_example(): # [inconsistent-return-statements]
+
+def bug_1772_counter_example():  # [inconsistent-return-statements]
     counter = 1
     if counter == 1:
         while True:
@@ -233,32 +267,45 @@ def bug_1772_counter_example(): # [inconsistent-return-statements]
             if counter == 100:
                 return 7
 
-def bug_1794_inner_func_in_if_counter_example_1(var): # [inconsistent-return-statements]
+
+def bug_1794_inner_func_in_if_counter_example_1(
+    var):  # [inconsistent-return-statements]
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return None
+
         return None
     else:
         return
 
-def bug_1794_inner_func_in_if_counter_example_2(var): # [inconsistent-return-statements]
+
+def bug_1794_inner_func_in_if_counter_example_2(
+    var):  # [inconsistent-return-statements]
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return
+
         return None
     else:
         return
 
-def bug_1794_inner_func_in_if_counter_example_3(var): # [inconsistent-return-statements]
+
+def bug_1794_inner_func_in_if_counter_example_3(
+    var):  # [inconsistent-return-statements]
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return None
+
         return None
     else:
-        def _inner2(var_bis): # [inconsistent-return-statements]
+
+        def _inner2(var_bis):  # [inconsistent-return-statements]
             if var_bis:
                 return True
             return

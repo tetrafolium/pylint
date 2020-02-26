@@ -1,30 +1,30 @@
 """Check that Python 3.5's async functions are properly analyzed by Pylint."""
+
+
 # pylint: disable=missing-docstring,invalid-name,too-few-public-methods
 # pylint: disable=using-constant-test, useless-object-inheritance
-
-async def next(): # [redefined-builtin]
+async def next():  # [redefined-builtin]
     pass
 
-async def some_function(arg1, arg2): # [unused-argument]
+
+async def some_function(arg1, arg2):  # [unused-argument]
     await arg1
 
 
 class OtherClass(object):
-
     @staticmethod
     def test():
         return 42
 
 
 class Class(object):
-
     async def some_method(self):
-        super(OtherClass, self).test() # [bad-super-call]
+        super(OtherClass, self).test()  # [bad-super-call]
 
 
 # +1: [too-many-arguments,too-many-return-statements, too-many-branches]
-async def complex_function(this, function, has, more, arguments, than,
-                           one, _, should, have):
+async def complex_function(this, function, has, more, arguments, than, one, _,
+                           should, have):
     if 1:
         return this
     if 1:

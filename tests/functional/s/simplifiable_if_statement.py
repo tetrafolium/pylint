@@ -5,7 +5,7 @@
 
 def test_simplifiable_1(arg):
     # Simple test that can be replaced by bool(arg)
-    if arg: # [simplifiable-if-statement]
+    if arg:  # [simplifiable-if-statement]
         return True
     else:
         return False
@@ -13,7 +13,7 @@ def test_simplifiable_1(arg):
 
 def test_simplifiable_2(arg, arg2):
     # Can be reduced to bool(arg and not arg2)
-    if arg and not arg2: # [simplifiable-if-statement]
+    if arg and not arg2:  # [simplifiable-if-statement]
         return True
     else:
         return False
@@ -21,7 +21,7 @@ def test_simplifiable_2(arg, arg2):
 
 def test_simplifiable_3(arg, arg2):
     # Can be reduced to bool(arg and not arg2)
-    if arg and not arg2: # [simplifiable-if-statement]
+    if arg and not arg2:  # [simplifiable-if-statement]
         var = True
     else:
         var = False
@@ -32,7 +32,7 @@ def test_simplifiable_4(arg):
     if arg:
         var = True
     else:
-        if arg == "arg1": # [simplifiable-if-statement]
+        if arg == "arg1":  # [simplifiable-if-statement]
             return True
         else:
             return False
@@ -103,6 +103,7 @@ def test_not_simplifiable_6(arg):
     else:
         return True
     return var
+
 
 def test_not_simplifiable_7(arg):
     # Returning something different

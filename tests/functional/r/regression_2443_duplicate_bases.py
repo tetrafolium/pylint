@@ -17,7 +17,8 @@ class ProducingMixin(Generic[OUT]):
     pass
 
 
-class StreamingMixin(Generic[IN, OUT], ConsumingMixin[IN], ProducingMixin[OUT]):
+class StreamingMixin(Generic[IN, OUT], ConsumingMixin[IN],
+                     ProducingMixin[OUT]):
     pass
 
 

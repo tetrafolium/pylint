@@ -10,7 +10,6 @@ try:
 except:
     raise ValueError('Invalid integer')
 
-
 try:
     int("9a")
 except:  # [try-except-raise]
@@ -28,9 +27,11 @@ class AAAException(Exception):
     """AAAException"""
     pass
 
+
 class BBBException(AAAException):
     """BBBException"""
     pass
+
 
 def ccc():
     """try-except-raise test function"""
@@ -52,6 +53,7 @@ def ddd():
         raise BBBException("raised from AAAException")
     except:  # [try-except-raise]
         raise
+
 
 try:
     pass
@@ -107,5 +109,5 @@ try:
     pass
 except (FileNotFoundError, PermissionError):
     raise
-except (Exception,):
+except (Exception, ):
     print("a failure")

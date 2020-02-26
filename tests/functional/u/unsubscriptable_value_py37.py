@@ -7,8 +7,8 @@ Checks that class used in a subscript supports subscription
 
 import typing
 
-class Subscriptable(object):
 
+class Subscriptable(object):
     def __class_getitem__(cls, params):
         pass
 

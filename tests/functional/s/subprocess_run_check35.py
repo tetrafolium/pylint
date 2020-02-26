@@ -2,5 +2,4 @@
 
 import subprocess
 
-
-subprocess.run() # [subprocess-run-check]
+subprocess.run()  # [subprocess-run-check]

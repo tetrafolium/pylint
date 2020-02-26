@@ -6,6 +6,5 @@ raise Exception, 1  # Error emitted here with the Python 3 checker.
 
 class Test(object):
     """dummy"""
-
     def __init__(self):
         return 42

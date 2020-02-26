@@ -2,10 +2,8 @@
 # pylint: disable=useless-object-inheritance
 
 
-
 class MyClass(object):
     """A class with some methods missing self args."""
-
     def __init__(self):
         self.var = "var"
 

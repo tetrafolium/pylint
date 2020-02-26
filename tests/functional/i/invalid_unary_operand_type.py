@@ -8,8 +8,10 @@ import collections
 class Implemented(object):
     def __invert__(self):
         return 42
+
     def __pos__(self):
         return 42
+
     def __neg__(self):
         return 42
 
@@ -33,19 +35,21 @@ def these_are_good():
 
 
 def these_are_bad():
-    invert_list = ~[] # [invalid-unary-operand-type]
-    invert_tuple = ~() # [invalid-unary-operand-type]
-    invert_dict = ~dict() # [invalid-unary-operand-type]
-    invert_dict_1 = ~{} # [invalid-unary-operand-type]
-    invert_set = ~set() # [invalid-unary-operand-type]
-    neg_set = -set() # [invalid-unary-operand-type]
-    neg_str = -"" # [invalid-unary-operand-type]
-    invert_str = ~"" # [invalid-unary-operand-type]
-    pos_str = +"" # [invalid-unary-operand-type]
+    invert_list = ~ []  # [invalid-unary-operand-type]
+    invert_tuple = ~()  # [invalid-unary-operand-type]
+    invert_dict = ~dict()  # [invalid-unary-operand-type]
+    invert_dict_1 = ~ {}  # [invalid-unary-operand-type]
+    invert_set = ~set()  # [invalid-unary-operand-type]
+    neg_set = -set()  # [invalid-unary-operand-type]
+    neg_str = - ""  # [invalid-unary-operand-type]
+    invert_str = ~ ""  # [invalid-unary-operand-type]
+    pos_str = + ""  # [invalid-unary-operand-type]
+
     class A(object):
         pass
-    invert_func = ~(lambda: None) # [invalid-unary-operand-type]
-    invert_class = ~A # [invalid-unary-operand-type]
-    invert_instance = ~A() # [invalid-unary-operand-type]
-    invert_module = ~collections # [invalid-unary-operand-type]
-    invert_float = ~2.0 # [invalid-unary-operand-type]
+
+    invert_func = ~(lambda: None)  # [invalid-unary-operand-type]
+    invert_class = ~A  # [invalid-unary-operand-type]
+    invert_instance = ~A()  # [invalid-unary-operand-type]
+    invert_module = ~collections  # [invalid-unary-operand-type]
+    invert_float = ~2.0  # [invalid-unary-operand-type]

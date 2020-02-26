@@ -8,6 +8,7 @@ it should emit a warning message.
 
 import unittest
 
+
 @unittest.skip("don't run this")
 class Tests(unittest.TestCase):
     def test_something(self):
@@ -33,6 +34,5 @@ class Tests(unittest.TestCase):
 @unittest.skip("don't run this")
 class RegressionWithArgs(unittest.TestCase):
     '''Don't fail if the bound method doesn't have arguments.'''
-
     def test(self):
         self.run()

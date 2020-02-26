@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Script used to generate the extensions file before building the actual documentation."""
 
 import os
@@ -26,8 +25,7 @@ def builder_inited(app):
     """Output full documentation in ReST format for all extension modules"""
     # PACKAGE/docs/exts/pylint_extensions.py --> PACKAGE/
     base_path = os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    )
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     # PACKAGE/ --> PACKAGE/pylint/extensions
     ext_path = os.path.join(base_path, "pylint", "extensions")
     modules = []
@@ -39,7 +37,8 @@ def builder_inited(app):
         if ext == ".py":
             modules.append("pylint.extensions.%s" % name)
         elif ext == ".rst":
-            doc_files["pylint.extensions." + name] = os.path.join(ext_path, filename)
+            doc_files["pylint.extensions." + name] = os.path.join(
+                ext_path, filename)
     modules.sort()
     if not modules:
         sys.exit("No Pylint extensions found?")
@@ -47,26 +46,21 @@ def builder_inited(app):
     linter = PyLinter()
     linter.load_plugin_modules(modules)
 
-    extensions_doc = os.path.join(
-        base_path, "doc", "technical_reference", "extensions.rst"
-    )
+    extensions_doc = os.path.join(base_path, "doc", "technical_reference",
+                                  "extensions.rst")
     with open(extensions_doc, "w") as stream:
         stream.write(
-            get_rst_title("Optional Pylint checkers in the extensions module", "=")
-        )
+            get_rst_title("Optional Pylint checkers in the extensions module",
+                          "="))
         stream.write("Pylint provides the following optional plugins:\n\n")
         for module in modules:
             stream.write("- :ref:`{}`\n".format(module))
         stream.write("\n")
-        stream.write(
-            "You can activate any or all of these extensions "
-            "by adding a ``load-plugins`` line to the ``MASTER`` "
-            "section of your ``.pylintrc``, for example::\n"
-        )
-        stream.write(
-            "\n    load-plugins=pylint.extensions.docparams,"
-            "pylint.extensions.docstyle\n\n"
-        )
+        stream.write("You can activate any or all of these extensions "
+                     "by adding a ``load-plugins`` line to the ``MASTER`` "
+                     "section of your ``.pylintrc``, for example::\n")
+        stream.write("\n    load-plugins=pylint.extensions.docparams,"
+                     "pylint.extensions.docstyle\n\n")
         by_checker = get_plugins_info(linter, doc_files)
         for checker, information in sorted(by_checker.items()):
             linter._print_checker_doc(information, stream=stream)

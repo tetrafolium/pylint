@@ -12,6 +12,7 @@ import email.encoders
 import sys  #pylint: disable=ungrouped-imports,wrong-import-order
 __revision__ = 0
 
+
 def no_reimport():
     """docstring"""
     import os  #pylint: disable=import-outside-toplevel

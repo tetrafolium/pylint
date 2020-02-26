@@ -14,10 +14,8 @@ class MyRawChecker(BaseChecker):
         "W9901": (
             "use \\ for line continuation",
             "backslash-line-continuation",
-            (
-                "Used when a \\ is used for a line continuation instead"
-                " of using triple quoted string or parenthesis."
-            ),
+            ("Used when a \\ is used for a line continuation instead"
+             " of using triple quoted string or parenthesis."),
         )
     }
     options = ()
@@ -30,7 +28,8 @@ class MyRawChecker(BaseChecker):
         with node.stream() as stream:
             for (lineno, line) in enumerate(stream):
                 if line.rstrip().endswith("\\"):
-                    self.add_message("backslash-line-continuation", line=lineno)
+                    self.add_message("backslash-line-continuation",
+                                     line=lineno)
 
 
 def register(linter):

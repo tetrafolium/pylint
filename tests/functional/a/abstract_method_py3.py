@@ -5,6 +5,7 @@ from __future__ import print_function
 # pylint: disable=too-few-public-methods, useless-object-inheritance
 import abc
 
+
 class Abstract(object):
     def aaaa(self):
         """should be overridden in concrete class"""
@@ -25,9 +26,9 @@ class AbstractB(Abstract):
         """should be overridden in concrete class"""
         raise NotImplementedError()
 
-class Concrete(Abstract): # [abstract-method]
-    """Concrete class"""
 
+class Concrete(Abstract):  # [abstract-method]
+    """Concrete class"""
     def aaaa(self):
         """overidden form Abstract"""
 
@@ -36,12 +37,15 @@ class Structure(object, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __iter__(self):
         pass
+
     @abc.abstractmethod
     def __len__(self):
         pass
+
     @abc.abstractmethod
     def __contains__(self, _):
         pass
+
     @abc.abstractmethod
     def __hash__(self):
         pass
@@ -76,6 +80,7 @@ class AbstractSizable(Structure):
     @abc.abstractmethod
     def length(self):
         pass
+
     __len__ = length
 
 

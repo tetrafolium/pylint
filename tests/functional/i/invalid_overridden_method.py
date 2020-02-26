@@ -27,19 +27,17 @@ class NoProp(SuperClass):
         return None
 
     @property
-    def method(self): # [invalid-overridden-method]
+    def method(self):  # [invalid-overridden-method]
         return None
 
 
 class Property:
-
     @property
     def close(self):
         pass
 
 
 class PropertySetter(Property):
-
     @property
     def close(self):
         pass
@@ -54,7 +52,6 @@ class PropertySetter(Property):
 
 
 class AbstractProperty:
-
     @abc.abstractproperty
     def prop(self):
         return

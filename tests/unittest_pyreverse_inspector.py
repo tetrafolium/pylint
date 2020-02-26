@@ -3,7 +3,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """
  for the visitors.diadefs module
 """
@@ -59,14 +58,14 @@ def test_instance_attrs_resolution(project):
     assert len(type_dict) == 2
     keys = sorted(type_dict.keys())
     assert keys == ["_id", "relation"]
-    assert isinstance(type_dict["relation"][0], bases.Instance), type_dict["relation"]
+    assert isinstance(type_dict["relation"][0],
+                      bases.Instance), type_dict["relation"]
     assert type_dict["relation"][0].name == "DoNothing"
     assert type_dict["_id"][0] is astroid.Uninferable
 
 
 def test_concat_interfaces():
-    cls = astroid.extract_node(
-        '''
+    cls = astroid.extract_node('''
         class IMachin: pass
 
         class Correct2:
@@ -80,15 +79,13 @@ def test_concat_interfaces():
         class InterfaceCanNowBeFound: #@
             """docstring"""
             __implements__ = BadArgument.__implements__ + Correct2.__implements__
-    '''
-    )
+    ''')
     interfaces = inspector.interfaces(cls)
     assert [i.name for i in interfaces] == ["IMachin"]
 
 
 def test_interfaces():
-    module = astroid.parse(
-        """
+    module = astroid.parse("""
     class Interface(object): pass
     class MyIFace(Interface): pass
     class AnotherIFace(Interface): pass
@@ -99,8 +96,7 @@ def test_interfaces():
     class Concrete2:
         __implements__ = (MyIFace, AnotherIFace)
     class Concrete23(Concrete1): pass
-    """
-    )
+    """)
 
     for klass, interfaces in (
         ("Concrete0", ["MyIFace"]),

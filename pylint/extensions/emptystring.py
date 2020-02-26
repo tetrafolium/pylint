@@ -4,7 +4,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Looks for  comparisons to empty string."""
 
 import itertools
@@ -26,7 +25,7 @@ class CompareToEmptyStringChecker(checkers.BaseChecker):
     and has a different meaning than None!
     """
 
-    __implements__ = (interfaces.IAstroidChecker,)
+    __implements__ = (interfaces.IAstroidChecker, )
 
     # configuration section name
     name = "compare-to-empty-string"

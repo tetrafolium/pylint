@@ -14,7 +14,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Checker for spelling errors in comments and docstrings.
 """
 
@@ -29,15 +28,11 @@ from pylint.interfaces import IAstroidChecker, ITokenChecker
 try:
     import enchant
     from enchant.tokenize import (  # type: ignore
-        get_tokenizer,
-        Chunker,
-        Filter,
-        EmailFilter,
-        URLFilter,
-        WikiWordFilter,
+        get_tokenizer, Chunker, Filter, EmailFilter, URLFilter, WikiWordFilter,
     )
 except ImportError:
     enchant = None
+
     # pylint: disable=no-init
     class Filter:  # type: ignore
         def _skip(self, word):
@@ -63,7 +58,6 @@ else:
 class WordsWithDigigtsFilter(Filter):
     """Skips words with digits.
     """
-
     def _skip(self, word):
         for char in word:
             if char.isdigit():
@@ -76,7 +70,6 @@ class WordsWithUnderscores(Filter):
 
     They are probably function parameter names.
     """
-
     def _skip(self, word):
         return "_" in word
 
@@ -114,7 +107,6 @@ class ForwardSlashChunkder(Chunker):
     """
     This chunker allows splitting words like 'before/after' into 'before' and 'after'
     """
-
     def next(self):
         while True:
             if not self._text:
@@ -127,12 +119,8 @@ class ForwardSlashChunkder(Chunker):
             pre_text, post_text = self._text.split("/", 1)
             self._text = post_text
             self._offset = 0
-            if (
-                not pre_text
-                or not post_text
-                or not pre_text[-1].isalpha()
-                or not post_text[0].isalpha()
-            ):
+            if (not pre_text or not post_text or not pre_text[-1].isalpha()
+                    or not post_text[0].isalpha()):
                 self._text = ""
                 self._offset = 0
                 return (pre_text + "/" + post_text, 0)
@@ -179,40 +167,58 @@ class SpellingChecker(BaseTokenChecker):
         (
             "spelling-dict",
             {
-                "default": "",
-                "type": "choice",
-                "metavar": "<dict name>",
-                "choices": dict_choices,
-                "help": "Spelling dictionary name. "
+                "default":
+                "",
+                "type":
+                "choice",
+                "metavar":
+                "<dict name>",
+                "choices":
+                dict_choices,
+                "help":
+                "Spelling dictionary name. "
                 "Available dictionaries: %s.%s" % (dicts, instr),
             },
         ),
         (
             "spelling-ignore-words",
             {
-                "default": "",
-                "type": "string",
-                "metavar": "<comma separated words>",
-                "help": "List of comma separated words that " "should not be checked.",
+                "default":
+                "",
+                "type":
+                "string",
+                "metavar":
+                "<comma separated words>",
+                "help":
+                "List of comma separated words that "
+                "should not be checked.",
             },
         ),
         (
             "spelling-private-dict-file",
             {
-                "default": "",
-                "type": "string",
-                "metavar": "<path to file>",
-                "help": "A path to a file that contains the private "
+                "default":
+                "",
+                "type":
+                "string",
+                "metavar":
+                "<path to file>",
+                "help":
+                "A path to a file that contains the private "
                 "dictionary; one word per line.",
             },
         ),
         (
             "spelling-store-unknown-words",
             {
-                "default": "n",
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": "Tells whether to store unknown words to the "
+                "default":
+                "n",
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help":
+                "Tells whether to store unknown words to the "
                 "private dictionary (see the "
                 "--spelling-private-dict-file option) instead of "
                 "raising a message.",
@@ -221,10 +227,15 @@ class SpellingChecker(BaseTokenChecker):
         (
             "max-spelling-suggestions",
             {
-                "default": 4,
-                "type": "int",
-                "metavar": "N",
-                "help": "Limits count of emitted suggestions for " "spelling mistakes.",
+                "default":
+                4,
+                "type":
+                "int",
+                "metavar":
+                "N",
+                "help":
+                "Limits count of emitted suggestions for "
+                "spelling mistakes.",
             },
         ),
     )
@@ -249,14 +260,13 @@ class SpellingChecker(BaseTokenChecker):
         # Expand tilde to allow e.g. spelling-private-dict-file = ~/.pylintdict
         if self.config.spelling_private_dict_file:
             self.config.spelling_private_dict_file = os.path.expanduser(
-                self.config.spelling_private_dict_file
-            )
+                self.config.spelling_private_dict_file)
 
         if self.config.spelling_private_dict_file:
             self.spelling_dict = enchant.DictWithPWL(
-                dict_name, self.config.spelling_private_dict_file
-            )
-            self.private_dict_file = open(self.config.spelling_private_dict_file, "a")
+                dict_name, self.config.spelling_private_dict_file)
+            self.private_dict_file = open(
+                self.config.spelling_private_dict_file, "a")
         else:
             self.spelling_dict = enchant.Dict(dict_name)
 
@@ -318,9 +328,9 @@ class SpellingChecker(BaseTokenChecker):
                 if self.spelling_dict.check(word):
                     continue
             except enchant.errors.Error:
-                self.add_message(
-                    "invalid-characters-in-docstring", line=line_num, args=(word,)
-                )
+                self.add_message("invalid-characters-in-docstring",
+                                 line=line_num,
+                                 args=(word, ))
                 continue
 
             # Store word to private dict or raise a message.
@@ -331,7 +341,7 @@ class SpellingChecker(BaseTokenChecker):
             else:
                 # Present up to N suggestions.
                 suggestions = self.spelling_dict.suggest(word)
-                del suggestions[self.config.max_spelling_suggestions :]
+                del suggestions[self.config.max_spelling_suggestions:]
 
                 line_segment = line[word_start_at:]
                 match = re.search(r"(\W|^)(%s)(\W|$)" % word, line_segment)
@@ -371,7 +381,8 @@ class SpellingChecker(BaseTokenChecker):
                 if token.startswith("# pylint:"):
                     # Skip pylint enable/disable comments
                     continue
-                self._check_spelling("wrong-spelling-in-comment", token, start_row)
+                self._check_spelling("wrong-spelling-in-comment", token,
+                                     start_row)
 
     @check_messages("wrong-spelling-in-docstring")
     def visit_module(self, node):
@@ -403,7 +414,8 @@ class SpellingChecker(BaseTokenChecker):
 
         # Go through lines of docstring
         for idx, line in enumerate(docstring.splitlines()):
-            self._check_spelling("wrong-spelling-in-docstring", line, start_line + idx)
+            self._check_spelling("wrong-spelling-in-docstring", line,
+                                 start_line + idx)
 
 
 def register(linter):

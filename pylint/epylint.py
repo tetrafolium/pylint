@@ -20,7 +20,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Emacs and Flymake compatible Pylint.
 
 This script is for integration with emacs and is compatible with flymake mode.
@@ -89,27 +88,26 @@ def lint(filename, options=()):
     parent_path = osp.dirname(full_path)
     child_path = osp.basename(full_path)
 
-    while parent_path != "/" and osp.exists(osp.join(parent_path, "__init__.py")):
+    while parent_path != "/" and osp.exists(
+            osp.join(parent_path, "__init__.py")):
         child_path = osp.join(osp.basename(parent_path), child_path)
         parent_path = osp.dirname(parent_path)
 
     # Start pylint
     # Ensure we use the python and pylint associated with the running epylint
     run_cmd = "import sys; from pylint.lint import Run; Run(sys.argv[1:])"
-    cmd = (
-        [sys.executable, "-c", run_cmd]
-        + [
-            "--msg-template",
-            "{path}:{line}: {category} ({msg_id}, {symbol}, {obj}) {msg}",
-            "-r",
-            "n",
-            child_path,
-        ]
-        + list(options)
-    )
-    process = Popen(
-        cmd, stdout=PIPE, cwd=parent_path, env=_get_env(), universal_newlines=True
-    )
+    cmd = ([sys.executable, "-c", run_cmd] + [
+        "--msg-template",
+        "{path}:{line}: {category} ({msg_id}, {symbol}, {obj}) {msg}",
+        "-r",
+        "n",
+        child_path,
+    ] + list(options))
+    process = Popen(cmd,
+                    stdout=PIPE,
+                    cwd=parent_path,
+                    env=_get_env(),
+                    universal_newlines=True)
 
     for line in process.stdout:
         # remove pylintrc warning
@@ -151,8 +149,11 @@ def py_run(command_options="", return_std=False, stdout=None, stderr=None):
     executable = sys.executable if "python" in sys.executable else "python"
 
     # Create command line to call pylint
-    epylint_part = [executable, "-c", "from pylint import epylint;epylint.Run()"]
-    options = shlex.split(command_options, posix=not sys.platform.startswith("win"))
+    epylint_part = [
+        executable, "-c", "from pylint import epylint;epylint.Run()"
+    ]
+    options = shlex.split(command_options,
+                          posix=not sys.platform.startswith("win"))
     cli = epylint_part + options
 
     # Providing standard output and/or error if not set

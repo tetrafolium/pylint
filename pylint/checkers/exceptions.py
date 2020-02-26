@@ -20,7 +20,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Checks for various exception related errors."""
 import builtins
 import inspect
@@ -170,7 +169,6 @@ MSGS = {
 
 class BaseVisitor:
     """Base class for visitors defined in this module."""
-
     def __init__(self, checker, node):
         self._checker = checker
         self._node = node
@@ -189,7 +187,6 @@ class BaseVisitor:
 
 class ExceptionRaiseRefVisitor(BaseVisitor):
     """Visit references (anything that is not an AST leaf)."""
-
     def visit_name(self, name):
         if name.name == "NotImplemented":
             self._checker.add_message("notimplemented-raised", node=self._node)
@@ -197,25 +194,22 @@ class ExceptionRaiseRefVisitor(BaseVisitor):
     def visit_call(self, call):
         if isinstance(call.func, astroid.Name):
             self.visit_name(call.func)
-        if (
-            len(call.args) > 1
-            and isinstance(call.args[0], astroid.Const)
-            and isinstance(call.args[0].value, str)
-        ):
+        if (len(call.args) > 1 and isinstance(call.args[0], astroid.Const)
+                and isinstance(call.args[0].value, str)):
             msg = call.args[0].value
             if "%" in msg or ("{" in msg and "}" in msg):
-                self._checker.add_message("raising-format-tuple", node=self._node)
+                self._checker.add_message("raising-format-tuple",
+                                          node=self._node)
 
 
 class ExceptionRaiseLeafVisitor(BaseVisitor):
     """Visitor for handling leaf kinds of a raise value."""
-
     def visit_const(self, const):
         if not isinstance(const.value, str):
             # raising-string will be emitted from python3 porting checker.
-            self._checker.add_message(
-                "raising-bad-type", node=self._node, args=const.value.__class__.__name__
-            )
+            self._checker.add_message("raising-bad-type",
+                                      node=self._node,
+                                      args=const.value.__class__.__name__)
 
     def visit_instance(self, instance):
         # pylint: disable=protected-access
@@ -228,14 +222,19 @@ class ExceptionRaiseLeafVisitor(BaseVisitor):
     def visit_classdef(self, cls):
         if not utils.inherit_from_std_ex(cls) and utils.has_known_bases(cls):
             if cls.newstyle:
-                self._checker.add_message("raising-non-exception", node=self._node)
+                self._checker.add_message("raising-non-exception",
+                                          node=self._node)
 
     def visit_tuple(self, _):
-        self._checker.add_message("raising-bad-type", node=self._node, args="tuple")
+        self._checker.add_message("raising-bad-type",
+                                  node=self._node,
+                                  args="tuple")
 
     def visit_default(self, node):
         name = getattr(node, "name", node.__class__.__name__)
-        self._checker.add_message("raising-bad-type", node=self._node, args=name)
+        self._checker.add_message("raising-bad-type",
+                                  node=self._node,
+                                  args=name)
 
 
 class ExceptionsChecker(checkers.BaseChecker):
@@ -246,19 +245,21 @@ class ExceptionsChecker(checkers.BaseChecker):
     name = "exceptions"
     msgs = MSGS
     priority = -4
-    options = (
-        (
-            "overgeneral-exceptions",
-            {
-                "default": OVERGENERAL_EXCEPTIONS,
-                "type": "csv",
-                "metavar": "<comma-separated class names>",
-                "help": "Exceptions that will emit a warning "
-                'when being caught. Defaults to "%s".'
-                % (", ".join(OVERGENERAL_EXCEPTIONS),),
-            },
-        ),
-    )
+    options = ((
+        "overgeneral-exceptions",
+        {
+            "default":
+            OVERGENERAL_EXCEPTIONS,
+            "type":
+            "csv",
+            "metavar":
+            "<comma-separated class names>",
+            "help":
+            "Exceptions that will emit a warning "
+            'when being caught. Defaults to "%s".' %
+            (", ".join(OVERGENERAL_EXCEPTIONS), ),
+        },
+    ), )
 
     def open(self):
         self._builtin_exceptions = _builtin_exceptions()
@@ -294,11 +295,8 @@ class ExceptionsChecker(checkers.BaseChecker):
     def _check_misplaced_bare_raise(self, node):
         # Filter out if it's present in __exit__.
         scope = node.scope()
-        if (
-            isinstance(scope, astroid.FunctionDef)
-            and scope.is_method()
-            and scope.name == "__exit__"
-        ):
+        if (isinstance(scope, astroid.FunctionDef) and scope.is_method()
+                and scope.name == "__exit__"):
             return
 
         current = node
@@ -308,7 +306,7 @@ class ExceptionsChecker(checkers.BaseChecker):
         while current and not isinstance(current.parent, ignores):
             current = current.parent
 
-        expected = (astroid.ExceptHandler,)
+        expected = (astroid.ExceptHandler, )
         if not current or not isinstance(current.parent, expected):
             self.add_message("misplaced-bare-raise", node=node)
 
@@ -324,9 +322,9 @@ class ExceptionsChecker(checkers.BaseChecker):
         if isinstance(cause, astroid.Const):
             if cause.value is not None:
                 self.add_message("bad-exception-context", node=node)
-        elif not isinstance(cause, astroid.ClassDef) and not utils.inherit_from_std_ex(
-            cause
-        ):
+        elif not isinstance(
+                cause,
+                astroid.ClassDef) and not utils.inherit_from_std_ex(cause):
             self.add_message("bad-exception-context", node=node)
 
     def _check_catching_non_exception(self, handler, exc, part):
@@ -336,11 +334,9 @@ class ExceptionsChecker(checkers.BaseChecker):
             if any(node is astroid.Uninferable for node in inferred):
                 # Don't emit if we don't know every component.
                 return
-            if all(
-                node
-                and (utils.inherit_from_std_ex(node) or not utils.has_known_bases(node))
-                for node in inferred
-            ):
+            if all(node and (utils.inherit_from_std_ex(node)
+                             or not utils.has_known_bases(node))
+                   for node in inferred):
                 return
 
         if not isinstance(exc, astroid.ClassDef):
@@ -348,10 +344,9 @@ class ExceptionsChecker(checkers.BaseChecker):
             # is None, but the exception handler is something else,
             # maybe it was redefined.
             if isinstance(exc, astroid.Const) and exc.value is None:
-                if (
-                    isinstance(handler.type, astroid.Const)
-                    and handler.type.value is None
-                ) or handler.type.parent_of(exc):
+                if (isinstance(handler.type, astroid.Const)
+                        and handler.type.value is None
+                    ) or handler.type.parent_of(exc):
                     # If the exception handler catches None or
                     # the exception component, which is None, is
                     # defined by the entire exception handler, then
@@ -359,40 +354,35 @@ class ExceptionsChecker(checkers.BaseChecker):
                     self.add_message(
                         "catching-non-exception",
                         node=handler.type,
-                        args=(part.as_string(),),
+                        args=(part.as_string(), ),
                     )
             else:
                 self.add_message(
                     "catching-non-exception",
                     node=handler.type,
-                    args=(part.as_string(),),
+                    args=(part.as_string(), ),
                 )
             return
 
-        if (
-            not utils.inherit_from_std_ex(exc)
-            and exc.name not in self._builtin_exceptions
-        ):
+        if (not utils.inherit_from_std_ex(exc)
+                and exc.name not in self._builtin_exceptions):
             if utils.has_known_bases(exc):
-                self.add_message(
-                    "catching-non-exception", node=handler.type, args=(exc.name,)
-                )
+                self.add_message("catching-non-exception",
+                                 node=handler.type,
+                                 args=(exc.name, ))
 
     def _check_try_except_raise(self, node):
         def gather_exceptions_from_handler(
-            handler,
-        ) -> typing.Optional[typing.List[NodeNG]]:
+                handler, ) -> typing.Optional[typing.List[NodeNG]]:
             exceptions = []  # type: typing.List[NodeNG]
             if handler.type:
                 exceptions_in_handler = utils.safe_infer(handler.type)
                 if isinstance(exceptions_in_handler, astroid.Tuple):
-                    exceptions = list(
-                        {
-                            exception
-                            for exception in exceptions_in_handler.elts
-                            if isinstance(exception, astroid.Name)
-                        }
-                    )
+                    exceptions = list({
+                        exception
+                        for exception in exceptions_in_handler.elts
+                        if isinstance(exception, astroid.Name)
+                    })
                 elif exceptions_in_handler:
                     exceptions = [exceptions_in_handler]
                 else:
@@ -409,7 +399,8 @@ class ExceptionsChecker(checkers.BaseChecker):
                 # since utils.safe_infer can fail for bare except, check it before.
                 # also break early if bare except is followed by bare except.
 
-                excs_in_current_handler = gather_exceptions_from_handler(handler)
+                excs_in_current_handler = gather_exceptions_from_handler(
+                    handler)
 
                 if not excs_in_current_handler:
                     bare_raise = False
@@ -421,11 +412,10 @@ class ExceptionsChecker(checkers.BaseChecker):
                 for exc_in_current_handler in excs_in_current_handler:
                     inferred_current = utils.safe_infer(exc_in_current_handler)
                     if any(
-                        utils.is_subclass_of(
-                            utils.safe_infer(exc_in_bare_handler), inferred_current
-                        )
-                        for exc_in_bare_handler in excs_in_bare_handler
-                    ):
+                            utils.is_subclass_of(
+                                utils.safe_infer(exc_in_bare_handler),
+                                inferred_current)
+                            for exc_in_bare_handler in excs_in_bare_handler):
                         bare_raise = False
                         break
 
@@ -435,10 +425,12 @@ class ExceptionsChecker(checkers.BaseChecker):
                 if handler.body[0].exc is None:
                     bare_raise = True
                     handler_having_bare_raise = handler
-                    excs_in_bare_handler = gather_exceptions_from_handler(handler)
+                    excs_in_bare_handler = gather_exceptions_from_handler(
+                        handler)
         else:
             if bare_raise:
-                self.add_message("try-except-raise", node=handler_having_bare_raise)
+                self.add_message("try-except-raise",
+                                 node=handler_having_bare_raise)
 
     @utils.check_messages("wrong-exception-operation")
     def visit_binop(self, node):
@@ -448,7 +440,9 @@ class ExceptionsChecker(checkers.BaseChecker):
                 node.left.as_string(),
                 node.right.as_string(),
             )
-            self.add_message("wrong-exception-operation", node=node, args=(suggestion,))
+            self.add_message("wrong-exception-operation",
+                             node=node,
+                             args=(suggestion, ))
 
     @utils.check_messages("wrong-exception-operation")
     def visit_compare(self, node):
@@ -458,7 +452,9 @@ class ExceptionsChecker(checkers.BaseChecker):
                 node.left.as_string(),
                 ", ".join(operand.as_string() for _, operand in node.ops),
             )
-            self.add_message("wrong-exception-operation", node=node, args=(suggestion,))
+            self.add_message("wrong-exception-operation",
+                             node=node,
+                             args=(suggestion, ))
 
     @utils.check_messages(
         "bare-except",
@@ -486,9 +482,9 @@ class ExceptionsChecker(checkers.BaseChecker):
                     self.add_message("bad-except-order", node=node, args=msg)
 
             elif isinstance(handler.type, astroid.BoolOp):
-                self.add_message(
-                    "binary-op-exception", node=handler, args=handler.type.op
-                )
+                self.add_message("binary-op-exception",
+                                 node=handler,
+                                 args=handler.type.op)
             else:
                 try:
                     excs = list(_annotated_unpack_infer(handler.type))
@@ -498,9 +494,8 @@ class ExceptionsChecker(checkers.BaseChecker):
                 for part, exc in excs:
                     if exc is astroid.Uninferable:
                         continue
-                    if isinstance(exc, astroid.Instance) and utils.inherit_from_std_ex(
-                        exc
-                    ):
+                    if isinstance(exc, astroid.Instance
+                                  ) and utils.inherit_from_std_ex(exc):
                         # pylint: disable=protected-access
                         exc = exc._proxied
 
@@ -510,8 +505,7 @@ class ExceptionsChecker(checkers.BaseChecker):
                         continue
 
                     exc_ancestors = [
-                        anc
-                        for anc in exc.ancestors()
+                        anc for anc in exc.ancestors()
                         if isinstance(anc, astroid.ClassDef)
                     ]
 
@@ -521,22 +515,20 @@ class ExceptionsChecker(checkers.BaseChecker):
                                 previous_exc.name,
                                 exc.name,
                             )
-                            self.add_message(
-                                "bad-except-order", node=handler.type, args=msg
-                            )
-                    if (
-                        exc.name in self.config.overgeneral_exceptions
-                        and exc.root().name == utils.EXCEPTIONS_MODULE
-                        and not _is_raising(handler.body)
-                    ):
-                        self.add_message(
-                            "broad-except", args=exc.name, node=handler.type
-                        )
+                            self.add_message("bad-except-order",
+                                             node=handler.type,
+                                             args=msg)
+                    if (exc.name in self.config.overgeneral_exceptions
+                            and exc.root().name == utils.EXCEPTIONS_MODULE
+                            and not _is_raising(handler.body)):
+                        self.add_message("broad-except",
+                                         args=exc.name,
+                                         node=handler.type)
 
                     if exc in exceptions_classes:
-                        self.add_message(
-                            "duplicate-except", args=exc.name, node=handler.type
-                        )
+                        self.add_message("duplicate-except",
+                                         args=exc.name,
+                                         node=handler.type)
 
                 exceptions_classes += [exc for _, exc in excs]
 
