@@ -37,7 +37,7 @@ class ThirdBadReversed(dict):
 
 
 def uninferable(seq):
-    """ This can't be infered at this moment,
+    """ This can't be inferred at this moment,
     make sure we don't have a false positive.
     """
     return reversed(seq)
