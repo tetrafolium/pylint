@@ -2,7 +2,7 @@ inspecode:
 
   experimental:
     runtime:
-      python: 2
+      python: 3
 
   pylint:
   - thresholds: { num-issues: 999 }
