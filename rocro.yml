@@ -7,18 +7,24 @@ inspecode:
   pylint:
   - ignore:
     - tests/functional/
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 648 }
+      # pylint outputs 649 issues / task reports 648 issues
   - input:
     - tests/functional/[a-i]*/
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 582 }
+      # pylint outputs 593 issues / task reports 582 issues
   - input:
     - tests/functional/[j-r]*/
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 340 }
+      # pylint outputs 340 issues / task reports 340 issues
   - input:
     - tests/functional/[s-z]*/
     ignore:
     - tests/functional/u/unknown_encoding_*.py
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 547 }
+      # pylint outputs 547 issues / task reports 547 issues
   - input:
     - tests/functional/u/unknown_encoding_*.py
     thresholds: { num-issues: 999 }
+      # LookupError: unknown encoding: IBO-8859-1
+      # SyntaxError: unknown encoding for '{pathname}.py': IBO-8859-1
