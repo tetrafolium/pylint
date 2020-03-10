@@ -2,7 +2,7 @@ inspecode:
 
   experimental:
     runtime:
-      python: 3.7
+      python: 3
 
   autopep8:
     auto-fix: true
@@ -60,17 +60,30 @@ inspecode:
   pyflakes:
     thresholds: { num-issues: 347 }
 
-  ###------------------------------------------------
-  ###  $ pylint --persistent=no --output-format=text --msg-template="${MSGTEMPLATE}" --jobs=1 ${INPUT}
-  ###  Traceback (most recent call last):
-  ###    File "/opt/pyenv/versions/3.7.3/lib/python3.7/tokenize.py", line 397, in find_cookie
-  ###      codec = lookup(encoding)
-  ###  LookupError: unknown encoding: IBO-8859-1
-  ###------------------------------------------------
   pylint:
-    options:
-      --py3k:
+  - ignore:
+    - tests/functional/
+    thresholds: { num-issues: 648 }
+      # pylint outputs 649 issues / task reports 648 issues
+  - input:
+    - tests/functional/[a-i]*/
+    thresholds: { num-issues: 582 }
+      # pylint outputs 593 issues / task reports 582 issues
+  - input:
+    - tests/functional/[j-r]*/
+    thresholds: { num-issues: 340 }
+      # pylint outputs 340 issues / task reports 340 issues
+  - input:
+    - tests/functional/[s-z]*/
+    ignore:
+    - tests/functional/u/unknown_encoding_*.py
+    thresholds: { num-issues: 547 }
+      # pylint outputs 547 issues / task reports 547 issues
+  - input:
+    - tests/functional/u/unknown_encoding_*.py
     thresholds: { num-issues: 999 }
+      # LookupError: unknown encoding: IBO-8859-1
+      # SyntaxError: unknown encoding for '{pathname}.py': IBO-8859-1
 
   pytest:
     thresholds: { num-issues: 3 }
