@@ -5,20 +5,20 @@ inspecode:
       python: 3
 
   pylint:
-  - thresholds: { num-issues: 999 }
-    ignore:
+  - ignore:
     - tests/functional/
-  - thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 999 }
+  - input:
+    - tests/functional/[a-i]*/
+    thresholds: { num-issues: 999 }
+  - input:
+    - tests/functional/[j-r]*/
+    thresholds: { num-issues: 999 }
+  - input:
+    - tests/functional/[s-z]*/
     ignore:
-    - tests/functional/p/preferred_module.py
-    - tests/functional/r/raising_self.py
     - tests/functional/u/unknown_encoding_*.py
-  - thresholds: { num-issues: 999 }
-    input:
-    - tests/functional/p/preferred_module.py
-  - thresholds: { num-issues: 999 }
-    input:
-    - tests/functional/r/raising_self.py
-  - thresholds: { num-issues: 999 }
-    input:
+    thresholds: { num-issues: 999 }
+  - input:
     - tests/functional/u/unknown_encoding_*.py
+    thresholds: { num-issues: 999 }
