@@ -6,10 +6,19 @@ inspecode:
 
   pylint:
   - thresholds: { num-issues: 999 }
+    ignore:
+    - tests/functional/
   - thresholds: { num-issues: 999 }
-    options: [ --py3k ]
+    ignore:
+    - tests/functional/p/preferred_module.py
+    - tests/functional/r/raising_self.py
+    - tests/functional/u/unknown_encoding_*.py
   - thresholds: { num-issues: 999 }
-    ignore: [ tests/functional/u/unknown_encoding_jython.py ]
+    input:
+    - tests/functional/p/preferred_module.py
   - thresholds: { num-issues: 999 }
-    options: [ --py3k ]
-    ignore: [ tests/functional/u/unknown_encoding_jython.py ]
+    input:
+    - tests/functional/r/raising_self.py
+  - thresholds: { num-issues: 999 }
+    input:
+    - tests/functional/u/unknown_encoding_*.py
