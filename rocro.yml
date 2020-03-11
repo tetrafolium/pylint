@@ -4,17 +4,10 @@ inspecode:
     runtime:
       python: 3
 
-  ###------------------------------------------------
-  ###  unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
-  ###
-  ###  Possibly Unused failed because the tags file had an invalid encoding.
-  ###  Convert the tags file to UTF-8 and try again.
-  ###------------------------------------------------
   unused:
     ignore:
-    #- tests/regrtest_data/descriptor_crash.py
-    #- tests/regrtest_data/no_stdout_encoding.py
     - tests/functional/i/implicit_str_concat_*.py
     - tests/functional/l/long_*utf8*.py
     - tests/functional/u/unknown_encoding_*.py
+    options: [ --single-occurrence --all-likelihoods ]
     thresholds: { num-issues: 999 }
