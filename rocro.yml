@@ -79,24 +79,30 @@ inspecode:
     - tests/functional/u/unknown_encoding_*.py
     thresholds: { num-issues: 547 }
       # pylint outputs 547 issues / task reports 547 issues
-  - input:
-    - tests/functional/u/unknown_encoding_*.py
-    thresholds: { num-issues: 999 }
-      # LookupError: unknown encoding: IBO-8859-1
-      # SyntaxError: unknown encoding for '{pathname}.py': IBO-8859-1
+  #- input:
+  #  - tests/functional/u/unknown_encoding_*.py
+  #  thresholds: { num-issues: 999 }
+  #    # LookupError: unknown encoding: IBO-8859-1
+  #    # SyntaxError: unknown encoding for '{pathname}.py': IBO-8859-1
 
   pytest:
     thresholds: { num-issues: 3 }
 
-  ###------------------------------------------------
-  ###  unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
-  ###
-  ###  Possibly Unused failed because the tags file had an invalid encoding.
-  ###  Convert the tags file to UTF-8 and try again.
-  ###------------------------------------------------
-  #unused:
-  #  thresholds: { num-issues: 999 }
+  unused:
+  - ignore:
+    - tests/functional/
+    options: [ --single-occurrence, --all-likelihoods ]
+    thresholds: { num-issues: 780 }
+  - input:
+    - tests/functional/
+    ignore:
+      # these files generates illegal byte sequences (as UTF-8) into tags file.
+    - tests/functional/i/implicit_str_concat_*.py
+    - tests/functional/l/long_*utf8*.py
+    - tests/functional/u/unknown_encoding_*.py
+    options: [ --single-occurrence, --all-likelihoods ]
+    thresholds: { num-issues: 437 }
 
   yapf:
     auto-fix: true
-    thresholds: { num-issues: 486 }
+    thresholds: { num-issues: 493 }
