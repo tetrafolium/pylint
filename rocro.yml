@@ -12,5 +12,7 @@ inspecode:
   ###------------------------------------------------
   unused:
     ignore:
-    - tests/functional/u/unknown_encoding_*.py  # not UTF-8 encoding (IBO-8859-1)
+    - tests/regrtest_data/descriptor_crash.py
+    - tests/regrtest_data/no_stdout_encoding.py
+    - tests/functional/u/unknown_encoding_*.py
     thresholds: { num-issues: 999 }
