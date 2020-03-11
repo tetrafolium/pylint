@@ -12,7 +12,9 @@ inspecode:
   ###------------------------------------------------
   unused:
     ignore:
-    - tests/regrtest_data/descriptor_crash.py
-    - tests/regrtest_data/no_stdout_encoding.py
+    #- tests/regrtest_data/descriptor_crash.py
+    #- tests/regrtest_data/no_stdout_encoding.py
+    - tests/functional/i/implicit_str_concat_*.py
+    - tests/functional/l/long_*utf8*.py
     - tests/functional/u/unknown_encoding_*.py
     thresholds: { num-issues: 999 }
