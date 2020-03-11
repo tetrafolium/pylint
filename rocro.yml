@@ -5,9 +5,15 @@ inspecode:
       python: 3
 
   unused:
+  - ignore:
+    - tests/functional/
+    options: [ --single-occurrence, --all-likelihoods ]
+    thresholds: { num-issues: 999 }
+  - input:
+    - tests/functional/
     ignore:
     - tests/functional/i/implicit_str_concat_*.py
     - tests/functional/l/long_*utf8*.py
     - tests/functional/u/unknown_encoding_*.py
-    options: [ --single-occurrence --all-likelihoods ]
+    options: [ --single-occurrence, --all-likelihoods ]
     thresholds: { num-issues: 999 }
