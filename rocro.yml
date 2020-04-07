@@ -35,6 +35,9 @@ inspecode:
       - F811    #  108 issues
     thresholds: { num-issues: 787 }
 
+  fossology:
+    thresholds: { num-issues: 999 }
+
   grep:
     thresholds: { num-issues: 10 }
 
