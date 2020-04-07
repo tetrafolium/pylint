@@ -36,7 +36,7 @@ inspecode:
     thresholds: { num-issues: 787 }
 
   fossology:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 8 }
 
   grep:
     thresholds: { num-issues: 10 }
