@@ -14,7 +14,7 @@ inspecode:
   ## ==> tractrix/codelift#1745
   ##----------------------------------------------------------------------------
   autopep8:
-    auto-fix: true
+    #auto-fix: true         ## TODO: turn-on after fix tractrix/codelift#1745
     thresholds: { num-issues: 444 }
 
   cpd:
