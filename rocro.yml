@@ -1,2 +1,4 @@
 inspecode:
-  fortify: default
+  fortify:
+    machine:
+      cpu: 2
