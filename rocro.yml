@@ -1,6 +1,6 @@
 inspecode:
 
-  experimental:
+  global:
     runtime:
       python: 3
 
@@ -34,8 +34,6 @@ inspecode:
 
   jscpd:
     thresholds: { num-issues: 17 }
-      # 17 isseus on SaaS
-      # 18 isseus on Errorprise
 
   misspell:
     auto-fix: true
@@ -46,8 +44,6 @@ inspecode:
 
   prospector:
     thresholds: { num-issues: 94 }
-      # 106 isseus on SaaS
-      # 107 isseus on Errorprise
 
   pycodestyle:
     options:
