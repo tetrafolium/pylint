@@ -4,18 +4,9 @@ inspecode:
     runtime:
       python: 3
 
-  ##----------------------------------------------------------------------------
-  ## [on SaaS/{prod,staging}]
-  ##    (autopep8 1.4.4)
-  ##    Failed ... SyntaxError: unexpected EOF while parsing
-  ## [on Enterprise]
-  ##    (autopep8 1.4.3)
-  ##    Succeeded ... found 444 issues
-  ## ==> tractrix/codelift#1745
-  ##----------------------------------------------------------------------------
   autopep8:
-    #auto-fix: true         ## TODO: turn-on after fix tractrix/codelift#1745
-    thresholds: { num-issues: 444 }
+    auto-fix: true
+    thresholds: { num-issues: 421 }
 
   cpd:
     thresholds: { num-issues: 5 }
@@ -33,7 +24,7 @@ inspecode:
       - E305    #  148 issues
       - F821    #  138 issues
       - F811    #  108 issues
-    thresholds: { num-issues: 787 }
+    thresholds: { num-issues: 785 }
 
   fossology:
     thresholds: { num-issues: 8 }
@@ -54,7 +45,7 @@ inspecode:
     thresholds: { num-issues: 20 }
 
   prospector:
-    thresholds: { num-issues: 106 }
+    thresholds: { num-issues: 94 }
       # 106 isseus on SaaS
       # 107 isseus on Errorprise
 
@@ -67,24 +58,21 @@ inspecode:
       - W503    #  371 issues
       - E231    #  164 issues
       - E305    #  148 issues
-    thresholds: { num-issues: 645 }
+    thresholds: { num-issues: 616 }
 
   pyflakes:
-    thresholds: { num-issues: 347 }
+    thresholds: { num-issues: 863 }
 
   pylint:
   - ignore:
     - tests/functional/
     thresholds: { num-issues: 648 }
-      # pylint outputs 649 issues / task reports 648 issues
   - input:
     - tests/functional/[a-i]*/
-    thresholds: { num-issues: 582 }
-      # pylint outputs 593 issues / task reports 582 issues
+    thresholds: { num-issues: 581 }
   - input:
     - tests/functional/[j-r]*/
-    thresholds: { num-issues: 340 }
-      # pylint outputs 340 issues / task reports 340 issues
+    thresholds: { num-issues: 334 }
   - input:
     - tests/functional/[s-z]*/
     ignore:
@@ -117,4 +105,4 @@ inspecode:
 
   yapf:
     auto-fix: true
-    thresholds: { num-issues: 493 }
+    thresholds: { num-issues: 491 }
