@@ -22,12 +22,12 @@ def simple_inference_positives():
 
 
 def type_creation_negatives():
-    type('Q', (object,), dict(a=1)) is int
-    type('Q', (object,), dict(a=1)) is not int
-    type('Q', (object,), dict(a=1)) == int
-    type('Q', (object,), dict(a=1)) != int
-    type('Q', (object,), dict(a=1)) in [int]
-    type('Q', (object,), dict(a=1)) not in [int]
+    type('Q', (object, ), dict(a=1)) is int
+    type('Q', (object, ), dict(a=1)) is not int
+    type('Q', (object, ), dict(a=1)) == int
+    type('Q', (object, ), dict(a=1)) != int
+    type('Q', (object, ), dict(a=1)) in [int]
+    type('Q', (object, ), dict(a=1)) not in [int]
 
 
 def invalid_type_call_negatives(**kwargs):
@@ -52,7 +52,9 @@ def invalid_type_call_negatives(**kwargs):
 
 
 def local_var_shadowing_inference_negatives():
-    def type(dummy): return 7
+    def type(dummy):
+        return 7
+
     type(42) is int
     type(42) is not int
     type(42) == int

@@ -8,14 +8,12 @@ from typing import overload  # pylint: disable=wrong-import-order
 
 class AAAA:
     """ancestor 1"""
-
     def __init__(self):
         print('init', self)
 
 
 class BBBB:
     """ancestor 2"""
-
     def __init__(self):
         print('init', self)
 
@@ -26,14 +24,12 @@ class CCCC:
 
 class ZZZZ(AAAA, BBBB, CCCC):
     """derived class"""
-
     def __init__(self):  # [super-init-not-called]
         AAAA.__init__(self)
 
 
 class NewStyleA(object):
     """new style class"""
-
     def __init__(self):
         super(NewStyleA, self).__init__()
         print('init', self)
@@ -41,7 +37,6 @@ class NewStyleA(object):
 
 class NewStyleB(NewStyleA):
     """derived new style class"""
-
     def __init__(self):
         super(NewStyleB, self).__init__()
 
@@ -52,14 +47,12 @@ class NoInit(object):
 
 class Init(NoInit):
     """Don't complain for not calling the super __init__"""
-
     def __init__(self, arg):
         self.arg = arg
 
 
 class NewStyleC(object):
     """__init__ defined by assignment."""
-
     def xx_init(self):
         """Initializer."""
         pass
@@ -69,7 +62,6 @@ class NewStyleC(object):
 
 class AssignedInit(NewStyleC):
     """No init called."""
-
     def __init__(self):  # [super-init-not-called]
         self.arg = 0
 
@@ -79,13 +71,11 @@ class UnknownBases(Missing):
 
 
 class Parent:
-
     def __init__(self, num: int):
         self.number = num
 
 
 class Child(Parent):
-
     @overload
     def __init__(self, num: int):
         ...

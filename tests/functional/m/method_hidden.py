@@ -6,14 +6,12 @@ from __future__ import print_function
 
 class Abcd(object):
     """dummy"""
-
     def __init__(self):
         self.abcd = 1
 
 
 class Cdef(Abcd):
     """dummy"""
-
     def abcd(self):  # [method-hidden]
         """test
         """
@@ -32,7 +30,6 @@ class Dabc(AbcdMixin, Abcd):
 
 class CustomProperty:
     """dummy"""
-
     def __init__(self, _):
         pass
 
@@ -47,7 +44,6 @@ class CustomProperty:
 
 class Ddef:
     """dummy"""
-
     def __init__(self):
         self.five = "five"
 

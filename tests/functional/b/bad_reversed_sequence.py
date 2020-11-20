@@ -7,14 +7,12 @@ from enum import IntEnum
 
 class GoodReversed(object):
     """ Implements __reversed__ """
-
     def __reversed__(self):
         return [1, 2, 3]
 
 
 class SecondGoodReversed(object):
     """ Implements __len__ and __getitem__ """
-
     def __len__(self):
         return 3
 
@@ -24,14 +22,12 @@ class SecondGoodReversed(object):
 
 class BadReversed(object):
     """ implements only len() """
-
     def __len__(self):
         return 3
 
 
 class SecondBadReversed(object):
     """ implements only __getitem__ """
-
     def __getitem__(self, index):
         return index
 

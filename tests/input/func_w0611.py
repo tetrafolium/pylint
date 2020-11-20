@@ -10,7 +10,6 @@ import sys
 
 class NonRegr(object):
     """???"""
-
     def __init__(self):
         print('initialized')
 

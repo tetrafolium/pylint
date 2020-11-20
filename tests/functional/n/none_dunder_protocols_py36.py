@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring, too-few-public-methods,pointless-statement
 # pylint: disable=expression-not-assigned
 
+
 class MetaIterable(type):
     __iter__ = None
 

@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,too-few-public-methods,no-init,no-self-use,unused-argument,pointless-statement,expression-not-assigned
 
+
 # metaclasses that support membership test protocol
 class MetaIterable(type):
     def __iter__(cls):
@@ -9,7 +10,7 @@ class MetaIterable(type):
 class MetaOldIterable(type):
     def __getitem__(cls, key):
         if key < 10:
-            return key ** 2
+            return key**2
 
         raise IndexError("bad index")
 

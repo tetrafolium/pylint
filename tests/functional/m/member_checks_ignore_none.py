@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring, useless-return
 
+
 def func():
     return None
 

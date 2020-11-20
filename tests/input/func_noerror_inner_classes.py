@@ -6,7 +6,6 @@ __revision__ = "alpha"
 
 class Aaa(object):
     """docstring"""
-
     def __init__(self):
         self.__setattr__('a', 'b')
 
@@ -26,7 +25,6 @@ class Bbb(Aaa):
 
 class Ccc(Aaa):
     """docstring"""
-
     class Ddd(Aaa):
         """docstring"""
         pass

@@ -20,7 +20,6 @@ class MyClass:
 
 MyClass().mymethod2()()
 
-
 # Check a false positive does not occur
 
 

@@ -25,7 +25,6 @@ class SomeClass(object):
 
 # pylint: disable=wrong-import-order,ungrouped-imports
 
-
 if typing.TYPE_CHECKING:
     import collections
 if TYPE_CHECKING:

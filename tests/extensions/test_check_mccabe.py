@@ -4,7 +4,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the pylint checker in :mod:`pylint.extensions.check_mccabe
 """
 
@@ -52,9 +51,8 @@ def fname_mccabe_example():
     return osp.join(osp.dirname(osp.abspath(__file__)), "data", "mccabe.py")
 
 
-@pytest.mark.parametrize(
-    "complexity, expected", [(0, EXPECTED_MSGS), (9, EXPECTED_MSGS[-2:])]
-)
+@pytest.mark.parametrize("complexity, expected", [(0, EXPECTED_MSGS),
+                                                  (9, EXPECTED_MSGS[-2:])])
 def test_max_mccabe_rate(linter, fname_mccabe_example, complexity, expected):
     linter.global_set_option("max-complexity", complexity)
     linter.check([fname_mccabe_example])

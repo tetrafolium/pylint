@@ -6,7 +6,7 @@ In python3 every class implicitly inherits from object, therefore give refactori
 import abc
 
 
-class A(object):    # [useless-object-inheritance]
+class A(object):  # [useless-object-inheritance]
     pass
 
 
@@ -18,11 +18,11 @@ class C(B, object):  # [useless-object-inheritance]
     pass
 
 
-class D(object, C, metaclass=abc.ABCMeta):   # [useless-object-inheritance]
+class D(object, C, metaclass=abc.ABCMeta):  # [useless-object-inheritance]
     pass
 
 
-class E(D, C, object, metaclass=abc.ABCMeta):   # [useless-object-inheritance]
+class E(D, C, object, metaclass=abc.ABCMeta):  # [useless-object-inheritance]
     pass
 
 

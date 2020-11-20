@@ -15,8 +15,8 @@ FORMAT_STR = '{0}, {1}'
 # Statements that should be flagged:
 # [logging-format-interpolation]
 renamed_logging.debug('{0}, {1}'.format(4, 5))
-renamed_logging.log(renamed_logging.DEBUG, 'msg: {}'.format(
-    'Run!'))  # [logging-format-interpolation]
+renamed_logging.log(renamed_logging.DEBUG,
+                    'msg: {}'.format('Run!'))  # [logging-format-interpolation]
 # [logging-format-interpolation]
 renamed_logging.debug(FORMAT_STR.format(4, 5))
 # [logging-format-interpolation]

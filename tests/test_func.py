@@ -10,7 +10,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """functional/non regression tests for pylint"""
 
 import re
@@ -112,10 +111,15 @@ def gen_tests(filter_rgx):
     if filter_rgx:
         is_to_run = re.compile(filter_rgx).search
     else:
-        def is_to_run(x): return 1
+
+        def is_to_run(x):
+            return 1
+
     tests = []
-    for module_file, messages_file in _get_tests_info(INPUT_DIR, MSG_DIR, "func_", ""):
-        if not is_to_run(module_file) or module_file.endswith((".pyc", "$py.class")):
+    for module_file, messages_file in _get_tests_info(INPUT_DIR, MSG_DIR,
+                                                      "func_", ""):
+        if not is_to_run(module_file) or module_file.endswith(
+            (".pyc", "$py.class")):
             continue
         base = module_file.replace(".py", "").split("_")[1]
         dependencies = _get_tests_info(INPUT_DIR, MSG_DIR, base, ".py")

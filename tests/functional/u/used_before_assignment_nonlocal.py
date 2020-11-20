@@ -11,6 +11,7 @@ def test_ok():
     def wrap():
         nonlocal cnt
         cnt = cnt + 1
+
     wrap()
 
 
@@ -20,6 +21,7 @@ def test_fail():
 
     def wrap():
         cnt = cnt + 1  # [used-before-assignment]
+
     wrap()
 
 
@@ -31,12 +33,15 @@ def test_fail2():
     def wrap():
         nonlocal count
         cnt = cnt + 1  # [used-before-assignment]
+
     wrap()
 
 
 def test_fail3(arg: test_fail4):  # [used-before-assignment]
     """ Depends on `test_fail4`, in argument annotation. """
     return arg
+
+
 # +1: [used-before-assignment, used-before-assignment]
 
 
@@ -68,6 +73,7 @@ def nonlocal_in_ifexp():
         if event:
             nonlocal bug2
             bug2 = not bug2
+
     on_click(True)
 
 

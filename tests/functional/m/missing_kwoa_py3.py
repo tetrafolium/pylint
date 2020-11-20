@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,unused-argument
 
+
 def target(pos, *, keyword):
     return pos + keyword
 

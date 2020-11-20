@@ -3,7 +3,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Checker for anything related to the async protocol (PEP 492)."""
 
 import sys
@@ -25,30 +24,32 @@ class AsyncChecker(checkers.BaseChecker):
             "yield-inside-async-function",
             "Used when an `yield` or `yield from` statement is "
             "found inside an async function.",
-            {"minversion": (3, 5)},
+            {
+                "minversion": (3, 5)
+            },
         ),
         "E1701": (
             "Async context manager '%s' doesn't implement __aenter__ and __aexit__.",
             "not-async-context-manager",
             "Used when an async context manager is used with an object "
             "that does not implement the async context management protocol.",
-            {"minversion": (3, 5)},
+            {
+                "minversion": (3, 5)
+            },
         ),
     }
 
     def open(self):
         self._ignore_mixin_members = utils.get_global_option(
-            self, "ignore-mixin-members"
-        )
+            self, "ignore-mixin-members")
         self._async_generators = ["contextlib.asynccontextmanager"]
 
     @checker_utils.check_messages("yield-inside-async-function")
     def visit_asyncfunctiondef(self, node):
         for child in node.nodes_of_class(astroid.Yield):
-            if child.scope() is node and (
-                sys.version_info[:2] == (3, 5) or isinstance(
-                    child, astroid.YieldFrom)
-            ):
+            if child.scope() is node and (sys.version_info[:2] == (3, 5)
+                                          or isinstance(
+                                              child, astroid.YieldFrom)):
                 self.add_message("yield-inside-async-function", node=child)
 
     @checker_utils.check_messages("not-async-context-manager")
@@ -80,9 +81,9 @@ class AsyncChecker(checkers.BaseChecker):
                 else:
                     continue
 
-            self.add_message(
-                "not-async-context-manager", node=node, args=(inferred.name,)
-            )
+            self.add_message("not-async-context-manager",
+                             node=node,
+                             args=(inferred.name, ))
 
 
 def register(linter):

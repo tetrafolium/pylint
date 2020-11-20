@@ -21,8 +21,10 @@ def args_out_of_order():
 
     function_3_args(first_argument, third_argument,
                     second_argument)  # [arguments-out-of-order]
-    function_3_args(second_argument, first_argument,  # [arguments-out-of-order]
-                    third_argument=third_argument)
+    function_3_args(
+        second_argument,
+        first_argument,  # [arguments-out-of-order]
+        third_argument=third_argument)
     function_default_arg(two, one)  # [arguments-out-of-order]
 
     # Checking exceptions:
@@ -52,5 +54,6 @@ def args_out_of_order():
 
     TestClass().function_2_args(second_argument,
                                 first_argument)  # [arguments-out-of-order]
-    TestClass().function_2_args(first_argument, second_argument=second_argument)
+    TestClass().function_2_args(first_argument,
+                                second_argument=second_argument)
     TestClass.function_0_args()

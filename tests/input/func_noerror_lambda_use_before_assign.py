@@ -5,6 +5,8 @@ __revision__ = 1
 
 def function():
     """hop"""
-    def ggg(): return xxx
+    def ggg():
+        return xxx
+
     xxx = 1
     print(ggg())

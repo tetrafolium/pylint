@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,redefined-builtin
 
+
 def do_stuff(some_random_list):
     for var in some_random_list:
         pass
@@ -30,7 +31,6 @@ for note in __revision__:
 for line in __revision__:
     for note in line:
         A = note.anotherthing()
-
 
 for x in []:
     pass
@@ -71,6 +71,7 @@ def do_stuff_with_a_range():
 def do_stuff_with_redefined_range():
     def range(key):
         yield from [1, key]
+
     for var in range(3):
         pass
     return var  # [undefined-loop-variable]

@@ -30,12 +30,10 @@ class Aimpl(object):
 
 
 class Bimpl(Aimpl):
-
     def makex(self):
         return XBsub()
 
 
 class Cimpl(Aimpl):
-
     def makex(self):
         return XCsub()

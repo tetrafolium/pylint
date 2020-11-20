@@ -44,22 +44,21 @@ Subscriptable[0]  # [unsubscriptable-object]
 def powers_of_two():
     k = 0
     while k < 10:
-        yield 2 ** k
+        yield 2**k
         k += 1
 
 
 powers_of_two()[0]  # [unsubscriptable-object]
 powers_of_two[0]  # [unsubscriptable-object]
 
-
 # check that primitive non subscriptable types are caught
-True[0]  # [unsubscriptable-object]
-None[0]  # [unsubscriptable-object]
-8.5[0]  # [unsubscriptable-object]
-10[0]  # [unsubscriptable-object]
+True [0]  # [unsubscriptable-object]
+None [0]  # [unsubscriptable-object]
+8.5 [0]  # [unsubscriptable-object]
+10 [0]  # [unsubscriptable-object]
 
 # sets are not subscriptable
-{x ** 2 for x in range(10)}[0]  # [unsubscriptable-object]
+{x**2 for x in range(10)}[0]  # [unsubscriptable-object]
 set(numbers)[0]  # [unsubscriptable-object]
 frozenset(numbers)[0]  # [unsubscriptable-object]
 
@@ -104,7 +103,6 @@ deq[0]
 
 
 class AbstractClass(object):
-
     def __init__(self):
         self.ala = {i for i in range(10)}
         self.bala = [i for i in range(10)]
@@ -116,7 +114,6 @@ class AbstractClass(object):
 
 
 class ClassMixin(object):
-
     def __init__(self):
         self.ala = {i for i in range(10)}
         self.bala = [i for i in range(10)]

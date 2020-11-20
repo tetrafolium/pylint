@@ -1,6 +1,5 @@
 # pylint: disable=missing-docstring,too-few-public-methods
 class AbstractFoo:
-
     def kwonly_1(self, first, *, second, third):
         "Normal positional with two positional only params."
 
@@ -18,7 +17,6 @@ class AbstractFoo:
 
 
 class Foo(AbstractFoo):
-
     def kwonly_1(self, first, *, second):  # [arguments-differ]
         "One positional and only one positional only param."
 

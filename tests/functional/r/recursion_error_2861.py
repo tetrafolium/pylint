@@ -5,5 +5,5 @@ class Repository:
         self._bytesTransfered = 0
         bufff = True
         while bufff and (bytes < 0 or self._bytesTransfered < bytes):
-            bufff = bufff[: bytes - self._bytesTransfered]
+            bufff = bufff[:bytes - self._bytesTransfered]
             self._bytesTransfered += len(bufff)

@@ -7,7 +7,7 @@ dict()
 dict([])
 
 # [consider-using-dict-comprehension]
-dict([(number, number*2) for number in numbers])
+dict([(number, number * 2) for number in numbers])
 
 # Cannot emit as this cannot be written as a comprehension
 dict([value.split("=") for value in ["a=b", "c=d"]])

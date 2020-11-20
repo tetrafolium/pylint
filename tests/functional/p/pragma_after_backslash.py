@@ -4,7 +4,6 @@
 
 class Foo:
     """block-disable test"""
-
     def meth3(self):
         """test one line disabling"""
         print(self.bla) \

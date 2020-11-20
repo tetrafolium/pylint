@@ -19,7 +19,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Check format checker helper functions"""
 
 import os
@@ -37,74 +36,68 @@ class TestMultiStatementLine(CheckerTestCase):
     CHECKER_CLASS = FormatChecker
 
     def testSingleLineIfStmts(self):
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         if True: pass  #@
-        """
-        )
+        """)
         self.checker.config.single_line_if_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_if_stmt = True
         with self.assertNoMessages():
             self.visitFirst(stmt)
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         if True: pass  #@
         else:
             pass
-        """
-        )
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        """)
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
 
     def testSingleLineClassStmts(self):
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         class MyError(Exception): pass  #@
-        """
-        )
+        """)
         self.checker.config.single_line_class_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_class_stmt = True
         with self.assertNoMessages():
             self.visitFirst(stmt)
 
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         class MyError(Exception): a='a'  #@
-        """
-        )
+        """)
         self.checker.config.single_line_class_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_class_stmt = True
         with self.assertNoMessages():
             self.visitFirst(stmt)
 
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         class MyError(Exception): a='a'; b='b'  #@
-        """
-        )
+        """)
         self.checker.config.single_line_class_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_class_stmt = True
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
 
     def testTryExceptFinallyNoMultipleStatement(self):
-        tree = astroid.extract_node(
-            """
+        tree = astroid.extract_node("""
         try:  #@
             pass
         except:
             pass
         finally:
-            pass"""
-        )
+            pass""")
         with self.assertNoMessages():
             self.visitFirst(tree)
 
@@ -126,7 +119,8 @@ class TestMultiStatementLine(CheckerTestCase):
         def concat2(arg1: str) -> str: ...
         """
         stmt = astroid.extract_node(code)
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
 
 
@@ -157,17 +151,23 @@ class TestSuperfluousParentheses(CheckerTestCase):
         self.checker._keywords_with_parens = set()
         cases = [
             (Message("superfluous-parens", line=1, args="if"), "if (foo):", 0),
-            (Message("superfluous-parens", line=1, args="if"), "if ((foo, bar)):", 0),
-            (Message("superfluous-parens", line=1, args="if"), "if (foo(bar)):", 0),
+            (Message("superfluous-parens", line=1,
+                     args="if"), "if ((foo, bar)):", 0),
+            (Message("superfluous-parens", line=1,
+                     args="if"), "if (foo(bar)):", 0),
             (
                 Message("superfluous-parens", line=1, args="return"),
                 "return ((x for x in x))",
                 0,
             ),
-            (Message("superfluous-parens", line=1, args="not"), "not (foo)", 0),
-            (Message("superfluous-parens", line=1, args="not"), "if not (foo):", 1),
-            (Message("superfluous-parens", line=1, args="if"), "if (not (foo)):", 0),
-            (Message("superfluous-parens", line=1, args="not"), "if (not (foo)):", 2),
+            (Message("superfluous-parens", line=1,
+                     args="not"), "not (foo)", 0),
+            (Message("superfluous-parens", line=1,
+                     args="not"), "if not (foo):", 1),
+            (Message("superfluous-parens", line=1,
+                     args="if"), "if (not (foo)):", 0),
+            (Message("superfluous-parens", line=1,
+                     args="not"), "if (not (foo)):", 2),
             (
                 Message("superfluous-parens", line=1, args="for"),
                 "for (x) in (1, 2, 3):",
@@ -189,8 +189,8 @@ class TestSuperfluousParentheses(CheckerTestCase):
         cases = [("if (foo):", 0), ("assert (1 == 1)", 0)]
 
         for code, offset in cases:
-            self.checker._check_keyword_parentheses(
-                _tokenize_str(code), offset)
+            self.checker._check_keyword_parentheses(_tokenize_str(code),
+                                                    offset)
             got = self.linter.release_messages()
             assert isinstance(got[-1].args, str)
 
@@ -207,8 +207,8 @@ print('Hello world!')
         self.checker._keywords_with_parens = set()
         code = "if 'bar' in (DICT or {}):"
         with self.assertNoMessages():
-            self.checker._check_keyword_parentheses(
-                _tokenize_str(code), start=2)
+            self.checker._check_keyword_parentheses(_tokenize_str(code),
+                                                    start=2)
 
 
 class TestCheckSpace(CheckerTestCase):
@@ -222,40 +222,37 @@ class TestCheckSpace(CheckerTestCase):
 
     def testParenthesesBad(self):
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("No", "allowed", "after", "bracket", "( a)\n^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("No", "allowed", "after", "bracket", "( a)\n^"),
+                )):
             self.checker.process_tokens(_tokenize_str("( a)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("No", "allowed", "before", "bracket", "(a )\n   ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("No", "allowed", "before", "bracket", "(a )\n   ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("(a )\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("No", "allowed", "before", "bracket", "foo (a)\n    ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("No", "allowed", "before", "bracket",
+                          "foo (a)\n    ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("foo (a)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("No", "allowed", "before",
-                      "bracket", "{1: 2} [1]\n       ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("No", "allowed", "before", "bracket",
+                          "{1: 2} [1]\n       ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("{1: 2} [1]\n"))
 
     def testTrailingCommaGood(self):
@@ -270,27 +267,27 @@ class TestCheckSpace(CheckerTestCase):
     @set_config(no_space_check=[])
     def testTrailingCommaBad(self):
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("No", "allowed", "before", "bracket", "(a, )\n    ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("No", "allowed", "before", "bracket",
+                          "(a, )\n    ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("(a, )\n"))
 
     def testComma(self):
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("No", "allowed", "before", "comma", "(a , b)\n   ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("No", "allowed", "before", "comma", "(a , b)\n   ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("(a , b)\n"))
 
     def testSpacesAllowedInsideSlices(self):
-        good_cases = ["[a:b]\n", "[a : b]\n",
-                      "[a : ]\n", "[:a]\n", "[:]\n", "[::]\n"]
+        good_cases = [
+            "[a:b]\n", "[a : b]\n", "[a : ]\n", "[:a]\n", "[:]\n", "[::]\n"
+        ]
         with self.assertNoMessages():
             for code in good_cases:
                 self.checker.process_tokens(_tokenize_str(code))
@@ -300,129 +297,118 @@ class TestCheckSpace(CheckerTestCase):
             self.checker.process_tokens(_tokenize_str("foo(foo=bar)\n"))
             self.checker.process_tokens(_tokenize_str("foo(foo: int = bar)\n"))
             self.checker.process_tokens(
-                _tokenize_str("foo(foo: module.classname = bar)\n")
-            )
+                _tokenize_str("foo(foo: module.classname = bar)\n"))
             self.checker.process_tokens(
-                _tokenize_str("foo(foo: Dict[int, str] = bar)\n")
-            )
+                _tokenize_str("foo(foo: Dict[int, str] = bar)\n"))
             self.checker.process_tokens(
                 _tokenize_str("foo(foo: 'int' = bar)\n"))
             self.checker.process_tokens(
-                _tokenize_str("foo(foo: Dict[int, 'str'] = bar)\n")
-            )
+                _tokenize_str("foo(foo: Dict[int, 'str'] = bar)\n"))
             self.checker.process_tokens(_tokenize_str("lambda x=1: x\n"))
 
     def testKeywordSpacingBad(self):
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "No",
-                    "allowed",
-                    "before",
-                    "keyword argument assignment",
-                    "(foo =bar)\n     ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "No",
+                        "allowed",
+                        "before",
+                        "keyword argument assignment",
+                        "(foo =bar)\n     ^",
+                    ),
+                )):
             self.checker.process_tokens(_tokenize_str("(foo =bar)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "No",
-                    "allowed",
-                    "after",
-                    "keyword argument assignment",
-                    "(foo= bar)\n    ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "No",
+                        "allowed",
+                        "after",
+                        "keyword argument assignment",
+                        "(foo= bar)\n    ^",
+                    ),
+                )):
             self.checker.process_tokens(_tokenize_str("(foo= bar)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "No",
-                    "allowed",
-                    "around",
-                    "keyword argument assignment",
-                    "(foo = bar)\n     ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "No",
+                        "allowed",
+                        "around",
+                        "keyword argument assignment",
+                        "(foo = bar)\n     ^",
+                    ),
+                )):
             self.checker.process_tokens(_tokenize_str("(foo = bar)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "Exactly one",
-                    "required",
-                    "before",
-                    "keyword argument assignment",
-                    "(foo: int= bar)\n         ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "Exactly one",
+                        "required",
+                        "before",
+                        "keyword argument assignment",
+                        "(foo: int= bar)\n         ^",
+                    ),
+                )):
             self.checker.process_tokens(_tokenize_str("(foo: int= bar)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "Exactly one",
-                    "required",
-                    "after",
-                    "keyword argument assignment",
-                    "(foo: int =bar)\n          ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "Exactly one",
+                        "required",
+                        "after",
+                        "keyword argument assignment",
+                        "(foo: int =bar)\n          ^",
+                    ),
+                )):
             self.checker.process_tokens(_tokenize_str("(foo: int =bar)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "Exactly one",
-                    "required",
-                    "around",
-                    "keyword argument assignment",
-                    "(foo: int=bar)\n         ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "Exactly one",
+                        "required",
+                        "around",
+                        "keyword argument assignment",
+                        "(foo: int=bar)\n         ^",
+                    ),
+                )):
             self.checker.process_tokens(_tokenize_str("(foo: int=bar)\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=(
-                    "Exactly one",
-                    "required",
-                    "around",
-                    "keyword argument assignment",
-                    "(foo: List[int]=bar)\n               ^",
-                ),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=(
+                        "Exactly one",
+                        "required",
+                        "around",
+                        "keyword argument assignment",
+                        "(foo: List[int]=bar)\n               ^",
+                    ),
+                )):
             self.checker.process_tokens(
                 _tokenize_str("(foo: List[int]=bar)\n"))
         # Regression test for #1831
         with self.assertNoMessages():
             self.checker.process_tokens(
-                _tokenize_str("(arg: Tuple[\n    int, str] = None):\n")
-            )
+                _tokenize_str("(arg: Tuple[\n    int, str] = None):\n"))
 
     def testOperatorSpacingGood(self):
         good_cases = ["a = b\n" "a < b\n" "a\n< b\n"]
@@ -432,43 +418,39 @@ class TestCheckSpace(CheckerTestCase):
 
     def testOperatorSpacingBad(self):
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("Exactly one", "required",
-                      "before", "comparison", "a< b\n ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("Exactly one", "required", "before", "comparison",
+                          "a< b\n ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("a< b\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("Exactly one", "required", "after",
-                      "comparison", "a <b\n  ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("Exactly one", "required", "after", "comparison",
+                          "a <b\n  ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("a <b\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("Exactly one", "required",
-                      "around", "comparison", "a<b\n ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("Exactly one", "required", "around", "comparison",
+                          "a<b\n ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("a<b\n"))
 
         with self.assertAddsMessages(
-            Message(
-                "bad-whitespace",
-                line=1,
-                args=("Exactly one", "required", "around",
-                      "comparison", "a<  b\n ^"),
-            )
-        ):
+                Message(
+                    "bad-whitespace",
+                    line=1,
+                    args=("Exactly one", "required", "around", "comparison",
+                          "a<  b\n ^"),
+                )):
             self.checker.process_tokens(_tokenize_str("a<  b\n"))
 
     def testValidTypingAnnotationEllipses(self):
@@ -476,8 +458,7 @@ class TestCheckSpace(CheckerTestCase):
         doesn't cause a false positive bad-whitespace message"""
         with self.assertNoMessages():
             self.checker.process_tokens(
-                _tokenize_str("def foo(t: Tuple[str, ...] = None):\n")
-            )
+                _tokenize_str("def foo(t: Tuple[str, ...] = None):\n"))
 
     def testEmptyLines(self):
         self.checker.config.no_space_check = []
@@ -510,12 +491,10 @@ class TestCheckSpace(CheckerTestCase):
         reading a file does
         """
         with self.assertNoMessages():
-            encoding_token = tokenize.TokenInfo(
-                tokenize.ENCODING, "utf-8", (0, 0), (0, 0), ""
-            )
-            tokens = [encoding_token] + _tokenize_str(
-                "if (\n        None):\n    pass\n"
-            )
+            encoding_token = tokenize.TokenInfo(tokenize.ENCODING, "utf-8",
+                                                (0, 0), (0, 0), "")
+            tokens = [encoding_token
+                      ] + _tokenize_str("if (\n        None):\n    pass\n")
             self.checker.process_tokens(tokens)
 
 
@@ -526,20 +505,17 @@ def test_disable_global_option_end_of_line():
     """
     file_ = tempfile.NamedTemporaryFile("w", delete=False)
     with file_:
-        file_.write(
-            """
+        file_.write("""
 mylist = [
     None
         ]
-    """
-        )
+    """)
     try:
         linter = lint.PyLinter()
         checker = FormatChecker(linter)
         linter.register_checker(checker)
         args = linter.load_command_line_configuration(
-            [file_.name, "-d", "bad-continuation"]
-        )
+            [file_.name, "-d", "bad-continuation"])
         myreporter = reporters.CollectingReporter()
         linter.set_reporter(myreporter)
         linter.check(args)

@@ -34,6 +34,5 @@ class Tests(unittest.TestCase):
 @unittest.skip("don't run this")
 class RegressionWithArgs(unittest.TestCase):
     '''Don't fail if the bound method doesn't have arguments.'''
-
     def test(self):
         self.run()

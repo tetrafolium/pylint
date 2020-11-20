@@ -8,7 +8,6 @@ __revision__ = 'pouet'
 
 class Test(object):
     """Smallest test case for reported issue."""
-
     def __init__(self):
         self._thing = None
 

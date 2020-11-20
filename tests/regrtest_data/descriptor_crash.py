@@ -11,10 +11,11 @@ class Page(object):
         data = handle.read()
         handle.close()
         return data
+
     # _getPage
 
-# Page
 
+# Page
 
 if __name__ == "__main__":
     import sys

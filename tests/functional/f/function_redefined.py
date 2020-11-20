@@ -8,7 +8,6 @@ __revision__ = ''
 
 class AAAA(object):
     """docstring"""
-
     def __init__(self):
         pass
 
@@ -24,7 +23,6 @@ class AAAA(object):
 
 class AAAA(object):  # [function-redefined]
     """docstring"""
-
     def __init__(self):
         pass
 
@@ -50,19 +48,25 @@ def func2():  # [function-redefined]
 
 
 if __revision__:
+
     def exclusive_func():
         "docstring"
 else:
+
     def exclusive_func():
         "docstring"
 
+
 try:
+
     def exclusive_func2():
         "docstring"
 except TypeError:
+
     def exclusive_func2():
         "docstring"
 else:
+
     def exclusive_func2():  # [function-redefined]
         "this one redefine the one defined line 42"
 
@@ -72,6 +76,7 @@ def with_inner_function_1():
     def callback():
         """callback docstring"""
         pass
+
     return callback
 
 
@@ -80,6 +85,7 @@ def with_inner_function_2():
     def callback():
         """does not redefine callback returned by with_inner_function_1"""
         pass
+
     return callback
 
 
@@ -112,6 +118,7 @@ def math():  # [function-redefined]
 
 def _():
     pass
+
 
 # pylint: disable=too-few-public-methods
 

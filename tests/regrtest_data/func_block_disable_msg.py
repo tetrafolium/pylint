@@ -5,7 +5,6 @@ from __future__ import print_function
 
 class Foo(object):
     """block-disable test"""
-
     def __init__(self):
         self._test = "42"
 
@@ -16,8 +15,7 @@ class Foo(object):
     def meth2(self, arg):
         """and this one not"""
         # pylint: disable=W0613
-        print(self._test
-              + "foo")
+        print(self._test + "foo")
 
     def meth3(self):
         """test one line disabling"""
@@ -113,6 +111,7 @@ class Foo(object):
 class ClassLevelMessage(object):
     """shouldn't display to much attributes/not enough methods messages
     """
+
     # pylint: disable=R0902,R0903
 
     def __init__(self):
@@ -132,7 +131,7 @@ class ClassLevelMessage(object):
         """
         # pylint: disable=R0912,R0911
         try:
-            attr3 = attr1+attr2
+            attr3 = attr1 + attr2
         except ValueError:
             attr3 = None
         except:

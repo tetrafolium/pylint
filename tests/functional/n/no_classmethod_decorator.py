@@ -7,12 +7,12 @@ scope and if classmethod's argument is a member of the class
 
 class MyClass(object):
     """Some class"""
-
     def __init__(self):
         pass
 
     def cmethod(cls):
         """class method-to-be"""
+
     cmethod = classmethod(cmethod)  # [no-classmethod-decorator]
 
     if True:
@@ -24,6 +24,7 @@ class MyClass(object):
 
     def other_method(cls):
         """some method"""
+
     cmethod2 = classmethod(other_method)  # [no-classmethod-decorator]
 
 

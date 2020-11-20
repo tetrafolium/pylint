@@ -17,10 +17,10 @@ class MyTest(unittest.TestCase):
 
 xml.etree.ElementTree.Element('tag').getchildren()  # [deprecated-method]
 xml.etree.ElementTree.Element('tag').getiterator()  # [deprecated-method]
-xml.etree.ElementTree.XMLParser('tag', None, None).doctype(
-    None, None, None)  # [deprecated-method]
+xml.etree.ElementTree.XMLParser('tag', None,
+                                None).doctype(None, None,
+                                              None)  # [deprecated-method]
 nntplib.NNTP(None).xpath(None)  # [deprecated-method]
-
 
 inspect.getargspec(None)  # [deprecated-method]
 logging.warn("a")  # [deprecated-method]
@@ -31,7 +31,6 @@ cgi.escape("a")  # [deprecated-method]
 
 
 class SuperCrash(unittest.TestCase):
-
     def __init__(self):
         # should not crash.
         super(SuperCrash, self)()
@@ -41,7 +40,6 @@ xml.etree.ElementTree.iterparse(None)
 
 
 class Tests(unittest.TestCase):
-
     def test_foo(self):
         self.assertEquals(2 + 2, 4)  # [deprecated-method]
         self.assertNotEquals(2 + 2, 4)  # [deprecated-method]

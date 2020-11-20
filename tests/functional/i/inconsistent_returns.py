@@ -84,6 +84,7 @@ def explicit_returns5(arg):
 def nested_function():
     def dummy_return():
         return True
+
     return dummy_return
 
 
@@ -141,8 +142,10 @@ def bug_1771_with_user_config(var):
 def bug_1794_inner_func_in_if(var):
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return None
+
         return None
     else:
         return None
@@ -166,6 +169,7 @@ def bug_1794(a):
             return a
     raise configparser.NoSectionError('toto')
 
+
 # pylint: disable = no-else-return
 
 
@@ -176,6 +180,7 @@ def bug_1782_bis(val=3):
         return True
     else:
         raise RuntimeError()
+
 
 # Next ones are not consistent
 
@@ -236,6 +241,7 @@ def inconsistent_returns_in_nested_function():
                 break
             else:
                 return arg
+
     return not_consistent_returns_inner
 
 
@@ -272,8 +278,10 @@ def bug_1772_counter_example():  # [inconsistent-return-statements]
 def bug_1794_inner_func_in_if_counter_example_1(var):
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return None
+
         return None
     else:
         return
@@ -283,8 +291,10 @@ def bug_1794_inner_func_in_if_counter_example_1(var):
 def bug_1794_inner_func_in_if_counter_example_2(var):
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return
+
         return None
     else:
         return
@@ -294,10 +304,13 @@ def bug_1794_inner_func_in_if_counter_example_2(var):
 def bug_1794_inner_func_in_if_counter_example_3(var):
     # pylint: disable = no-else-return,useless-return
     if var:
+
         def _inner():
             return None
+
         return None
     else:
+
         def _inner2(var_bis):  # [inconsistent-return-statements]
             if var_bis:
                 return True

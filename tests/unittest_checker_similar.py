@@ -21,9 +21,8 @@ from pylint.checkers import similar
 SIMILAR1 = join(dirname(abspath(__file__)), "input", "similar1")
 SIMILAR2 = join(dirname(abspath(__file__)), "input", "similar2")
 MULTILINE = join(dirname(abspath(__file__)), "input", "multiline-import")
-HIDE_CODE_WITH_IMPORTS = join(
-    dirname(abspath(__file__)), "input", "hide_code_with_imports.py"
-)
+HIDE_CODE_WITH_IMPORTS = join(dirname(abspath(__file__)), "input",
+                              "hide_code_with_imports.py")
 
 
 def test_ignore_comments():
@@ -31,10 +30,7 @@ def test_ignore_comments():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-comments", SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 10 similar lines in 2 files
 ==%s:0
 ==%s:0
@@ -49,10 +45,7 @@ def test_ignore_comments():
    nine
    ''' ten
 TOTAL lines=60 duplicates=10 percent=16.67
-"""
-            % (SIMILAR1, SIMILAR2)
-        ).strip()
-    )
+""" % (SIMILAR1, SIMILAR2)).strip())
 
 
 def test_ignore_docsrings():
@@ -60,10 +53,7 @@ def test_ignore_docsrings():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-docstrings", SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 8 similar lines in 2 files
 ==%s:6
 ==%s:6
@@ -85,10 +75,7 @@ def test_ignore_docsrings():
    four
    five
 TOTAL lines=60 duplicates=13 percent=21.67
-"""
-            % ((SIMILAR1, SIMILAR2) * 2)
-        ).strip()
-    )
+""" % ((SIMILAR1, SIMILAR2) * 2)).strip())
 
 
 def test_ignore_imports():
@@ -96,12 +83,9 @@ def test_ignore_imports():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-imports", SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == """
+    assert (output.getvalue().strip() == """
 TOTAL lines=60 duplicates=0 percent=0.00
-""".strip()
-    )
+""".strip())
 
 
 def test_multiline_imports():
@@ -109,10 +93,7 @@ def test_multiline_imports():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run([MULTILINE, MULTILINE])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 8 similar lines in 2 files
 ==%s:0
 ==%s:0
@@ -125,10 +106,7 @@ def test_multiline_imports():
      quuuuux,
    )
 TOTAL lines=16 duplicates=8 percent=50.00
-"""
-            % (MULTILINE, MULTILINE)
-        ).strip()
-    )
+""" % (MULTILINE, MULTILINE)).strip())
 
 
 def test_ignore_multiline_imports():
@@ -136,12 +114,9 @@ def test_ignore_multiline_imports():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-imports", MULTILINE, MULTILINE])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == """
+    assert (output.getvalue().strip() == """
 TOTAL lines=16 duplicates=0 percent=0.00
-""".strip()
-    )
+""".strip())
 
 
 def test_no_hide_code_with_imports():
@@ -157,10 +132,7 @@ def test_ignore_nothing():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run([SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 5 similar lines in 2 files
 ==%s:0
 ==%s:0
@@ -170,10 +142,7 @@ def test_ignore_nothing():
    four
    five
 TOTAL lines=60 duplicates=5 percent=8.33
-"""
-            % (SIMILAR1, SIMILAR2)
-        ).strip()
-    )
+""" % (SIMILAR1, SIMILAR2)).strip())
 
 
 def test_help():

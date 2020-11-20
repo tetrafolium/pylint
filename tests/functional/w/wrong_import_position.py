@@ -11,22 +11,24 @@ if True:
 try:
     import sys
 except ImportError:
+
     class Myclass(object):
         """docstring"""
+
 
 if sys.version_info[0] >= 3:
     from collections import OrderedDict
 else:
+
     class OrderedDict(object):
         """Nothing to see here."""
-
         def some_func(self):
             pass
+
 
 import six  # [wrong-import-position]
 
 CONSTANT = True
-
 
 VAR = 0
 for i in range(10):

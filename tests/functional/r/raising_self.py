@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring
 
+
 class MultiException(Exception):
     def __init__(self):
         Exception.__init__(self)

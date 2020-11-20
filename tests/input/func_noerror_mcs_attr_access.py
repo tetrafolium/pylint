@@ -1,7 +1,6 @@
 # pylint: disable=R0903, metaclass-assignment, useless-object-inheritance
 """test attribute access on metaclass"""
 
-
 from __future__ import print_function
 
 
