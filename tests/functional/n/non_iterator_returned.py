@@ -66,7 +66,7 @@ class FileBasedIterator(object):
         if self.file is not None:
             self.file.close()
         self.file = open(self.path)
-        # self file has two infered values: None and <instance of 'file'>
+        # self file has two inferred values: None and <instance of 'file'>
         # we don't want to emit error in this case
         return self.file
 
