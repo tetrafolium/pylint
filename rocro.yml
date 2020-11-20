@@ -12,7 +12,8 @@ inspecode:
     thresholds: { num-issues: 5 }
 
   flake8:
-    options:
+  - thresholds: { num-issues: 999 }
+  - options:
       --ignore:
       - E501    # 1844 issues
       - E261    #  848 issues
@@ -24,7 +25,7 @@ inspecode:
       - E305    #  148 issues
       - F821    #  138 issues
       - F811    #  108 issues
-    thresholds: { num-issues: 785 }
+    thresholds: { num-issues: 866 }
 
   fossology:
     thresholds: { num-issues: 8 }
