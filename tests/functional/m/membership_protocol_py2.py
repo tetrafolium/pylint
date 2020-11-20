@@ -5,12 +5,14 @@ class MetaIterable(type):
     def __iter__(cls):
         return iter((1, 2, 3))
 
+
 class MetaOldIterable(type):
     def __getitem__(cls, key):
         if key < 10:
             return key ** 2
         else:
             raise IndexError("bad index")
+
 
 class MetaContainer(type):
     def __contains__(cls, key):
@@ -20,8 +22,10 @@ class MetaContainer(type):
 class IterableClass(object):
     __metaclass__ = MetaIterable
 
+
 class OldIterableClass(object):
     __metaclass__ = MetaOldIterable
+
 
 class ContainerClass(object):
     __metaclass__ = MetaContainer

@@ -12,4 +12,4 @@ i = None == x  # [singleton-comparison]
 
 j = x != True  # [singleton-comparison]
 j1 = x != False  # [singleton-comparison]
-j2 = x != None # [singleton-comparison]
+j2 = x != None  # [singleton-comparison]

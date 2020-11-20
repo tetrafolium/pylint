@@ -4,7 +4,8 @@ try:
     A = 2
 except ValueError:
     A = 24
-    pass # [unnecessary-pass]
+    pass  # [unnecessary-pass]
+
 
 def docstring_only():
     '''In Python, stubbed functions often have a body that contains just a
@@ -30,7 +31,7 @@ def docstring_and_pass():
     statements, suggesting the removal of the useless `pass`
     statements
     '''
-    pass # [unnecessary-pass]
+    pass  # [unnecessary-pass]
 
 
 class DocstringOnly:
@@ -46,4 +47,4 @@ class PassOnly:
 class DocstringAndPass:
     '''Whoops! Mark this one as bad too.
     '''
-    pass # [unnecessary-pass]
+    pass  # [unnecessary-pass]

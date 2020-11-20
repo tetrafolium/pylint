@@ -3,11 +3,12 @@
 
 __revision__ = "alpha"
 
+
 class Aaa(object):
     """docstring"""
+
     def __init__(self):
         self.__setattr__('a', 'b')
-
 
     def one_public(self):
         """docstring"""
@@ -17,9 +18,11 @@ class Aaa(object):
         """docstring"""
         pass
 
+
 class Bbb(Aaa):
     """docstring"""
     pass
+
 
 class Ccc(Aaa):
     """docstring"""

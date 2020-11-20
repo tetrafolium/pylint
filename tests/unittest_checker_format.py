@@ -181,14 +181,16 @@ class TestSuperfluousParentheses(CheckerTestCase):
         ]
         for msg, code, offset in cases:
             with self.assertAddsMessages(msg):
-                self.checker._check_keyword_parentheses(_tokenize_str(code), offset)
+                self.checker._check_keyword_parentheses(
+                    _tokenize_str(code), offset)
 
     def testCheckIfArgsAreNotUnicode(self):
         self.checker._keywords_with_parens = set()
         cases = [("if (foo):", 0), ("assert (1 == 1)", 0)]
 
         for code, offset in cases:
-            self.checker._check_keyword_parentheses(_tokenize_str(code), offset)
+            self.checker._check_keyword_parentheses(
+                _tokenize_str(code), offset)
             got = self.linter.release_messages()
             assert isinstance(got[-1].args, str)
 
@@ -205,7 +207,8 @@ print('Hello world!')
         self.checker._keywords_with_parens = set()
         code = "if 'bar' in (DICT or {}):"
         with self.assertNoMessages():
-            self.checker._check_keyword_parentheses(_tokenize_str(code), start=2)
+            self.checker._check_keyword_parentheses(
+                _tokenize_str(code), start=2)
 
 
 class TestCheckSpace(CheckerTestCase):
@@ -249,7 +252,8 @@ class TestCheckSpace(CheckerTestCase):
             Message(
                 "bad-whitespace",
                 line=1,
-                args=("No", "allowed", "before", "bracket", "{1: 2} [1]\n       ^"),
+                args=("No", "allowed", "before",
+                      "bracket", "{1: 2} [1]\n       ^"),
             )
         ):
             self.checker.process_tokens(_tokenize_str("{1: 2} [1]\n"))
@@ -285,7 +289,8 @@ class TestCheckSpace(CheckerTestCase):
             self.checker.process_tokens(_tokenize_str("(a , b)\n"))
 
     def testSpacesAllowedInsideSlices(self):
-        good_cases = ["[a:b]\n", "[a : b]\n", "[a : ]\n", "[:a]\n", "[:]\n", "[::]\n"]
+        good_cases = ["[a:b]\n", "[a : b]\n",
+                      "[a : ]\n", "[:a]\n", "[:]\n", "[::]\n"]
         with self.assertNoMessages():
             for code in good_cases:
                 self.checker.process_tokens(_tokenize_str(code))
@@ -300,7 +305,8 @@ class TestCheckSpace(CheckerTestCase):
             self.checker.process_tokens(
                 _tokenize_str("foo(foo: Dict[int, str] = bar)\n")
             )
-            self.checker.process_tokens(_tokenize_str("foo(foo: 'int' = bar)\n"))
+            self.checker.process_tokens(
+                _tokenize_str("foo(foo: 'int' = bar)\n"))
             self.checker.process_tokens(
                 _tokenize_str("foo(foo: Dict[int, 'str'] = bar)\n")
             )
@@ -410,7 +416,8 @@ class TestCheckSpace(CheckerTestCase):
                 ),
             )
         ):
-            self.checker.process_tokens(_tokenize_str("(foo: List[int]=bar)\n"))
+            self.checker.process_tokens(
+                _tokenize_str("(foo: List[int]=bar)\n"))
         # Regression test for #1831
         with self.assertNoMessages():
             self.checker.process_tokens(
@@ -428,7 +435,8 @@ class TestCheckSpace(CheckerTestCase):
             Message(
                 "bad-whitespace",
                 line=1,
-                args=("Exactly one", "required", "before", "comparison", "a< b\n ^"),
+                args=("Exactly one", "required",
+                      "before", "comparison", "a< b\n ^"),
             )
         ):
             self.checker.process_tokens(_tokenize_str("a< b\n"))
@@ -437,7 +445,8 @@ class TestCheckSpace(CheckerTestCase):
             Message(
                 "bad-whitespace",
                 line=1,
-                args=("Exactly one", "required", "after", "comparison", "a <b\n  ^"),
+                args=("Exactly one", "required", "after",
+                      "comparison", "a <b\n  ^"),
             )
         ):
             self.checker.process_tokens(_tokenize_str("a <b\n"))
@@ -446,7 +455,8 @@ class TestCheckSpace(CheckerTestCase):
             Message(
                 "bad-whitespace",
                 line=1,
-                args=("Exactly one", "required", "around", "comparison", "a<b\n ^"),
+                args=("Exactly one", "required",
+                      "around", "comparison", "a<b\n ^"),
             )
         ):
             self.checker.process_tokens(_tokenize_str("a<b\n"))
@@ -455,7 +465,8 @@ class TestCheckSpace(CheckerTestCase):
             Message(
                 "bad-whitespace",
                 line=1,
-                args=("Exactly one", "required", "around", "comparison", "a<  b\n ^"),
+                args=("Exactly one", "required", "around",
+                      "comparison", "a<  b\n ^"),
             )
         ):
             self.checker.process_tokens(_tokenize_str("a<  b\n"))

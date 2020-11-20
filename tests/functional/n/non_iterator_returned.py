@@ -4,12 +4,14 @@
 
 import six
 
+
 class FirstGoodIterator(object):
     """ yields in iterator. """
 
     def __iter__(self):
         for index in range(10):
             yield index
+
 
 class SecondGoodIterator(object):
     """ __iter__ and next """
@@ -25,11 +27,13 @@ class SecondGoodIterator(object):
         """Same as __next__, but for Python 2."""
         return 1
 
+
 class ThirdGoodIterator(object):
     """ Returns other iterator, not the current instance """
 
     def __iter__(self):
         return SecondGoodIterator()
+
 
 class FourthGoodIterator(object):
     """ __iter__ returns iter(...) """
@@ -53,8 +57,10 @@ class IteratorClass(object):
 
 class FifthGoodIterator(object):
     """__iter__ returns a class which uses an iterator-metaclass."""
+
     def __iter__(self):
         return IteratorClass
+
 
 class FileBasedIterator(object):
     def __init__(self, path):
@@ -73,23 +79,26 @@ class FileBasedIterator(object):
 class FirstBadIterator(object):
     """ __iter__ returns a list """
 
-    def __iter__(self): # [non-iterator-returned]
+    def __iter__(self):  # [non-iterator-returned]
         return []
+
 
 class SecondBadIterator(object):
     """ __iter__ without next """
 
-    def __iter__(self): # [non-iterator-returned]
+    def __iter__(self):  # [non-iterator-returned]
         return self
+
 
 class ThirdBadIterator(object):
     """ __iter__ returns an instance of another non-iterator """
 
-    def __iter__(self): # [non-iterator-returned]
+    def __iter__(self):  # [non-iterator-returned]
         return SecondBadIterator()
+
 
 class FourthBadIterator(object):
     """__iter__ returns a class."""
 
-    def __iter__(self): # [non-iterator-returned]
+    def __iter__(self):  # [non-iterator-returned]
         return ThirdBadIterator

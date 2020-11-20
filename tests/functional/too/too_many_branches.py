@@ -1,6 +1,8 @@
 """ Test for too many branches. """
 # pylint: disable=using-constant-test
-def wrong(): # [too-many-branches]
+
+
+def wrong():  # [too-many-branches]
     """ Has too many branches. """
     if 1:
         pass
@@ -28,6 +30,7 @@ def wrong(): # [too-many-branches]
         pass
     elif 3:
         pass
+
 
 def good():
     """ Too many branches only if we take

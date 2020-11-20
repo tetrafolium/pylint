@@ -3,6 +3,7 @@
 """
 __revision__ = ''
 
+
 class BaseClass(object):
     """A simple base class
     """
@@ -12,9 +13,12 @@ class BaseClass(object):
 
     def met(self):
         """yo"""
+
     def meeting(self, with_):
         """ye"""
         return with_
+
+
 class MyClass(BaseClass):
     """Inherits from BaseClass
     """
@@ -29,6 +33,7 @@ class MyClass(BaseClass):
         self.var[1] = 'one'
         self.base_var[1] = 'one'
         return self.base_var, self.var
+
 
 if __name__ == '__main__':
     OBJ = MyClass()

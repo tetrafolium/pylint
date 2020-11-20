@@ -14,8 +14,12 @@ pi = 3.14159265
 may_14 = datetime(year=2018, month=5, day=14)
 
 # Statements that should be flagged:
-renamed_logging.debug(f'{local_var_1} {local_var_2}') # [logging-format-interpolation]
-renamed_logging.log(renamed_logging.DEBUG, f'msg: {local_var_2}') # [logging-format-interpolation]
-renamed_logging.log(renamed_logging.DEBUG, f'pi: {pi:.3f}') # [logging-format-interpolation]
-renamed_logging.info(f"{local_var_2.upper()}") # [logging-format-interpolation]
-renamed_logging.info(f"{may_14:'%b %d: %Y'}") # [logging-format-interpolation]
+# [logging-format-interpolation]
+renamed_logging.debug(f'{local_var_1} {local_var_2}')
+# [logging-format-interpolation]
+renamed_logging.log(renamed_logging.DEBUG, f'msg: {local_var_2}')
+# [logging-format-interpolation]
+renamed_logging.log(renamed_logging.DEBUG, f'pi: {pi:.3f}')
+# [logging-format-interpolation]
+renamed_logging.info(f"{local_var_2.upper()}")
+renamed_logging.info(f"{may_14:'%b %d: %Y'}")  # [logging-format-interpolation]

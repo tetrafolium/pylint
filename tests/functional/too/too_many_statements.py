@@ -2,7 +2,8 @@
 
 from __future__ import print_function
 
-def stupid_function(arg): # [too-many-statements]
+
+def stupid_function(arg):  # [too-many-statements]
     if arg == 1:
         print(1)
     elif arg == 2:
@@ -59,7 +60,8 @@ def stupid_function(arg): # [too-many-statements]
         print(1)
         print(1)
 
-def long_function_with_inline_def(fake): # [too-many-statements]
+
+def long_function_with_inline_def(fake):  # [too-many-statements]
     fake += 1
     fake += 1
     fake += 1
@@ -106,6 +108,7 @@ def long_function_with_inline_def(fake): # [too-many-statements]
     fake += 1
     fake += 1
     fake += 1
+
     def an_inline_function(var):
         return var + var
     fake = an_inline_function(fake)

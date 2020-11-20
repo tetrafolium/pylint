@@ -18,11 +18,11 @@ class ClassDocumented(object):
     """It has a docstring."""
 
 
-class ClassUndocumented(object): # [missing-class-docstring]
+class ClassUndocumented(object):  # [missing-class-docstring]
     pass
 
 
-def public_undocumented(): # [missing-function-docstring]
+def public_undocumented():  # [missing-function-docstring]
     pass
 
 

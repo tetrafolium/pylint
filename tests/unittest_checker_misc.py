@@ -83,7 +83,8 @@ class TestFixme(CheckerTestCase):
     def test_issue_2321_should_trigger(self):
         code = "# TODO this should not trigger a fixme"
         with self.assertAddsMessages(
-            Message(msg_id="fixme", line=1, args="TODO this should not trigger a fixme")
+            Message(msg_id="fixme", line=1,
+                    args="TODO this should not trigger a fixme")
         ):
             self.checker.process_tokens(_tokenize_str(code))
 

@@ -23,7 +23,8 @@ class MessageIdStore:
     def __repr__(self):
         result = "MessageIdStore: [\n"
         for msgid, symbol in self.__msgid_to_symbol.items():
-            result += "  - {msgid} ({symbol})\n".format(msgid=msgid, symbol=symbol)
+            result += "  - {msgid} ({symbol})\n".format(msgid=msgid,
+                                                        symbol=symbol)
         result += "]"
         return result
 
@@ -34,8 +35,10 @@ class MessageIdStore:
         return self.__symbol_to_msgid[symbol]
 
     def register_message_definition(self, message_definition):
-        self.check_msgid_and_symbol(message_definition.msgid, message_definition.symbol)
-        self.add_msgid_and_symbol(message_definition.msgid, message_definition.symbol)
+        self.check_msgid_and_symbol(
+            message_definition.msgid, message_definition.symbol)
+        self.add_msgid_and_symbol(
+            message_definition.msgid, message_definition.symbol)
         for old_msgid, old_symbol in message_definition.old_names:
             self.check_msgid_and_symbol(old_msgid, old_symbol)
             self.add_legacy_msgid_and_symbol(
@@ -82,7 +85,8 @@ class MessageIdStore:
         :raises InvalidMessageError:"""
         symbols = [symbol, other_symbol]
         symbols.sort()
-        error_message = "Message id '{msgid}' cannot have both ".format(msgid=msgid)
+        error_message = "Message id '{msgid}' cannot have both ".format(
+            msgid=msgid)
         error_message += "'{other_symbol}' and '{symbol}' as symbolic name.".format(
             other_symbol=symbols[0], symbol=symbols[1]
         )

@@ -57,7 +57,8 @@ else:
     variable1 = variable2 = "default"
 
 if 'word' in 'text':
-    variable = 'text'['word']  # already bogus, but to assert that this only works with dictionaries
+    # already bogus, but to assert that this only works with dictionaries
+    variable = 'text'['word']
 
 if 'word' in dictionary:
     variable = 'dictionary'['word']

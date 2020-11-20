@@ -3,6 +3,7 @@
 signature overriding
 """
 
+
 def fetch_config(mainattr=None):
     """return a class method"""
 
@@ -14,8 +15,10 @@ def fetch_config(mainattr=None):
     fetch_order = classmethod(fetch_order)
     return fetch_order
 
+
 class Aaa(object):
     """hop"""
     fetch_order = fetch_config('A')
+
 
 __revision__ = None

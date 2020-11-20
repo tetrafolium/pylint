@@ -13,5 +13,5 @@ wrong_dict = {  # [duplicate-key]
 
 }
 
-{1: b'a', 1: u'a'} # [duplicate-key]
-{1: 1, 1.0: 2} # [duplicate-key]
+{1: b'a', 1: u'a'}  # [duplicate-key]
+{1: 1, 1.0: 2}  # [duplicate-key]

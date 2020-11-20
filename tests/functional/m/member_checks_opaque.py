@@ -9,4 +9,4 @@ def test(argument):
     return Unknown
 
 
-test(some_value).test() # [no-member]
+test(some_value).test()  # [no-member]

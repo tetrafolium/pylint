@@ -4,6 +4,7 @@
 from __future__ import print_function
 PATH = OS = collections = deque = None
 
+
 def function(matches):
     """"yo"""
     aaaa = 1
@@ -11,6 +12,7 @@ def function(matches):
     for match in matches:
         index += 1
         print(match)
+
 
 def visit_if(self, node):
     """increments the branches counter"""
@@ -20,6 +22,7 @@ def visit_if(self, node):
         branches += 1
     self.inc_branch(branches)
     self.stmts += branches
+
 
 def test_global():
     """ Test various assignments of global

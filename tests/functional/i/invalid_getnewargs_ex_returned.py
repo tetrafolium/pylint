@@ -75,7 +75,7 @@ class SixthBadGetNewArgsEx(object):
 class AmbigousGetNewArgsEx(object):
     """ Uninferable return value """
 
-    __getnewargs_ex__ = lambda self: Missing
+    def __getnewargs_ex__(self): return Missing
 
 
 class AnotherAmbiguousGetNewArgsEx(object):

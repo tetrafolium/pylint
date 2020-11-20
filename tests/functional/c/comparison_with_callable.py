@@ -2,8 +2,10 @@
 def foo():
     return None
 
+
 def goo():
     return None
+
 
 if foo == 786:  # [comparison-with-callable]
     pass
@@ -33,22 +35,24 @@ class FakeClass(object):
     def fake_property(self, prop):
         self._fake_prop = prop
 
+
 obj1 = FakeClass()
 obj2 = FakeClass()
 
 if obj1.fake_method == obj2.fake_method:
     pass
 
-if obj1.fake_property != obj2.fake_property:    # property although is function but is called without parenthesis
+# property although is function but is called without parenthesis
+if obj1.fake_property != obj2.fake_property:
     pass
 
 if obj1.fake_method != foo:
     pass
 
-if obj1.fake_method != 786: # [comparison-with-callable]
+if obj1.fake_method != 786:  # [comparison-with-callable]
     pass
 
-if obj1.fake_method != obj2.fake_property: # [comparison-with-callable]
+if obj1.fake_method != obj2.fake_property:  # [comparison-with-callable]
     pass
 
 if 666 == 786:

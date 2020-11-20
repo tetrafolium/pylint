@@ -150,7 +150,8 @@ class LoggingChecker(checkers.BaseChecker):
         if self._format_style == "old":
             format_style_help = " and pass the % parameters as arguments"
 
-        self._format_style_args = (format_styles[self._format_style], format_style_help)
+        self._format_style_args = (
+            format_styles[self._format_style], format_style_help)
 
         self._logging_modules = set(logging_mods)
         self._from_imports = {}
@@ -285,7 +286,7 @@ class LoggingChecker(checkers.BaseChecker):
           node (astroid.node_classes.NodeNG): AST node to be checked.
           format_arg (int): Index of the format string in the node arguments.
         """
-        num_args = _count_supplied_tokens(node.args[format_arg + 1 :])
+        num_args = _count_supplied_tokens(node.args[format_arg + 1:])
         if not num_args:
             # If no args were supplied the string is not interpolated and can contain
             # formatting characters - it's used verbatim. Don't check any further.

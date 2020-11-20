@@ -99,7 +99,8 @@ class TestSpellingChecker(CheckerTestCase):
         ):
             self.checker.visit_functiondef(stmt)
 
-        stmt = astroid.extract_node('class Abc(object):\n   """bad coment"""\n   pass')
+        stmt = astroid.extract_node(
+            'class Abc(object):\n   """bad coment"""\n   pass')
         with self.assertAddsMessages(
             Message(
                 "wrong-spelling-in-docstring",
@@ -120,7 +121,8 @@ class TestSpellingChecker(CheckerTestCase):
     def test_invalid_docstring_characters(self):
         stmt = astroid.extract_node('def fff():\n   """test\\x00"""\n   pass')
         with self.assertAddsMessages(
-            Message("invalid-characters-in-docstring", line=2, args=("test\x00",))
+            Message("invalid-characters-in-docstring",
+                    line=2, args=("test\x00",))
         ):
             self.checker.visit_functiondef(stmt)
 
@@ -137,7 +139,8 @@ class TestSpellingChecker(CheckerTestCase):
         assert self.linter.release_messages() == []
         self.checker.process_tokens(_tokenize_str("# coding=utf-8"))
         assert self.linter.release_messages() == []
-        self.checker.process_tokens(_tokenize_str("# vim: set fileencoding=utf-8 :"))
+        self.checker.process_tokens(_tokenize_str(
+            "# vim: set fileencoding=utf-8 :"))
         assert self.linter.release_messages() == []
         # Now with a shebang first
         self.checker.process_tokens(
@@ -149,7 +152,8 @@ class TestSpellingChecker(CheckerTestCase):
         )
         assert self.linter.release_messages() == []
         self.checker.process_tokens(
-            _tokenize_str("#!/usr/bin/env python\n# vim: set fileencoding=utf-8 :")
+            _tokenize_str(
+                "#!/usr/bin/env python\n# vim: set fileencoding=utf-8 :")
         )
         assert self.linter.release_messages() == []
 
@@ -157,7 +161,8 @@ class TestSpellingChecker(CheckerTestCase):
     @set_config(spelling_dict=spell_dict)
     def test_skip_top_level_pylint_enable_disable_comments(self):
         self.checker.process_tokens(
-            _tokenize_str("# Line 1\n Line 2\n# pylint: disable=ungrouped-imports")
+            _tokenize_str(
+                "# Line 1\n Line 2\n# pylint: disable=ungrouped-imports")
         )
         assert self.linter.release_messages() == []
 
@@ -234,7 +239,8 @@ class TestSpellingChecker(CheckerTestCase):
             "affine3D",
         ):
             stmt = astroid.extract_node(
-                'class TestClass(object):\n   """{} comment"""\n   pass'.format(ccn)
+                'class TestClass(object):\n   """{} comment"""\n   pass'.format(
+                    ccn)
             )
             self.checker.visit_classdef(stmt)
             assert self.linter.release_messages() == []
@@ -257,7 +263,8 @@ class TestSpellingChecker(CheckerTestCase):
     @skip_on_missing_package_or_dict
     @set_config(spelling_dict=spell_dict)
     def test_skip_urls(self):
-        self.checker.process_tokens(_tokenize_str("# https://github.com/rfk/pyenchant"))
+        self.checker.process_tokens(_tokenize_str(
+            "# https://github.com/rfk/pyenchant"))
         assert self.linter.release_messages() == []
 
     @skip_on_missing_package_or_dict

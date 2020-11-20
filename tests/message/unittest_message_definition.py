@@ -28,7 +28,8 @@ def test_create_invalid_message_type(msgid, expected):
     with pytest.raises(InvalidMessageError) as invalid_message_error:
         MessageDefinition.check_msgid(msgid)
     with pytest.raises(InvalidMessageError) as other_invalid_message_error:
-        MessageDefinition(checker_mock, msgid, "msg", "descr", "symbol", "scope")
+        MessageDefinition(checker_mock, msgid, "msg",
+                          "descr", "symbol", "scope")
     assert str(invalid_message_error.value) == expected
     assert str(other_invalid_message_error.value) == expected
 
@@ -51,7 +52,8 @@ class TestMessagesDefinition(object):
         fail_msg = "With minversion='{}' and maxversion='{}',".format(
             msg.minversion, msg.maxversion
         )
-        fail_msg += " and the python interpreter being {} ".format(sys.version_info)
+        fail_msg += " and the python interpreter being {} ".format(
+            sys.version_info)
         fail_msg += "the message should{}be emitable"
         if expected:
             assert msg.may_be_emitted(), fail_msg.format(" ")
