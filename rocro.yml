@@ -17,6 +17,7 @@ inspecode:
       - E501    # 1844 issues
       - E261    #  848 issues
       - E302    #  756 issues
+      - W503    #  371 issues
       - F401    #  248 issues
       - F841    #  171 issues
       - E231    #  164 issues
