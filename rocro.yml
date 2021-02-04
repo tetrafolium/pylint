@@ -9,77 +9,72 @@ inspecode:
 
     autopep8:
       auto-fix: true
-      thresholds: { num-issues: 421 }
+      thresholds: { num-issues: 439 }
 
     cpd:
+      options: [ --skip-lexical-errors ]
       thresholds: { num-issues: 5 }
 
     flake8:
     - options:
         --ignore:
-        - E501    # 1844 issues
-        - E261    #  848 issues
-        - E302    #  756 issues
-        - W503    #  371 issues
-        - F401    #  248 issues
-        - F841    #  171 issues
-        - E231    #  164 issues
-        - E305    #  148 issues
-        - F821    #  136 issues
-        - F811    #  102 issues
-      thresholds: { num-issues: 866 }
+        - E501
+        - E261
+        - E302
+        - W503
+        - F401
+        - F841
+        - E231
+        - E305
+        - F821
+        - F811
+      thresholds: { num-issues: 662 }
 
     # fortify:
 
     fossology:
-      thresholds: { num-issues: 8 }
+      thresholds: { num-issues: 7 }
 
     grep:
-      thresholds: { num-issues: 10 }
+      thresholds: { num-issues: 13 }
 
     jscpd:
-      thresholds: { num-issues: 17 }
+      thresholds: { num-issues: 25 }
 
     misspell:
       auto-fix: true
-      thresholds: { num-issues: 24 }
+      thresholds: { num-issues: 27 }
 
     nose2:
-      thresholds: { num-issues: 20 }
+      thresholds: { num-issues: 21 }
 
     prospector:
-      thresholds: { num-issues: 94 }    ## (codelift#2095)
+      thresholds: { num-issues: 116 }
 
     pycodestyle:
       options:
         --ignore:
-        - E501    # 1861 issues
-        - E261    #  848 issues
-        - E302    #  797 issues
-        - W503    #  371 issues
-        - E231    #  164 issues
-        - E305    #  148 issues
-      thresholds: { num-issues: 616 }
+        - E501
+        - E261
+        - E302
+        - W503
+        - E231
+        - E305
+      thresholds: { num-issues: 510 }
 
     pyflakes:
-      thresholds: { num-issues: 863 }
+      thresholds: { num-issues: 790 }
 
     pylint:
-    - ignore:
-      - tests/functional/
-      thresholds: { num-issues: 648 }
-    - input:
-      - tests/functional/[a-i]*/
-      thresholds: { num-issues: 581 }
-    - input:
-      - tests/functional/[j-r]*/
-      thresholds: { num-issues: 334 }
-    - input:
-      - tests/functional/[s-z]*/
-      ignore:
-      - tests/functional/u/unknown_encoding_*.py
-      thresholds: { num-issues: 547 }
-        # pylint outputs 547 issues / task reports 547 issues
+    - ignore: 'tests/functional/'
+      thresholds: { num-issues: 371 }
+    - input:  'tests/functional/[a-i]*/'
+      thresholds: { num-issues: 621 }
+    - input:  'tests/functional/[j-r]*/'
+      thresholds: { num-issues: 360 }
+    - input:  'tests/functional/[s-z]*/'
+      ignore: 'tests/functional/u/unknown_encoding_*.py'
+      thresholds: { num-issues: 571 }
     #- input:
     #  - tests/functional/u/unknown_encoding_*.py
     #  thresholds: { num-issues: 999 }
@@ -87,7 +82,7 @@ inspecode:
     #    # SyntaxError: unknown encoding for '{pathname}.py': IBO-8859-1
 
     pytest:
-      thresholds: { num-issues: 3 }
+      thresholds: { num-issues: 5 }   # pytest finished with errors.
 
     # understand:
 
@@ -95,7 +90,7 @@ inspecode:
     - ignore:
       - tests/functional/
       options: [ --single-occurrence, --all-likelihoods ]
-      thresholds: { num-issues: 780 }
+      thresholds: { num-issues: 837 }
     - input:
       - tests/functional/
       ignore:
@@ -104,8 +99,8 @@ inspecode:
       - tests/functional/l/long_*utf8*.py
       - tests/functional/u/unknown_encoding_*.py
       options: [ --single-occurrence, --all-likelihoods ]
-      thresholds: { num-issues: 437 }
+      thresholds: { num-issues: 472 }
 
     yapf:
       auto-fix: true
-      thresholds: { num-issues: 491 }
+      thresholds: { num-issues: 525 }
