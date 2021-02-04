@@ -34,13 +34,13 @@ Mailing lists
 -------------
 
 You can subscribe to this mailing list at
-http://mail.python.org/mailman/listinfo/code-quality
+https://mail.python.org/mailman/listinfo/code-quality
 
 Archives are available at
-http://mail.python.org/pipermail/code-quality/
+https://mail.python.org/pipermail/code-quality/
 
 Archives before April 2013 are available at
-http://lists.logilab.org/pipermail/python-projects/
+https://lists.logilab.org/pipermail/python-projects/
 
 
 .. _repository:
@@ -110,7 +110,10 @@ your patch gets accepted.
   (`What's New` section). For the release document we usually write some more details,
   and it is also a good place to offer examples on how the new change is supposed to work.
 
-- Add yourself to the `CONTRIBUTORS` file, if you are not already there.
+- Add a short entry in :file:`doc/whatsnew/VERSION.rst`.
+
+- Add yourself to the `CONTRIBUTORS` file, flag youself appropriately
+  (if in doubt, you're a ``contributor``).
 
 - Write a comprehensive commit message
 
@@ -156,14 +159,20 @@ If you need special control over Pylint's flag, you can also create a .rc file, 
 can have sections of Pylint's configuration.
 
 During development, it's sometimes helpful to run all functional tests in your
-current environment in order to have faster feedback. Run with::
+current environment in order to have faster feedback. Run from Pylint root directory with::
 
-    python pylint/test/test_functional.py
+    python tests/test_functional.py
+
+You can use all the options you would use for pytest, for example `-k "test_functional[len_checks]"`.
+It is also possible to update the expected output instead of using it for comparison, by appending
+`--update-functional-output` to the command line::
+
+    python tests/test_functional.py --update-functional-output -k "test_functional[len_checks]"
 
 .. _`Closing issues via commit messages`: https://help.github.com/articles/closing-issues-via-commit-messages/
 .. _`About pull requests`: https://help.github.com/articles/using-pull-requests/
-.. _tox: http://tox.readthedocs.io/en/latest/
-.. _pytest: http://pytest.readthedocs.io/en/latest/
+.. _tox: https://tox.readthedocs.io/en/latest/
+.. _pytest: https://pytest.readthedocs.io/en/latest/
 .. _black: https://github.com/ambv/black
 .. _isort: https://github.com/timothycrosley/isort
 .. _astroid: https://github.com/pycqa/astroid

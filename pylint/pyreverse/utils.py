@@ -1,10 +1,13 @@
 # Copyright (c) 2006, 2008, 2010, 2013-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2014 Brett Cannon <brett@python.org>
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
-# Copyright (c) 2015-2017 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2015-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
 # Copyright (c) 2017 hippo91 <guillaume.peillex@gmail.com>
 # Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2020 bernie gray <bfgray3@users.noreply.github.com>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -32,14 +35,13 @@ def get_default_options():
         rcfile = os.path.join(home, RCFILE)
         try:
             options = open(rcfile).read().split()
-        except IOError:
+        except OSError:
             pass  # ignore if no config file found
     return options
 
 
 def insert_default_options():
-    """insert default options to sys.argv
-    """
+    """insert default options to sys.argv"""
     options = get_default_options()
     options.reverse()
     for arg in options:
@@ -47,15 +49,13 @@ def insert_default_options():
 
 
 # astroid utilities ###########################################################
-
-SPECIAL = re.compile("^__[A-Za-z0-9]+[A-Za-z0-9_]*__$")
-PRIVATE = re.compile("^__[_A-Za-z0-9]*[A-Za-z0-9]+_?$")
-PROTECTED = re.compile("^_[_A-Za-z0-9]*$")
+SPECIAL = re.compile(r"^__([^\W_]_*)+__$")
+PRIVATE = re.compile(r"^__(_*[^\W_])+_?$")
+PROTECTED = re.compile(r"^_\w*$")
 
 
 def get_visibility(name):
-    """return the visibility from a name: public, protected, private or special
-    """
+    """return the visibility from a name: public, protected, private or special"""
     if SPECIAL.match(name):
         visibility = "special"
     elif PRIVATE.match(name):
@@ -68,8 +68,8 @@ def get_visibility(name):
     return visibility
 
 
-ABSTRACT = re.compile("^.*Abstract.*")
-FINAL = re.compile("^[A-Z_]*$")
+ABSTRACT = re.compile(r"^.*Abstract.*")
+FINAL = re.compile(r"^[^\W\da-z]*$")
 
 
 def is_abstract(node):
@@ -117,8 +117,7 @@ VIS_MOD = {
 
 
 class FilterMixIn:
-    """filter nodes according to a mode and nodes' visibility
-    """
+    """filter nodes according to a mode and nodes' visibility"""
 
     def __init__(self, mode):
         "init filter modes"
@@ -131,8 +130,7 @@ class FilterMixIn:
         self.__mode = __mode
 
     def show_attr(self, node):
-        """return true if the node should be treated
-        """
+        """return true if the node should be treated"""
         visibility = get_visibility(getattr(node, "name", node))
         return not self.__mode & VIS_MOD[visibility]
 

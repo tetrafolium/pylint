@@ -1,43 +1,56 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2006-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
-# Copyright (c) 2014-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2014-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Vlad Temian <vladtemian@gmail.com>
 # Copyright (c) 2014 Google, Inc.
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
 # Copyright (c) 2016 Derek Gustafson <degustaf@gmail.com>
 # Copyright (c) 2016 Moises Lopez <moylop260@vauxoo.com>
+# Copyright (c) 2017 Pierre Sassoulas <pierre.sassoulas@cea.fr>
+# Copyright (c) 2017, 2019 Thomas Hisch <t.hisch@gmail.com>
 # Copyright (c) 2017 hippo91 <guillaume.peillex@gmail.com>
 # Copyright (c) 2017 Daniel Miller <millerdev@gmail.com>
 # Copyright (c) 2017 Bryce Guinta <bryce.paul.guinta@gmail.com>
-# Copyright (c) 2017 Thomas Hisch <t.hisch@gmail.com>
 # Copyright (c) 2017 Ville Skyttä <ville.skytta@iki.fi>
 # Copyright (c) 2018 Sushobhit <31987769+sushobhit27@users.noreply.github.com>
 # Copyright (c) 2018 Jason Owen <jason.a.owen@gmail.com>
 # Copyright (c) 2018 Jace Browning <jacebrowning@gmail.com>
 # Copyright (c) 2018 Reverb C <reverbc@users.noreply.github.com>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Hugues <hugues.bruant@affirm.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2020 Pieter Engelbrecht <pengelbrecht@rems2.com>
+# Copyright (c) 2020 Clément Pit-Claudel <cpitclaudel@users.noreply.github.com>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
+# pylint: disable=too-many-public-methods
+
 import configparser
 import contextlib
 import json
+import os
 import platform
 import re
 import subprocess
-import tempfile
+import sys
 import textwrap
+import warnings
 from io import StringIO
 from os.path import abspath, dirname, join
 from unittest import mock
 
 import pytest
 
-from pylint.constants import MAIN_CHECKER_NAME
+from pylint.constants import MAIN_CHECKER_NAME, MSG_TYPES_STATUS
 from pylint.lint import Run
 from pylint.reporters import JSONReporter
-from pylint.reporters.text import *
+from pylint.reporters.text import BaseReporter, ColorizedTextReporter, TextReporter
+from pylint.utils import utils
 
 HERE = abspath(dirname(__file__))
 CLEAN_PATH = re.escape(dirname(dirname(__file__)) + "/")
@@ -68,6 +81,10 @@ def _configure_lc_ctype(lc_ctype):
 
 class MultiReporter(BaseReporter):
     def __init__(self, reporters):
+        # pylint: disable=super-init-not-called
+        # We don't call it because there is an attribute "linter" that is set inside the base class
+        # and we have another setter here using yet undefined attribute.
+        # I don't think fixing the init order in a test class used once is worth it.
         self._reporters = reporters
         self.path_strip_prefix = os.getcwd() + os.sep
 
@@ -79,7 +96,7 @@ class MultiReporter(BaseReporter):
         for rep in self._reporters:
             rep.handle_message(msg)
 
-    def display_reports(self, layout):
+    def _display(self, layout):
         pass
 
     @property
@@ -97,7 +114,7 @@ class MultiReporter(BaseReporter):
             rep.linter = value
 
 
-class TestRunTC(object):
+class TestRunTC:
     def _runtest(self, args, reporter=None, out=None, code=None):
         if out is None:
             out = StringIO()
@@ -113,7 +130,8 @@ class TestRunTC(object):
             msg = "%s. Below pylint output: \n%s" % (msg, output)
         assert pylint_code == code, msg
 
-    def _run_pylint(self, args, out, reporter=None):
+    @staticmethod
+    def _run_pylint(args, out, reporter=None):
         args = args + ["--persistent=no"]
         with _patch_streams(out):
             with pytest.raises(SystemExit) as cm:
@@ -199,11 +217,8 @@ class TestRunTC(object):
         output = out.getvalue()
         assert "profile" not in output
 
-    def test_inexisting_rcfile(self):
-        out = StringIO()
-        with pytest.raises(IOError) as excinfo:
-            self._run_pylint(["--rcfile=/tmp/norcfile.txt"], out=out)
-        assert "The config file /tmp/norcfile.txt doesn't exist!" == str(excinfo.value)
+    def test_nonexistent_config_file(self):
+        self._runtest(["--rcfile=/tmp/this_file_does_not_exist"], code=32)
 
     def test_help_message_option(self):
         self._runtest(["--help-msg", "W0101"], code=0)
@@ -215,8 +230,7 @@ class TestRunTC(object):
         self._runtest([], code=32)
 
     def test_no_out_encoding(self):
-        """test redirection of stdout with non ascii caracters
-        """
+        """test redirection of stdout with non ascii caracters"""
         # This test reproduces bug #48066 ; it happens when stdout is redirected
         # through '>' : the sys.stdout.encoding becomes then None, and if the
         # output contains non ascii, pylint will crash
@@ -229,13 +243,19 @@ class TestRunTC(object):
         )
 
     def test_parallel_execution(self):
+        out = StringIO()
         self._runtest(
             [
                 "-j 2",
                 join(HERE, "functional", "a", "arguments.py"),
-                join(HERE, "functional", "a", "arguments.py"),
             ],
-            code=2,
+            out=out,
+            # We expect similarities to fail and an error
+            code=MSG_TYPES_STATUS["E"],
+        )
+        assert (
+            "Unexpected keyword argument 'fourth' in function call"
+            in out.getvalue().strip()
         )
 
     def test_parallel_execution_missing_arguments(self):
@@ -348,6 +368,7 @@ class TestRunTC(object):
             assert key in message
             assert message[key] == value
         assert "invalid syntax" in message["message"].lower()
+        assert "<unknown>" in message["message"].lower()
 
     def test_json_report_when_file_is_missing(self):
         out = StringIO()
@@ -525,7 +546,7 @@ class TestRunTC(object):
         ).format(path=expected_path, module=module)
 
         with mock.patch(
-            "pylint.lint._read_stdin", return_value="import os\n"
+            "pylint.lint.pylinter._read_stdin", return_value="import os\n"
         ) as mock_stdin:
             self._test_output(
                 ["--from-stdin", input_path, "--disable=all", "--enable=unused-import"],
@@ -579,7 +600,7 @@ class TestRunTC(object):
 
             # this code needs to work w/ and w/o a file named a/b.py on the
             # harddisk.
-            with mock.patch("pylint.lint._read_stdin", return_value=b_code):
+            with mock.patch("pylint.lint.pylinter._read_stdin", return_value=b_code):
                 self._test_output(
                     [
                         "--from-stdin",
@@ -596,7 +617,9 @@ class TestRunTC(object):
             "a.py:1:4: E0001: invalid syntax (<unknown>, line 1) (syntax-error)"
         )
 
-        with mock.patch("pylint.lint._read_stdin", return_value="for\n") as mock_stdin:
+        with mock.patch(
+            "pylint.lint.pylinter._read_stdin", return_value="for\n"
+        ) as mock_stdin:
             self._test_output(
                 ["--from-stdin", "a.py", "--disable=all", "--enable=syntax-error"],
                 expected_output=expected_output,
@@ -639,7 +662,25 @@ class TestRunTC(object):
         self._runtest(
             [
                 "--fail-under",
+                "5.5",
+                "--enable=all",
+                join(HERE, "regrtest_data", "fail_under_plus6.py"),
+            ],
+            code=0,
+        )
+        self._runtest(
+            [
+                "--fail-under",
                 "7",
+                "--enable=all",
+                join(HERE, "regrtest_data", "fail_under_plus6.py"),
+            ],
+            code=16,
+        )
+        self._runtest(
+            [
+                "--fail-under",
+                "6.7",
                 "--enable=all",
                 join(HERE, "regrtest_data", "fail_under_plus6.py"),
             ],
@@ -664,3 +705,118 @@ class TestRunTC(object):
             ],
             code=0,
         )
+
+    @staticmethod
+    def test_do_not_import_files_from_local_directory(tmpdir):
+        p_astroid = tmpdir / "astroid.py"
+        p_astroid.write("'Docstring'\nimport completely_unknown\n")
+        p_hmac = tmpdir / "hmac.py"
+        p_hmac.write("'Docstring'\nimport completely_unknown\n")
+
+        with tmpdir.as_cwd():
+            subprocess.check_output(
+                [
+                    sys.executable,
+                    "-m",
+                    "pylint",
+                    "astroid.py",
+                    "--disable=import-error,unused-import",
+                ],
+                cwd=str(tmpdir),
+            )
+
+        # Linting this astroid file does not import it
+        with tmpdir.as_cwd():
+            subprocess.check_output(
+                [
+                    sys.executable,
+                    "-m",
+                    "pylint",
+                    "-j2",
+                    "astroid.py",
+                    "--disable=import-error,unused-import",
+                ],
+                cwd=str(tmpdir),
+            )
+
+        # Test with multiple jobs for hmac.py for which we have a
+        # CVE against: https://github.com/PyCQA/pylint/issues/959
+        with tmpdir.as_cwd():
+            subprocess.call(
+                [
+                    sys.executable,
+                    "-m",
+                    "pylint",
+                    "-j2",
+                    "hmac.py",
+                    "--disable=import-error,unused-import",
+                ],
+                cwd=str(tmpdir),
+            )
+
+    def test_allow_import_of_files_found_in_modules_during_parallel_check(self, tmpdir):
+        test_directory = tmpdir / "test_directory"
+        test_directory.mkdir()
+        spam_module = test_directory / "spam.py"
+        spam_module.write("'Empty'")
+
+        init_module = test_directory / "__init__.py"
+        init_module.write("'Empty'")
+
+        # For multiple jobs we could not find the `spam.py` file.
+        with tmpdir.as_cwd():
+            self._runtest(
+                [
+                    "-j2",
+                    "--disable=missing-docstring, missing-final-newline",
+                    "test_directory",
+                ],
+                code=0,
+            )
+
+        # A single job should be fine as well
+        with tmpdir.as_cwd():
+            self._runtest(
+                [
+                    "-j1",
+                    "--disable=missing-docstring, missing-final-newline",
+                    "test_directory",
+                ],
+                code=0,
+            )
+
+    def test_can_list_directories_without_dunder_init(self, tmpdir):
+        test_directory = tmpdir / "test_directory"
+        test_directory.mkdir()
+        spam_module = test_directory / "spam.py"
+        spam_module.write("'Empty'")
+
+        with tmpdir.as_cwd():
+            self._runtest(
+                [
+                    "--disable=missing-docstring, missing-final-newline",
+                    "test_directory",
+                ],
+                code=0,
+            )
+
+    def test_jobs_score(self):
+        path = join(HERE, "regrtest_data", "unused_variable.py")
+        expected = "Your code has been rated at 7.50/10"
+        self._test_output([path, "--jobs=2", "-ry"], expected_output=expected)
+
+    def test_duplicate_code_raw_strings(self):
+        path = join(HERE, "regrtest_data", "duplicate_data_raw_strings")
+        expected_output = "Similar lines in 2 files"
+        self._test_output(
+            [path, "--disable=all", "--enable=duplicate-code"],
+            expected_output=expected_output,
+        )
+
+    def test_regression_parallel_mode_without_filepath(self):
+        # Test that parallel mode properly passes filepath
+        # https://github.com/PyCQA/pylint/issues/3564
+        path = join(
+            HERE, "regrtest_data", "regression_missing_init_3564", "subdirectory/"
+        )
+        self._test_output([path, "-j2"], expected_output="No such file or directory")

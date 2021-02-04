@@ -281,3 +281,16 @@ def not_using_loop_variable_accordingly(iterator):
     for iteree in iteree: # [undefined-variable]
         yield iteree
 # pylint: enable=unused-argument
+
+
+class DunderClass:
+    def method(self):
+        # This name is not defined in the AST but it's present at runtime
+        return __class__
+
+
+def undefined_annotation(a:x): # [undefined-variable]
+    if x == 2: # [used-before-assignment]
+        for x in [1, 2]:
+            pass
+    return a

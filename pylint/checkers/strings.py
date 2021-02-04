@@ -3,7 +3,7 @@
 # Copyright (c) 2010-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2010 Daniel Harding <dharding@gmail.com>
 # Copyright (c) 2012-2014 Google, Inc.
-# Copyright (c) 2013-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2013-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Brett Cannon <brett@python.org>
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
 # Copyright (c) 2015 Rene Zhang <rz99@cornell.edu>
@@ -12,8 +12,18 @@
 # Copyright (c) 2016 Peter Dawyndt <Peter.Dawyndt@UGent.be>
 # Copyright (c) 2017 Łukasz Rogalski <rogalski.91@gmail.com>
 # Copyright (c) 2017 Ville Skyttä <ville.skytta@iki.fi>
+# Copyright (c) 2018, 2020 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2018-2019 Lucas Cimon <lucas.cimon@gmail.com>
+# Copyright (c) 2018 Alan Chan <achan961117@gmail.com>
+# Copyright (c) 2018 Yury Gribov <tetra2005@gmail.com>
+# Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
 # Copyright (c) 2018 Nick Drozd <nicholasdrozd@gmail.com>
-# Copyright (c) 2018 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2019 Wes Turner <westurner@google.com>
+# Copyright (c) 2019 Djailla <bastien.vallet@gmail.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2020 谭九鼎 <109224573@qq.com>
+# Copyright (c) 2020 Anthony <tanant@users.noreply.github.com>
 
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -210,7 +220,7 @@ BUILTINS_INT = builtins.__name__ + ".int"
 
 
 def get_access_path(key, parts):
-    """ Given a list of format specifiers, returns
+    """Given a list of format specifiers, returns
     the final access path (e.g. a.b.c[0][1]).
     """
     path = []
@@ -378,10 +388,14 @@ class StringFormatChecker(BaseChecker):
                     if not arg:
                         continue
                     arg_type = utils.safe_infer(arg)
-                    if arg_type not in (
-                        None,
-                        astroid.Uninferable,
-                    ) and not arg_matches_format_type(arg_type, format_type):
+                    if (
+                        arg_type
+                        not in (
+                            None,
+                            astroid.Uninferable,
+                        )
+                        and not arg_matches_format_type(arg_type, format_type)
+                    ):
                         self.add_message(
                             "bad-string-format-type",
                             node=node,
@@ -431,7 +445,7 @@ class StringFormatChecker(BaseChecker):
 
     def _check_new_format(self, node, func):
         """Check the new string formatting. """
-        # Skip ormat nodes which don't have an explicit string on the
+        # Skip format nodes which don't have an explicit string on the
         # left side of the format operation.
         # We do this because our inference engine can't properly handle
         # redefinitions of the original string.
@@ -676,7 +690,7 @@ class StringConstantChecker(BaseTokenChecker):
     UNICODE_ESCAPE_CHARACTERS = "uUN"
 
     def __init__(self, *args, **kwargs):
-        super(StringConstantChecker, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.string_tokens = {}  # token position -> (token value, next token)
 
     def process_module(self, module):
@@ -691,7 +705,7 @@ class StringConstantChecker(BaseTokenChecker):
             elif tok_type == tokenize.STRING:
                 # 'token' is the whole un-parsed token; we can look at the start
                 # of it to see whether it's a raw or unicode string etc.
-                self.process_string_token(token, start[0])
+                self.process_string_token(token, start[0], start[1])
                 # We figure the next token, ignoring comments & newlines:
                 j = i + 1
                 while j < len(tokens) and tokens[j].type in (
@@ -785,7 +799,7 @@ class StringConstantChecker(BaseTokenChecker):
                         "implicit-str-concat", line=elt.lineno, args=(iterable_type,)
                     )
 
-    def process_string_token(self, token, start_row):
+    def process_string_token(self, token, start_row, start_col):
         quote_char = None
         index = None
         for index, char in enumerate(token):
@@ -797,21 +811,30 @@ class StringConstantChecker(BaseTokenChecker):
 
         prefix = token[:index].lower()  # markers like u, b, r.
         after_prefix = token[index:]
-        if after_prefix[:3] == after_prefix[-3:] == 3 * quote_char:
-            string_body = after_prefix[3:-3]
-        else:
-            string_body = after_prefix[1:-1]  # Chop off quotes
+        # Chop off quotes
+        quote_length = (
+            3 if after_prefix[:3] == after_prefix[-3:] == 3 * quote_char else 1
+        )
+        string_body = after_prefix[quote_length:-quote_length]
         # No special checks on raw strings at the moment.
         if "r" not in prefix:
-            self.process_non_raw_string_token(prefix, string_body, start_row)
+            self.process_non_raw_string_token(
+                prefix,
+                string_body,
+                start_row,
+                start_col + len(prefix) + quote_length,
+            )
 
-    def process_non_raw_string_token(self, prefix, string_body, start_row):
+    def process_non_raw_string_token(
+        self, prefix, string_body, start_row, string_start_col
+    ):
         """check for bad escapes in a non-raw string.
 
         prefix: lowercase string of eg 'ur' string prefix markers.
         string_body: the un-parsed body of the string, not including the quote
         marks.
         start_row: integer line number in the source.
+        string_start_col: integer col number of the string start in the source.
         """
         # Walk through the string; if we see a backslash then escape the next
         # character, and skip over it.  If we see a non-escaped character,
@@ -819,7 +842,7 @@ class StringConstantChecker(BaseTokenChecker):
         #
         # Accept a backslash when it escapes a backslash, or a quote, or
         # end-of-line, or one of the letters that introduce a special escape
-        # sequence <http://docs.python.org/reference/lexical_analysis.html>
+        # sequence <https://docs.python.org/reference/lexical_analysis.html>
         #
         index = 0
         while True:
@@ -830,6 +853,16 @@ class StringConstantChecker(BaseTokenChecker):
             # of the string would be a SyntaxError.
             next_char = string_body[index + 1]
             match = string_body[index : index + 2]
+            # The column offset will vary depending on whether the string token
+            # is broken across lines. Calculate relative to the nearest line
+            # break or relative to the start of the token's line.
+            last_newline = string_body.rfind("\n", 0, index)
+            if last_newline == -1:
+                line = start_row
+                col_offset = index + string_start_col
+            else:
+                line = start_row + string_body.count("\n", 0, index)
+                col_offset = index - last_newline - 1
             if next_char in self.UNICODE_ESCAPE_CHARACTERS:
                 if "u" in prefix:
                     pass
@@ -838,16 +871,16 @@ class StringConstantChecker(BaseTokenChecker):
                 else:
                     self.add_message(
                         "anomalous-unicode-escape-in-string",
-                        line=start_row,
+                        line=line,
                         args=(match,),
-                        col_offset=index,
+                        col_offset=col_offset,
                     )
             elif next_char not in self.ESCAPE_CHARACTERS:
                 self.add_message(
                     "anomalous-backslash-in-string",
-                    line=start_row,
+                    line=line,
                     args=(match,),
-                    col_offset=index,
+                    col_offset=col_offset,
                 )
             # Whether it was a valid escape or not, backslash followed by
             # another character can always be consumed whole: the second

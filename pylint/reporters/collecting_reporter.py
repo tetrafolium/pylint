@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
@@ -17,5 +15,8 @@ class CollectingReporter(BaseReporter):
 
     def handle_message(self, msg):
         self.messages.append(msg)
+
+    def reset(self):
+        self.messages = []
 
     _display = None

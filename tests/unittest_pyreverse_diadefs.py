@@ -1,27 +1,34 @@
 # Copyright (c) 2008-2010, 2013 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2014 Google, Inc.
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
-# Copyright (c) 2015-2017 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2015-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
 # Copyright (c) 2016 Derek Gustafson <degustaf@gmail.com>
 # Copyright (c) 2018 Sushobhit <31987769+sushobhit27@users.noreply.github.com>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2020 Damien Baty <damien.baty@polyconseil.fr>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""
-unit test for the extensions.diadefslib modules
-"""
-
+"""Unit test for the extensions.diadefslib modules"""
+# pylint: disable=redefined-outer-name
 import sys
 from pathlib import Path
 
 import astroid
 import pytest
-
-from pylint.pyreverse.diadefslib import *
-from pylint.pyreverse.inspector import Linker
 from unittest_pyreverse_writer import Config, get_project
+
+from pylint.pyreverse.diadefslib import (
+    ClassDiadefGenerator,
+    DefaultDiadefGenerator,
+    DiaDefGenerator,
+    DiadefsHandler,
+)
+from pylint.pyreverse.inspector import Linker
 
 
 def _process_classes(classes):
@@ -55,17 +62,17 @@ def test_option_values(HANDLER, PROJECT):
     cl_config = Config()
     cl_config.classes = ["Specialization"]
     cl_h = DiaDefGenerator(Linker(PROJECT), DiadefsHandler(cl_config))
-    assert (0, 0) == df_h._get_levels()
-    assert False == df_h.module_names
-    assert (-1, -1) == cl_h._get_levels()
-    assert True == cl_h.module_names
+    assert df_h._get_levels() == (0, 0)
+    assert not df_h.module_names
+    assert cl_h._get_levels() == (-1, -1)
+    assert cl_h.module_names
     for hndl in [df_h, cl_h]:
         hndl.config.all_ancestors = True
         hndl.config.all_associated = True
         hndl.config.module_names = True
         hndl._set_default_options()
-        assert (-1, -1) == hndl._get_levels()
-        assert True == hndl.module_names
+        assert hndl._get_levels() == (-1, -1)
+        assert hndl.module_names
     handler = DiadefsHandler(Config())
     df_h = DiaDefGenerator(Linker(PROJECT), handler)
     cl_config = Config()
@@ -76,41 +83,16 @@ def test_option_values(HANDLER, PROJECT):
         hndl.config.show_associated = 1
         hndl.config.module_names = False
         hndl._set_default_options()
-        assert (2, 1) == hndl._get_levels()
-        assert False == hndl.module_names
-
-    # def test_default_values():
-    """test efault values for package or class diagrams"""
-    # TODO : should test difference between default values for package
-    # or class diagrams
+        assert hndl._get_levels() == (2, 1)
+        assert not hndl.module_names
 
 
-class TestDefaultDiadefGenerator(object):
-    def test_known_values1(self, HANDLER, PROJECT):
-        dd = DefaultDiadefGenerator(Linker(PROJECT), HANDLER).visit(PROJECT)
-        assert len(dd) == 2
-        keys = [d.TYPE for d in dd]
-        assert keys == ["package", "class"]
-        pd = dd[0]
-        assert pd.title == "packages No Name"
-        modules = sorted(
-            [(isinstance(m.node, astroid.Module), m.title) for m in pd.objects]
-        )
-        assert modules == [
-            (True, "data"),
-            (True, "data.clientmodule_test"),
-            (True, "data.suppliermodule_test"),
-        ]
-        cd = dd[1]
-        assert cd.title == "classes No Name"
-        classes = _process_classes(cd.objects)
-        assert classes == [
-            (True, "Ancestor"),
-            (True, "DoNothing"),
-            (True, "Interface"),
-            (True, "Specialization"),
-        ]
+def test_default_values():
+    """test default values for package or class diagrams"""
+    # TODO : should test difference between default values for package or class diagrams pylint: disable=fixme
 
+
+class TestDefaultDiadefGenerator:
     _should_rels = [
         ("association", "DoNothing", "Ancestor"),
         ("association", "DoNothing", "Specialization"),
@@ -137,19 +119,46 @@ class TestDefaultDiadefGenerator(object):
         relations = _process_relations(cd.relationships)
         assert relations == self._should_rels
 
-    def test_known_values2(self, HANDLER):
-        project = get_project("data.clientmodule_test")
-        dd = DefaultDiadefGenerator(Linker(project), HANDLER).visit(project)
-        assert len(dd) == 1
-        keys = [d.TYPE for d in dd]
-        assert keys == ["class"]
-        cd = dd[0]
-        assert cd.title == "classes No Name"
-        classes = _process_classes(cd.objects)
-        assert classes == [(True, "Ancestor"), (True, "Specialization")]
-
 
 def test_known_values1(HANDLER, PROJECT):
+    dd = DefaultDiadefGenerator(Linker(PROJECT), HANDLER).visit(PROJECT)
+    assert len(dd) == 2
+    keys = [d.TYPE for d in dd]
+    assert keys == ["package", "class"]
+    pd = dd[0]
+    assert pd.title == "packages No Name"
+    modules = sorted(
+        [(isinstance(m.node, astroid.Module), m.title) for m in pd.objects]
+    )
+    assert modules == [
+        (True, "data"),
+        (True, "data.clientmodule_test"),
+        (True, "data.suppliermodule_test"),
+    ]
+    cd = dd[1]
+    assert cd.title == "classes No Name"
+    classes = _process_classes(cd.objects)
+    assert classes == [
+        (True, "Ancestor"),
+        (True, "DoNothing"),
+        (True, "Interface"),
+        (True, "Specialization"),
+    ]
+
+
+def test_known_values2(HANDLER):
+    project = get_project("data.clientmodule_test")
+    dd = DefaultDiadefGenerator(Linker(project), HANDLER).visit(project)
+    assert len(dd) == 1
+    keys = [d.TYPE for d in dd]
+    assert keys == ["class"]
+    cd = dd[0]
+    assert cd.title == "classes No Name"
+    classes = _process_classes(cd.objects)
+    assert classes == [(True, "Ancestor"), (True, "Specialization")]
+
+
+def test_known_values3(HANDLER, PROJECT):
     HANDLER.config.classes = ["Specialization"]
     cdg = ClassDiadefGenerator(Linker(PROJECT), HANDLER)
     special = "data.clientmodule_test.Specialization"
@@ -163,7 +172,7 @@ def test_known_values1(HANDLER, PROJECT):
     ]
 
 
-def test_known_values2(HANDLER, PROJECT):
+def test_known_values4(HANDLER, PROJECT):
     HANDLER.config.classes = ["Specialization"]
     HANDLER.config.module_names = False
     cd = ClassDiadefGenerator(Linker(PROJECT), HANDLER).class_diagram(

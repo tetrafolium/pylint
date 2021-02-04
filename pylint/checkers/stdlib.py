@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2013-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2013-2014 Google, Inc.
-# Copyright (c) 2014-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2014-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Cosmin Poieana <cmin@ropython.org>
 # Copyright (c) 2014 Vlad Temian <vladtemian@gmail.com>
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
@@ -13,8 +13,17 @@
 # Copyright (c) 2017 Martin <MartinBasti@users.noreply.github.com>
 # Copyright (c) 2017 Christopher Zurcher <zurcher@users.noreply.github.com>
 # Copyright (c) 2017 Łukasz Rogalski <rogalski.91@gmail.com>
+# Copyright (c) 2018 Lucas Cimon <lucas.cimon@gmail.com>
 # Copyright (c) 2018 Banjamin Freeman <befreeman@users.noreply.github.com>
 # Copyright (c) 2018 Ioana Tagirta <ioana.tagirta@gmail.com>
+# Copyright (c) 2019 Julien Palard <julien@palard.fr>
+# Copyright (c) 2019 laike9m <laike9m@users.noreply.github.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Robert Schweizer <robert_schweizer@gmx.de>
+# Copyright (c) 2019 fadedDexofan <fadedDexofan@gmail.com>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2020 谭九鼎 <109224573@qq.com>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -81,7 +90,7 @@ class StdlibChecker(BaseChecker):
             "bad-open-mode",
             "Python supports: r, w, a[, x] modes with b, +, "
             "and U (only with r) options. "
-            "See http://docs.python.org/2/library/functions.html#open",
+            "See https://docs.python.org/2/library/functions.html#open",
         ),
         "W1502": (
             "Using datetime.time in a boolean context.",
@@ -89,7 +98,7 @@ class StdlibChecker(BaseChecker):
             "Using datetime.time in a boolean context can hide "
             "subtle bugs when the time they represent matches "
             "midnight UTC. This behaviour was fixed in Python 3.5. "
-            "See http://bugs.python.org/issue13936 for reference.",
+            "See https://bugs.python.org/issue13936 for reference.",
             {"maxversion": (3, 5)},
         ),
         "W1503": (
@@ -206,6 +215,7 @@ class StdlibChecker(BaseChecker):
                 "base64.encodestring",
                 "base64.decodestring",
                 "ntpath.splitunc",
+                "os.path.splitunc",
             },
             (3, 2, 0): {
                 "cgi.escape",
@@ -239,6 +249,33 @@ class StdlibChecker(BaseChecker):
                 "platform.dist",
             },
             (3, 6, 0): {"importlib._bootstrap_external.FileLoader.load_module"},
+            (3, 7, 0): {
+                "sys.set_coroutine_wrapper",
+                "sys.get_coroutine_wrapper",
+                "aifc.openfp",
+                "asyncio.Task.current_task",
+                "asyncio.Task.all_task",
+                "locale.format",
+                "ssl.wrap_socket",
+                "sunau.openfp",
+                "wave.openfp",
+            },
+            (3, 8, 0): {
+                "gettext.lgettext",
+                "gettext.ldgettext",
+                "gettext.lngettext",
+                "gettext.ldngettext",
+                "gettext.bind_textdomain_codeset",
+                "gettext.NullTranslations.output_charset",
+                "gettext.NullTranslations.set_output_charset",
+                "threading.Thread.isAlive",
+            },
+            (3, 9, 0): {
+                "binascii.b2a_hqx",
+                "binascii.a2b_hqx",
+                "binascii.rlecode_hqx",
+                "binascii.rledecode_hqx",
+            },
         },
     }
 
@@ -366,7 +403,7 @@ class StdlibChecker(BaseChecker):
             )
 
     def _check_datetime(self, node):
-        """ Check that a datetime was inferred.
+        """Check that a datetime was inferred.
         If so, emit boolean-datetime warning.
         """
         try:

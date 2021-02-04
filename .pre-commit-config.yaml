@@ -1,16 +1,37 @@
 repos:
--   repo: https://github.com/ambv/black
-    rev: 19.10b0
+-   repo: https://github.com/myint/autoflake
+    rev: v1.4
     hooks:
-    - id: black
-      args: [--safe, --quiet]
-      exclude: tests/functional/|tests/input|tests/extensions/data|tests/regrtest_data/|tests/data/
+    -   id: autoflake
+        exclude: &fixtures tests/functional/|tests/input|tests/extensions/data|tests/regrtest_data/|tests/data/
+        args:
+            - --in-place
+            - --remove-all-unused-imports
+            - --expand-star-imports
+            - --remove-duplicate-keys
+            - --remove-unused-variables
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.1.0
     hooks:
     -   id: trailing-whitespace
+        exclude: "tests/functional/t/trailing_whitespaces.py"
     -   id: end-of-file-fixer
--   repo: https://github.com/pre-commit/mirrors-isort
-    rev: v4.3.21
+        exclude: "tests/functional/m/missing_final_newline.py|tests/functional/t/trailing_newlines.py"
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.5.2
     hooks:
     -   id: isort
+-   repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+    - id: black
+      args: [--safe, --quiet]
+      exclude: *fixtures
+-   repo: local
+    hooks:
+    -   id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        exclude: tests/functional/|tests/input|tests/extensions/data|tests/regrtest_data/|tests/data/|doc/

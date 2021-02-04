@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
 # Copyright (c) 2008-2010, 2013-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
-# Copyright (c) 2015-2017 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2015-2018, 2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2015 Mike Frysinger <vapier@gentoo.org>
 # Copyright (c) 2015 Florian Bruhin <me@the-compiler.org>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
+# Copyright (c) 2018, 2020 Anthony Sottile <asottile@umich.edu>
 # Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
-# Copyright (c) 2018 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Kylian <development@goudcode.nl>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -19,8 +20,7 @@ from pylint.pyreverse.vcgutils import VCGPrinter
 
 
 class DiagramWriter:
-    """base class for writing project diagrams
-    """
+    """base class for writing project diagrams"""
 
     def __init__(self, config, styles):
         self.config = config
@@ -28,8 +28,7 @@ class DiagramWriter:
         self.printer = None  # defined in set_printer
 
     def write(self, diadefs):
-        """write files for <project> according to <diadefs>
-        """
+        """write files for <project> according to <diadefs>"""
         for diagram in diadefs:
             basename = diagram.title.strip().replace(" ", "_")
             file_name = "%s.%s" % (basename, self.config.output_format)
@@ -95,8 +94,7 @@ class DiagramWriter:
 
 
 class DotWriter(DiagramWriter):
-    """write dot graphs from a diagram definition and a project
-    """
+    """write dot graphs from a diagram definition and a project"""
 
     def __init__(self, config):
         styles = [
@@ -110,8 +108,7 @@ class DotWriter(DiagramWriter):
         DiagramWriter.__init__(self, config, styles)
 
     def set_printer(self, file_name, basename):
-        """initialize DotWriter and add options for layout.
-        """
+        """initialize DotWriter and add options for layout."""
         layout = dict(rankdir="BT")
         self.printer = DotBackend(basename, additional_param=layout)
         self.file_name = file_name
@@ -131,7 +128,10 @@ class DotWriter(DiagramWriter):
         if not self.config.only_classnames:
             label = r"%s|%s\l|" % (label, r"\l".join(obj.attrs))
             for func in obj.methods:
-                args = [arg.name for arg in func.args.args if arg.name != "self"]
+                if func.args.args:
+                    args = [arg.name for arg in func.args.args if arg.name != "self"]
+                else:
+                    args = []
                 label = r"%s%s(%s)\l" % (label, func.name, ", ".join(args))
             label = "{%s}" % label
         if is_exception(obj.node):
@@ -144,8 +144,7 @@ class DotWriter(DiagramWriter):
 
 
 class VCGWriter(DiagramWriter):
-    """write vcg graphs from a diagram definition and a project
-    """
+    """write vcg graphs from a diagram definition and a project"""
 
     def __init__(self, config):
         styles = [

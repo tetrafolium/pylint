@@ -1,20 +1,9 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
 import pytest
 
 from pylint.exceptions import InvalidMessageError, UnknownMessageError
-from pylint.message import MessageIdStore
-
-from .generic_fixtures import (
-    empty_msgid_store,
-    message_definitions,
-    msgid_store,
-    msgids,
-    store,
-)
 
 
 def test_len_str(msgid_store, msgids):
@@ -45,7 +34,7 @@ def test_get_message_ids_not_existing(empty_msgid_store):
 
 def test_register_message_definitions(empty_msgid_store, message_definitions):
     number_of_msgid = len(message_definitions)
-    for i, message_definition in enumerate(message_definitions):
+    for message_definition in message_definitions:
         empty_msgid_store.register_message_definition(message_definition)
         if message_definition.old_names:
             number_of_msgid += len(message_definition.old_names)
@@ -66,9 +55,9 @@ def test_add_msgid_and_symbol(empty_msgid_store):
     assert empty_msgid_store.get_symbol("E1235") == "new-sckiil"
     assert empty_msgid_store.get_msgid("old-sckiil") == "C1235"
     assert empty_msgid_store.get_msgid("new-sckiil") == "E1235"
-    with pytest.raises(KeyError) as e:
+    with pytest.raises(KeyError):
         empty_msgid_store.get_symbol("C1234")
-    with pytest.raises(KeyError) as e:
+    with pytest.raises(KeyError):
         empty_msgid_store.get_msgid("not-exist")
 
 

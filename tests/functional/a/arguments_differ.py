@@ -93,7 +93,7 @@ class Sub(Super):
 
     # pylint: disable=unused-argument
     def __init__(self, arg):
-        super(Sub, self).__init__()
+        super().__init__()
 
     def __private(self, arg):
         pass
@@ -142,7 +142,7 @@ class PropertySetter(Property):
 class StaticmethodChild2(Staticmethod):
 
     def func(self, data):
-        super(StaticmethodChild2, self).func(data)
+        super().func(data)
 
 
 class SuperClass(object):
@@ -154,9 +154,11 @@ class SuperClass(object):
 
 class MyClass(SuperClass):
 
-    def impl(self, *args, **kwargs): # [arguments-differ]
-
-        super(MyClass, self).impl(*args, **kwargs)
+    def impl(self, *args, **kwargs):
+        """
+        Acceptable use of vararg in subclass because it does not violate LSP.
+        """
+        super().impl(*args, **kwargs)
 
 
 class FirstHasArgs(object):
@@ -170,6 +172,7 @@ class SecondChangesArgs(FirstHasArgs):
     def test(self, first, second, *args): # [arguments-differ]
         pass
 
+
 class Positional(object):
 
     def test(self, first, second):
@@ -178,12 +181,34 @@ class Positional(object):
 
 class PositionalChild(Positional):
 
-    def test(self, *args): # [arguments-differ]
-        """Accepts too many.
-
-        Why subclassing in the first case if the behavior is different?
+    def test(self, *args):
         """
-        super(PositionalChild, self).test(args[0], args[1])
+        Acceptable use of vararg in subclass because it does not violate LSP.
+        """
+        super().test(args[0], args[1])
+
+class Mixed(object):
+
+    def mixed(self, first, second, *, third, fourth):
+        pass
+
+
+class MixedChild1(Mixed):
+
+    def mixed(self, first, *args, **kwargs):
+        """
+        Acceptable use of vararg in subclass because it does not violate LSP.
+        """
+        super().mixed(first, *args, **kwargs)
+
+
+class MixedChild2(Mixed):
+
+    def mixed(self, first, *args, third, **kwargs):
+        """
+        Acceptable use of vararg in subclass because it does not violate LSP.
+        """
+        super().mixed(first, *args, third, **kwargs)
 
 
 class HasSpecialMethod(object):

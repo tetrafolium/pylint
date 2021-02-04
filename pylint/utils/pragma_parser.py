@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
@@ -19,7 +17,7 @@ OPTION_RGX = r"""
     .*?                # Anything (as little as possible)
     \bpylint:          # pylint word and column
     \s*                # Any number of whitespaces
-    ([^;#\n]+))        # Anything except semicolon or hash or newline (it is the second matched group) 
+    ([^;#\n]+))        # Anything except semicolon or hash or newline (it is the second matched group)
                        # and end of the first matched group
     [;#]{0,1}"""  # From 0 to 1 repetition of semicolon or hash
 OPTION_PO = re.compile(OPTION_RGX, re.VERBOSE)
@@ -41,7 +39,7 @@ ALL_KEYWORDS = "|".join(
 
 TOKEN_SPECIFICATION = [
     ("KEYWORD", r"\b({:s})\b".format(ALL_KEYWORDS)),
-    ("MESSAGE_STRING", r"[A-Za-z\-]{2,}"),  #  Identifiers
+    ("MESSAGE_STRING", r"[0-9A-Za-z\-\_]{2,}"),  #  Identifiers
     ("ASSIGN", r"="),  #  Assignment operator
     ("MESSAGE_NUMBER", r"[CREIWF]{1}\d*"),
 ]
@@ -72,7 +70,7 @@ class PragmaParserError(Exception):
         """
         self.message = message
         self.token = token
-        super(PragmaParserError, self).__init__(self.message)
+        super().__init__(self.message)
 
 
 class UnRecognizedOptionError(PragmaParserError):

@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2016 Alexander Todorov <atodorov@otb.bg>
 # Copyright (c) 2016 Łukasz Rogalski <rogalski.91@gmail.com>
-# Copyright (c) 2017 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2017-2018, 2020 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""Tests for the pylint checker in :mod:`pylint.extensions.emptystring
-"""
+"""Tests for the pylint checker in :mod:`pylint.extensions.emptystring"""
 
 import os
-import os.path as osp
 import unittest
 
 from pylint import checkers
@@ -26,6 +27,9 @@ class CompareToZeroTestReporter(BaseReporter):
     def on_set_current_module(self, module, filepath):
         self.messages = []
 
+    def _display(self, layout):
+        pass
+
 
 class CompareToZeroUsedTC(unittest.TestCase):
     @classmethod
@@ -37,8 +41,8 @@ class CompareToZeroUsedTC(unittest.TestCase):
         cls._linter.disable("I")
 
     def test_comparetozero_message(self):
-        elif_test = osp.join(
-            osp.dirname(osp.abspath(__file__)), "data", "compare_to_zero.py"
+        elif_test = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "data", "compare_to_zero.py"
         )
         self._linter.check([elif_test])
         msgs = self._linter.reporter.messages
@@ -50,7 +54,3 @@ class CompareToZeroUsedTC(unittest.TestCase):
         self.assertEqual(msgs[1].line, 9)
         self.assertEqual(msgs[2].line, 12)
         self.assertEqual(msgs[3].line, 15)
-
-
-if __name__ == "__main__":
-    unittest.main()

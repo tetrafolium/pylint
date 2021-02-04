@@ -3,7 +3,7 @@
 # Copyright (c) 2010 Maarten ter Huurne <maarten@treewalker.org>
 # Copyright (c) 2012-2014 Google, Inc.
 # Copyright (c) 2012 FELD Boris <lothiraldan@gmail.com>
-# Copyright (c) 2013-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2013-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Michal Nowikowski <godfryd@gmail.com>
 # Copyright (c) 2014 Brett Cannon <brett@python.org>
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
@@ -16,13 +16,23 @@
 # Copyright (c) 2016 Florian Bruhin <me@the-compiler.org>
 # Copyright (c) 2016 Moises Lopez <moylop260@vauxoo.com>
 # Copyright (c) 2016 Jakub Wilk <jwilk@jwilk.net>
-# Copyright (c) 2017 hippo91 <guillaume.peillex@gmail.com>
+# Copyright (c) 2017, 2019 hippo91 <guillaume.peillex@gmail.com>
+# Copyright (c) 2018, 2020 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2018-2019 Nick Drozd <nicholasdrozd@gmail.com>
+# Copyright (c) 2018-2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2018 Lucas Cimon <lucas.cimon@gmail.com>
+# Copyright (c) 2018 Bryce Guinta <bryce.paul.guinta@gmail.com>
 # Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
-# Copyright (c) 2018 Ashley Whetter <ashley@awhetter.co.uk>
-# Copyright (c) 2018 Anthony Sottile <asottile@umich.edu>
 # Copyright (c) 2018 Ben Green <benhgreen@icloud.com>
-# Copyright (c) 2018 Ville Skyttä <ville.skytta@upcloud.com>
-# Copyright (c) 2018 Nick Drozd <nicholasdrozd@gmail.com>
+# Copyright (c) 2018 Ville Skyttä <ville.skytta@iki.fi>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 mattlbeck <17108752+mattlbeck@users.noreply.github.com>
+# Copyright (c) 2019-2020 craig-sh <craig-sh@users.noreply.github.com>
+# Copyright (c) 2019 Janne Rönkkö <jannero@users.noreply.github.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Grygorii Iermolenko <gyermolenko@gmail.com>
+# Copyright (c) 2019 Andrzej Klajnert <github@aklajnert.pl>
+# Copyright (c) 2019 Pascal Corpet <pcorpet@users.noreply.github.com>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -52,6 +62,7 @@ from pylint.checkers.utils import (
     is_builtin_object,
     is_comprehension,
     is_iterable,
+    is_overload_stub,
     is_property_setter,
     is_property_setter_or_deleter,
     is_protocol_class,
@@ -110,7 +121,11 @@ def _signature_from_call(call):
 def _signature_from_arguments(arguments):
     kwarg = arguments.kwarg
     vararg = arguments.vararg
-    args = [arg.name for arg in arguments.args if arg.name != "self"]
+    args = [
+        arg.name
+        for arg in chain(arguments.posonlyargs, arguments.args)
+        if arg.name != "self"
+    ]
     kwonlyargs = [arg.name for arg in arguments.kwonlyargs]
     return _ParameterSignature(args, kwonlyargs, vararg, kwarg)
 
@@ -231,15 +246,16 @@ def _has_different_parameters_default_value(original, overridden):
             astroid.ClassDef: "name",
             astroid.Tuple: "elts",
             astroid.List: "elts",
+            astroid.Dict: "items",
         }
         handled_types = tuple(
             astroid_type for astroid_type in astroid_type_compared_attr
         )
         original_type = _get_node_type(original_default, handled_types)
         if original_type:
-            #  We handle only astroid types that are inside the dict astroid_type_compared_attr
+            # We handle only astroid types that are inside the dict astroid_type_compared_attr
             if not isinstance(overridden_default, original_type):
-                #  Two args with same name but different types
+                # Two args with same name but different types
                 return True
             if not _check_arg_equality(
                 original_default,
@@ -281,11 +297,30 @@ def _different_parameters(original, overridden, dummy_parameter_regex):
     original_parameters = _positional_parameters(original)
     overridden_parameters = _positional_parameters(overridden)
 
+    # Copy kwonlyargs list so that we don't affect later function linting
+    original_kwonlyargs = original.args.kwonlyargs
+
+    # Allow positional/keyword variadic in overridden to match against any
+    # positional/keyword argument in original.
+    # Keep any arguments that are found seperately in overridden to satisfy
+    # later tests
+    if overridden.args.vararg:
+        overidden_names = [v.name for v in overridden_parameters]
+        original_parameters = [
+            v for v in original_parameters if v.name in overidden_names
+        ]
+
+    if overridden.args.kwarg:
+        overidden_names = [v.name for v in overridden.args.kwonlyargs]
+        original_kwonlyargs = [
+            v for v in original.args.kwonlyargs if v.name in overidden_names
+        ]
+
     different_positional = _has_different_parameters(
         original_parameters, overridden_parameters, dummy_parameter_regex
     )
     different_kwonly = _has_different_parameters(
-        original.args.kwonlyargs, overridden.args.kwonlyargs, dummy_parameter_regex
+        original_kwonlyargs, overridden.args.kwonlyargs, dummy_parameter_regex
     )
     if original.name in PYMETHODS:
         # Ignore the difference for special methods. If the parameter
@@ -295,21 +330,12 @@ def _different_parameters(original, overridden, dummy_parameter_regex):
         # be used as keyword arguments anyway.
         different_positional = different_kwonly = False
 
-    # Both or none should have extra variadics, otherwise the method
-    # loses or gains capabilities that are not reflected into the parent method,
-    # leading to potential inconsistencies in the code.
-    different_kwarg = (
-        sum(1 for param in (original.args.kwarg, overridden.args.kwarg) if not param)
-        == 1
-    )
-    different_vararg = (
-        sum(1 for param in (original.args.vararg, overridden.args.vararg) if not param)
-        == 1
-    )
+    # Arguments will only violate LSP if there are variadics in the original
+    # that are then removed from the overridden
+    kwarg_lost = original.args.kwarg and not overridden.args.kwarg
+    vararg_lost = original.args.vararg and not overridden.args.vararg
 
-    return any(
-        (different_positional, different_kwarg, different_vararg, different_kwonly)
-    )
+    return any((different_positional, kwarg_lost, vararg_lost, different_kwonly))
 
 
 def _is_invalid_base_class(cls):
@@ -336,7 +362,7 @@ def _has_data_descriptor(cls, attr):
 
 
 def _called_in_methods(func, klass, methods):
-    """ Check if the func was called in any of the given methods,
+    """Check if the func was called in any of the given methods,
     belonging to the *klass*. Returns True if so, False otherwise.
     """
     if not isinstance(func, astroid.FunctionDef):
@@ -427,6 +453,7 @@ def _safe_infer_call_result(node, caller, context=None):
         return None  # there is some kind of ambiguity
     except StopIteration:
         return value
+    return None
 
 
 def _has_same_layout_slots(slots, assigned_value):
@@ -568,9 +595,9 @@ MSGS = {
     "W0236": (
         "Method %r was expected to be %r, found it instead as %r",
         "invalid-overridden-method",
-        "Used when we detect that a method was overridden as a property "
-        "or the other way around, which could result in potential bugs at "
-        "runtime.",
+        "Used when we detect that a method was overridden in a way "
+        "that does not match its base class "
+        "which could result in potential bugs at runtime.",
     ),
     "E0236": (
         "Invalid object %r in __slots__, must contain only non empty strings",
@@ -729,6 +756,15 @@ a metaclass class method.",
                 ),
             },
         ),
+        (
+            "check-protected-access-in-special-methods",
+            {
+                "default": False,
+                "type": "yn",
+                "metavar": "<y or n>",
+                "help": "Warn about protected attribute access inside special methods",
+            },
+        ),
     )
 
     def __init__(self, linter=None):
@@ -758,8 +794,7 @@ a metaclass class method.",
         "duplicate-bases",
     )
     def visit_classdef(self, node):
-        """init visit variable _accessed
-        """
+        """init visit variable _accessed"""
         self._check_bases_classes(node)
         # if not an exception or a metaclass
         if node.type == "class" and has_known_bases(node):
@@ -790,7 +825,7 @@ a metaclass class method.",
         """
         for base in node.bases:
             ancestor = safe_infer(base)
-            if ancestor in (astroid.Uninferable, None):
+            if not ancestor:
                 continue
             if isinstance(ancestor, astroid.Instance) and ancestor.is_subtype_of(
                 "%s.type" % (BUILTINS,)
@@ -963,15 +998,10 @@ a metaclass class method.",
                 return
 
             # If a subclass defined the method then it's not our fault.
-            try:
-                mro = klass.mro()
-            except (InconsistentMroError, DuplicateBasesError):
-                pass
-            else:
-                for subklass in mro[1 : mro.index(overridden_frame) + 1]:
-                    for obj in subklass.lookup(node.name)[1]:
-                        if isinstance(obj, astroid.FunctionDef):
-                            return
+            for ancestor in klass.ancestors():
+                for obj in ancestor.lookup(node.name)[1]:
+                    if isinstance(obj, astroid.FunctionDef):
+                        return
             args = (overridden.root().name, overridden.fromlineno)
             self.add_message("method-hidden", args=args, node=node)
         except astroid.NotFoundError:
@@ -1040,7 +1070,7 @@ a metaclass class method.",
         ):
             return
 
-        #  Check values of default args
+        # Check values of default args
         klass = function.parent.frame()
         meth_node = None
         for overridden in klass.local_attr_ancestors(function.name):
@@ -1069,13 +1099,16 @@ a metaclass class method.",
 
         if meth_node is not None:
 
-            def form_annotations(annotations):
+            def form_annotations(arguments):
+                annotations = chain(
+                    (arguments.posonlyargs_annotations or []), arguments.annotations
+                )
                 return [
                     annotation.as_string() for annotation in filter(None, annotations)
                 ]
 
-            called_annotations = form_annotations(function.args.annotations)
-            overridden_annotations = form_annotations(meth_node.args.annotations)
+            called_annotations = form_annotations(function.args)
+            overridden_annotations = form_annotations(meth_node.args)
             if called_annotations and overridden_annotations:
                 if called_annotations != overridden_annotations:
                     return
@@ -1086,7 +1119,12 @@ a metaclass class method.",
             )
 
     def _check_property_with_parameters(self, node):
-        if node.args.args and len(node.args.args) > 1 and decorated_with_property(node):
+        if (
+            node.args.args
+            and len(node.args.args) > 1
+            and decorated_with_property(node)
+            and not is_property_setter(node)
+        ):
             self.add_message("property-with-parameters", node=node)
 
     def _check_invalid_overridden_method(self, function_node, parent_function_node):
@@ -1106,6 +1144,23 @@ a metaclass class method.",
             self.add_message(
                 "invalid-overridden-method",
                 args=(function_node.name, "method", "property"),
+                node=function_node,
+            )
+
+        parent_is_async = isinstance(parent_function_node, astroid.AsyncFunctionDef)
+        current_is_async = isinstance(function_node, astroid.AsyncFunctionDef)
+
+        if parent_is_async and not current_is_async:
+            self.add_message(
+                "invalid-overridden-method",
+                args=(function_node.name, "async", "non-async"),
+                node=function_node,
+            )
+
+        elif not parent_is_async and current_is_async:
+            self.add_message(
+                "invalid-overridden-method",
+                args=(function_node.name, "non-async", "async"),
                 node=function_node,
             )
 
@@ -1190,6 +1245,7 @@ a metaclass class method.",
                     or decorated_with_property(node)
                     or _has_bare_super_call(node)
                     or is_protocol_class(class_node)
+                    or is_overload_stub(node)
                 )
             ):
                 self.add_message("no-self-use", node=node)
@@ -1217,7 +1273,7 @@ a metaclass class method.",
         self._check_in_slots(node)
 
     def _check_in_slots(self, node):
-        """ Check that the given AssignAttr node
+        """Check that the given AssignAttr node
         is defined in the class slots.
         """
         inferred = safe_infer(node.expr)
@@ -1371,10 +1427,13 @@ a metaclass class method.",
                     if _is_attribute_property(name, klass):
                         return
 
-                #  A licit use of protected member is inside a special method
-                if not attrname.startswith(
-                    "__"
-                ) and self._is_called_inside_special_method(node):
+                if (
+                    not self.config.check_protected_access_in_special_methods
+                    and
+                    # A licit use of protected member is inside a special method
+                    not attrname.startswith("__")
+                    and self._is_called_inside_special_method(node)
+                ):
                     return
 
                 self.add_message("protected-access", node=node, args=attrname)
@@ -1633,8 +1692,7 @@ a metaclass class method.",
             self.add_message("super-init-not-called", args=klass.name, node=node)
 
     def _check_signature(self, method1, refmethod, class_type, cls):
-        """check that the signature of the two given methods match
-        """
+        """check that the signature of the two given methods match"""
         if not (
             isinstance(method1, astroid.FunctionDef)
             and isinstance(refmethod, astroid.FunctionDef)
@@ -1666,7 +1724,10 @@ a metaclass class method.",
             self.add_message(
                 "arguments-differ", args=(class_type, method1.name), node=method1
             )
-        elif len(method1.args.defaults) < len(refmethod.args.defaults):
+        elif (
+            len(method1.args.defaults) < len(refmethod.args.defaults)
+            and not method1.args.vararg
+        ):
             self.add_message(
                 "signature-differs", args=(class_type, method1.name), node=method1
             )

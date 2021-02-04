@@ -286,11 +286,7 @@ contributors:
 
 * Michael Scott Cuthbert: contributor
 
-* Pierre Sassoulas : contributor
-    - Made C0412 (ungrouped import) compatible with isort
-    - Made multiple message with the same old name possible
-    - Made Pylint a little faster by refactoring the message store
-    - Broke down "missing-docstrings" between "module", "class" and "function"
+* Pierre Sassoulas : maintainer, contributor
 
 * Nathan Marrow
 
@@ -370,3 +366,76 @@ contributors:
 
 * Anthony Tan: contributor
 
+* Benny Müller: contributor
+
+* Bernie Gray: contributor
+
+* Slavfox: contributor
+
+* Matthew Beckers (mattlbeck): contributor
+
+* Yang Yang: contributor
+
+* Andrew J. Simmons (anjsimmo): contributor
+
+* Damien Baty: contributor
+
+* Daniel R. Neal (danrneal): contributer
+
+* Jeremy Fleischman (jfly): contributer
+
+* Shiv Venkatasubrahmanyam
+
+* Jochen Preusche (iilei): contributor
+
+* Ram Rachum (cool-RR)
+
+* Pieter Engelbrecht
+
+* Ethan Leba: contributor
+
+* Matěj Grabovský: contributor
+
+* Yeting Li (yetingli): contributor
+
+* Frost Ming (frostming): contributor
+
+* Luigi Bertaco Cristofolini (luigibertaco): contributor
+
+* Eli Fine (eli88fine): Fixed false positive duplicate code warning for lines with symbols only
+
+* Ganden Schaffner: contributor
+
+* Josselin Feist: contributor
+
+* David Cain: contributor
+
+* Pedro Algarvio (s0undt3ch): contributor
+
+* Luigi Bertaco Cristofolini (luigibertaco): contributor
+
+* Or Bahari
+
+* Joshua Cannon: contributor
+
+* Giuseppe Valente: contributor
+
+* Takashi Hirashima: contributor
+
+* Joffrey Mander: contributor
+
+* Julien Palard: contributor
+
+* Raphael Gaschignard: contributor
+
+* Sorin Sbarnea: contributor
+
+* Gergely Kalmár: contributor
+
+* Batuhan Taskaya: contributor
+
+* Frank Harrison (doublethefish): contributor
+
+* Logan Miller (komodo472): contributor
+
+* Matthew Suozzo: contributor

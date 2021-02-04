@@ -1,12 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# pylint: disable=W0404,W0622,W0613
 # Copyright (c) 2006, 2009-2010, 2012-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2010 Julien Jehannet <julien.jehannet@logilab.fr>
 # Copyright (c) 2012 FELD Boris <lothiraldan@gmail.com>
 # Copyright (c) 2013 Benedikt Morbach <benedikt.morbach@googlemail.com>
 # Copyright (c) 2013 T.Rzepka <Tobias.Rzepka@gmail.com>
-# Copyright (c) 2014-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2014-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Pedro Algarvio <pedro@algarvio.me>
 # Copyright (c) 2014 Brett Cannon <brett@python.org>
 # Copyright (c) 2014 Google, Inc.
@@ -14,19 +11,26 @@
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
 # Copyright (c) 2016 Florian Bruhin <me@the-compiler.org>
 # Copyright (c) 2017 Hugo <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Enji Cooper <yaneurabeya@gmail.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2020 Damien Baty <damien.baty@polyconseil.fr>
+# Copyright (c) 2020 Bryce Guinta <bryce.guinta@protonmail.com>
+# Copyright (c) 2020 Ville Skyttä <ville.skytta@iki.fi>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""Generic Setup script, takes package info from __pkginfo__.py file.
-"""
-from distutils.command.build_py import build_py
+"""Generic Setup script, takes package info from __pkginfo__.py file."""
+
+# pylint: disable=import-outside-toplevel,arguments-differ,ungrouped-imports,exec-used
+
 import os
-from os.path import exists, isdir, join
 import sys
-
-__docformat__ = "restructuredtext en"
-
+from distutils.command.build_py import build_py
+from os.path import exists, isdir, join
 
 try:
     from setuptools import setup
@@ -35,13 +39,14 @@ try:
 
     USE_SETUPTOOLS = 1
 except ImportError:
-    from distutils.core import setup
     from distutils.command import install_lib  # pylint: disable=unused-import
+    from distutils.core import setup
 
     USE_SETUPTOOLS = 0
     easy_install_lib = None
 
 
+__docformat__ = "restructuredtext en"
 base_dir = os.path.dirname(__file__)
 
 __pkginfo__ = {}
@@ -53,17 +58,18 @@ ext_modules = __pkginfo__.get("ext_modules", None)
 install_requires = __pkginfo__.get("install_requires", None)
 dependency_links = __pkginfo__.get("dependency_links", [])
 extras_require = __pkginfo__.get("extras_require", {})
+project_urls = __pkginfo__.get("project_urls", {})
 
 readme_path = join(base_dir, "README.rst")
 if exists(readme_path):
-    with open(readme_path) as stream:
+    with open(readme_path, encoding="UTF-8") as stream:
         long_description = stream.read()
 else:
     long_description = ""
 
 
-needs_pytest = set(['pytest', 'test', 'ptr']).intersection(sys.argv)
-pytest_runner = ['pytest-runner'] if needs_pytest else []
+needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
+pytest_runner = ["pytest-runner"] if needs_pytest else []
 
 
 def ensure_scripts(linux_scripts):
@@ -146,9 +152,10 @@ def install(**kwargs):
         cmdclass=cmdclass,
         extras_require=extras_require,
         test_suite="test",
-        python_requires=">=3.5.*",
+        python_requires="~=3.5",
         setup_requires=pytest_runner,
-        tests_require=["pytest"],
+        tests_require=["pytest", "pytest-benchmark"],
+        project_urls=project_urls,
         **kwargs
     )
 

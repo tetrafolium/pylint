@@ -2,7 +2,7 @@
 # Copyright (c) 2006-2015 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
 # Copyright (c) 2012-2014 Google, Inc.
 # Copyright (c) 2013 buck@yelp.com <buck@yelp.com>
-# Copyright (c) 2014-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2014-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Brett Cannon <brett@python.org>
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
 # Copyright (c) 2015-2016 Moises Lopez <moylop260@vauxoo.com>
@@ -20,10 +20,20 @@
 # Copyright (c) 2017 Michka Popoff <michkapopoff@gmail.com>
 # Copyright (c) 2017 Łukasz Rogalski <rogalski.91@gmail.com>
 # Copyright (c) 2017 Erik Wright <erik.wright@shopify.com>
+# Copyright (c) 2018 Lucas Cimon <lucas.cimon@gmail.com>
+# Copyright (c) 2018 Hornwitser <github@hornwitser.no>
+# Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
+# Copyright (c) 2018 Natalie Serebryakova <natalie.serebryakova@Natalies-MacBook-Pro.local>
 # Copyright (c) 2018 Mike Frysinger <vapier@gmail.com>
 # Copyright (c) 2018 Sushobhit <31987769+sushobhit27@users.noreply.github.com>
 # Copyright (c) 2018 Marianna Polatoglou <mpolatoglou@bloomberg.net>
-# Copyright (c) 2019 Paul Renvoise <renvoisepaul@gmail.com>
+# Copyright (c) 2019 Nick Drozd <nicholasdrozd@gmail.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Nick Smith <clickthisnick@users.noreply.github.com>
+# Copyright (c) 2019 Paul Renvoisé <renvoisepaul@gmail.com>
+# Copyright (c) 2020 Damien Baty <damien.baty@polyconseil.fr>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -37,7 +47,6 @@ import sys
 from distutils import sysconfig
 
 import astroid
-import isort
 from astroid import modutils
 from astroid.decorators import cached
 
@@ -51,7 +60,7 @@ from pylint.exceptions import EmptyReportError
 from pylint.graph import DotBackend, get_cycles
 from pylint.interfaces import IAstroidChecker
 from pylint.reporters.ureports.nodes import Paragraph, VerbatimText
-from pylint.utils import get_global_option
+from pylint.utils import IsortDriver, get_global_option
 
 
 def _qualified_names(modname):
@@ -85,8 +94,7 @@ def _get_import_name(importnode, modname):
 
 
 def _get_first_import(node, context, name, base, level, alias):
-    """return the node where [base.]<name> is imported or None if not found
-    """
+    """return the node where [base.]<name> is imported or None if not found"""
     fullname = "%s.%s" % (base, name) if base else name
 
     first = None
@@ -168,8 +176,7 @@ def _repr_tree_defs(data, indent_str=None):
 
 
 def _dependencies_graph(filename, dep_info):
-    """write dependencies as a dot (graphviz) file
-    """
+    """write dependencies as a dot (graphviz) file"""
     done = {}
     printer = DotBackend(filename[:-4], rankdir="LR")
     printer.emit('URL="." node[shape="box"]')
@@ -541,8 +548,8 @@ class ImportsChecker(BaseChecker):
         std_imports, ext_imports, loc_imports = self._check_imports_order(node)
 
         # Check that imports are grouped by package within a given category
-        met_import = set()  #  set for 'import x' style
-        met_from = set()  #  set for 'from x import y' style
+        met_import = set()  # set for 'import x' style
+        met_from = set()  # set for 'from x import y' style
         current_package = None
         for import_node, import_name in std_imports + ext_imports + loc_imports:
             if not self.linter.is_message_enabled(
@@ -700,11 +707,7 @@ class ImportsChecker(BaseChecker):
         third_party_not_ignored = []
         first_party_not_ignored = []
         local_not_ignored = []
-        isort_obj = isort.SortImports(
-            file_contents="",
-            known_third_party=self.config.known_third_party,
-            known_standard_library=self.config.known_standard_library,
-        )
+        isort_driver = IsortDriver(self.config)
         for node, modname in self._imports_stack:
             if modname.startswith("."):
                 package = "." + modname.split(".")[1]
@@ -714,7 +717,7 @@ class ImportsChecker(BaseChecker):
             ignore_for_import_order = not self.linter.is_message_enabled(
                 "wrong-import-order", node.fromlineno
             )
-            import_category = isort_obj.place_module(package)
+            import_category = isort_driver.place_module(package)
             node_and_package_import = (node, package)
             if import_category in ("FUTURE", "STDLIB"):
                 std_imports.append(node_and_package_import)
@@ -776,7 +779,6 @@ class ImportsChecker(BaseChecker):
         except astroid.TooManyLevelsError:
             if _ignore_import_failure(importnode, modname, self._ignored_modules):
                 return None
-
             self.add_message("relative-beyond-top-level", node=importnode)
         except astroid.AstroidSyntaxError as exc:
             message = "Cannot import {!r} due to syntax error {!r}".format(
@@ -796,6 +798,7 @@ class ImportsChecker(BaseChecker):
 
             dotted_modname = _get_import_name(importnode, modname)
             self.add_message("import-error", args=repr(dotted_modname), node=importnode)
+        return None
 
     def _add_imported_module(self, node, importedmodname):
         """notify an imported module, used to analyze dependencies"""
@@ -953,8 +956,7 @@ class ImportsChecker(BaseChecker):
         )
 
     def _check_toplevel(self, node):
-        """Check whether the import is made outside the module toplevel.
-        """
+        """Check whether the import is made outside the module toplevel."""
         # If the scope of the import is a module, then obviously it is
         # not outside the module toplevel.
         if isinstance(node.scope(), astroid.Module):

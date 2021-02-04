@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
 from pylint.message import Message
-
-from .generic_fixtures import message_definitions, store
 
 
 def test_new_message(message_definitions):

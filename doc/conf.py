@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Pylint documentation build configuration file, created by
 # sphinx-quickstart on Thu Apr  4 20:31:25 2013.
@@ -109,7 +108,7 @@ html_theme_options = {
     "collapsiblesidebar": True,
     "issues_url": "https://github.com/pycqa/pylint/issues/new",
     "root_name": "PyCQA",
-    "root_url": "http://meta.pycqa.org/en/latest/",
+    "root_url": "https://meta.pycqa.org/en/latest/",
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -234,7 +233,7 @@ man_pages = [
 ]
 
 intersphinx_mapping = {
-    "astroid": ("http://astroid.readthedocs.io/en/latest/", None),
+    "astroid": ("https://astroid.readthedocs.io/en/latest/", None),
     "python": ("https://docs.python.org/3", None),
 }
 

@@ -16,6 +16,14 @@ def test_simple_pragma():
         assert pragma_repr.messages == ["missing-docstring"]
 
 
+def test_disable_checker_with_number_in_name():
+    comment = "#pylint: disable = j3-custom-checker"
+    match = OPTION_PO.search(comment)
+    for pragma_repr in parse_pragma(match.group(2)):
+        assert pragma_repr.action == "disable"
+        assert pragma_repr.messages == ["j3-custom-checker"]
+
+
 def test_simple_pragma_no_messages():
     comment = "#pylint: skip-file"
     match = OPTION_PO.search(comment)
@@ -46,49 +54,47 @@ def test_missing_assignment():
     comment = "#pylint: disable missing-docstring"
     match = OPTION_PO.search(comment)
     with pytest.raises(InvalidPragmaError):
-        for pragma_repr in parse_pragma(match.group(2)):
-            pass
+        list(parse_pragma(match.group(2)))
 
 
 def test_missing_keyword():
     comment = "#pylint: = missing-docstring"
     match = OPTION_PO.search(comment)
     with pytest.raises(InvalidPragmaError):
-        for pragma_repr in parse_pragma(match.group(2)):
-            pass
+        list(parse_pragma(match.group(2)))
 
 
 def test_unsupported_assignment():
     comment = "#pylint: disable-all = missing-docstring"
     match = OPTION_PO.search(comment)
     with pytest.raises(UnRecognizedOptionError):
-        for pragma_repr in parse_pragma(match.group(2)):
-            pass
+        list(parse_pragma(match.group(2)))
 
 
 def test_unknown_keyword_with_messages():
     comment = "#pylint: unknown-keyword = missing-docstring"
     match = OPTION_PO.search(comment)
     with pytest.raises(UnRecognizedOptionError):
-        for pragma_repr in parse_pragma(match.group(2)):
-            pass
+        list(parse_pragma(match.group(2)))
 
 
 def test_unknown_keyword_without_messages():
     comment = "#pylint: unknown-keyword"
     match = OPTION_PO.search(comment)
     with pytest.raises(UnRecognizedOptionError):
-        for pragma_repr in parse_pragma(match.group(2)):
-            pass
+        list(parse_pragma(match.group(2)))
 
 
 def test_missing_message():
     comment = "#pylint: disable = "
     match = OPTION_PO.search(comment)
     with pytest.raises(InvalidPragmaError):
-        for pragma_repr in parse_pragma(match.group(2)):
-            pass
+        list(parse_pragma(match.group(2)))
 
 
-if __name__ == "__main__":
-    test_missing_message()
+def test_parse_message_with_dash():
+    comment = "#pylint: disable = raw_input-builtin"
+    match = OPTION_PO.search(comment)
+    res = list(parse_pragma(match.group(2)))
+    assert res[0].action == "disable"
+    assert res[0].messages == ["raw_input-builtin"]

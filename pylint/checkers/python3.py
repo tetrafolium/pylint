@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2014-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014-2015 Brett Cannon <brett@python.org>
 # Copyright (c) 2015 Simu Toni <simutoni@gmail.com>
 # Copyright (c) 2015 Pavel Roskin <proski@gnu.org>
@@ -11,15 +11,27 @@
 # Copyright (c) 2016 Roy Williams <rwilliams@lyft.com>
 # Copyright (c) 2016 Łukasz Rogalski <rogalski.91@gmail.com>
 # Copyright (c) 2016 Erik <erik.eriksson@yahoo.com>
-# Copyright (c) 2017 Ville Skyttä <ville.skytta@iki.fi>
+# Copyright (c) 2017-2018 Ville Skyttä <ville.skytta@iki.fi>
 # Copyright (c) 2017 Daniel Miller <millerdev@gmail.com>
 # Copyright (c) 2017 hippo91 <guillaume.peillex@gmail.com>
 # Copyright (c) 2017 ahirnish <ahirnish@gmail.com>
+# Copyright (c) 2018-2020 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2018 sbagan <pnlbagan@gmail.com>
+# Copyright (c) 2018 Lucas Cimon <lucas.cimon@gmail.com>
+# Copyright (c) 2018 Aivar Annamaa <aivarannamaa@users.noreply.github.com>
+# Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
 # Copyright (c) 2018 Sushobhit <31987769+sushobhit27@users.noreply.github.com>
-# Copyright (c) 2018 Anthony Sottile <asottile@umich.edu>
 # Copyright (c) 2018 Ashley Whetter <ashley@awhetter.co.uk>
-# Copyright (c) 2018 Ville Skyttä <ville.skytta@upcloud.com>
 # Copyright (c) 2018 gaurikholkar <f2013002@goa.bits-pilani.ac.in>
+# Copyright (c) 2019 Nick Drozd <nicholasdrozd@gmail.com>
+# Copyright (c) 2019 Hugues Bruant <hugues.bruant@affirm.com>
+# Copyright (c) 2019 Gabriel R Sezefredo <gabriel@sezefredo.com.br>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 bluesheeptoken <louis.fruleux1@gmail.com>
+# Copyright (c) 2020 谭九鼎 <109224573@qq.com>
+# Copyright (c) 2020 Federico Bond <federicobond@gmail.com>
+# Copyright (c) 2020 Athos Ribeiro <athoscr@fedoraproject.org>
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
@@ -151,8 +163,7 @@ def _in_iterating_context(node):
 
 
 def _is_conditional_import(node):
-    """Checks if an import node is in the context of a conditional.
-    """
+    """Checks if an import node is in the context of a conditional."""
     parent = node.parent
     return isinstance(
         parent, (astroid.TryExcept, astroid.ExceptHandler, astroid.If, astroid.IfExp)
@@ -188,7 +199,7 @@ class Python3Checker(checkers.BaseChecker):
             "unpacking-in-except",
             "Python3 will not allow implicit unpacking of "
             "exceptions in except clauses. "
-            "See http://www.python.org/dev/peps/pep-3110/",
+            "See https://www.python.org/dev/peps/pep-3110/",
             {"old_names": [("W0712", "old-unpacking-in-except")]},
         ),
         "E1604": (
@@ -909,14 +920,14 @@ class Python3Checker(checkers.BaseChecker):
         self._future_absolute_import = False
         self._modules_warned_about = set()
         self._branch_stack = []
-        super(Python3Checker, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     # pylint: disable=keyword-arg-before-vararg, arguments-differ
     def add_message(self, msg_id, always_warn=False, *args, **kwargs):
         if always_warn or not (
             self._branch_stack and self._branch_stack[-1].is_py2_only
         ):
-            super(Python3Checker, self).add_message(msg_id, *args, **kwargs)
+            super().add_message(msg_id, *args, **kwargs)
 
     def _is_py2_test(self, node):
         if isinstance(node.test, astroid.Attribute) and isinstance(
@@ -1223,7 +1234,7 @@ class Python3Checker(checkers.BaseChecker):
                     if not _in_iterating_context(node):
                         checker = "{}-builtin-not-iterating".format(node.func.name)
                         self.add_message(checker, node=node)
-                if node.func.name == "open" and node.keywords:
+                elif node.func.name == "open" and node.keywords:
                     kwargs = node.keywords
                     for kwarg in kwargs or []:
                         if kwarg.arg == "encoding":

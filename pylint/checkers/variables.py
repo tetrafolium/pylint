@@ -4,7 +4,7 @@
 # Copyright (c) 2010 Daniel Harding <dharding@gmail.com>
 # Copyright (c) 2011-2014, 2017 Google, Inc.
 # Copyright (c) 2012 FELD Boris <lothiraldan@gmail.com>
-# Copyright (c) 2013-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2013-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Michal Nowikowski <godfryd@gmail.com>
 # Copyright (c) 2014 Brett Cannon <brett@python.org>
 # Copyright (c) 2014 Ricardo Gemignani <ricardo.gemignani@gmail.com>
@@ -13,21 +13,33 @@
 # Copyright (c) 2015 Radu Ciorba <radu@devrandom.ro>
 # Copyright (c) 2015 Simu Toni <simutoni@gmail.com>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
-# Copyright (c) 2016, 2018 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2016, 2018-2019 Ashley Whetter <ashley@awhetter.co.uk>
 # Copyright (c) 2016, 2018 Jakub Wilk <jwilk@jwilk.net>
 # Copyright (c) 2016-2017 Derek Gustafson <degustaf@gmail.com>
 # Copyright (c) 2016-2017 Łukasz Rogalski <rogalski.91@gmail.com>
 # Copyright (c) 2016 Grant Welch <gwelch925+github@gmail.com>
-# Copyright (c) 2017 Ville Skyttä <ville.skytta@iki.fi>
+# Copyright (c) 2017-2018 Ville Skyttä <ville.skytta@iki.fi>
 # Copyright (c) 2017-2018 hippo91 <guillaume.peillex@gmail.com>
 # Copyright (c) 2017 Dan Garrette <dhgarrette@gmail.com>
+# Copyright (c) 2018-2019 Jim Robertson <jrobertson98atx@gmail.com>
+# Copyright (c) 2018 Mike Miller <mtmiller@users.noreply.github.com>
+# Copyright (c) 2018 Lucas Cimon <lucas.cimon@gmail.com>
+# Copyright (c) 2018 Drew <drewrisinger@users.noreply.github.com>
+# Copyright (c) 2018 Sushobhit <31987769+sushobhit27@users.noreply.github.com>
+# Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
 # Copyright (c) 2018 Bryce Guinta <bryce.guinta@protonmail.com>
 # Copyright (c) 2018 Bryce Guinta <bryce.paul.guinta@gmail.com>
 # Copyright (c) 2018 Mike Frysinger <vapier@gmail.com>
-# Copyright (c) 2018 ssolanki <sushobhitsolanki@gmail.com>
 # Copyright (c) 2018 Marianna Polatoglou <mpolatoglou@bloomberg.net>
 # Copyright (c) 2018 mar-chi-pan <mar.polatoglou@gmail.com>
-# Copyright (c) 2018 Ville Skyttä <ville.skytta@upcloud.com>
+# Copyright (c) 2019 Nick Drozd <nicholasdrozd@gmail.com>
+# Copyright (c) 2019 Djailla <bastien.vallet@gmail.com>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2020 Andrew Simmons <anjsimmo@gmail.com>
+# Copyright (c) 2020 Andrew Simmons <a.simmons@deakin.edu.au>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2020 Ashley Whetter <ashleyw@activestate.com>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -175,7 +187,7 @@ def _get_unpacking_extra_info(node, inferred):
 
 
 def _detect_global_scope(node, frame, defframe):
-    """ Detect that the given frames shares a global
+    """Detect that the given frames shares a global
     scope.
 
     Two frames shares a global scope when neither
@@ -246,7 +258,7 @@ def _infer_name_module(node, name):
 
 
 def _fix_dot_imports(not_consumed):
-    """ Try to fix imports with multiple dots, by returning a dictionary
+    """Try to fix imports with multiple dots, by returning a dictionary
     with the import names expanded. The function unflattens root imports,
     like 'xml' (when we have both 'xml.etree' and 'xml.sax'), to 'xml.etree'
     and 'xml.sax' respectively.
@@ -501,6 +513,7 @@ class NamesConsumer:
 
     def __init__(self, node, scope_type):
         self._atomic = ScopeConsumer(copy.copy(node.locals), {}, scope_type)
+        self.node = node
 
     def __repr__(self):
         msg = "\nto_consume : {:s}\n".format(
@@ -726,8 +739,7 @@ class VariablesChecker(BaseChecker):
         "unused-variable",
     )
     def leave_module(self, node):
-        """leave module: check globals
-        """
+        """leave module: check globals"""
         assert len(self._to_consume) == 1
 
         self._check_metaclasses(node)
@@ -746,63 +758,52 @@ class VariablesChecker(BaseChecker):
         self._check_imports(not_consumed)
 
     def visit_classdef(self, node):
-        """visit class: update consumption analysis variable
-        """
+        """visit class: update consumption analysis variable"""
         self._to_consume.append(NamesConsumer(node, "class"))
 
     def leave_classdef(self, _):
-        """leave class: update consumption analysis variable
-        """
+        """leave class: update consumption analysis variable"""
         # do not check for not used locals here (no sense)
         self._to_consume.pop()
 
     def visit_lambda(self, node):
-        """visit lambda: update consumption analysis variable
-        """
+        """visit lambda: update consumption analysis variable"""
         self._to_consume.append(NamesConsumer(node, "lambda"))
 
     def leave_lambda(self, _):
-        """leave lambda: update consumption analysis variable
-        """
+        """leave lambda: update consumption analysis variable"""
         # do not check for not used locals here
         self._to_consume.pop()
 
     def visit_generatorexp(self, node):
-        """visit genexpr: update consumption analysis variable
-        """
+        """visit genexpr: update consumption analysis variable"""
         self._to_consume.append(NamesConsumer(node, "comprehension"))
 
     def leave_generatorexp(self, _):
-        """leave genexpr: update consumption analysis variable
-        """
+        """leave genexpr: update consumption analysis variable"""
         # do not check for not used locals here
         self._to_consume.pop()
 
     def visit_dictcomp(self, node):
-        """visit dictcomp: update consumption analysis variable
-        """
+        """visit dictcomp: update consumption analysis variable"""
         self._to_consume.append(NamesConsumer(node, "comprehension"))
 
     def leave_dictcomp(self, _):
-        """leave dictcomp: update consumption analysis variable
-        """
+        """leave dictcomp: update consumption analysis variable"""
         # do not check for not used locals here
         self._to_consume.pop()
 
     def visit_setcomp(self, node):
-        """visit setcomp: update consumption analysis variable
-        """
+        """visit setcomp: update consumption analysis variable"""
         self._to_consume.append(NamesConsumer(node, "comprehension"))
 
     def leave_setcomp(self, _):
-        """leave setcomp: update consumption analysis variable
-        """
+        """leave setcomp: update consumption analysis variable"""
         # do not check for not used locals here
         self._to_consume.pop()
 
     def visit_functiondef(self, node):
-        """visit function: update consumption analysis variable and check locals
-        """
+        """visit function: update consumption analysis variable and check locals"""
         self._to_consume.append(NamesConsumer(node, "function"))
         if not (
             self.linter.is_message_enabled("redefined-outer-name")
@@ -937,11 +938,8 @@ class VariablesChecker(BaseChecker):
     def visit_delname(self, node):
         self.visit_name(node)
 
-    @utils.check_messages(*MSGS)
     def visit_name(self, node):
-        """check that a name is defined if the current scope and doesn't
-        redefine a built-in
-        """
+        """Check that a name is defined in the current scope"""
         stmt = node.statement()
         if stmt.fromlineno is None:
             # name node from an astroid built from live code, skip
@@ -950,39 +948,52 @@ class VariablesChecker(BaseChecker):
 
         name = node.name
         frame = stmt.scope()
-        # if the name node is used as a function default argument's value or as
-        # a decorator, then start from the parent frame of the function instead
-        # of the function frame - and thus open an inner class scope
-        if (
-            utils.is_default_argument(node)
-            or utils.is_func_decorator(node)
-            or utils.is_ancestor_name(frame, node)
-        ):
-            start_index = len(self._to_consume) - 2
-        else:
-            start_index = len(self._to_consume) - 1
+        start_index = len(self._to_consume) - 1
+
+        undefined_variable_is_enabled = self.linter.is_message_enabled(
+            "undefined-variable"
+        )
+        used_before_assignment_is_enabled = self.linter.is_message_enabled(
+            "used-before-assignment"
+        )
+
         # iterates through parent scopes, from the inner to the outer
         base_scope_type = self._to_consume[start_index].scope_type
         # pylint: disable=too-many-nested-blocks; refactoring this block is a pain.
         for i in range(start_index, -1, -1):
             current_consumer = self._to_consume[i]
-            # if the current scope is a class scope but it's not the inner
+
+            # The list of base classes in the class definition is not part
+            # of the class body.
+            # If the current scope is a class scope but it's not the inner
             # scope, ignore it. This prevents to access this scope instead of
             # the globals one in function members when there are some common
-            # names. The only exception is when the starting scope is a
-            # comprehension and its direct outer scope is a class
-            if (
-                current_consumer.scope_type == "class"
-                and i != start_index
-                and not (base_scope_type == "comprehension" and i == start_index - 1)
+            # names.
+            if current_consumer.scope_type == "class" and (
+                utils.is_ancestor_name(current_consumer.node, node)
+                or (i != start_index and self._ignore_class_scope(node))
             ):
-                if self._ignore_class_scope(node):
-                    continue
+                continue
+
+            # if the name node is used as a function default argument's value or as
+            # a decorator, then start from the parent frame of the function instead
+            # of the function frame - and thus open an inner class scope
+            if (
+                current_consumer.scope_type == "function"
+                and self._defined_in_function_definition(node, current_consumer.node)
+            ):
+                # ignore function scope if is an annotation/default/decorator, as not in the body
+                continue
+
+            if current_consumer.scope_type == "lambda" and utils.is_default_argument(
+                node, current_consumer.node
+            ):
+                continue
 
             # the name has already been consumed, only check it's not a loop
             # variable used outside the loop
             # avoid the case where there are homonyms inside function scope and
-            #  comprehension current scope (avoid bug #1731)
+            # comprehension current scope (avoid bug #1731)
             if name in current_consumer.consumed and not (
                 current_consumer.scope_type == "comprehension"
                 and self._has_homonym_in_upper_function_scope(node, i)
@@ -999,7 +1010,9 @@ class VariablesChecker(BaseChecker):
             # checks for use before assignment
             defnode = utils.assign_parent(current_consumer.to_consume[name][0])
 
-            if defnode is not None:
+            if (
+                undefined_variable_is_enabled or used_before_assignment_is_enabled
+            ) and defnode is not None:
                 self._check_late_binding_closure(node, defnode)
                 defstmt = defnode.statement()
                 defframe = defstmt.frame()
@@ -1134,10 +1147,15 @@ class VariablesChecker(BaseChecker):
         else:
             # we have not found the name, if it isn't a builtin, that's an
             # undefined name !
-            if not (
+            if undefined_variable_is_enabled and not (
                 name in astroid.Module.scope_attrs
                 or utils.is_builtin(name)
                 or name in self.config.additional_builtins
+                or (
+                    name == "__class__"
+                    and isinstance(frame, astroid.FunctionDef)
+                    and frame.is_method()
+                )
             ):
                 if not utils.node_ignores_exception(node, NameError):
                     self.add_message("undefined-variable", args=name, node=node)
@@ -1203,13 +1221,11 @@ class VariablesChecker(BaseChecker):
 
     # listcomp have now also their scope
     def visit_listcomp(self, node):
-        """visit dictcomp: update consumption analysis variable
-        """
+        """visit dictcomp: update consumption analysis variable"""
         self._to_consume.append(NamesConsumer(node, "comprehension"))
 
     def leave_listcomp(self, _):
-        """leave dictcomp: update consumption analysis variable
-        """
+        """leave dictcomp: update consumption analysis variable"""
         # do not check for not used locals here
         self._to_consume.pop()
 
@@ -1238,15 +1254,53 @@ class VariablesChecker(BaseChecker):
 
     @staticmethod
     def _defined_in_function_definition(node, frame):
-        in_annotation_or_default = False
+        in_annotation_or_default_or_decorator = False
         if isinstance(frame, astroid.FunctionDef) and node.statement() is frame:
-            in_annotation_or_default = (
-                node in frame.args.annotations
-                or node in frame.args.kwonlyargs_annotations
-                or node is frame.args.varargannotation
-                or node is frame.args.kwargannotation
-            ) or frame.args.parent_of(node)
-        return in_annotation_or_default
+            in_annotation_or_default_or_decorator = (
+                (
+                    node in frame.args.annotations
+                    or node in frame.args.posonlyargs_annotations
+                    or node in frame.args.kwonlyargs_annotations
+                    or node is frame.args.varargannotation
+                    or node is frame.args.kwargannotation
+                )
+                or frame.args.parent_of(node)
+                or (frame.decorators and frame.decorators.parent_of(node))
+                or (
+                    frame.returns
+                    and (node is frame.returns or frame.returns.parent_of(node))
+                )
+            )
+        return in_annotation_or_default_or_decorator
+
+    @staticmethod
+    def _in_lambda_or_comprehension_body(
+        node: astroid.node_classes.NodeNG, frame: astroid.node_classes.NodeNG
+    ) -> bool:
+        """return True if node within a lambda/comprehension body (or similar) and thus should not have access to class attributes in frame"""
+        child = node
+        parent = node.parent
+        while parent is not None:
+            if parent is frame:
+                return False
+            if isinstance(parent, astroid.Lambda) and not child is parent.args:
+                # Body of lambda should not have access to class attributes.
+                return True
+            if (
+                isinstance(parent, astroid.node_classes.Comprehension)
+                and not child is parent.iter
+            ):
+                # Only iter of list/set/dict/generator comprehension should have access.
+                return True
+            if isinstance(parent, astroid.scoped_nodes.ComprehensionScope) and not (
+                parent.generators and child is parent.generators[0]
+            ):
+                # Body of list/set/dict/generator comprehension should not have access to class attributes.
+                # Furthermore, only the first generator (if multiple) in comprehension should have access.
+                return True
+            child = parent
+            parent = parent.parent
+        return False
 
     @staticmethod
     def _is_variable_violation(
@@ -1404,16 +1458,28 @@ class VariablesChecker(BaseChecker):
         #    tp = 2
         #    def func(self, arg=tp):
         #        ...
+        # class C:
+        #    class Tp:
+        #        pass
+        #    class D(Tp):
+        #        ...
 
         name = node.name
         frame = node.statement().scope()
-        in_annotation_or_default = self._defined_in_function_definition(node, frame)
-        if in_annotation_or_default:
+        in_annotation_or_default_or_decorator = self._defined_in_function_definition(
+            node, frame
+        )
+        in_ancestor_list = utils.is_ancestor_name(frame, node)
+        if in_annotation_or_default_or_decorator or in_ancestor_list:
             frame_locals = frame.parent.scope().locals
         else:
             frame_locals = frame.locals
         return not (
-            (isinstance(frame, astroid.ClassDef) or in_annotation_or_default)
+            (
+                isinstance(frame, astroid.ClassDef)
+                or in_annotation_or_default_or_decorator
+            )
+            and not self._in_lambda_or_comprehension_body(node, frame)
             and name in frame_locals
         )
 
@@ -1630,6 +1696,9 @@ class VariablesChecker(BaseChecker):
         self.add_message("unused-argument", args=name, node=stmt, confidence=confidence)
 
     def _check_late_binding_closure(self, node, assignment_node):
+        if not self.linter.is_message_enabled("cell-var-from-loop"):
+            return
+
         def _is_direct_lambda_call():
             return (
                 isinstance(node_scope.parent, astroid.Call)
@@ -1648,13 +1717,14 @@ class VariablesChecker(BaseChecker):
         else:
             assign_scope = assignment_node.scope()
             maybe_for = assignment_node
-            while not isinstance(maybe_for, astroid.For):
+            while maybe_for and not isinstance(maybe_for, astroid.For):
                 if maybe_for is assign_scope:
                     break
                 maybe_for = maybe_for.parent
             else:
                 if (
-                    maybe_for.parent_of(node_scope)
+                    maybe_for
+                    and maybe_for.parent_of(node_scope)
                     and not _is_direct_lambda_call()
                     and not isinstance(node_scope.statement(), astroid.Return)
                 ):
@@ -1743,10 +1813,10 @@ class VariablesChecker(BaseChecker):
             if isinstance(target, astroid.node_classes.AssignName)
         )
         if self_cls_name in target_assign_names:
-            self.add_message("self-cls-assignment", node=node, args=(self_cls_name))
+            self.add_message("self-cls-assignment", node=node, args=(self_cls_name,))
 
     def _check_unpacking(self, inferred, node, targets):
-        """ Check for unbalanced tuple unpacking
+        """Check for unbalanced tuple unpacking
         and unpacking non sequences.
         """
         if utils.is_inside_abstract_class(node):
@@ -1967,7 +2037,10 @@ class VariablesChecker(BaseChecker):
         if isinstance(klass._metaclass, astroid.Name):
             name = klass._metaclass.name
         elif isinstance(klass._metaclass, astroid.Attribute) and klass._metaclass.expr:
-            name = klass._metaclass.expr.name
+            attr = klass._metaclass.expr
+            while not isinstance(attr, astroid.Name):
+                attr = attr.expr
+            name = attr.name
         elif metaclass:
             name = metaclass.root().name
 

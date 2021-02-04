@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
@@ -22,8 +20,8 @@ from pylint.message import MessageDefinition
     ],
 )
 def test_create_invalid_message_type(msgid, expected):
-    checker_mock = mock.Mock(name='Checker')
-    checker_mock.name = 'checker'
+    checker_mock = mock.Mock(name="Checker")
+    checker_mock.name = "checker"
 
     with pytest.raises(InvalidMessageError) as invalid_message_error:
         MessageDefinition.check_msgid(msgid)
@@ -46,8 +44,9 @@ class FalseChecker(BaseChecker):
     }
 
 
-class TestMessagesDefinition(object):
-    def assert_with_fail_msg(self, msg, expected=True):
+class TestMessagesDefinition:
+    @staticmethod
+    def assert_with_fail_msg(msg, expected=True):
         fail_msg = "With minversion='{}' and maxversion='{}',".format(
             msg.minversion, msg.maxversion
         )
@@ -58,7 +57,8 @@ class TestMessagesDefinition(object):
         else:
             assert not msg.may_be_emitted(), fail_msg.format(" not ")
 
-    def get_message_definition(self):
+    @staticmethod
+    def get_message_definition():
         args = [
             FalseChecker(),
             "W1234",

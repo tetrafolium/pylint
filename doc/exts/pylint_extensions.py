@@ -18,7 +18,7 @@ from pylint.utils import get_rst_title
 # Skip documenting these modules since:
 # 1) They are deprecated, why document them moving forward?
 # 2) We can't load the deprecated module and the newly renamed module at the
-#    same time without getting naming conflicts
+# same time without getting naming conflicts
 DEPRECATED_MODULES = ["check_docs"]  # ==> docparams
 
 
@@ -85,7 +85,7 @@ def get_plugins_info(linter, doc_files):
         doc = ""
         doc_file = doc_files.get(module)
         if doc_file:
-            with open(doc_file, "r") as f:
+            with open(doc_file) as f:
                 doc = f.read()
         try:
             by_checker[checker]["checker"] = checker

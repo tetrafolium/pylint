@@ -1,13 +1,14 @@
-# Copyright (c) 2016-2017 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2016-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2016-2017 Derek Gustafson <degustaf@gmail.com>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2020 Damien Baty <damien.baty@polyconseil.fr>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""Tests for the pylint checker in :mod:`pylint.extensions.check_elif
-"""
-
-import os.path as osp
+"""Tests for the pylint checker in :mod:`pylint.extensions.check_elif"""
+from os import path as osp
 
 import pytest
 
@@ -29,12 +30,12 @@ EXPECTED = [
 
 
 @pytest.fixture(scope="module")
-def checker(checker):
+def checker():
     return MultipleTypesChecker
 
 
 @pytest.fixture(scope="module")
-def disable(disable):
+def disable():
     return ["I"]
 
 

@@ -1,14 +1,16 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2019 Tyler N. Thieding <python@thieding.com>
+# Copyright (c) 2019-2020 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2019-2020 Tyler Thieding <tyler@thieding.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2020 Damien Baty <damien.baty@polyconseil.fr>
+# Copyright (c) 2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2020 Anthony Sottile <asottile@umich.edu>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-"""Tests for the pylint checker in :mod:`pylint.extensions.broad_try_clause
-"""
-
-import os.path as osp
+"""Tests for the pylint checker in :mod:`pylint.extensions.broad_try_clause`"""
 import unittest
+from os import path as osp
 
 from pylint import checkers
 from pylint.extensions.broad_try_clause import BroadTryClauseChecker
@@ -22,6 +24,9 @@ class BroadTryClauseTestReporter(BaseReporter):
 
     def on_set_current_module(self, module, filepath):
         self.messages = []
+
+    def _display(self, layout):
+        pass
 
 
 class BroadTryClauseTC(unittest.TestCase):
@@ -64,7 +69,3 @@ class BroadTryClauseTC(unittest.TestCase):
             msgs[3].msg, "try clause contains 7 statements, expected at most 1"
         )
         self.assertEqual(msgs[3].line, 29)
-
-
-if __name__ == "__main__":
-    unittest.main()

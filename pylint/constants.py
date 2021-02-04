@@ -1,14 +1,15 @@
-# -*- coding: utf-8 -*-
-
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-import re
+import sys
 
-# Allow stopping after the first semicolon/hash encountered,
-# so that an option can be continued with the reasons
-# why it is active or disabled.
-OPTION_RGX = re.compile(r"\s*#.*\bpylint:\s*([^;#]+)[;#]{0,1}")
+from astroid.__pkginfo__ import version as astroid_version
+
+from pylint.__pkginfo__ import version as pylint_version
+
+PY38_PLUS = sys.version_info[:2] >= (3, 8)
+PY310_PLUS = sys.version_info[:2] >= (3, 10)
+
 
 PY_EXTS = (".py", ".pyc", ".pyo", ".pyw", ".so", ".dll")
 
@@ -41,3 +42,10 @@ MAIN_CHECKER_NAME = "master"
 class WarningScope:
     LINE = "line-based-msg"
     NODE = "node-based-msg"
+
+
+full_version = "pylint %s\nastroid %s\nPython %s" % (
+    pylint_version,
+    astroid_version,
+    sys.version,
+)

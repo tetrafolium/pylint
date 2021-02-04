@@ -1,6 +1,6 @@
 
-README for Pylint - http://pylint.pycqa.org/
-============================================
+README for Pylint - https://pylint.pycqa.org/
+=============================================
 
 .. image:: https://travis-ci.org/PyCQA/pylint.svg?branch=master
     :target: https://travis-ci.org/PyCQA/pylint
@@ -18,7 +18,7 @@ README for Pylint - http://pylint.pycqa.org/
     :target: https://pypi.python.org/pypi/pylint
 
 .. image:: https://readthedocs.org/projects/pylint/badge/?version=latest
-    :target: http://pylint.readthedocs.io/en/latest/?badge=latest
+    :target: https://pylint.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
@@ -95,7 +95,7 @@ can be found here_.
 Documentation
 -------------
 
-The documentation lives at http://pylint.pycqa.org/.
+The documentation lives at https://pylint.pycqa.org/.
 
 Pylint is shipped with following additional commands:
 
@@ -126,7 +126,7 @@ We use pytest_ for testing ``pylint``, which you can use without using ``tox`` f
 
 If you want to run tests on a specific portion of the code with pytest_, (pytest-cov_) and your local python version::
 
-    # ( pip install pytest-cov )
+    # ( pip install pytest-cov )
     # Everything:
     python3 -m pytest tests/
     # Everything in tests/message with coverage for the relevant code:
@@ -152,7 +152,7 @@ Do not forget to clone astroid_ and install the last version::
 
 For more detailed information, check the documentation.
 
-.. _here: http://pylint.pycqa.org/en/latest/user_guide/installation.html
+.. _here: https://pylint.pycqa.org/en/latest/user_guide/installation.html
 .. _tox: https://tox.readthedocs.io/en/latest/
 .. _pytest: https://docs.pytest.org/en/latest/
 .. _pytest-cov: https://pypi.org/project/pytest-cov/

@@ -2,10 +2,13 @@
 # Copyright (c) 2012 FELD Boris <lothiraldan@gmail.com>
 # Copyright (c) 2014 Google, Inc.
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
-# Copyright (c) 2015-2018 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2015-2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
 # Copyright (c) 2016-2017 Derek Gustafson <degustaf@gmail.com>
 # Copyright (c) 2018 Reverb C <reverbc@users.noreply.github.com>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
+# Copyright (c) 2020 Damien Baty <damien.baty@polyconseil.fr>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -13,6 +16,7 @@
 """non regression tests for pylint, which requires a too specific configuration
 to be incorporated in the automatic functional test framework
 """
+# pylint: disable=redefined-outer-name
 
 import os
 import sys
@@ -21,7 +25,7 @@ from os.path import abspath, dirname, join
 import astroid
 import pytest
 
-import pylint.testutils as testutils
+from pylint import testutils
 
 REGR_DATA = join(dirname(abspath(__file__)), "regrtest_data")
 sys.path.insert(1, REGR_DATA)
@@ -33,12 +37,12 @@ except AttributeError:
 
 
 @pytest.fixture(scope="module")
-def reporter(reporter):
-    return testutils.TestReporter
+def reporter():
+    return testutils.GenericTestReporter
 
 
 @pytest.fixture(scope="module")
-def disable(disable):
+def disable():
     return ["I"]
 
 
@@ -118,7 +122,7 @@ def test_check_package___init__(finalize_linter):
 
 
 def test_pylint_config_attr():
-    mod = astroid.MANAGER.ast_from_module_name("pylint.lint")
+    mod = astroid.MANAGER.ast_from_module_name("pylint.lint.pylinter")
     pylinter = mod["PyLinter"]
     expect = [
         "OptionsManagerMixIn",

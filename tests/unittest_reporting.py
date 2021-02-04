@@ -1,14 +1,17 @@
 # Copyright (c) 2013-2014 LOGILAB S.A. (Paris, FRANCE) <contact@logilab.fr>
-# Copyright (c) 2014-2017 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2014-2018, 2020 Claudiu Popa <pcmanticore@gmail.com>
 # Copyright (c) 2014 Calin Don <calin.don@gmail.com>
 # Copyright (c) 2014 Google, Inc.
 # Copyright (c) 2014 Arun Persaud <arun@nubati.net>
 # Copyright (c) 2015 Ionel Cristian Maries <contact@ionelmc.ro>
 # Copyright (c) 2016-2017 Derek Gustafson <degustaf@gmail.com>
 # Copyright (c) 2018 Sushobhit <31987769+sushobhit27@users.noreply.github.com>
+# Copyright (c) 2019-2020 Pierre Sassoulas <pierre.sassoulas@gmail.com>
+# Copyright (c) 2019 Ashley Whetter <ashley@awhetter.co.uk>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
+# pylint: disable=redefined-outer-name
 
 import warnings
 from io import StringIO
@@ -21,12 +24,12 @@ from pylint.reporters.text import ParseableTextReporter, TextReporter
 
 
 @pytest.fixture(scope="module")
-def reporter(reporter):
+def reporter():
     return TextReporter
 
 
 @pytest.fixture(scope="module")
-def disable(disable):
+def disable():
     return ["I"]
 
 
@@ -77,5 +80,7 @@ def test_display_results_is_renamed():
             return None
 
     reporter = CustomReporter()
-    with pytest.raises(AttributeError):
-        reporter.display_results
+    with pytest.raises(AttributeError) as exc:
+        # pylint: disable=no-member
+        reporter.display_results()
+    assert "no attribute 'display_results'" in str(exc)

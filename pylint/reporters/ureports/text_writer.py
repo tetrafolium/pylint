@@ -1,5 +1,7 @@
-# Copyright (c) 2015-2016 Claudiu Popa <pcmanticore@gmail.com>
-# Copyright (c) 2018 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2015-2016, 2018-2020 Claudiu Popa <pcmanticore@gmail.com>
+# Copyright (c) 2018, 2020 Anthony Sottile <asottile@umich.edu>
+# Copyright (c) 2019 Hugo van Kemenade <hugovk@users.noreply.github.com>
+# Copyright (c) 2019 Pierre Sassoulas <pierre.sassoulas@gmail.com>
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
@@ -18,12 +20,11 @@ class TextWriter(BaseWriter):
     """
 
     def begin_format(self):
-        super(TextWriter, self).begin_format()
+        super().begin_format()
         self.list_level = 0
 
     def visit_section(self, layout):
-        """display a section as text
-        """
+        """display a section as text"""
         self.section += 1
         self.writeln()
         self.format_children(layout)
@@ -82,8 +83,7 @@ class TextWriter(BaseWriter):
                 self.write(table_linesep)
 
     def visit_verbatimtext(self, layout):
-        """display a verbatim layout as text (so difficult ;)
-        """
+        """display a verbatim layout as text (so difficult ;)"""
         self.writeln("::\n")
         for line in layout.data.splitlines():
             self.writeln("    " + line)
