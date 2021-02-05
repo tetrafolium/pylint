@@ -9,6 +9,6 @@ inspecode:
 
     pytest:
     - thresholds: { num-issues: 5 }   # pytest finished with errors.
-    - thresholds: { num-issues: 99 }  # pytest finished with errors.
+    - thresholds: { num-issues: 99 }
       options:
-        --maxfail=99  # try to avoid "!!!!!!!!!!!!!!!!!!! Interrupted: 5 errors during collection !!!!!!!!!!!!!!!!!!!!"
+        --maxfail: 99 # try to avoid "!!!!!!!!!!!!!!!!!!! Interrupted: 5 errors during collection !!!!!!!!!!!!!!!!!!!!"
