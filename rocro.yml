@@ -12,8 +12,8 @@ inspecode:
       thresholds: { num-issues: 439 }
 
     cpd:
-      options: [ --skip-lexical-errors ]
-      thresholds: { num-issues: 5 }
+      options: { --skip-lexical-errors: }
+      thresholds: { num-issues: 6 }
 
     flake8:
     - options:
@@ -81,8 +81,11 @@ inspecode:
     #    # LookupError: unknown encoding: IBO-8859-1
     #    # SyntaxError: unknown encoding for '{pathname}.py': IBO-8859-1
 
+    #### (codelift-plugins#1819)
+    # failed without error message indicating the cause
     pytest:
-      thresholds: { num-issues: 5 }   # pytest finished with errors.
+      options: { --continue-on-collection-errors: }
+      thresholds: { num-issues: 999 }
 
     # understand:
 
