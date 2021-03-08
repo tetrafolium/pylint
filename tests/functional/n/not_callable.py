@@ -19,7 +19,6 @@ class Correct(object):
 
 class MetaCorrect(object):
     """callable object"""
-
     def __call__(self):
         return self
 
@@ -48,7 +47,6 @@ class MyProperty(property):
 
 class PropertyTest(object):
     """ class """
-
     def __init__(self):
         self.attr = 4
 
@@ -97,6 +95,7 @@ class SafeProperty(object):
     def other_function(self):
         def function(arg):
             return arg
+
         return function
 
     @property
@@ -112,6 +111,7 @@ class SafeProperty(object):
         class Empty(object):
             def __call__(self):
                 return 42
+
         return Empty()
 
     @property

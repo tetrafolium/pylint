@@ -22,7 +22,6 @@ class SecondGoodClass(object, metaclass=abc.ABCMeta):
 
 class ThirdGoodClass(object, metaclass=abc.ABCMeta):
     """ This should not raise the warning. """
-
     def test(self):
         raise NotImplementedError()
 
@@ -87,6 +86,7 @@ class AbstractSizable(Structure):
     @abc.abstractmethod
     def length(self):
         pass
+
     __len__ = length
 
 
@@ -99,7 +99,6 @@ class BadMroAbstractMethods(Container, Iterator, AbstractSizable):
 
 
 class SomeMetaclass(metaclass=abc.ABCMeta):
-
     @abc.abstractmethod
     def prop(self):
         pass
@@ -129,13 +128,13 @@ def main():
 
 
 if 1:  # pylint: disable=using-constant-test
-    class FourthBadClass(object, metaclass=abc.ABCMeta):
 
+    class FourthBadClass(object, metaclass=abc.ABCMeta):
         def test(self):
             pass
 else:
-    class FourthBadClass(object, metaclass=abc.ABCMeta):
 
+    class FourthBadClass(object, metaclass=abc.ABCMeta):
         @abc.abstractmethod
         def test(self):
             pass

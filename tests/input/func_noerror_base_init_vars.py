@@ -7,7 +7,6 @@ __revision__ = ''
 class BaseClass(object):
     """A simple base class
     """
-
     def __init__(self):
         self.base_var = {}
 
@@ -22,7 +21,6 @@ class BaseClass(object):
 class MyClass(BaseClass):
     """Inherits from BaseClass
     """
-
     def __init__(self):
         BaseClass.__init__(self)
         self.var = {}

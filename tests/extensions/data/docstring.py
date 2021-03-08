@@ -15,7 +15,6 @@ class FFFF:
     """
     Test Docstring First Line Empty
     """
-
     def method1(self):
         '''
         Test Triple Single Quotes docstring

@@ -10,7 +10,6 @@ try:
 except:
     raise ValueError('Invalid integer')
 
-
 try:
     int("9a")
 except:  # [try-except-raise]
@@ -110,5 +109,5 @@ try:
     pass
 except (FileNotFoundError, PermissionError):
     raise
-except (Exception,):
+except (Exception, ):
     print("a failure")

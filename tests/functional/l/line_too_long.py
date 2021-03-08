@@ -11,14 +11,12 @@ A = "--------------------------------------------------------------------------"
 # line longer than 80 characters is a trailing pylint disable.
 # pylint:disable=invalid-name
 var = (
-    "This line has a disable pragma and whitespace trailing beyond 80 chars. "
-)
+    "This line has a disable pragma and whitespace trailing beyond 80 chars. ")
 
 # +1: [line-too-long]
 badname = "This line is already longer than 100 characters even without the pragma. Trust me. Please."  # pylint:disable=invalid-name
 
 # http://example.com/this/is/a/very/long/url?but=splitting&urls=is&a=pain&so=they&can=be&long
-
 
 # +1: [line-too-long]
 # This line is toooooooooooooooooooooooooooooooooooooooooooooooo looooooooooooooooooooooooooooooooooooooooong #pylint: disable=fixme
@@ -70,7 +68,6 @@ def issue_2957_bis():
 # +2: [line-too-long]
 VAR = """A very very long, maybe too much, constant. Just here to trigger message emission and check everything is fine and nice"""
 """But it is however too long, isn't it? I don't know what to say more here. I got a lack of imagination, just listening to music..."""
-
 
 # +1: [line-too-long]
 VAR_BIS = """A very very long, maybe too much, constant. Just here to trigger message emission and check everything is fine and nice"""

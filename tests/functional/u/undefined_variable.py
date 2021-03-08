@@ -33,8 +33,12 @@ def bad_default(var, default=unknown2):  # [undefined-variable]
     del vardel  # [undefined-variable]
 
 
-def LMBD(x, y=doesnotexist): return x+y  # [undefined-variable]
-def LMBD2(x, y): return x+z  # [undefined-variable]
+def LMBD(x, y=doesnotexist):
+    return x + y  # [undefined-variable]
+
+
+def LMBD2(x, y):
+    return x + z  # [undefined-variable]
 
 
 try:
@@ -53,7 +57,6 @@ except:  # pylint:disable = bare-except
     POUETTT = 'something'
 
 print(POUET, POUETT, POUETTT)
-
 
 try:
     PLOUF  # [used-before-assignment]
@@ -92,6 +95,7 @@ def func2():
 def main():
     """A function with a decorator that contains a lambda."""
 
+
 # Test shared scope.
 
 
@@ -102,7 +106,6 @@ def test_arguments(arg=TestClass):  # [used-before-assignment]
 
 class TestClass(Ancestor):  # [used-before-assignment]
     """ contains another class, which uses an undefined ancestor. """
-
     class MissingAncestor(Ancestor1):  # [used-before-assignment]
         """ no op """
 
@@ -112,14 +115,17 @@ class TestClass(Ancestor):  # [used-before-assignment]
         """
         class UsingBeforeDefinition(Empty):  # [used-before-assignment]
             """ uses Empty before definition """
+
         class Empty(object):
             """ no op """
+
         return UsingBeforeDefinition
 
     def test(self):
         """ Ancestor isn't defined yet, but we don't care. """
         class MissingAncestor1(Ancestor):
             """ no op """
+
         return MissingAncestor1
 
 
@@ -130,7 +136,6 @@ class Self(object):
 
 class Self1(object):
     """ No error should be raised here. """
-
     def test(self):
         """ empty """
         return Self1
@@ -164,10 +169,13 @@ class KeywordArgument(object):
 
     enabled = True
 
-    def func(arg=arg): return arg * arg  # [undefined-variable]
+    def func(arg=arg):
+        return arg * arg  # [undefined-variable]
 
     arg2 = 0
-    def func2(arg2=arg2): return arg2 * arg2
+
+    def func2(arg2=arg2):
+        return arg2 * arg2
 
 
 # Don't emit if the code is protected by NameError
@@ -195,8 +203,7 @@ except IOError as err:
 
 def test_conditional_comprehension():
     methods = ['a', 'b', '_c', '_d']
-    my_methods = sum(1 for method in methods
-                     if not method.startswith('_'))
+    my_methods = sum(1 for method in methods if not method.startswith('_'))
     return my_methods
 
 
@@ -213,7 +220,9 @@ def dec(inp):
     def inner(func):
         print(inp)
         return func
+
     return inner
+
 
 # Make sure lambdas with expressions
 # referencing parent class do not raise undefined variable
@@ -224,7 +233,10 @@ def dec(inp):
 
 class LambdaClass:
     myattr = 1
-    def mylambda(): return LambdaClass.myattr
+
+    def mylambda():
+        return LambdaClass.myattr
+
 
 # Need different classes to make sure
 # consumed variables don't get in the way
@@ -232,20 +244,27 @@ class LambdaClass:
 
 class LambdaClass2:
     myattr = 1
+
     # Different base_scope scope but still applies
-    def mylambda2(): return [LambdaClass2.myattr for _ in [1, 2]]
+    def mylambda2():
+        return [LambdaClass2.myattr for _ in [1, 2]]
 
 
 class LambdaClass3:
     myattr = 1
+
     # Nested default argument in lambda
     # Should not raise error
-    def mylambda3(): return lambda a=LambdaClass3: a
+    def mylambda3():
+        return lambda a=LambdaClass3: a
 
 
 class LambdaClass4:
     myattr = 1
-    def mylambda4(a=LambdaClass4): return lambda: a  # [undefined-variable]
+
+    def mylambda4(a=LambdaClass4):
+        return lambda: a  # [undefined-variable]
+
 
 # Make sure the first lambda does not consume the LambdaClass5 class
 # name although the expression is is valid
@@ -254,8 +273,12 @@ class LambdaClass4:
 
 class LambdaClass5:
     myattr = 1
-    def mylambda(): return LambdaClass5.myattr
-    def mylambda4(a=LambdaClass5): return lambda: a  # [undefined-variable]
+
+    def mylambda():
+        return LambdaClass5.myattr
+
+    def mylambda4(a=LambdaClass5):
+        return lambda: a  # [undefined-variable]
 
 
 def nonlocal_in_ifexp():
@@ -266,6 +289,7 @@ def nonlocal_in_ifexp():
             nonlocal i
             i += 1
             print(i)
+
     i = 0
     fig = plt.figure()
     fig.canvas.mpl_connect('button_press_event', onclick)
@@ -287,7 +311,6 @@ if TYPE_CHECKING:
 
     AllowedValues = Literal['hello', 'world']
 
-
 if TYPE_CHECKING:
     from collections import Counter
     from collections import OrderedDict
@@ -305,4 +328,6 @@ def tick(counter: Counter, name: str, dictionary: OrderedDict) -> OrderedDict:
 def not_using_loop_variable_accordingly(iterator):
     for iteree in iteree:  # [undefined-variable]
         yield iteree
+
+
 # pylint: enable=unused-argument

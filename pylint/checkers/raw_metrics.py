@@ -8,7 +8,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """ Copyright (c) 2003-2010 LOGILAB S.A. (Paris, FRANCE).
  http://www.logilab.fr/ -- mailto:contact@logilab.fr
 
@@ -49,7 +48,7 @@ class RawMetricsChecker(BaseTokenChecker):
     * total number of empty lines
     """
 
-    __implements__ = (ITokenChecker,)
+    __implements__ = (ITokenChecker, )
 
     # configuration section name
     name = "metrics"
@@ -58,7 +57,7 @@ class RawMetricsChecker(BaseTokenChecker):
     # messages
     msgs = {}  # type: Any
     # reports
-    reports = (("RP0701", "Raw metrics", report_raw_stats),)
+    reports = (("RP0701", "Raw metrics", report_raw_stats), )
 
     def __init__(self, linter):
         BaseTokenChecker.__init__(self, linter)

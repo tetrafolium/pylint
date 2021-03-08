@@ -1,6 +1,7 @@
 # pylint: disable=too-few-public-methods,invalid-name,missing-docstring
 # https://github.com/PyCQA/pylint/issues/870
 
+
 class X:
     def __init__(self, val=None):
         self._val = val

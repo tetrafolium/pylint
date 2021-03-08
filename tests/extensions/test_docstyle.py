@@ -4,7 +4,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the pylint checker in :mod:`pylint.extensions.check_docstring
 """
 
@@ -45,8 +44,7 @@ def test_docstring_message(linter):
     linter.check([docstring_test])
     msgs = linter.reporter.messages
     assert len(msgs) == 7
-    for msg, expected_symbol, expected_msg in zip(
-        msgs, EXPECTED_SYMBOLS, EXPECTED_MSGS
-    ):
+    for msg, expected_symbol, expected_msg in zip(msgs, EXPECTED_SYMBOLS,
+                                                  EXPECTED_MSGS):
         assert msg.symbol == expected_symbol
         assert msg.msg == expected_msg

@@ -6,7 +6,6 @@ _OK = True
 
 
 class MyClass(object):
-
     class Klass(object):
         def __init__(self):
             self.var2 = 'var'
@@ -26,6 +25,7 @@ class MyClass(object):
 
     def _setter(self, val):
         self.a_str = val
+
     var2 = property(_getter, _setter)
 
     def some_method(self):
@@ -33,6 +33,7 @@ class MyClass(object):
             var = 1
             test = 'bar'
             var = 'baz'  # [redefined-variable-type]
+
         self.var = 1  # the rule checks for redefinitions in the scope of a function or method
         test = 'foo'
         myint = 2

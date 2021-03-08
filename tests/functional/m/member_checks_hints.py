@@ -2,7 +2,6 @@
 
 
 class Parent(object):
-
     def __init__(self):
         self._parent = 42
         self._registry = {}
@@ -14,7 +13,6 @@ class Parent(object):
 
 
 class Child(Parent):
-
     def __init__(self):
         super(Child, self).__init__()
 

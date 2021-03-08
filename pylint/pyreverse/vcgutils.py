@@ -5,7 +5,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Functions to generate files readable with Georg Sander's vcg
 (Visualization of Compiler Graphs).
 
@@ -148,14 +147,12 @@ EDGE_ATTRS = {
     "horizontal_order": 1,
 }
 
-
 # Misc utilities ###############################################################
 
 
 class VCGPrinter:
     """A vcg graph writer.
     """
-
     def __init__(self, output_stream):
         self._stream = output_stream
         self._indent = ""
@@ -183,10 +180,8 @@ class VCGPrinter:
     def edge(self, from_node, to_node, edge_type="", **args):
         """draw an edge from a node to another.
         """
-        self._stream.write(
-            '%s%sedge: {sourcename:"%s" targetname:"%s"'
-            % (self._indent, edge_type, from_node, to_node)
-        )
+        self._stream.write('%s%sedge: {sourcename:"%s" targetname:"%s"' %
+                           (self._indent, edge_type, from_node, to_node))
         self._write_attributes(EDGE_ATTRS, **args)
         self._stream.write("}\n")
 
@@ -199,11 +194,8 @@ class VCGPrinter:
             try:
                 _type = attributes_dict[key]
             except KeyError:
-                raise Exception(
-                    """no such attribute %s
-possible attributes are %s"""
-                    % (key, attributes_dict.keys())
-                )
+                raise Exception("""no such attribute %s
+possible attributes are %s""" % (key, attributes_dict.keys()))
 
             if not _type:
                 self._stream.write('%s%s:"%s"\n' % (self._indent, key, value))
@@ -213,11 +205,8 @@ possible attributes are %s"""
             elif value in _type:
                 self._stream.write("%s%s:%s\n" % (self._indent, key, value))
             else:
-                raise Exception(
-                    """value %s isn\'t correct for attribute %s
-correct values are %s"""
-                    % (value, key, _type)
-                )
+                raise Exception("""value %s isn\'t correct for attribute %s
+correct values are %s""" % (value, key, _type))
 
     def _inc_indent(self):
         """increment indentation

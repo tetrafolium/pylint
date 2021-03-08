@@ -21,7 +21,9 @@ __all__ = [
     'path',
     'func',  # [undefined-all-variable]
     'inner',  # [undefined-all-variable]
-    'InnerKlass', deque.__name__]  # [undefined-all-variable]
+    'InnerKlass',
+    deque.__name__
+]  # [undefined-all-variable]
 
 
 class Dummy(object):
@@ -43,7 +45,6 @@ function()
 
 class Klass(object):
     """A klass which contains a function"""
-
     def func(self):
         """A klass method"""
         inner = None

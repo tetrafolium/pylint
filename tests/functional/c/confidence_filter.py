@@ -5,7 +5,6 @@ from __future__ import print_function
 
 class Client(object):
     """use provider class"""
-
     def __init__(self):
         self.set_later = 0
 

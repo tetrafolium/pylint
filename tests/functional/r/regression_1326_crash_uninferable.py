@@ -2,7 +2,7 @@
 
 import socket
 
-RETRYABLE_EXCEPTIONS = (socket.error,)
+RETRYABLE_EXCEPTIONS = (socket.error, )
 
 # pylint: disable=wrong-exception-operation
 

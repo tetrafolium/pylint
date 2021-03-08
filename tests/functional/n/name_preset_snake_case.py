@@ -16,7 +16,8 @@ class MyClass:  # [invalid-name]
         return self._my_secret_x * 2
 
     def __eq__(self, other):
-        return isinstance(other, MyClass) and self.my_public_x == other.my_public_x
+        return isinstance(other,
+                          MyClass) and self.my_public_x == other.my_public_x
 
 
 def sayHello():  # [invalid-name]

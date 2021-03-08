@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring, invalid-name, too-few-public-methods, no-self-use, useless-object-inheritance,import-outside-toplevel
 
+
 def test_regression_737():
     import xml  # [unused-import]
 
@@ -26,7 +27,6 @@ def test_local_field_prefixed_with_unused_or_ignored():
 
 
 class HasUnusedDunderClass(object):
-
     def test(self):
         __class__ = 42  # [unused-variable]
 
@@ -50,6 +50,7 @@ def locals_does_not_account_for_subscopes():
 
     def some_other_scope():
         return locals()
+
     return some_other_scope
 
 

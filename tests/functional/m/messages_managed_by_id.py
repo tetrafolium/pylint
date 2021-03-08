@@ -7,6 +7,7 @@ def foo():  # pylint: disable=C0102
 def toto():  # pylint: disable=C0102,R1711
     return
 
+
 # +1: [missing-function-docstring]
 
 

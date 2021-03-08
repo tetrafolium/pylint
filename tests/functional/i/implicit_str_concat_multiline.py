@@ -1,4 +1,6 @@
 #pylint: disable=bad-continuation,missing-docstring
 
-TEST_TUPLE = ('a', 'b'  # [implicit-str-concat]
-              'c')
+TEST_TUPLE = (
+    'a',
+    'b'  # [implicit-str-concat]
+    'c')

@@ -3,7 +3,6 @@
 # pylint: disable=no-init,expression-not-assigned, useless-object-inheritance
 # pylint: disable=missing-parentheses-for-call-in-test, unnecessary-comprehension
 
-
 import collections
 
 
@@ -12,7 +11,6 @@ def function():
 
 
 class Class(object):
-
     def method(self):
         pass
 
@@ -87,7 +85,6 @@ if Class.method:  # [using-constant-test]
 # BoundMethod
 if instance.method:  # [using-constant-test]
     pass
-
 
 # For these, we require to do inference, even though the result can be a
 # constant value. For some of them, we could determine that the test

@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring,too-few-public-methods
 # pylint: disable=unpacking-non-sequence,attribute-defined-outside-init,invalid-name
 
+
 class Class:
     pass
 
@@ -19,7 +20,6 @@ CLS.FIRST = FIRST
 FIRST = Class()
 FIRST = FIRST  # [self-assigning-variable]
 FIRST, SECOND = FIRST, CLS.FIRST  # [self-assigning-variable]
-
 
 FOO = 1
 

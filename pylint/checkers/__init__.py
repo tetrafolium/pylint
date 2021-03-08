@@ -10,7 +10,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """utilities methods and classes for checkers
 
 Base id of standard checkers (used in msg and report ids):

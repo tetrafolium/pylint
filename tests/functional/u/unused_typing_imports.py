@@ -60,9 +60,10 @@ def typing_fully_qualified():
     return variable, other_variable
 
 
-def function(arg1,  # type: Iterable
-             arg2  # type: List
-             ):
+def function(
+    arg1,  # type: Iterable
+    arg2  # type: List
+):
     # type: (...) -> Sequence
     """docstring"""
     print(arg1, arg2)

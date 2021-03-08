@@ -6,7 +6,6 @@ from __future__ import print_function
 
 class Toto(object):
     """bla bal abl"""
-
     def __init__(self):
         self.aaa = 2
 
@@ -21,7 +20,6 @@ class Toto(object):
 
 class Base(object):
     """an abstract class"""
-
     def __init__(self):
         self.aaa = 2
 
@@ -32,7 +30,6 @@ class Base(object):
 
 class Sub(Base):
     """a concrete class"""
-
     def check(self, arg):
         """a concrete method, could not be a function since it need
         polymorphism benefits
@@ -51,7 +48,6 @@ class Super(object):
 
 class Sub1(Super):
     """override method with need for self"""
-
     def method(self):
         """no i can not be a function"""
         print(42)
@@ -72,7 +68,6 @@ class Sub1(Super):
 
 
 class Prop(object):
-
     @property
     def count(self):
         """Don't emit no-self-use for properties.

@@ -18,7 +18,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """functional/non regression tests for pylint"""
 import collections
 import contextlib
@@ -153,9 +152,8 @@ class MinimalTestReporter(BaseReporter):
 
 
 class Message(
-    collections.namedtuple(
-        "Message", ["msg_id", "line", "node", "args", "confidence"])
-):
+        collections.namedtuple(
+            "Message", ["msg_id", "line", "node", "args", "confidence"])):
     def __new__(cls, msg_id, line=None, node=None, args=None, confidence=None):
         return tuple.__new__(cls, (msg_id, line, node, args, confidence))
 
@@ -184,9 +182,13 @@ class UnittestLinter:
         finally:
             self._messages = []
 
-    def add_message(
-        self, msg_id, line=None, node=None, args=None, confidence=None, col_offset=None
-    ):
+    def add_message(self,
+                    msg_id,
+                    line=None,
+                    node=None,
+                    args=None,
+                    confidence=None,
+                    col_offset=None):
         # Do not test col_offset for now since changing Message breaks everything
         self._messages.append(Message(msg_id, line, node, args, confidence))
 
@@ -205,7 +207,6 @@ class UnittestLinter:
 
 def set_config(**kwargs):
     """Decorator for setting config values on a checker."""
-
     def _wrapper(fun):
         @functools.wraps(fun)
         def _forward(self):
@@ -229,8 +230,7 @@ class CheckerTestCase:
 
     def setup_method(self):
         self.linter = UnittestLinter()
-        self.checker = self.CHECKER_CLASS(
-            self.linter)  # pylint: disable=not-callable
+        self.checker = self.CHECKER_CLASS(self.linter)  # pylint: disable=not-callable
         for key, value in self.CONFIG.items():
             setattr(self.checker.config, key, value)
         self.checker.open()
@@ -312,10 +312,9 @@ class NoFileError(Exception):
 
 
 class OutputLine(
-    collections.namedtuple(
-        "OutputLine", ["symbol", "lineno", "object", "msg", "confidence"]
-    )
-):
+        collections.namedtuple(
+            "OutputLine",
+            ["symbol", "lineno", "object", "msg", "confidence"])):
     @classmethod
     def from_msg(cls, msg):
         return cls(
@@ -323,9 +322,8 @@ class OutputLine(
             msg.line,
             msg.obj or "",
             msg.msg.replace("\r\n", "\n"),
-            msg.confidence.name
-            if msg.confidence != interfaces.UNDEFINED
-            else interfaces.HIGH.name,
+            msg.confidence.name if msg.confidence != interfaces.UNDEFINED else
+            interfaces.HIGH.name,
         )
 
     @classmethod
@@ -347,11 +345,10 @@ _MESSAGE = {"msg": r"[a-z][a-z\-]+"}
 #  - followed by a line number with a +/- (optional),
 #  - followed by a list of bracketed message symbols.
 # Used to extract expected messages from testdata files.
-_EXPECTED_RE = re.compile(
-    r"\s*#\s*(?:(?P<line>[+-]?[0-9]+):)?"
-    r"(?:(?P<op>[><=]+) *(?P<version>[0-9.]+):)?"
-    r"\s*\[(?P<msgs>%(msg)s(?:,\s*%(msg)s)*)\]" % _MESSAGE
-)
+_EXPECTED_RE = re.compile(r"\s*#\s*(?:(?P<line>[+-]?[0-9]+):)?"
+                          r"(?:(?P<op>[><=]+) *(?P<version>[0-9.]+):)?"
+                          r"\s*\[(?P<msgs>%(msg)s(?:,\s*%(msg)s)*)\]" %
+                          _MESSAGE)
 
 
 def parse_python_version(ver_str):
@@ -428,8 +425,12 @@ class FunctionalTestFile:
         raise NoFileError("Cannot find '{}'.".format(name))
 
 
-_OPERATORS = {">": operator.gt, "<": operator.lt,
-              ">=": operator.ge, "<=": operator.le}
+_OPERATORS = {
+    ">": operator.gt,
+    "<": operator.lt,
+    ">=": operator.ge,
+    "<=": operator.le
+}
 
 
 def parse_expected_output(stream):
@@ -512,10 +513,8 @@ class LintModuleTest:
 
     def setUp(self):
         if self._should_be_skipped_due_to_version():
-            pytest.skip(
-                "Test cannot run with Python %s." % (
-                    sys.version.split(" ")[0],)
-            )
+            pytest.skip("Test cannot run with Python %s." %
+                        (sys.version.split(" ")[0], ))
         missing = []
         for req in self._test_file.options["requires"]:
             try:
@@ -523,24 +522,20 @@ class LintModuleTest:
             except ImportError:
                 missing.append(req)
         if missing:
-            pytest.skip("Requires %s to be present." % (",".join(missing),))
+            pytest.skip("Requires %s to be present." % (",".join(missing), ))
         if self._test_file.options["except_implementations"]:
             implementations = [
-                item.strip()
-                for item in self._test_file.options["except_implementations"].split(",")
+                item.strip() for item in
+                self._test_file.options["except_implementations"].split(",")
             ]
             implementation = platform.python_implementation()
             if implementation in implementations:
-                pytest.skip(
-                    "Test cannot run with Python implementation %r" % (
-                        implementation,)
-                )
+                pytest.skip("Test cannot run with Python implementation %r" %
+                            (implementation, ))
 
     def _should_be_skipped_due_to_version(self):
-        return (
-            sys.version_info < self._test_file.options["min_pyver"]
-            or sys.version_info > self._test_file.options["max_pyver"]
-        )
+        return (sys.version_info < self._test_file.options["min_pyver"]
+                or sys.version_info > self._test_file.options["max_pyver"])
 
     def __str__(self):
         return "%s (%s.%s)" % (
@@ -576,9 +571,9 @@ class LintModuleTest:
         received_msgs = collections.Counter()
         received_output_lines = []
         for msg in messages:
-            assert (
-                msg.symbol != "fatal"
-            ), "Pylint analysis failed because of '{}'".format(msg.msg)
+            assert (msg.symbol !=
+                    "fatal"), "Pylint analysis failed because of '{}'".format(
+                        msg.msg)
             received_msgs[msg.line, msg.symbol] += 1
             received_output_lines.append(OutputLine.from_msg(msg))
         return received_msgs, received_output_lines
@@ -591,9 +586,8 @@ class LintModuleTest:
 
         if expected_messages != received_messages:
             msg = ['Wrong results for file "%s":' % (self._test_file.base)]
-            missing, unexpected = multiset_difference(
-                expected_messages, received_messages
-            )
+            missing, unexpected = multiset_difference(expected_messages,
+                                                      received_messages)
             if missing:
                 msg.append("\nExpected in testdata:")
                 msg.extend(" %3d: %s" % msg for msg in sorted(missing))
@@ -601,8 +595,8 @@ class LintModuleTest:
                 msg.append("\nUnexpected in testdata:")
                 msg.extend(" %3d: %s" % msg for msg in sorted(unexpected))
             pytest.fail("\n".join(msg))
-        self._check_output_text(
-            expected_messages, expected_text, received_text)
+        self._check_output_text(expected_messages, expected_text,
+                                received_text)
 
     @classmethod
     def _split_lines(cls, expected_messages, lines):
@@ -614,8 +608,9 @@ class LintModuleTest:
                 omitted.append(msg)
         return emitted, omitted
 
-    def _check_output_text(self, expected_messages, expected_lines, received_lines):
-        assert (
-            self._split_lines(expected_messages, expected_lines)[
-                0] == received_lines
-        ), "Error with the following functional test: {}".format(self._test_file.base)
+    def _check_output_text(self, expected_messages, expected_lines,
+                           received_lines):
+        assert (self._split_lines(expected_messages,
+                                  expected_lines)[0] == received_lines
+                ), "Error with the following functional test: {}".format(
+                    self._test_file.base)

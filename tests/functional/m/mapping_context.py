@@ -84,6 +84,7 @@ class BaseThing(object):
         kws = self.get_kwargs()
         self.run(**kws)
 
+
 # abstract class
 
 
@@ -110,7 +111,6 @@ test(**MyClass())
 
 
 class HasDynamicGetattr(object):
-
     def __init__(self):
         self._obj = {}
 

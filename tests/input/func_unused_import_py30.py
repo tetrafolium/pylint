@@ -10,7 +10,6 @@ from abc import ABCMeta as SomethingElse
 
 class Meta(metaclass=abc.ABCMeta):
     """ Test """
-
     def __init__(self):
         self.data = sys.executable
         self.test = abc

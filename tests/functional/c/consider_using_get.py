@@ -80,7 +80,6 @@ if bool(key) and 'key' in dictionary:  # not a simple compare
 else:
     variable = 'default'
 
-
 d1 = {'foo': None}
 d2 = {}
 # Cannot be represented as using .get()

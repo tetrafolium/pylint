@@ -53,9 +53,11 @@ def good_case8():
     """Another eager binding of the cell variable."""
     funs = []
     for i in range(10):
+
         def func(bound_i=i):
             """Ignore."""
             return bound_i
+
         funs.append(func)
     return funs
 
@@ -86,9 +88,11 @@ def bad_case4():
     """Closing over variable defined in loop."""
     lst = []
     for i in range(10):
+
         def nested():
             """Nested function."""
             return i**2  # [cell-var-from-loop]
+
         lst.append(nested)
     return lst
 

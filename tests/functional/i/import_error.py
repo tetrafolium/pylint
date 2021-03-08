@@ -17,7 +17,6 @@ try:
 except ValueError:
     maybe_missing_2 = None
 
-
 try:
     if maybe_missing:
         import really_missing

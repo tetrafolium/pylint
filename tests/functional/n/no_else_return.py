@@ -39,7 +39,7 @@ def foo3(x, y, z):
 
 
 def foo4(x, y):
-    if x:   # [no-else-return]
+    if x:  # [no-else-return]
         if y:
             a = 4
         else:
@@ -51,7 +51,7 @@ def foo4(x, y):
 
 
 def foo5(x, y, z):
-    if x:   # [no-else-return]
+    if x:  # [no-else-return]
         if y:
             a = 4
         else:
@@ -66,7 +66,7 @@ def foo5(x, y, z):
 
 def foo6(x, y):
     if x:
-        if y:   # [no-else-return]
+        if y:  # [no-else-return]
             a = 4
             return
         else:

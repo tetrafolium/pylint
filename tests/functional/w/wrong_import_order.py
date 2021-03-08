@@ -23,16 +23,13 @@ from .package2 import Class2
 from ..package3 import Class3
 from six.moves.urllib.parse import quote  # [wrong-import-order]
 
-
 LOGGER = logging.getLogger(__name__)
-
 
 if LOGGER:
     # imports nested skipped
     from . import package4
     import pprint
     from pprint import PrettyPrinter
-
 
 try:
     # imports nested skipped

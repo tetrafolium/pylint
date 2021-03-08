@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring
 
+
 def function():
     ann: int = 0
     assign = 0

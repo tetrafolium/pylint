@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring, unused-variable, unused-argument
 # pylint: disable=redefined-outer-name, invalid-name, redefine-in-handler
 
+
 def test_redefined_in_with(name):
     with open('something') as name:  # [redefined-argument-from-local]
         pass

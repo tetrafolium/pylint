@@ -40,9 +40,11 @@ class TestASTWalker(object):
             raise NotImplementedError
 
     def test_check_messages(self):
-        linter = self.MockLinter(
-            {"first-message": True, "second-message": False, "third-message": True}
-        )
+        linter = self.MockLinter({
+            "first-message": True,
+            "second-message": False,
+            "third-message": True
+        })
         walker = ASTWalker(linter)
         checker = self.Checker()
         walker.add_checker(checker)

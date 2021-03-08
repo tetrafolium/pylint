@@ -46,12 +46,10 @@ def dec():
 with dec():  # valid use
     pass
 
-
 # Tests a message is produced when a contextlib.contextmanager
 # decorated function is used without being called.
 with dec:  # [not-context-manager]
     pass
-
 
 # Tests no messages about context manager protocol
 # if the type can't be inferred.
@@ -74,9 +72,9 @@ with tropa:  # [not-context-manager]
 with hopa:
     pass
 
-
 # Tests that no messages are emitted for function calls
 # which return managers
+
 
 def wrapper():
     return dec()
@@ -89,7 +87,6 @@ with wrapper():
 
 
 class Property(object):
-
     @property
     def ctx(self):
         return dec()
@@ -131,6 +128,7 @@ class FullContextManager(ManagerMixin):
 
     def __exit__(self, *args):
         pass
+
 
 # Test a false positive with returning a generator
 # from a context manager.

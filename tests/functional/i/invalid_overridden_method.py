@@ -32,14 +32,12 @@ class NoProp(SuperClass):
 
 
 class Property:
-
     @property
     def close(self):
         pass
 
 
 class PropertySetter(Property):
-
     @property
     def close(self):
         pass
@@ -54,7 +52,6 @@ class PropertySetter(Property):
 
 
 class AbstractProperty:
-
     @abc.abstractproperty
     def prop(self):
         return

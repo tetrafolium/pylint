@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring
 
+
 class SomeException(Exception):
     pass
 

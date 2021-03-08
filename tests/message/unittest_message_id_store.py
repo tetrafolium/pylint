@@ -54,8 +54,8 @@ def test_register_message_definitions(empty_msgid_store, message_definitions):
 
 def test_add_msgid_and_symbol(empty_msgid_store):
     empty_msgid_store.add_msgid_and_symbol("E1235", "new-sckiil")
-    empty_msgid_store.add_legacy_msgid_and_symbol(
-        "C1235", "old-sckiil", "E1235")
+    empty_msgid_store.add_legacy_msgid_and_symbol("C1235", "old-sckiil",
+                                                  "E1235")
     assert len(empty_msgid_store) == 2
     message_ids = empty_msgid_store.get_active_msgids("E1235")
     assert len(message_ids) == 1
@@ -79,8 +79,7 @@ def test_duplicate_symbol(empty_msgid_store):
         empty_msgid_store.check_msgid_and_symbol("W1234", "other-symbol")
     assert (
         "Message id 'W1234' cannot have both 'other-symbol' and 'warning-symbol' as symbolic name."
-        in str(error.value)
-    )
+        in str(error.value))
 
 
 def test_duplicate_msgid(msgid_store):
@@ -89,5 +88,4 @@ def test_duplicate_msgid(msgid_store):
         msgid_store.check_msgid_and_symbol("W1235", "warning-symbol")
     assert (
         "Message symbol 'warning-symbol' cannot be used for 'W1234' and 'W1235'"
-        in str(error.value)
-    )
+        in str(error.value))

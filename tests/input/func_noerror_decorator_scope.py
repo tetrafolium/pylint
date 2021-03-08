@@ -11,7 +11,8 @@ from __future__ import print_function
 
 class Test(object):
     """test class"""
-    def ident(x): return x
+    def ident(x):
+        return x
 
     @ident(ident)
     def method(self, val=ident(7), func=ident):

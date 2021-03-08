@@ -5,7 +5,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Graph manipulation utilities.
 
 (dot generation adapted from pypy/translator/tool/make_dot.py)
@@ -29,7 +28,6 @@ def target_info_from_filename(filename):
 
 class DotBackend:
     """Dot File backend."""
-
     def __init__(
         self,
         graphname,
@@ -54,9 +52,9 @@ class DotBackend:
         if size:
             self.emit('size="%s"' % size)
         if charset:
-            assert charset.lower() in ("utf-8", "iso-8859-1", "latin1"), (
-                "unsupported charset %s" % charset
-            )
+            assert charset.lower() in ("utf-8", "iso-8859-1",
+                                       "latin1"), ("unsupported charset %s" %
+                                                   charset)
             self.emit('charset="%s"' % charset)
         for param in additional_param.items():
             self.emit("=".join(param))
@@ -116,7 +114,10 @@ class DotBackend:
                 )
             else:
                 subprocess.call(
-                    [self.renderer, "-T", target, dot_sourcepath, "-o", outputfile],
+                    [
+                        self.renderer, "-T", target, dot_sourcepath, "-o",
+                        outputfile
+                    ],
                     shell=use_shell,
                 )
             os.unlink(dot_sourcepath)

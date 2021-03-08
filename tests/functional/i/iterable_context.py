@@ -52,7 +52,7 @@ for i in {x: 10 - x for x in range(10)}:
 def powers_of_two():
     k = 0
     while k < 10:
-        yield 2 ** k
+        yield 2**k
         k += 1
 
 
@@ -126,7 +126,6 @@ for i in 8.5:  # [not-an-iterable]
 for i in 10:  # [not-an-iterable]
     pass
 
-
 # skip uninferable instances
 
 
@@ -180,6 +179,7 @@ class AbstractUrlMarkManager(object):
     def _init_lineparser(self):
         raise NotImplementedError
 
+
 # class is not named as abstract
 # but still is deduceably abstract
 
@@ -197,7 +197,6 @@ class UrlMarkManager(object):
 
 
 class HasDynamicGetattr(object):
-
     def __init__(self):
         self._obj = []
 

@@ -8,7 +8,6 @@ from missing import Missing
 
 class Custom(object):
     """ Has a __getattr__ """
-
     def __getattr__(self, _):
         return self
 
@@ -21,7 +20,6 @@ class Test(object):
 
 class Getitem(object):
     """ test custom getitem for lookup access """
-
     def __getitem__(self, index):
         return 42
 
@@ -154,9 +152,9 @@ def issue338():
         """ Looking for attributes in __str__ will crash,
         because EmptyNodes can't be infered.
         """
-
         def __str__(self):
             return "{0.foo}: {0.bar}".format(self)
+
     return Crash
 
 
@@ -176,7 +174,6 @@ def issue373():
     """
     class SomeClass(object):
         """ empty docstring. """
-
         def __init__(self, opts=None):
             self.opts = opts
 
