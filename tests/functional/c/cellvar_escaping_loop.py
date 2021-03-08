@@ -2,6 +2,7 @@
 """Tests for loopvar-in-closure."""
 from __future__ import print_function
 
+
 def good_case():
     """No problems here."""
     lst = []

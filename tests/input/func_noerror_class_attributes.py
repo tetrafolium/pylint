@@ -2,6 +2,7 @@
 __revision__ = 'sponge bob'
 # pylint: disable=useless-object-inheritance
 
+
 class Clazz(object):
     "dummy class"
 

@@ -81,13 +81,15 @@ def save_results(results, base):
         try:
             os.mkdir(PYLINT_HOME)
         except OSError:
-            print("Unable to create directory %s" % PYLINT_HOME, file=sys.stderr)
+            print("Unable to create directory %s" %
+                  PYLINT_HOME, file=sys.stderr)
     data_file = _get_pdata_path(base, 1)
     try:
         with open(data_file, "wb") as stream:
             pickle.dump(results, stream)
     except (IOError, OSError) as ex:
-        print("Unable to create file %s: %s" % (data_file, ex), file=sys.stderr)
+        print("Unable to create file %s: %s" %
+              (data_file, ex), file=sys.stderr)
 
 
 def _toml_has_config(path):
@@ -376,7 +378,8 @@ class Option(optparse.Option):
 
 class OptionParser(optparse.OptionParser):
     def __init__(self, option_class, *args, **kwargs):
-        optparse.OptionParser.__init__(self, option_class=Option, *args, **kwargs)
+        optparse.OptionParser.__init__(
+            self, option_class=Option, *args, **kwargs)
 
     def format_option_help(self, formatter=None):
         if formatter is None:
@@ -387,7 +390,8 @@ class OptionParser(optparse.OptionParser):
         result.append(formatter.format_heading("Options"))
         formatter.indent()
         if self.option_list:
-            result.append(optparse.OptionContainer.format_option_help(self, formatter))
+            result.append(
+                optparse.OptionContainer.format_option_help(self, formatter))
             result.append("\n")
         for group in self.option_groups:
             if group.level <= outputlevel and (
@@ -491,7 +495,7 @@ class _ManHelpFormatter(optparse.HelpFormatter):
         long_desc = "\n".join(line.lstrip() for line in long_desc.splitlines())
         long_desc = long_desc.replace("\n.\n", "\n\n")
         if long_desc.lower().startswith(pgm):
-            long_desc = long_desc[len(pgm) :]
+            long_desc = long_desc[len(pgm):]
         return """.SH DESCRIPTION
 .B %s
 %s
@@ -552,7 +556,8 @@ class OptionsManagerMixIn:
             inline_comment_prefixes=("#", ";")
         )
         # command line parser
-        self.cmdline_parser = OptionParser(Option, usage=usage, version=version)
+        self.cmdline_parser = OptionParser(
+            Option, usage=usage, version=version)
         self.cmdline_parser.options_manager = self
         self._optik_option_attrs = set(self.cmdline_parser.option_class.ATTRS)
 
@@ -578,7 +583,8 @@ class OptionsManagerMixIn:
             )
         else:
             for opt, optdict in non_group_spec_options:
-                self.add_optik_option(provider, self.cmdline_parser, opt, optdict)
+                self.add_optik_option(
+                    provider, self.cmdline_parser, opt, optdict)
         for gname, gdoc in groups:
             gname = gname.upper()
             goptions = [
@@ -724,7 +730,8 @@ class OptionsManagerMixIn:
             helpfunc = functools.partial(self.helpfunc, level=helplevel)
 
             helpmsg = "%s verbose help." % " ".join(["more"] * helplevel)
-            optdict = {"action": "callback", "callback": helpfunc, "help": helpmsg}
+            optdict = {"action": "callback",
+                       "callback": helpfunc, "help": helpmsg}
             provider = self.options_providers[0]
             self.add_optik_option(provider, self.cmdline_parser, opt, optdict)
             provider.options += ((opt, optdict),)
@@ -734,7 +741,8 @@ class OptionsManagerMixIn:
         if config_file is not None:
             config_file = os.path.expanduser(config_file)
             if not os.path.exists(config_file):
-                raise IOError("The config file {:s} doesn't exist!".format(config_file))
+                raise IOError(
+                    "The config file {:s} doesn't exist!".format(config_file))
 
         use_config_file = config_file and os.path.exists(config_file)
         if use_config_file:
@@ -759,7 +767,7 @@ class OptionsManagerMixIn:
                 # normalize sections'title
                 for sect, values in list(parser._sections.items()):
                     if sect.startswith("pylint."):
-                        sect = sect[len("pylint.") :]
+                        sect = sect[len("pylint."):]
                     if not sect.isupper() and values:
                         parser._sections[sect.upper()] = values
 

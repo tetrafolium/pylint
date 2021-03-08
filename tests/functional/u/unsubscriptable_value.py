@@ -4,6 +4,8 @@ Checks that value used in a subscript supports subscription
 """
 # pylint: disable=missing-docstring,pointless-statement,expression-not-assigned,wrong-import-position, unnecessary-comprehension
 # pylint: disable=too-few-public-methods,import-error,invalid-name,wrong-import-order, useless-object-inheritance
+from collections import deque
+from some_missing_module import LibSubscriptable
 import six
 
 # primitives
@@ -25,9 +27,11 @@ dict(a=1, b=2)['a']
 class NonSubscriptable(object):
     pass
 
+
 class Subscriptable(object):
     def __getitem__(self, key):
         return key + key
+
 
 NonSubscriptable()[0]  # [unsubscriptable-object]
 NonSubscriptable[0]  # [unsubscriptable-object]
@@ -35,11 +39,14 @@ Subscriptable()[0]
 Subscriptable[0]  # [unsubscriptable-object]
 
 # generators are not subscriptable
+
+
 def powers_of_two():
     k = 0
     while k < 10:
         yield 2 ** k
         k += 1
+
 
 powers_of_two()[0]  # [unsubscriptable-object]
 powers_of_two[0]  # [unsubscriptable-object]
@@ -57,34 +64,40 @@ set(numbers)[0]  # [unsubscriptable-object]
 frozenset(numbers)[0]  # [unsubscriptable-object]
 
 # skip instances with unknown base classes
-from some_missing_module import LibSubscriptable
+
 
 class MaybeSubscriptable(LibSubscriptable):
     pass
+
 
 MaybeSubscriptable()[0]
 
 # subscriptable classes (through metaclasses)
 
+
 class MetaSubscriptable(type):
     def __getitem__(cls, key):
         return key + key
 
+
 class SubscriptableClass(six.with_metaclass(MetaSubscriptable, object)):
     pass
+
 
 SubscriptableClass[0]
 SubscriptableClass()[0]  # [unsubscriptable-object]
 
 # functions are not subscriptable
+
+
 def test(*args, **kwargs):
     return args, kwargs
+
 
 test()[0]
 test[0]  # [unsubscriptable-object]
 
 # deque
-from collections import deque
 deq = deque(maxlen=10)
 deq.append(42)
 deq[0]

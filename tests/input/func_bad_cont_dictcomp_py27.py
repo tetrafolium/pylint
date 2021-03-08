@@ -23,7 +23,7 @@ C6 = {x*y: (x, y) for x in range(3)
       for y in range(3)}
 
 C7 = {key:
-          key ** 2
+      key ** 2
       for key in range(10)}
 
 C8 = {
@@ -32,7 +32,7 @@ C8 = {
 
 # Misaligned cases for dict comprehensions
 C9 = {'key{}'.format(x): 'value{}'.format(x)
-    for x in range(3)}  # [bad-continuation]
+      for x in range(3)}  # [bad-continuation]
 
 C9 = {'key{}'.format(x): 'value{}'.format(x)
-          for x in range(3)}  # [bad-continuation]
+      for x in range(3)}  # [bad-continuation]

@@ -18,10 +18,10 @@ class Child(Parent):
     def __init__(self):
         super(Child, self).__init__()
 
-        self._similar # [no-member]
-        self._really_similar # [no-member]
-        self._paren # [no-member]
+        self._similar  # [no-member]
+        self._really_similar  # [no-member]
+        self._paren  # [no-member]
         # Distance is too big
-        self._registryyyy # [no-member]
+        self._registryyyy  # [no-member]
         # Nothing close.
-        self._pretty_sure_this_wont_match # [no-member]
+        self._pretty_sure_this_wont_match  # [no-member]

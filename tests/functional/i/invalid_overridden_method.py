@@ -27,7 +27,7 @@ class NoProp(SuperClass):
         return None
 
     @property
-    def method(self): # [invalid-overridden-method]
+    def method(self):  # [invalid-overridden-method]
         return None
 
 

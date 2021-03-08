@@ -2,11 +2,12 @@
 
 # pylint: disable=missing-docstring, import-error, useless-object-inheritance, unsubscriptable-object, too-few-public-methods
 
+
 def bad():
     iterable = [1, 2, 3]
-    for obj in range(len(iterable)): # [consider-using-enumerate]
+    for obj in range(len(iterable)):  # [consider-using-enumerate]
         yield iterable[obj]
-    for obj in range(0, len(iterable)): # [consider-using-enumerate]
+    for obj in range(0, len(iterable)):  # [consider-using-enumerate]
         yield iterable[obj]
 
 
@@ -14,11 +15,11 @@ class Bad(object):
 
     def __iter__(self):
         iterable = [1, 2, 3]
-        for i in range(len(iterable)): # [consider-using-enumerate]
+        for i in range(len(iterable)):  # [consider-using-enumerate]
             yield iterable[i]
 
     def test(self):
-        for i in range(len(self)): # [consider-using-enumerate]
+        for i in range(len(self)):  # [consider-using-enumerate]
             yield self[i]
 
 

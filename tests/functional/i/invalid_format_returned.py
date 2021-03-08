@@ -54,7 +54,7 @@ class ThirdBadFormat(object):
 class AmbiguousFormat(object):
     """ Uninferable return value """
 
-    __format__ = lambda self, format_spec: Missing
+    def __format__(self, format_spec): return Missing
 
 
 class AnotherAmbiguousFormat(object):

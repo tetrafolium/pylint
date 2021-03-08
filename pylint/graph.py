@@ -139,7 +139,8 @@ class DotBackend:
         node properties: see http://www.graphviz.org/doc/info/attrs.html
         """
         attrs = ['%s="%s"' % (prop, value) for prop, value in props.items()]
-        self.emit("%s [%s];" % (normalize_node_id(name), ", ".join(sorted(attrs))))
+        self.emit("%s [%s];" %
+                  (normalize_node_id(name), ", ".join(sorted(attrs))))
 
 
 def normalize_node_id(nid):

@@ -55,10 +55,12 @@ class ThirdBadLen(object):
 
 class AmbigousLen(object):
     """ Uninferable return value """
-    __len__ = lambda self: Missing
+
+    def __len__(self): return Missing
 
 
 class AnotherAmbiguousLen(object):
     """Potential uninferable return value"""
+
     def __len__(self):
         return int(Missing)

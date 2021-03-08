@@ -454,7 +454,8 @@ def test_errors_only(linter):
     linter.error_mode()
     checkers = linter.prepare_checkers()
     checker_names = {c.name for c in checkers}
-    should_not = {"design", "format", "metrics", "miscellaneous", "similarities"}
+    should_not = {"design", "format", "metrics",
+                  "miscellaneous", "similarities"}
     assert set() == should_not & checker_names
 
 
@@ -495,7 +496,8 @@ def test_addmessage_invalid(linter):
     assert str(cm.value) == "Message C0301 must provide line, got None"
 
     with pytest.raises(InvalidMessageError) as cm:
-        linter.add_message("line-too-long", line=2, node="fake_node", args=(1, 2))
+        linter.add_message("line-too-long", line=2,
+                           node="fake_node", args=(1, 2))
     assert (
         str(cm.value)
         == "Message C0301 must only provide line, got line=2, node=fake_node"
@@ -511,7 +513,8 @@ def test_load_plugin_command_line():
     sys.path.append(dummy_plugin_path)
 
     run = Run(
-        ["--load-plugins", "dummy_plugin", join(HERE, "regrtest_data", "empty.py")],
+        ["--load-plugins", "dummy_plugin",
+            join(HERE, "regrtest_data", "empty.py")],
         do_exit=False,
     )
     assert (
@@ -732,7 +735,8 @@ class TestPreprocessOptions(object):
 
     def test_error_missing_expected_value(self):
         with pytest.raises(ArgumentPreprocessingError):
-            preprocess_options(["--foo", "--bar", "--qu=ux"], {"bar": (None, True)})
+            preprocess_options(["--foo", "--bar", "--qu=ux"],
+                               {"bar": (None, True)})
         with pytest.raises(ArgumentPreprocessingError):
             preprocess_options(["--foo", "--bar"], {"bar": (None, True)})
 
@@ -802,7 +806,8 @@ def test_by_module_statement_value(init_linter):
 
         linter2 = init_linter
         if module == "data":
-            linter2.check(os.path.join(os.path.dirname(__file__), "data/__init__.py"))
+            linter2.check(os.path.join(
+                os.path.dirname(__file__), "data/__init__.py"))
         else:
             linter2.check(os.path.join(os.path.dirname(__file__), module))
 

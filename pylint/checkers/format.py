@@ -442,7 +442,8 @@ class ContinuedLineState:
         if self._tokens.token(pos) == _ASYNC_TOKEN:
             check_token_position += 1
         self._is_block_opener = (
-            self._tokens.token(check_token_position) in _CONTINUATION_BLOCK_OPENERS
+            self._tokens.token(
+                check_token_position) in _CONTINUATION_BLOCK_OPENERS
         )
         self._line_start = pos
 
@@ -461,7 +462,8 @@ class ContinuedLineState:
         self._cont_stack = []
 
     def add_block_warning(self, token_position, state, valid_indentations):
-        self.retained_warnings.append((token_position, state, valid_indentations))
+        self.retained_warnings.append(
+            (token_position, state, valid_indentations))
 
     def get_valid_indentations(self, idx):
         """Returns the valid offsets for the token at the given position."""
@@ -500,7 +502,8 @@ class ContinuedLineState:
                 HANGING_BLOCK,
                 bracket,
                 position,
-                _Indentations(indentation + self._continuation_string, indentation),
+                _Indentations(
+                    indentation + self._continuation_string, indentation),
                 _BeforeBlockIndentations(
                     indentation + self._continuation_string,
                     indentation + self._continuation_string * 2,
@@ -527,7 +530,8 @@ class ContinuedLineState:
             HANGING,
             bracket,
             position,
-            _Indentations(indentation, indentation + self._continuation_string),
+            _Indentations(indentation, indentation +
+                          self._continuation_string),
             _Indentations(indentation + self._continuation_string),
         )
 
@@ -575,9 +579,11 @@ class ContinuedLineState:
         :param int position: The position of the token in the stream.
         """
         if _token_followed_by_eol(self._tokens, position):
-            self._cont_stack.append(self._hanging_indent_after_bracket(token, position))
+            self._cont_stack.append(
+                self._hanging_indent_after_bracket(token, position))
         else:
-            self._cont_stack.append(self._continuation_inside_bracket(token, position))
+            self._cont_stack.append(
+                self._continuation_inside_bracket(token, position))
 
 
 class FormatChecker(BaseTokenChecker):
@@ -720,7 +726,8 @@ class FormatChecker(BaseTokenChecker):
     def new_line(self, tokens, line_end, line_start):
         """a new line has been encountered, process it if necessary"""
         if _last_token_on_line_is(tokens, line_end, ";"):
-            self.add_message("unnecessary-semicolon", line=tokens.start_line(line_end))
+            self.add_message("unnecessary-semicolon",
+                             line=tokens.start_line(line_end))
 
         line_num = tokens.start_line(line_start)
         line = tokens.line(line_start)
@@ -844,7 +851,7 @@ class FormatChecker(BaseTokenChecker):
         # type string start end line
         #  0      1     2    3    4
         bracket_level = 0
-        for token in tokens[i - 1 :: -1]:
+        for token in tokens[i - 1:: -1]:
             if token[1] == ":":
                 return True
             if token[1] == "(":
@@ -950,7 +957,8 @@ class FormatChecker(BaseTokenChecker):
             self.add_message(
                 "bad-whitespace",
                 line=token[2][0],
-                args=(count, state, position, construct, _underline_token(token)),
+                args=(count, state, position, construct,
+                      _underline_token(token)),
                 col_offset=token[2][1],
             )
 
@@ -1031,7 +1039,8 @@ class FormatChecker(BaseTokenChecker):
             elif tok_type == tokenize.NL:
                 if not line.strip("\r\n"):
                     last_blank_line_num = line_num
-                self._check_continued_indentation(TokenWrapper(tokens), idx + 1)
+                self._check_continued_indentation(
+                    TokenWrapper(tokens), idx + 1)
                 self._current_line.next_physical_line()
             elif tok_type not in (tokenize.COMMENT, tokenize.ENCODING):
                 self._current_line.handle_line_start(idx)
@@ -1063,7 +1072,8 @@ class FormatChecker(BaseTokenChecker):
                 "too-many-lines"
             )[0]
             names = (message_definition.msgid, "too-many-lines")
-            line = next(filter(None, map(self.linter._pragma_lineno.get, names)), 1)
+            line = next(
+                filter(None, map(self.linter._pragma_lineno.get, names)), 1)
             self.add_message(
                 "too-many-lines",
                 args=(line_num, self.config.max_module_lines),
@@ -1090,7 +1100,8 @@ class FormatChecker(BaseTokenChecker):
         expected = self.config.expected_line_ending_format
         if expected:
             # reduce multiple \n\n\n\n to one \n
-            line_ending = reduce(lambda x, y: x + y if x != y else x, line_ending, "")
+            line_ending = reduce(lambda x, y: x + y if x !=
+                                 y else x, line_ending, "")
             line_ending = "LF" if line_ending == "\n" else "CRLF"
             if line_ending != expected:
                 self.add_message(
@@ -1100,15 +1111,18 @@ class FormatChecker(BaseTokenChecker):
                 )
 
     def _process_retained_warnings(self, tokens, current_pos):
-        single_line_block_stmt = not _last_token_on_line_is(tokens, current_pos, ":")
+        single_line_block_stmt = not _last_token_on_line_is(
+            tokens, current_pos, ":")
 
         for indent_pos, state, indentations in self._current_line.retained_warnings:
             block_type = indentations[tokens.token_indent(indent_pos)]
             hints = {k: v for k, v in indentations.items() if v != block_type}
             if single_line_block_stmt and block_type == WITH_BODY:
-                self._add_continuation_message(state, hints, tokens, indent_pos)
+                self._add_continuation_message(
+                    state, hints, tokens, indent_pos)
             elif not single_line_block_stmt and block_type == SINGLE_LINE:
-                self._add_continuation_message(state, hints, tokens, indent_pos)
+                self._add_continuation_message(
+                    state, hints, tokens, indent_pos)
 
     def _check_continued_indentation(self, tokens, next_idx):
         def same_token_around_nl(token_type):
@@ -1121,7 +1135,8 @@ class FormatChecker(BaseTokenChecker):
         if not self._current_line.has_content or tokens.type(next_idx) == tokenize.NL:
             return
 
-        state, valid_indentations = self._current_line.get_valid_indentations(next_idx)
+        state, valid_indentations = self._current_line.get_valid_indentations(
+            next_idx)
         # Special handling for hanging comments and strings. If the last line ended
         # with a comment (string) and the new line contains only a comment, the line
         # may also be indented to the start of the previous token.
@@ -1138,7 +1153,8 @@ class FormatChecker(BaseTokenChecker):
             state.context_type in (HANGING_BLOCK, CONTINUED_BLOCK)
             and tokens.token_indent(next_idx) in valid_indentations
         ):
-            self._current_line.add_block_warning(next_idx, state, valid_indentations)
+            self._current_line.add_block_warning(
+                next_idx, state, valid_indentations)
         elif tokens.token_indent(next_idx) not in valid_indentations:
             length_indentation = len(tokens.token_indent(next_idx))
             if not any(
@@ -1181,7 +1197,8 @@ class FormatChecker(BaseTokenChecker):
         # by taking the last line of the body and adding 1, which
         # should be the line of finally:
         elif (
-            isinstance(node.parent, nodes.TryFinally) and node in node.parent.finalbody
+            isinstance(
+                node.parent, nodes.TryFinally) and node in node.parent.finalbody
         ):
             prev_line = node.parent.body[0].tolineno + 1
         else:
@@ -1255,7 +1272,7 @@ class FormatChecker(BaseTokenChecker):
             if not stripped_line and _EMPTY_LINE in self.config.no_space_check:
                 # allow empty lines
                 pass
-            elif line[len(stripped_line) :] not in ("\n", "\r\n"):
+            elif line[len(stripped_line):] not in ("\n", "\r\n"):
                 self.add_message(
                     "trailing-whitespace", line=i, col_offset=len(stripped_line)
                 )
@@ -1268,7 +1285,8 @@ class FormatChecker(BaseTokenChecker):
         ignore_long_line = self.config.ignore_long_lines
         line = line.rstrip()
         if len(line) > max_chars and not ignore_long_line.search(line):
-            self.add_message("line-too-long", line=i, args=(len(line), max_chars))
+            self.add_message("line-too-long", line=i,
+                             args=(len(line), max_chars))
 
     @staticmethod
     def remove_pylint_option_from_lines(options_pattern_obj) -> str:
@@ -1278,7 +1296,7 @@ class FormatChecker(BaseTokenChecker):
         lines = options_pattern_obj.string
         purged_lines = (
             lines[: options_pattern_obj.start(1)].rstrip()
-            + lines[options_pattern_obj.end(1) :]
+            + lines[options_pattern_obj.end(1):]
         )
         return purged_lines
 
@@ -1375,7 +1393,8 @@ class FormatChecker(BaseTokenChecker):
             self.add_message(
                 "bad-indentation",
                 line=line_num,
-                args=(level * unit_size + len(suppl), i_type, expected * unit_size),
+                args=(level * unit_size + len(suppl),
+                      i_type, expected * unit_size),
             )
         return None
 

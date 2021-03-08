@@ -153,7 +153,8 @@ class MinimalTestReporter(BaseReporter):
 
 
 class Message(
-    collections.namedtuple("Message", ["msg_id", "line", "node", "args", "confidence"])
+    collections.namedtuple(
+        "Message", ["msg_id", "line", "node", "args", "confidence"])
 ):
     def __new__(cls, msg_id, line=None, node=None, args=None, confidence=None):
         return tuple.__new__(cls, (msg_id, line, node, args, confidence))
@@ -228,7 +229,8 @@ class CheckerTestCase:
 
     def setup_method(self):
         self.linter = UnittestLinter()
-        self.checker = self.CHECKER_CLASS(self.linter)  # pylint: disable=not-callable
+        self.checker = self.CHECKER_CLASS(
+            self.linter)  # pylint: disable=not-callable
         for key, value in self.CONFIG.items():
             setattr(self.checker.config, key, value)
         self.checker.open()
@@ -426,7 +428,8 @@ class FunctionalTestFile:
         raise NoFileError("Cannot find '{}'.".format(name))
 
 
-_OPERATORS = {">": operator.gt, "<": operator.lt, ">=": operator.ge, "<=": operator.le}
+_OPERATORS = {">": operator.gt, "<": operator.lt,
+              ">=": operator.ge, "<=": operator.le}
 
 
 def parse_expected_output(stream):
@@ -510,7 +513,8 @@ class LintModuleTest:
     def setUp(self):
         if self._should_be_skipped_due_to_version():
             pytest.skip(
-                "Test cannot run with Python %s." % (sys.version.split(" ")[0],)
+                "Test cannot run with Python %s." % (
+                    sys.version.split(" ")[0],)
             )
         missing = []
         for req in self._test_file.options["requires"]:
@@ -528,7 +532,8 @@ class LintModuleTest:
             implementation = platform.python_implementation()
             if implementation in implementations:
                 pytest.skip(
-                    "Test cannot run with Python implementation %r" % (implementation,)
+                    "Test cannot run with Python implementation %r" % (
+                        implementation,)
                 )
 
     def _should_be_skipped_due_to_version(self):
@@ -596,7 +601,8 @@ class LintModuleTest:
                 msg.append("\nUnexpected in testdata:")
                 msg.extend(" %3d: %s" % msg for msg in sorted(unexpected))
             pytest.fail("\n".join(msg))
-        self._check_output_text(expected_messages, expected_text, received_text)
+        self._check_output_text(
+            expected_messages, expected_text, received_text)
 
     @classmethod
     def _split_lines(cls, expected_messages, lines):
@@ -610,5 +616,6 @@ class LintModuleTest:
 
     def _check_output_text(self, expected_messages, expected_lines, received_lines):
         assert (
-            self._split_lines(expected_messages, expected_lines)[0] == received_lines
+            self._split_lines(expected_messages, expected_lines)[
+                0] == received_lines
         ), "Error with the following functional test: {}".format(self._test_file.base)

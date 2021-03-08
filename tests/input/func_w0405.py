@@ -16,6 +16,7 @@ if __revision__:
     from os.path import exists
     print(join, exists)
 
+
 def func(yooo):
     """reimport in different scope"""
     import os as ass
@@ -23,7 +24,8 @@ def func(yooo):
     import re
     re.compile('.*')
 
-if 1: # pylint: disable=using-constant-test
+
+if 1:  # pylint: disable=using-constant-test
     import sys
     print(sys.modules)
 else:

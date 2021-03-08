@@ -15,10 +15,10 @@ def function():
     # +1: [fixme]
     xxx = "n/a"  # XXX: Fix this later
     # +1: [fixme]
-    #FIXME: no space after hash
+    # FIXME: no space after hash
     # +1: [fixme]
-    #todo: no space after hash
-    #FIXME: in fact nothing to fix #pylint: disable=fixme
-    #TODO: in fact nothing to do #pylint: disable=fixme
-    #TODO: in fact nothing to do #pylint: disable=line-too-long, fixme
+    # todo: no space after hash
+    # FIXME: in fact nothing to fix #pylint: disable=fixme
+    # TODO: in fact nothing to do #pylint: disable=fixme
+    # TODO: in fact nothing to do #pylint: disable=line-too-long, fixme
     # Todoist API mentioned should not result in a message.

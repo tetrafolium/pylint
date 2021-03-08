@@ -1,5 +1,6 @@
 """Test for redefine-in-handler, overwriting names in exception handlers."""
 
+
 def new_style():
     """Some exceptions can be unpacked."""
     try:

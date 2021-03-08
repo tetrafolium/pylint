@@ -2,6 +2,7 @@
 
 # pylint:disable=invalid-name,missing-docstring,unused-variable
 
+
 def foo1(x, y, z):
     if x:  # [no-else-raise]
         a = 1
@@ -38,7 +39,7 @@ def foo3(x, y, z):
 
 
 def foo4(x, y):
-    if x: # [no-else-raise]
+    if x:  # [no-else-raise]
         if y:
             a = 4
         else:
@@ -50,7 +51,7 @@ def foo4(x, y):
 
 
 def foo5(x, y, z):
-    if x: # [no-else-raise]
+    if x:  # [no-else-raise]
         if y:
             a = 4
         else:

@@ -58,7 +58,8 @@ IGNORED_ARGUMENT_NAMES = re.compile("_.*|^ignored_|^unused_")
 # by astroid. Unfortunately this also messes up our explicit checks
 # for `abc`
 METACLASS_NAME_TRANSFORMS = {"_py_abc": "abc"}
-TYPING_TYPE_CHECKS_GUARDS = frozenset({"typing.TYPE_CHECKING", "TYPE_CHECKING"})
+TYPING_TYPE_CHECKS_GUARDS = frozenset(
+    {"typing.TYPE_CHECKING", "TYPE_CHECKING"})
 BUILTIN_RANGE = "builtins.range"
 TYPING_MODULE = "typing"
 TYPING_NAMES = frozenset(
@@ -668,7 +669,8 @@ class VariablesChecker(BaseChecker):
     def __init__(self, linter=None):
         BaseChecker.__init__(self, linter)
         self._to_consume = (
-            None  # list of tuples: (to_consume:dict, consumed:dict, scope_type:str)
+            # list of tuples: (to_consume:dict, consumed:dict, scope_type:str)
+            None
         )
         self._checking_mod_attr = None
         self._loop_variables = []
@@ -709,7 +711,8 @@ class VariablesChecker(BaseChecker):
         checks globals doesn't overrides builtins
         """
         self._to_consume = [NamesConsumer(node, "module")]
-        self._postponed_evaluation_enabled = is_postponed_evaluation_enabled(node)
+        self._postponed_evaluation_enabled = is_postponed_evaluation_enabled(
+            node)
 
         for name, stmts in node.locals.items():
             if utils.is_builtin(name) and not utils.is_inside_except(stmts[0]):
@@ -870,10 +873,13 @@ class VariablesChecker(BaseChecker):
         if is_method and node.is_abstract():
             return
 
-        global_names = _flattened_scope_names(node.nodes_of_class(astroid.Global))
-        nonlocal_names = _flattened_scope_names(node.nodes_of_class(astroid.Nonlocal))
+        global_names = _flattened_scope_names(
+            node.nodes_of_class(astroid.Global))
+        nonlocal_names = _flattened_scope_names(
+            node.nodes_of_class(astroid.Nonlocal))
         for name, stmts in not_consumed.items():
-            self._check_is_unused(name, node, stmts[0], global_names, nonlocal_names)
+            self._check_is_unused(
+                name, node, stmts[0], global_names, nonlocal_names)
 
     visit_asyncfunctiondef = visit_functiondef
     leave_asyncfunctiondef = leave_functiondef
@@ -907,7 +913,8 @@ class VariablesChecker(BaseChecker):
                 for local in locals_.get(name, ())
             )
             if not assign_nodes and not_defined_locally_by_import:
-                self.add_message("global-variable-not-assigned", args=name, node=node)
+                self.add_message("global-variable-not-assigned",
+                                 args=name, node=node)
                 default_message = False
                 continue
 
@@ -924,7 +931,8 @@ class VariablesChecker(BaseChecker):
             else:
                 if not_defined_locally_by_import:
                     # global undefined at the module scope
-                    self.add_message("global-variable-undefined", args=name, node=node)
+                    self.add_message(
+                        "global-variable-undefined", args=name, node=node)
                     default_message = False
 
         if default_message:
@@ -987,7 +995,8 @@ class VariablesChecker(BaseChecker):
                 current_consumer.scope_type == "comprehension"
                 and self._has_homonym_in_upper_function_scope(node, i)
             ):
-                defnode = utils.assign_parent(current_consumer.consumed[name][0])
+                defnode = utils.assign_parent(
+                    current_consumer.consumed[name][0])
                 self._check_late_binding_closure(node, defnode)
                 self._loopvar_name(node, name)
                 break
@@ -1125,7 +1134,8 @@ class VariablesChecker(BaseChecker):
                                     "undefined-variable", args=name, node=node
                                 )
                         elif current_consumer.scope_type == "lambda":
-                            self.add_message("undefined-variable", node=node, args=name)
+                            self.add_message(
+                                "undefined-variable", node=node, args=name)
 
             current_consumer.mark_as_consumed(name, found_node)
             # check it's not a loop variable used outside the loop
@@ -1140,7 +1150,8 @@ class VariablesChecker(BaseChecker):
                 or name in self.config.additional_builtins
             ):
                 if not utils.node_ignores_exception(node, NameError):
-                    self.add_message("undefined-variable", args=name, node=node)
+                    self.add_message("undefined-variable",
+                                     args=name, node=node)
 
     @utils.check_messages("no-name-in-module")
     def visit_import(self, node):
@@ -1407,7 +1418,8 @@ class VariablesChecker(BaseChecker):
 
         name = node.name
         frame = node.statement().scope()
-        in_annotation_or_default = self._defined_in_function_definition(node, frame)
+        in_annotation_or_default = self._defined_in_function_definition(
+            node, frame)
         if in_annotation_or_default:
             frame_locals = frame.parent.scope().locals
         else:
@@ -1421,7 +1433,8 @@ class VariablesChecker(BaseChecker):
         # filter variables according to node's scope
         if not self.linter.is_message_enabled("undefined-loop-variable"):
             return
-        astmts = [stmt for stmt in node.lookup(name)[1] if hasattr(stmt, "assign_type")]
+        astmts = [stmt for stmt in node.lookup(
+            name)[1] if hasattr(stmt, "assign_type")]
         # If this variable usage exists inside a function definition
         # that exists in the same loop,
         # the usage is safe because the function will not be defined either if
@@ -1460,7 +1473,8 @@ class VariablesChecker(BaseChecker):
         assign = astmts[0].assign_type()
         if not (
             isinstance(
-                assign, (astroid.For, astroid.Comprehension, astroid.GeneratorExp)
+                assign, (astroid.For, astroid.Comprehension,
+                         astroid.GeneratorExp)
             )
             and assign.statement() is not node.statement()
         ):
@@ -1492,12 +1506,15 @@ class VariablesChecker(BaseChecker):
                 objects.FrozenSet,
             )
             if not isinstance(inferred, sequences):
-                self.add_message("undefined-loop-variable", args=name, node=node)
+                self.add_message("undefined-loop-variable",
+                                 args=name, node=node)
                 return
 
-            elements = getattr(inferred, "elts", getattr(inferred, "items", []))
+            elements = getattr(
+                inferred, "elts", getattr(inferred, "items", []))
             if not elements:
-                self.add_message("undefined-loop-variable", args=name, node=node)
+                self.add_message("undefined-loop-variable",
+                                 args=name, node=node)
 
     def _check_is_unused(self, name, node, stmt, global_names, nonlocal_names):
         # pylint: disable=too-many-branches
@@ -1520,7 +1537,8 @@ class VariablesChecker(BaseChecker):
                 return
 
         argnames = list(
-            itertools.chain(node.argnames(), [arg.name for arg in node.args.kwonlyargs])
+            itertools.chain(node.argnames(), [
+                            arg.name for arg in node.args.kwonlyargs])
         )
         # Care about functions with unknown argument (builtins)
         if name in argnames:
@@ -1591,7 +1609,8 @@ class VariablesChecker(BaseChecker):
         klass = node.parent.frame()
         if is_method and isinstance(klass, astroid.ClassDef):
             confidence = (
-                INFERENCE if utils.has_known_bases(klass) else INFERENCE_FAILURE
+                INFERENCE if utils.has_known_bases(
+                    klass) else INFERENCE_FAILURE
             )
         else:
             confidence = HIGH
@@ -1627,7 +1646,8 @@ class VariablesChecker(BaseChecker):
         if utils.is_protocol_class(klass):
             return
 
-        self.add_message("unused-argument", args=name, node=stmt, confidence=confidence)
+        self.add_message("unused-argument", args=name,
+                         node=stmt, confidence=confidence)
 
     def _check_late_binding_closure(self, node, assignment_node):
         def _is_direct_lambda_call():
@@ -1644,7 +1664,8 @@ class VariablesChecker(BaseChecker):
 
         if isinstance(assignment_node, astroid.Comprehension):
             if assignment_node.parent.parent_of(node.scope()):
-                self.add_message("cell-var-from-loop", node=node, args=node.name)
+                self.add_message("cell-var-from-loop",
+                                 node=node, args=node.name)
         else:
             assign_scope = assignment_node.scope()
             maybe_for = assignment_node
@@ -1658,7 +1679,8 @@ class VariablesChecker(BaseChecker):
                     and not _is_direct_lambda_call()
                     and not isinstance(node_scope.statement(), astroid.Return)
                 ):
-                    self.add_message("cell-var-from-loop", node=node, args=node.name)
+                    self.add_message("cell-var-from-loop",
+                                     node=node, args=node.name)
 
     def _should_ignore_redefined_builtin(self, stmt):
         if not isinstance(stmt, astroid.ImportFrom):
@@ -1678,7 +1700,7 @@ class VariablesChecker(BaseChecker):
                  and if that scope is a function
         :rtype: bool
         """
-        for _consumer in self._to_consume[index - 1 :: -1]:
+        for _consumer in self._to_consume[index - 1:: -1]:
             if _consumer.scope_type == "function" and node.name in _consumer.to_consume:
                 return True
         return False
@@ -1743,7 +1765,8 @@ class VariablesChecker(BaseChecker):
             if isinstance(target, astroid.node_classes.AssignName)
         )
         if self_cls_name in target_assign_names:
-            self.add_message("self-cls-assignment", node=node, args=(self_cls_name))
+            self.add_message("self-cls-assignment",
+                             node=node, args=(self_cls_name))
 
     def _check_unpacking(self, inferred, node, targets):
         """ Check for unbalanced tuple unpacking
@@ -1837,7 +1860,8 @@ class VariablesChecker(BaseChecker):
             if not isinstance(elt_name, astroid.Const) or not isinstance(
                 elt_name.value, str
             ):
-                self.add_message("invalid-all-object", args=elt.as_string(), node=elt)
+                self.add_message("invalid-all-object",
+                                 args=elt.as_string(), node=elt)
                 continue
 
             elt_name = elt_name.value
@@ -1931,15 +1955,18 @@ class VariablesChecker(BaseChecker):
                         continue
 
                     if imported_name == "*":
-                        self.add_message("unused-wildcard-import", args=name, node=stmt)
+                        self.add_message(
+                            "unused-wildcard-import", args=name, node=stmt)
                     else:
                         if as_name is None:
-                            msg = "%s imported from %s" % (imported_name, stmt.modname)
+                            msg = "%s imported from %s" % (
+                                imported_name, stmt.modname)
                         else:
                             fields = (imported_name, stmt.modname, as_name)
                             msg = "%s imported from %s as %s" % fields
                         if not _is_type_checking_import(stmt):
-                            self.add_message("unused-import", args=msg, node=stmt)
+                            self.add_message(
+                                "unused-import", args=msg, node=stmt)
         del self._to_consume
 
     def _check_metaclasses(self, node):
@@ -1948,7 +1975,8 @@ class VariablesChecker(BaseChecker):
 
         for child_node in node.get_children():
             if isinstance(child_node, astroid.ClassDef):
-                consumed.extend(self._check_classdef_metaclasses(child_node, node))
+                consumed.extend(
+                    self._check_classdef_metaclasses(child_node, node))
 
         # Pop the consumed items, in order to avoid having
         # unused-import and unused-variable false positives
@@ -1998,7 +2026,8 @@ class VariablesChecker(BaseChecker):
                     or name in self.config.additional_builtins
                     or name in parent_node.locals
                 ):
-                    self.add_message("undefined-variable", node=klass, args=(name,))
+                    self.add_message("undefined-variable",
+                                     node=klass, args=(name,))
 
         return consumed
 

@@ -34,10 +34,11 @@ def returns_random_type():
 
     return "abc"
 
+
 ExampleClass.__name__ = 1  # [non-str-assignment-to-dunder-name]
 ExampleClass.__name__ = True  # [non-str-assignment-to-dunder-name]
-ExampleClass.__name__ = returns_tuple() # [non-str-assignment-to-dunder-name]
-ExampleClass.__name__ = returns_int() # [non-str-assignment-to-dunder-name]
+ExampleClass.__name__ = returns_tuple()  # [non-str-assignment-to-dunder-name]
+ExampleClass.__name__ = returns_int()  # [non-str-assignment-to-dunder-name]
 ExampleClass.__name__ = "foo"
 ExampleClass.__name__ = returns_str()
 ExampleClass.__name__ = returns_random_type()
@@ -45,8 +46,10 @@ ExampleClass.__name__ = Unknown
 
 example_function.__name__ = 1  # [non-str-assignment-to-dunder-name]
 example_function.__name__ = True  # [non-str-assignment-to-dunder-name]
-example_function.__name__ = returns_tuple() # [non-str-assignment-to-dunder-name]
-example_function.__name__ = returns_int() # [non-str-assignment-to-dunder-name]
+# [non-str-assignment-to-dunder-name]
+example_function.__name__ = returns_tuple()
+# [non-str-assignment-to-dunder-name]
+example_function.__name__ = returns_int()
 example_function.__name__ = "foo"
 example_function.__name__ = returns_str()
 example_function.__name__ = returns_random_type()

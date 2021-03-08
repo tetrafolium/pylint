@@ -61,7 +61,7 @@ class FourthBadIndex(object):
 class AmbigousIndex(object):
     """ Uninferable return value """
 
-    __index__ = lambda self: Missing
+    def __index__(self): return Missing
 
 
 class AnotherAmbiguousIndex(object):

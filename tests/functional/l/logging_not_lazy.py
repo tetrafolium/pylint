@@ -9,10 +9,12 @@ var_name = 'Var:'
 # Statements that should be flagged:
 renamed_logging.warn('%s, %s' % (4, 5))             # [logging-not-lazy]
 renamed_logging.exception('%s' % 'Exceptional!')    # [logging-not-lazy]
-renamed_logging.log(renamed_logging.INFO, 'msg: %s' % 'Run!')  # [logging-not-lazy]
+renamed_logging.log(renamed_logging.INFO, 'msg: %s' %
+                    'Run!')  # [logging-not-lazy]
 renamed_logging.log(renamed_logging.INFO, "Var: " + var)  # [logging-not-lazy]
-renamed_logging.warn('%s' + ' the rest of a single string') # [logging-not-lazy]
-renamed_logging.log(renamed_logging.INFO, var_name + var) # [logging-not-lazy]
+# [logging-not-lazy]
+renamed_logging.warn('%s' + ' the rest of a single string')
+renamed_logging.log(renamed_logging.INFO, var_name + var)  # [logging-not-lazy]
 
 var_name = 'Var:'
 # Statements that should not be flagged:

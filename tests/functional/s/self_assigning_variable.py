@@ -4,6 +4,7 @@
 class Class:
     pass
 
+
 CLS = Class()
 FIRST = 1
 # Not enough values on the right hand side
@@ -16,8 +17,8 @@ FIRST = (FIRST, )
 CLS.FIRST = FIRST
 # Not a name on the right hand side
 FIRST = Class()
-FIRST = FIRST # [self-assigning-variable]
-FIRST, SECOND = FIRST, CLS.FIRST # [self-assigning-variable]
+FIRST = FIRST  # [self-assigning-variable]
+FIRST, SECOND = FIRST, CLS.FIRST  # [self-assigning-variable]
 
 
 FOO = 1

@@ -4,8 +4,8 @@ other errors are disabled.
 # pylint: disable=unused-import, too-few-public-methods
 
 
+import os
+
+
 class Something(object):
     """A class before an import."""
-
-
-import os

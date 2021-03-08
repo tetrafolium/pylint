@@ -2,6 +2,8 @@
 
 # pylint: disable=singleton-comparison,too-many-branches,too-few-public-methods,undefined-variable
 # pylint: disable=literal-comparison, comparison-with-itself, useless-object-inheritance
+
+
 def unneeded_not():
     """This is not ok
     """
@@ -59,5 +61,6 @@ def tolerated_statements():
 
 class Klass(object):
     """This is also ok"""
+
     def __ne__(self, other):
         return not self == other

@@ -6,24 +6,24 @@ try:
     __revision__ += 1
 except Exception:
     __revision__ = 0
-except TypeError: # [bad-except-order]
+except TypeError:  # [bad-except-order]
     __revision__ = 0
 
 try:
     __revision__ += 1
 except LookupError:
     __revision__ = 0
-except IndexError: # [bad-except-order]
+except IndexError:  # [bad-except-order]
     __revision__ = 0
 
 try:
     __revision__ += 1
 except (LookupError, NameError):
     __revision__ = 0
-except (IndexError, UnboundLocalError): # [bad-except-order, bad-except-order]
+except (IndexError, UnboundLocalError):  # [bad-except-order, bad-except-order]
     __revision__ = 0
 
-try: # [bad-except-order]
+try:  # [bad-except-order]
     __revision__ += 1
 except:
     pass

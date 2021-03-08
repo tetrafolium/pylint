@@ -17,11 +17,13 @@ def in_method(var):
     var = nomoreknown  # [undefined-variable]
     assert var
 
-DEFINED = {DEFINED:__revision__}  # [undefined-variable]
+
+DEFINED = {DEFINED: __revision__}  # [undefined-variable]
 # +1:[undefined-variable]
 DEFINED[__revision__] = OTHER = 'move this is astroid test'
 
 OTHER += '$'
+
 
 def bad_default(var, default=unknown2):  # [undefined-variable]
     """function with defaut arg's value set to an unexistant name"""
@@ -30,22 +32,24 @@ def bad_default(var, default=unknown2):  # [undefined-variable]
     augvar += 1  # [undefined-variable]
     del vardel  # [undefined-variable]
 
-LMBD = lambda x, y=doesnotexist: x+y  # [undefined-variable]
-LMBD2 = lambda x, y: x+z  # [undefined-variable]
+
+def LMBD(x, y=doesnotexist): return x+y  # [undefined-variable]
+def LMBD2(x, y): return x+z  # [undefined-variable]
+
 
 try:
-    POUET # don't catch me
+    POUET  # don't catch me
 except NameError:
     POUET = 'something'
 
 try:
-    POUETT # [used-before-assignment]
-except Exception: # pylint:disable = broad-except
+    POUETT  # [used-before-assignment]
+except Exception:  # pylint:disable = broad-except
     POUETT = 'something'
 
 try:
-    POUETTT # don't catch me
-except: # pylint:disable = bare-except
+    POUETTT  # don't catch me
+except:  # pylint:disable = bare-except
     POUETTT = 'something'
 
 print(POUET, POUETT, POUETTT)
@@ -57,6 +61,7 @@ except ValueError:
     PLOUF = 'something'
 
 print(PLOUF)
+
 
 def if_branch_test(something):
     """hop"""
@@ -77,9 +82,11 @@ def decorator(arg):
 def func1():
     """A function with a decorator that contains a listcomp."""
 
+
 @decorator(arg=(i * 2 for i in range(15)))
 def func2():
     """A function with a decorator that contains a genexpr."""
+
 
 @decorator(lambda x: x > 0)
 def main():
@@ -87,9 +94,11 @@ def main():
 
 # Test shared scope.
 
+
 def test_arguments(arg=TestClass):  # [used-before-assignment]
     """ TestClass isn't defined yet. """
     return arg
+
 
 class TestClass(Ancestor):  # [used-before-assignment]
     """ contains another class, which uses an undefined ancestor. """
@@ -113,9 +122,11 @@ class TestClass(Ancestor):  # [used-before-assignment]
             """ no op """
         return MissingAncestor1
 
+
 class Self(object):
     """ Detect when using the same name inside the class scope. """
-    obj = Self # [undefined-variable]
+    obj = Self  # [undefined-variable]
+
 
 class Self1(object):
     """ No error should be raised here. """
@@ -128,10 +139,12 @@ class Self1(object):
 class Ancestor(object):
     """ No op """
 
+
 class Ancestor1(object):
     """ No op """
 
-NANA = BAT # [undefined-variable]
+
+NANA = BAT  # [undefined-variable]
 del BAT
 
 
@@ -139,21 +152,23 @@ class KeywordArgument(object):
     """Test keyword arguments."""
 
     enable = True
+
     def test(self, is_enabled=enable):
         """do nothing."""
 
-    def test1(self, is_enabled=enabled): # [used-before-assignment]
+    def test1(self, is_enabled=enabled):  # [used-before-assignment]
         """enabled is undefined at this point, but it is used before assignment."""
 
-    def test2(self, is_disabled=disabled): # [undefined-variable]
+    def test2(self, is_disabled=disabled):  # [undefined-variable]
         """disabled is undefined"""
 
     enabled = True
 
-    func = lambda arg=arg: arg * arg # [undefined-variable]
+    def func(arg=arg): return arg * arg  # [undefined-variable]
 
     arg2 = 0
-    func2 = lambda arg2=arg2: arg2 * arg2
+    def func2(arg2=arg2): return arg2 * arg2
+
 
 # Don't emit if the code is protected by NameError
 try:
@@ -162,18 +177,20 @@ except NameError:
     pass
 
 try:
-    unicode_2 # [undefined-variable]
+    unicode_2  # [undefined-variable]
 except Exception:
     pass
 
 try:
-    unicode_3 # [undefined-variable]
+    unicode_3  # [undefined-variable]
 except ValueError:
     pass
 
 # See https://bitbucket.org/logilab/pylint/issue/111/
-try: raise IOError(1, "a")
-except IOError as err: print(err)
+try:
+    raise IOError(1, "a")
+except IOError as err:
+    print(err)
 
 
 def test_conditional_comprehension():
@@ -203,38 +220,47 @@ def dec(inp):
 # because at the time of their calling, the class name will
 # be populated
 # See https://github.com/PyCQA/pylint/issues/704
+
+
 class LambdaClass:
     myattr = 1
-    mylambda = lambda: LambdaClass.myattr
+    def mylambda(): return LambdaClass.myattr
 
 # Need different classes to make sure
 # consumed variables don't get in the way
+
+
 class LambdaClass2:
     myattr = 1
     # Different base_scope scope but still applies
-    mylambda2 = lambda: [LambdaClass2.myattr for _ in [1, 2]]
+    def mylambda2(): return [LambdaClass2.myattr for _ in [1, 2]]
+
 
 class LambdaClass3:
     myattr = 1
     # Nested default argument in lambda
     # Should not raise error
-    mylambda3 = lambda: lambda a=LambdaClass3: a
+    def mylambda3(): return lambda a=LambdaClass3: a
+
 
 class LambdaClass4:
     myattr = 1
-    mylambda4 = lambda a=LambdaClass4: lambda: a # [undefined-variable]
+    def mylambda4(a=LambdaClass4): return lambda: a  # [undefined-variable]
 
 # Make sure the first lambda does not consume the LambdaClass5 class
 # name although the expression is is valid
 # Consuming the class would cause the subsequent undefined-variable to be masked
+
+
 class LambdaClass5:
     myattr = 1
-    mylambda = lambda: LambdaClass5.myattr
-    mylambda4 = lambda a=LambdaClass5: lambda: a # [undefined-variable]
+    def mylambda(): return LambdaClass5.myattr
+    def mylambda4(a=LambdaClass5): return lambda: a  # [undefined-variable]
 
 
 def nonlocal_in_ifexp():
     import matplotlib.pyplot as plt
+
     def onclick(event):
         if event:
             nonlocal i
@@ -244,7 +270,6 @@ def nonlocal_in_ifexp():
     fig = plt.figure()
     fig.canvas.mpl_connect('button_press_event', onclick)
     plt.show(block=True)
-
 
 
 if TYPE_CHECKING:
@@ -278,6 +303,6 @@ def tick(counter: Counter, name: str, dictionary: OrderedDict) -> OrderedDict:
 
 # pylint: disable=unused-argument
 def not_using_loop_variable_accordingly(iterator):
-    for iteree in iteree: # [undefined-variable]
+    for iteree in iteree:  # [undefined-variable]
         yield iteree
 # pylint: enable=unused-argument

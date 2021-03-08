@@ -55,10 +55,12 @@ class ThirdBadLengthHint(object):
 
 class AmbigousLengthHint(object):
     """ Uninferable return value """
-    __length_hint__ = lambda self: Missing
+
+    def __length_hint__(self): return Missing
 
 
 class AnotherAmbiguousLengthHint(object):
     """Potential uninferable return value"""
+
     def __length_hint__(self):
         return int(Missing)

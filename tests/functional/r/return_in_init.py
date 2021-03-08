@@ -2,8 +2,9 @@
 
 class MyClass(object):
 
-    def __init__(self): # [return-in-init]
+    def __init__(self):  # [return-in-init]
         return 1
+
 
 class MyClass2(object):
     """dummy class"""
@@ -17,6 +18,7 @@ class MyClass3(object):
 
     def __init__(self):
         return None
+
 
 class MyClass5(object):
     """dummy class"""

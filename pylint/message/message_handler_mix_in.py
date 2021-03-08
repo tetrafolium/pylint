@@ -50,7 +50,8 @@ class MessagesHandlerMixIn:
         """If the msgid is a numeric one, then register it to inform the user
         it could furnish instead a symbolic msgid."""
         try:
-            message_definitions = self.msgs_store.get_message_definitions(msgid)
+            message_definitions = self.msgs_store.get_message_definitions(
+                msgid)
             for message_definition in message_definitions:
                 if msgid == message_definition.msgid:
                     MessagesHandlerMixIn.__by_id_managed_msgs.append(
@@ -86,7 +87,8 @@ class MessagesHandlerMixIn:
 
         if msgid == "all":
             for _msgid in MSG_TYPES:
-                self._set_msg_status(_msgid, enable, scope, line, ignore_unknown)
+                self._set_msg_status(_msgid, enable, scope,
+                                     line, ignore_unknown)
             if enable and not self._python3_porting_mode:
                 # Don't activate the python 3 porting checker if it wasn't activated explicitly.
                 self.disable("python3")
@@ -118,7 +120,8 @@ class MessagesHandlerMixIn:
 
         try:
             # msgid is a symbolic or numeric msgid.
-            message_definitions = self.msgs_store.get_message_definitions(msgid)
+            message_definitions = self.msgs_store.get_message_definitions(
+                msgid)
         except UnknownMessageError:
             if ignore_unknown:
                 return
@@ -178,7 +181,8 @@ class MessagesHandlerMixIn:
             if confidence.name not in self.config.confidence:
                 return False
         try:
-            message_definitions = self.msgs_store.get_message_definitions(msg_descr)
+            message_definitions = self.msgs_store.get_message_definitions(
+                msg_descr)
             msgids = [md.msgid for md in message_definitions]
         except UnknownMessageError:
             # The linter checks for messages that are not registered
@@ -254,7 +258,8 @@ class MessagesHandlerMixIn:
                 if node is not None:
                     raise InvalidMessageError(
                         "Message %s must only provide line, "
-                        "got line=%s, node=%s" % (message_definition.msgid, line, node)
+                        "got line=%s, node=%s" % (
+                            message_definition.msgid, line, node)
                     )
             elif message_definition.scope == WarningScope.NODE:
                 # Node-based warnings may provide an override line.

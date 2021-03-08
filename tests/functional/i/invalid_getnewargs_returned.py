@@ -53,10 +53,12 @@ class ThirdBadGetNewArgs(object):
 
 class AmbigousGetNewArgs(object):
     """ Uninferable return value """
-    __getnewargs__ = lambda self: Missing
+
+    def __getnewargs__(self): return Missing
 
 
 class AnotherAmbiguousGetNewArgs(object):
     """Potential uninferable return value"""
+
     def __getnewargs__(self):
         return tuple(Missing)

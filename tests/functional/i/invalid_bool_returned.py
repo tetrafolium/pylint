@@ -53,10 +53,12 @@ class ThirdBadBool(object):
 
 class AmbigousBool(object):
     """ Uninferable return value """
-    __bool__ = lambda self: Missing
+
+    def __bool__(self): return Missing
 
 
 class AnotherAmbiguousBool(object):
     """Potential uninferable return value"""
+
     def __bool__(self):
         return bool(Missing)

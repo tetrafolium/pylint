@@ -6,8 +6,8 @@ class MyClass:
 
 
 def function():
-    assert self.attr # [undefined-variable]
+    assert self.attr  # [undefined-variable]
 
 
 def func():
-    self.attr += 2 # [undefined-variable]
+    self.attr += 2  # [undefined-variable]
