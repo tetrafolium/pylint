@@ -3,13 +3,16 @@ from __future__ import print_function
 
 
 def totoo():
- print('malindented') # [bad-indentation]
+    print('malindented')  # [bad-indentation]
+
 
 def tutuu():
     print('good indentation')
 
+
 def titii():
-     1  # and this. # [bad-indentation]
+    1  # and this. # [bad-indentation]
+
 
 def tataa(kdict):
     for key in ['1', '2', '3']:

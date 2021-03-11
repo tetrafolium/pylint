@@ -17,7 +17,8 @@ def _level_options(group, outputlevel):
 
 class OptionParser(optparse.OptionParser):
     def __init__(self, option_class, *args, **kwargs):
-        optparse.OptionParser.__init__(self, option_class=Option, *args, **kwargs)
+        optparse.OptionParser.__init__(
+            self, option_class=Option, *args, **kwargs)
 
     def format_option_help(self, formatter=None):
         if formatter is None:
@@ -28,7 +29,8 @@ class OptionParser(optparse.OptionParser):
         result.append(formatter.format_heading("Options"))
         formatter.indent()
         if self.option_list:
-            result.append(optparse.OptionContainer.format_option_help(self, formatter))
+            result.append(
+                optparse.OptionContainer.format_option_help(self, formatter))
             result.append("\n")
         for group in self.option_groups:
             if group.level <= outputlevel and (

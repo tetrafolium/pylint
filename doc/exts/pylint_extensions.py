@@ -39,7 +39,8 @@ def builder_inited(app):
         if ext == ".py":
             modules.append("pylint.extensions.%s" % name)
         elif ext == ".rst":
-            doc_files["pylint.extensions." + name] = os.path.join(ext_path, filename)
+            doc_files["pylint.extensions." +
+                      name] = os.path.join(ext_path, filename)
     modules.sort()
     if not modules:
         sys.exit("No Pylint extensions found?")
@@ -52,7 +53,8 @@ def builder_inited(app):
     )
     with open(extensions_doc, "w") as stream:
         stream.write(
-            get_rst_title("Optional Pylint checkers in the extensions module", "=")
+            get_rst_title(
+                "Optional Pylint checkers in the extensions module", "=")
         )
         stream.write("Pylint provides the following optional plugins:\n\n")
         for module in modules:

@@ -3,6 +3,7 @@ Checks that only valid values are used in a mapping context.
 """
 # pylint: disable=missing-docstring,invalid-name,too-few-public-methods,no-self-use,import-error,wrong-import-position, useless-object-inheritance
 from __future__ import print_function
+from some_missing_module import Mapping
 
 
 def test(**kwargs):
@@ -28,15 +29,20 @@ class CustomMapping(object):
     def keys(self):
         return self.data.keys()
 
+
 test(**CustomMapping())
 test(**CustomMapping)  # [not-a-mapping]
+
 
 class NotMapping(object):
     pass
 
+
 test(**NotMapping())  # [not-a-mapping]
 
 # skip checks if statement is inside mixin/base/abstract class
+
+
 class SomeMixin(object):
     kwargs = None
 
@@ -50,6 +56,7 @@ class SomeMixin(object):
         kws = self.get_kwargs()
         self.run(**kws)
 
+
 class AbstractThing(object):
     kwargs = None
 
@@ -62,6 +69,7 @@ class AbstractThing(object):
     def dispatch(self):
         kws = self.get_kwargs()
         self.run(**kws)
+
 
 class BaseThing(object):
     kwargs = None
@@ -77,6 +85,8 @@ class BaseThing(object):
         self.run(**kws)
 
 # abstract class
+
+
 class Thing(object):
     def get_kwargs(self):
         raise NotImplementedError
@@ -88,11 +98,13 @@ class Thing(object):
         kwargs = self.get_kwargs()
         self.run(**kwargs)
 
+
 # skip uninferable instances
-from some_missing_module import Mapping
+
 
 class MyClass(Mapping):
     pass
+
 
 test(**MyClass())
 

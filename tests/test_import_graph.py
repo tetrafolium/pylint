@@ -36,7 +36,8 @@ def dest():
 
 
 def test_dependencies_graph(dest):
-    imports._dependencies_graph(dest, {"labas": ["hoho", "yep"], "hoho": ["yep"]})
+    imports._dependencies_graph(
+        dest, {"labas": ["hoho", "yep"], "hoho": ["yep"]})
     with open(dest) as stream:
         assert (
             stream.read().strip()

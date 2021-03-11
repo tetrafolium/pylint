@@ -18,6 +18,7 @@ def async_context_manager():
         pass
     return wrapper
 
+
 async def func():
     async with async_context_manager():
         pass

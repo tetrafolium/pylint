@@ -33,7 +33,8 @@ def disable():
 
 
 def test_types_redefined(linter):
-    elif_test = osp.join(osp.dirname(osp.abspath(__file__)), "data", "bad_builtin.py")
+    elif_test = osp.join(osp.dirname(osp.abspath(__file__)),
+                         "data", "bad_builtin.py")
     with fix_import_path([elif_test]):
         linter.check([elif_test])
     msgs = sorted(linter.reporter.messages, key=lambda item: item.line)

@@ -109,7 +109,7 @@ class Similar:
             for lineset, idx in couples:
                 print("==%s:%s" % (lineset.name, idx))
             if lineset:
-                for line in lineset._real_lines[idx : idx + num]:
+                for line in lineset._real_lines[idx: idx + num]:
                     print("  ", line.rstrip())
             nb_lignes_dupliquees += num * (len(couples) - 1)
         nb_total_lignes = sum([len(lineset) for lineset in self.linesets])
@@ -157,7 +157,7 @@ class Similar:
         product
         """
         for idx, lineset in enumerate(self.linesets[:-1]):
-            for lineset2 in self.linesets[idx + 1 :]:
+            for lineset2 in self.linesets[idx + 1:]:
                 yield from self._find_common(lineset, lineset2)
 
     def get_map_data(self):
@@ -172,7 +172,8 @@ class Similar:
         """Reduces and recombines data into a format that we can report on
 
         The partner function of get_map_data()"""
-        self.linesets = [line for lineset in linesets_collection for line in lineset]
+        self.linesets = [
+            line for lineset in linesets_collection for line in lineset]
 
 
 def stripped_lines(lines, ignore_comments, ignore_docstrings, ignore_imports):
@@ -393,7 +394,8 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
         stream must implement the readlines method
         """
         with node.stream() as stream:
-            self.append_stream(self.linter.current_name, stream, node.file_encoding)
+            self.append_stream(self.linter.current_name,
+                               stream, node.file_encoding)
 
     def close(self):
         """compute and display similarities on closing (i.e. end of parsing)"""
@@ -408,7 +410,7 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
             msg.sort()
 
             if lineset:
-                for line in lineset._real_lines[idx : idx + num]:
+                for line in lineset._real_lines[idx: idx + num]:
                     msg.append(line.rstrip())
 
             self.add_message("R0801", args=(len(couples), "\n".join(msg)))
@@ -478,7 +480,8 @@ def Run(argv=None):
             ignore_imports = True
     if not args:
         usage(1)
-    sim = Similar(min_lines, ignore_comments, ignore_docstrings, ignore_imports)
+    sim = Similar(min_lines, ignore_comments,
+                  ignore_docstrings, ignore_imports)
     for filename in args:
         with open(filename) as stream:
             sim.append_stream(filename, stream)

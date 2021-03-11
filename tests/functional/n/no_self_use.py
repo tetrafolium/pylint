@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 
+
 class Toto(object):
     """bla bal abl"""
 
@@ -13,7 +14,7 @@ class Toto(object):
         """this method is a real method since it access to self"""
         self.function_method()
 
-    def function_method(self): # [no-self-use]
+    def function_method(self):  # [no-self-use]
         """this method isn' a real method since it doesn't need self"""
         print('hello')
 
@@ -38,15 +39,19 @@ class Sub(Base):
         """
         return arg == 0
 
+
 class Super(object):
     """same as before without abstract"""
     attr = 1
+
     def method(self):
         """regular"""
         print(self.attr)
 
+
 class Sub1(Super):
     """override method with need for self"""
+
     def method(self):
         """no i can not be a function"""
         print(42)

@@ -208,7 +208,8 @@ class TestCheckParallel:
 
         # Invoke the lint process in a multiprocess way, although we only specify one
         # job.
-        check_parallel(linter, jobs=1, files=single_file_container, arguments=None)
+        check_parallel(
+            linter, jobs=1, files=single_file_container, arguments=None)
         assert len(linter.get_checkers()) == 2, (
             "We should only have the 'master' and 'sequential-checker' "
             "checkers registered"
@@ -275,7 +276,8 @@ class TestCheckParallel:
 
         # Invoke the lint process in a multiprocess way, although we only specify one
         # job.
-        check_parallel(linter, jobs=1, files=single_file_container, arguments=None)
+        check_parallel(
+            linter, jobs=1, files=single_file_container, arguments=None)
 
         assert {
             "by_module": {

@@ -156,7 +156,8 @@ def expand_modules(files_or_modules, black_list, black_list_re):
             # this is a file or a directory
             try:
                 modname = ".".join(
-                    modutils.modpath_from_file(something, path=additional_search_path)
+                    modutils.modpath_from_file(
+                        something, path=additional_search_path)
                 )
             except ImportError:
                 modname = os.path.splitext(os.path.basename(something))[0]

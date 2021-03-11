@@ -3,6 +3,8 @@
 https://github.com/PyCQA/pylint/issues/1078
 """
 # pylint: disable=too-few-public-methods,missing-class-docstring
+
+
 class Cls:
     def test(self):
         "a"

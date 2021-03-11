@@ -6,6 +6,7 @@ print(CSTE)  # [undefined-variable]
 
 CONSTANT = 1
 
+
 def fix_contant(value):
     """all this is ok, but try not using global ;)"""
     global CONSTANT  # [global-statement]

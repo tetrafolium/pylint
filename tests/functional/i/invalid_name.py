@@ -7,17 +7,18 @@ try:
 except ImportError:
     collections = None
 
-aaa = 42 # [invalid-name]
+aaa = 42  # [invalid-name]
 try:
     import time
 except ValueError:
-    time = None # [invalid-name]
+    time = None  # [invalid-name]
 
 try:
     from sys import argv, executable as python
 except ImportError:
     argv = 42
     python = 24
+
 
 def test():
     """ Shouldn't emit an invalid-name here. """
@@ -27,7 +28,8 @@ def test():
         re = None
     return re
 
-def a(): # [invalid-name]
+
+def a():  # [invalid-name]
     """yo"""
 
 

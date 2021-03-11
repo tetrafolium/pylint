@@ -100,7 +100,8 @@ class OptionsManagerMixIn:
             )
         else:
             for opt, optdict in non_group_spec_options:
-                self.add_optik_option(provider, self.cmdline_parser, opt, optdict)
+                self.add_optik_option(
+                    provider, self.cmdline_parser, opt, optdict)
         for gname, gdoc in groups:
             gname = gname.upper()
             goptions = [
@@ -248,7 +249,8 @@ class OptionsManagerMixIn:
             helpfunc = functools.partial(self.helpfunc, level=helplevel)
 
             helpmsg = "%s verbose help." % " ".join(["more"] * helplevel)
-            optdict = {"action": "callback", "callback": helpfunc, "help": helpmsg}
+            optdict = {"action": "callback",
+                       "callback": helpfunc, "help": helpmsg}
             provider = self.options_providers[0]
             self.add_optik_option(provider, self.cmdline_parser, opt, optdict)
             provider.options += ((opt, optdict),)
@@ -258,7 +260,8 @@ class OptionsManagerMixIn:
         if config_file is not None:
             config_file = os.path.expanduser(config_file)
             if not os.path.exists(config_file):
-                raise OSError("The config file {:s} doesn't exist!".format(config_file))
+                raise OSError(
+                    "The config file {:s} doesn't exist!".format(config_file))
 
         use_config_file = config_file and os.path.exists(config_file)
         if use_config_file:  # pylint: disable=too-many-nested-blocks
@@ -292,7 +295,7 @@ class OptionsManagerMixIn:
                 # normalize sections'title
                 for sect, values in list(parser._sections.items()):
                     if sect.startswith("pylint."):
-                        sect = sect[len("pylint.") :]
+                        sect = sect[len("pylint."):]
                     if not sect.isupper() and values:
                         parser._sections[sect.upper()] = values
 

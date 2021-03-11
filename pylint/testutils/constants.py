@@ -25,4 +25,5 @@ _EXPECTED_RE = re.compile(
     r"\s*\[(?P<msgs>%(msg)s(?:,\s*%(msg)s)*)]" % _MESSAGE
 )
 
-_OPERATORS = {">": operator.gt, "<": operator.lt, ">=": operator.ge, "<=": operator.le}
+_OPERATORS = {">": operator.gt, "<": operator.lt,
+              ">=": operator.ge, "<=": operator.le}

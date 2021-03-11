@@ -2,6 +2,7 @@
 
 # pylint: disable=too-few-public-methods, invalid-name, attribute-defined-outside-init, unused-variable, no-absolute-import
 # pylint: disable=using-constant-test, no-init, missing-docstring, wrong-import-order,wrong-import-position,no-else-return, useless-object-inheritance
+import platform
 from os import rename as nonseq_func
 from six import with_metaclass
 from functional.u.unpacking import nonseq
@@ -10,8 +11,10 @@ __revision__ = 0
 
 # Working
 
+
 class Seq(object):
     """ sequence """
+
     def __init__(self):
         self.items = range(2)
 
@@ -21,11 +24,14 @@ class Seq(object):
     def __len__(self):
         return len(self.items)
 
+
 class Iter(object):
     """ Iterator """
+
     def __iter__(self):
         for number in range(2):
             yield number
+
 
 def good_unpacking():
     """ returns should be unpackable """
@@ -34,17 +40,21 @@ def good_unpacking():
     else:
         return (3, 4)
 
+
 def good_unpacking2():
     """ returns should be unpackable """
     return good_unpacking()
+
 
 class MetaIter(type):
     "metaclass that makes classes that use it iterables"
     def __iter__(cls):
         return iter((1, 2))
 
+
 class IterClass(with_metaclass(MetaIter)):
     "class that is iterable (and unpackable)"
+
 
 class AbstrClass(object):
     "abstract class"
@@ -59,6 +69,7 @@ class AbstrClass(object):
         self.setup_pair()
         x, y = self.pair
 
+
 a, b = [1, 2]
 a, b = (1, 2)
 a, b = set([1, 2])
@@ -72,16 +83,20 @@ a, b = good_unpacking2()
 a, b = IterClass
 
 # Not working
+
+
 class NonSeq(object):
     """ does nothing """
 
-a, b = NonSeq() # [unpacking-non-sequence]
-a, b = ValueError # [unpacking-non-sequence]
-a, b = None # [unpacking-non-sequence]
-a, b = 1 # [unpacking-non-sequence]
-a, b = nonseq # [unpacking-non-sequence]
-a, b = nonseq() # [unpacking-non-sequence]
-a, b = nonseq_func # [unpacking-non-sequence]
+
+a, b = NonSeq()  # [unpacking-non-sequence]
+a, b = ValueError  # [unpacking-non-sequence]
+a, b = None  # [unpacking-non-sequence]
+a, b = 1  # [unpacking-non-sequence]
+a, b = nonseq  # [unpacking-non-sequence]
+a, b = nonseq()  # [unpacking-non-sequence]
+a, b = nonseq_func  # [unpacking-non-sequence]
+
 
 class ClassUnpacking(object):
     """ Check unpacking as instance attributes. """
@@ -96,9 +111,10 @@ class ClassUnpacking(object):
         c, self.a = good_unpacking()
         self.a, self.b = Iter()
 
-        self.a, self.b = NonSeq() # [unpacking-non-sequence]
-        self.a, self.b = ValueError # [unpacking-non-sequence]
-        self.a, c = nonseq_func # [unpacking-non-sequence]
+        self.a, self.b = NonSeq()  # [unpacking-non-sequence]
+        self.a, self.b = ValueError  # [unpacking-non-sequence]
+        self.a, c = nonseq_func  # [unpacking-non-sequence]
+
 
 class TestBase(object):
     'base class with `test` method implementation'
@@ -107,8 +123,10 @@ class TestBase(object):
         'default implementation'
         return data
 
+
 class Test(TestBase):
     'child class that overrides `test` method'
+
     def __init__(self):
         # no error should be emitted here as `test` is overridden in this class
         (self.aaa, self.bbb, self.ccc) = self.test(None)
@@ -117,9 +135,6 @@ class Test(TestBase):
     def test(data):
         'overridden implementation'
         return (1, 2, 3)
-
-
-import platform
 
 
 def flow_control_false_positive():

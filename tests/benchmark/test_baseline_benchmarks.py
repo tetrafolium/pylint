@@ -23,7 +23,8 @@ from pylint.utils import register_plugins
 def _empty_filepath():
     return os.path.abspath(
         os.path.join(
-            os.path.dirname(__file__), "..", "input", "benchmark_minimal_file.py"
+            os.path.dirname(
+                __file__), "..", "input", "benchmark_minimal_file.py"
         )
     )
 
@@ -121,7 +122,8 @@ class TestEstablishBaselineBenchmarks:
         Because this is so simple, if this regresses something very serious has happened
         """
         linter = PyLinter(reporter=Reporter())
-        fileinfos = [self.empty_filepath]  # Single file to end-to-end the system
+        # Single file to end-to-end the system
+        fileinfos = [self.empty_filepath]
         assert linter.config.jobs == 1
         assert len(linter._checkers) == 1, "Should just have 'master'"
         benchmark(linter.check, fileinfos)
@@ -339,7 +341,8 @@ class TestEstablishBaselineBenchmarks:
 
         # Register all checkers/extensions and enable them
         register_plugins(
-            linter, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            linter, os.path.abspath(os.path.join(
+                os.path.dirname(__file__), "..", ".."))
         )
         linter.load_default_plugins()
         linter.enable("all")

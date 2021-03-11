@@ -441,7 +441,8 @@ class PyLinter(
         self._external_opts = options
         self.options = options + PyLinter.make_options()
         self.option_groups = option_groups + PyLinter.option_groups
-        self._options_methods = {"enable": self.enable, "disable": self.disable}
+        self._options_methods = {
+            "enable": self.enable, "disable": self.disable}
         self._bw_options_methods = {
             "disable-msg": self.disable,
             "enable-msg": self.enable,
@@ -450,7 +451,8 @@ class PyLinter(
         reporters.ReportsHandlerMixIn.__init__(self)
         super().__init__(
             usage=__doc__,
-            config_file=pylintrc or next(config.find_default_config_files(), None),
+            config_file=pylintrc or next(
+                config.find_default_config_files(), None),
         )
         checkers.BaseTokenChecker.__init__(self)
         # provided reports
@@ -516,7 +518,8 @@ class PyLinter(
 
     def _load_reporter_class(self):
         qname = self._reporter_name
-        module = modutils.load_module_from_name(modutils.get_module_part(qname))
+        module = modutils.load_module_from_name(
+            modutils.get_module_part(qname))
         class_name = qname.split(".")[-1]
         reporter_class = getattr(module, class_name)
         return reporter_class
@@ -556,9 +559,11 @@ class PyLinter(
                 self._load_reporter()
 
         try:
-            checkers.BaseTokenChecker.set_option(self, optname, value, action, optdict)
+            checkers.BaseTokenChecker.set_option(
+                self, optname, value, action, optdict)
         except config.UnsupportedAction:
-            print("option %s can't be read from config file" % optname, file=sys.stderr)
+            print("option %s can't be read from config file" %
+                  optname, file=sys.stderr)
 
     def register_reporter(self, reporter_class):
         self._reporters[reporter_class.name] = reporter_class
@@ -757,7 +762,8 @@ class PyLinter(
                 )
                 continue
             except InvalidPragmaError as err:
-                self.add_message("bad-inline-option", args=err.token, line=start[0])
+                self.add_message("bad-inline-option",
+                                 args=err.token, line=start[0])
                 continue
 
     # code checking methods ###################################################
@@ -789,7 +795,8 @@ class PyLinter(
         # get needed checkers
         needed_checkers = [self]
         for checker in self.get_checkers()[1:]:
-            messages = {msg for msg in checker.msgs if self.is_message_enabled(msg)}
+            messages = {
+                msg for msg in checker.msgs if self.is_message_enabled(msg)}
             if messages or any(self.report_is_enabled(r[0]) for r in checker.reports):
                 needed_checkers.append(checker)
         # Sort checkers by priority
@@ -893,7 +900,8 @@ class PyLinter(
         """
         with self._astroid_module_checker() as check_astroid_module:
             for name, filepath, modname in file_descrs:
-                self._check_file(get_ast, check_astroid_module, name, filepath, modname)
+                self._check_file(get_ast, check_astroid_module,
+                                 name, filepath, modname)
 
     def _check_file(self, get_ast, check_astroid_module, name, filepath, modname):
         """Check a file using the passed utility functions (get_ast and check_astroid_module)
@@ -1076,7 +1084,8 @@ class PyLinter(
         try:
             tokens = utils.tokenize_module(ast_node)
         except tokenize.TokenError as ex:
-            self.add_message("syntax-error", line=ex.args[1][0], args=ex.args[0])
+            self.add_message(
+                "syntax-error", line=ex.args[1][0], args=ex.args[0])
             return None
 
         if not ast_node.pure_python:
@@ -1106,7 +1115,8 @@ class PyLinter(
         self.stats = {"by_module": {}, "by_msg": {}}
         MANAGER.always_load_extensions = self.config.unsafe_load_any_extension
         MANAGER.max_inferable_values = self.config.limit_inference_results
-        MANAGER.extension_package_whitelist.update(self.config.extension_pkg_whitelist)
+        MANAGER.extension_package_whitelist.update(
+            self.config.extension_pkg_whitelist)
         for msg_cat in MSG_TYPES.values():
             self.stats[msg_cat] = 0
 
@@ -1150,7 +1160,8 @@ class PyLinter(
         # get a global note for the code
         evaluation = self.config.evaluation
         try:
-            note = eval(evaluation, {}, self.stats)  # pylint: disable=eval-used
+            note = eval(evaluation, {},
+                        self.stats)  # pylint: disable=eval-used
         except Exception as ex:  # pylint: disable=broad-except
             msg = "An exception occurred while rating: %s" % ex
         else:

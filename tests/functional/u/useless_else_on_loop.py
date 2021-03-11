@@ -2,6 +2,7 @@
 from __future__ import print_function
 __revision__ = 0
 
+
 def test_return_for():
     """else + return is not accetable."""
     for i in range(10):
@@ -10,6 +11,7 @@ def test_return_for():
     else:  # [useless-else-on-loop]
         print('math is broken')
     return None
+
 
 def test_return_while():
     """else + return is not accetable."""

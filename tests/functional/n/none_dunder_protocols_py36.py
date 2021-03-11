@@ -28,7 +28,7 @@ class NonContainerClass(metaclass=MetaContainer):
 def test():
     1 in NonIterableClass  # [unsupported-membership-test]
     1 in OldNonIterableClass  # [unsupported-membership-test]
-    1 in NonContainerClass # [unsupported-membership-test]
+    1 in NonContainerClass  # [unsupported-membership-test]
     1 in NonIterableClass()  # [unsupported-membership-test]
     1 in OldNonIterableClass()  # [unsupported-membership-test]
     1 in NonContainerClass()  # [unsupported-membership-test]

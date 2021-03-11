@@ -2,9 +2,11 @@
 for unbalanced-tuple-unpacking and unpacking-non-sequence
 """
 
+
 def unpack():
     """ Return something"""
     return (1, 2, 3)
+
 
 def nonseq():
     """ Return non sequence """

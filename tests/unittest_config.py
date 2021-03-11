@@ -53,7 +53,8 @@ def test__csv_validator_spaces():
 
 def test__regexp_csv_validator_valid():
     pattern_strings = ["test_.*", "foo\\.bar", "^baz$"]
-    result = config.option._regexp_csv_validator(None, None, ",".join(pattern_strings))
+    result = config.option._regexp_csv_validator(
+        None, None, ",".join(pattern_strings))
     for i, regex in enumerate(result):
         assert isinstance(regex, RE_PATTERN_TYPE)
         assert regex.pattern == pattern_strings[i]
@@ -62,4 +63,5 @@ def test__regexp_csv_validator_valid():
 def test__regexp_csv_validator_invalid():
     pattern_strings = ["test_.*", "foo\\.bar", "^baz)$"]
     with pytest.raises(sre_constants.error):
-        config.option._regexp_csv_validator(None, None, ",".join(pattern_strings))
+        config.option._regexp_csv_validator(
+            None, None, ",".join(pattern_strings))

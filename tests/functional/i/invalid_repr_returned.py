@@ -54,7 +54,7 @@ class ThirdBadRepr(object):
 class AmbiguousRepr(object):
     """ Uninferable return value """
 
-    __repr__ = lambda self: Missing
+    def __repr__(self): return Missing
 
 
 class AnotherAmbiguousRepr(object):

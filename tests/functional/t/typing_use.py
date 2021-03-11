@@ -3,6 +3,7 @@
 import typing
 from typing import overload
 
+
 @typing.overload
 def double_with_docstring(arg: str) -> str:
     """Return arg, concatenated with itself."""
@@ -51,6 +52,8 @@ def double_with_pass(arg):
     return 2 * arg
 
 # pylint: disable=too-few-public-methods
+
+
 class Cls:
     @typing.overload
     def method(self, param: int) -> None:

@@ -22,9 +22,11 @@ class AbstractB(Abstract):
     this class is checking that it does not output an error msg for
     unimplemeted methods in abstract classes
     """
+
     def cccc(self):
         """should be overridden in concrete class"""
         raise NotImplementedError()
+
 
 class AbstractC(AbstractB, abc.ABC):
     """
@@ -44,7 +46,7 @@ class AbstractD(AbstractB, metaclass=abc.ABCMeta):
     """
 
 
-class Concrete(Abstract): # [abstract-method]
+class Concrete(Abstract):  # [abstract-method]
     """Concrete class"""
 
     def aaaa(self):
@@ -55,12 +57,15 @@ class Structure(object, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __iter__(self):
         pass
+
     @abc.abstractmethod
     def __len__(self):
         pass
+
     @abc.abstractmethod
     def __contains__(self, _):
         pass
+
     @abc.abstractmethod
     def __hash__(self):
         pass

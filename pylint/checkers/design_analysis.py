@@ -144,7 +144,8 @@ def _count_boolean_expressions(bool_op):
 
 
 def _count_methods_in_class(node):
-    all_methods = sum(1 for method in node.methods() if not method.name.startswith("_"))
+    all_methods = sum(1 for method in node.methods()
+                      if not method.name.startswith("_"))
     # Special methods count towards the number of public methods,
     # but don't count towards there being too many methods.
     for method in node.mymethods():

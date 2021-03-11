@@ -133,7 +133,8 @@ def test_register_error_new_id_duplicate_of_new(empty_store):
 
     class CheckerTwo(BaseChecker):
         name = "checker_two"
-        msgs = {"W1234": ("message two", "msg-symbol-two", "another msg description.")}
+        msgs = {"W1234": ("message two", "msg-symbol-two",
+                          "another msg description.")}
 
     empty_store.register_messages_from_checker(CheckerOne())
     test_register_error(
@@ -233,7 +234,8 @@ def test_list_messages(store):
 
 def test_renamed_message_register(store):
     assert store.get_message_definitions("W0001")[0].symbol == "msg-symbol"
-    assert store.get_message_definitions("old-symbol")[0].symbol == "msg-symbol"
+    assert store.get_message_definitions(
+        "old-symbol")[0].symbol == "msg-symbol"
 
 
 def test_multiple_child_of_old_name(store):

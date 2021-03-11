@@ -7,10 +7,11 @@ import nonexistent
 
 
 def loop():
-	count = 0
-	for i in range(5):
-		count += 1
-	print(count)
+    count = 0
+    for i in range(5):
+        count += 1
+    print(count)
 
-path =   '/tmp'
+
+path = '/tmp'
 os.path.exists(path)

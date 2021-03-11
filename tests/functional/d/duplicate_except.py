@@ -1,5 +1,6 @@
 """Test for duplicate-check."""
 
+
 def main():
     """The second ValueError should be flagged."""
     try:

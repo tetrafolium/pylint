@@ -63,7 +63,8 @@ class TestStdlibChecker(CheckerTestCase):
         """
         )
         with self.assertAddsMessages(
-            Message(msg_id="shallow-copy-environ", node=node, confidence=UNDEFINED)
+            Message(msg_id="shallow-copy-environ",
+                    node=node, confidence=UNDEFINED)
         ):
             self.checker.visit_call(node)
 
@@ -78,7 +79,8 @@ class TestStdlibChecker(CheckerTestCase):
         """
         )
         with self.assertAddsMessages(
-            Message(msg_id="shallow-copy-environ", node=node, confidence=UNDEFINED)
+            Message(msg_id="shallow-copy-environ",
+                    node=node, confidence=UNDEFINED)
         ):
             self.checker.visit_call(node)
 

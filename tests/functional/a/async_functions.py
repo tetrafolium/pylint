@@ -2,10 +2,12 @@
 # pylint: disable=missing-docstring,invalid-name,too-few-public-methods
 # pylint: disable=using-constant-test, useless-object-inheritance
 
-async def next(): # [redefined-builtin]
+
+async def next():  # [redefined-builtin]
     pass
 
-async def some_function(arg1, arg2): # [unused-argument]
+
+async def some_function(arg1, arg2):  # [unused-argument]
     await arg1
 
 
@@ -19,7 +21,7 @@ class OtherClass(object):
 class Class(object):
 
     async def some_method(self):
-        super(OtherClass, self).test() # [bad-super-call]
+        super(OtherClass, self).test()  # [bad-super-call]
 
 
 # +1: [too-many-arguments,too-many-return-statements, too-many-branches]

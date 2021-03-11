@@ -4,14 +4,16 @@ scope and if static method's argument is a member of the class
 
 # pylint: disable=too-few-public-methods, using-constant-test, no-method-argument, useless-object-inheritance
 
+
 class MyClass(object):
     """Some class"""
+
     def __init__(self):
         pass
 
     def smethod():
         """static method-to-be"""
-    smethod = staticmethod(smethod) # [no-staticmethod-decorator]
+    smethod = staticmethod(smethod)  # [no-staticmethod-decorator]
 
     if True:
         smethod = staticmethod(smethod)  # [no-staticmethod-decorator]
@@ -24,11 +26,13 @@ class MyClass(object):
         """some method"""
     smethod2 = staticmethod(other_method)  # [no-staticmethod-decorator]
 
+
 def helloworld():
     """says hello"""
 
 
 MyClass.new_static_method = staticmethod(helloworld)
+
 
 class MyOtherClass(object):
     """Some other class"""

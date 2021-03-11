@@ -5,7 +5,7 @@ __revision__ = '$Id$'
 
 # Bad escape sequences, which probably don't do what you expect.
 A = "\[\]\\"  # [anomalous-backslash-in-string,anomalous-backslash-in-string]
-assert '\/' == '\\/' # [anomalous-backslash-in-string]
+assert '\/' == '\\/'  # [anomalous-backslash-in-string]
 ESCAPE_BACKSLASH = '\`'  # [anomalous-backslash-in-string]
 
 # Valid escape sequences.
@@ -15,7 +15,8 @@ HEX = '\xad\x0a\x0d'
 # +1:[anomalous-backslash-in-string,anomalous-backslash-in-string]
 FALSE_OCTAL = '\o123\o000'  # Not octal in Python
 OCTAL = '\123\000'
-NOT_OCTAL = '\888\999'  # [anomalous-backslash-in-string,anomalous-backslash-in-string]
+# [anomalous-backslash-in-string,anomalous-backslash-in-string]
+NOT_OCTAL = '\888\999'
 NUL = '\0'
 UNICODE = u'\u1234'
 HIGH_UNICODE = u'\U0000abcd'

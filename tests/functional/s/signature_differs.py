@@ -18,7 +18,7 @@ class Cdef(Abcd):
         Abcd.__init__(self)
         self.aaa = aaa
 
-    def abcd(self, aaa, bbbb=None): # [signature-differs]
+    def abcd(self, aaa, bbbb=None):  # [signature-differs]
         return aaa, bbbb
 
 

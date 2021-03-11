@@ -24,7 +24,8 @@ z = [x for x in range(10) if x or True]  # [condition-evals-to-constant]
 
 # Simplifies recursively
 assert True or CONSTANT or OTHER  # [condition-evals-to-constant]
-assert (CONSTANT or True) or (CONSTANT or True)  # [condition-evals-to-constant]
+# [condition-evals-to-constant]
+assert (CONSTANT or True) or (CONSTANT or True)
 
 # Will try to infer the truthiness of an expression as long as it doesn't contain any variables
 assert 3 + 4 or CONSTANT  # [condition-evals-to-constant]

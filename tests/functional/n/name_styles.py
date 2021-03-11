@@ -69,6 +69,7 @@ class DerivedFromCorrect(CorrectClassName):
 
 V = [WHAT_Ever_inListComp for WHAT_Ever_inListComp in GOOD_CONST_NAME]
 
+
 def class_builder():
     """Function returning a class object."""
 
@@ -76,6 +77,7 @@ def class_builder():
         """Useless class."""
 
     return EmbeddedClass
+
 
 # +1:[invalid-name]
 BAD_NAME_FOR_CLASS = collections.namedtuple('Named', ['tuple'])
@@ -134,14 +136,19 @@ def _private_scope_function_with_long_descriptive_name():
     """Private scope function are cool with long descriptive names"""
     return 12
 
+
 LONG_CONSTANT_NAME_IN_PUBLIC_SCOPE_ARE_OKAY = True
 # We don't emit for non-const nodes
-good_name_for_funcs = lambda: None
+def good_name_for_funcs(): return None
+
+
 good_name_for_lists = [1, 2, 3]
+
 
 class _AnExceptionalExceptionThatOccursVeryVeryRarely(Exception):
     """A very exceptional exception with a nice descriptive name"""
     pass
+
 
 class FooEnum(Enum):
     """A test case for enum names."""

@@ -55,7 +55,8 @@ master_doc = "index"
 # General information about the project.
 project = "Pylint"
 current_year = datetime.utcnow().year
-copyright = "2003-{year}, Logilab, PyCQA and contributors".format(year=current_year)
+copyright = "2003-{year}, Logilab, PyCQA and contributors".format(
+    year=current_year)
 
 # The full version, including alpha/beta/rc tags.
 release = version
@@ -229,7 +230,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ("index", "pylint", "Pylint Documentation", ["Logilab, PyCQA and contributors"], 1)
+    ("index", "pylint", "Pylint Documentation",
+     ["Logilab, PyCQA and contributors"], 1)
 ]
 
 intersphinx_mapping = {

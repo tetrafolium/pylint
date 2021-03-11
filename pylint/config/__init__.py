@@ -86,13 +86,15 @@ def save_results(results, base):
         try:
             os.mkdir(PYLINT_HOME)
         except OSError:
-            print("Unable to create directory %s" % PYLINT_HOME, file=sys.stderr)
+            print("Unable to create directory %s" %
+                  PYLINT_HOME, file=sys.stderr)
     data_file = _get_pdata_path(base, 1)
     try:
         with open(data_file, "wb") as stream:
             pickle.dump(results, stream)
     except OSError as ex:
-        print("Unable to create file %s: %s" % (data_file, ex), file=sys.stderr)
+        print("Unable to create file %s: %s" %
+              (data_file, ex), file=sys.stderr)
 
 
 def find_pylintrc():

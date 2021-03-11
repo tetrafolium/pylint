@@ -625,7 +625,8 @@ def _no_context_variadic(node, variadic_name, variadic_type, variadics):
             inferred_statement = inferred.statement()
 
         if not length and isinstance(inferred_statement, astroid.Lambda):
-            is_in_starred_context = _has_parent_of_type(node, variadic_type, statement)
+            is_in_starred_context = _has_parent_of_type(
+                node, variadic_type, statement)
             used_as_starred_argument = any(
                 variadic.value == name or variadic.value.parent_of(name)
                 for variadic in variadics
@@ -862,13 +863,15 @@ accessed. Python regular expressions are accepted.",
             gen = shlex.shlex(self.config.generated_members)
             gen.whitespace += ","
             gen.wordchars += r"[]-+\.*?()|"
-            self.config.generated_members = tuple(tok.strip('"') for tok in gen)
+            self.config.generated_members = tuple(
+                tok.strip('"') for tok in gen)
 
     @check_messages("keyword-arg-before-vararg")
     def visit_functiondef(self, node):
         # check for keyword arg before varargs
         if node.args.vararg and node.args.defaults:
-            self.add_message("keyword-arg-before-vararg", node=node, args=(node.name))
+            self.add_message("keyword-arg-before-vararg",
+                             node=node, args=(node.name))
 
     visit_asyncfunctiondef = visit_functiondef
 
@@ -1044,7 +1047,8 @@ accessed. Python regular expressions are accepted.",
             return
 
         function_node = safe_infer(node.value.func)
-        funcs = (astroid.FunctionDef, astroid.UnboundMethod, astroid.BoundMethod)
+        funcs = (astroid.FunctionDef,
+                 astroid.UnboundMethod, astroid.BoundMethod)
         if not isinstance(function_node, funcs):
             return
 
@@ -1069,7 +1073,8 @@ accessed. Python regular expressions are accepted.",
             return
 
         returns = list(
-            function_node.nodes_of_class(astroid.Return, skip_klass=astroid.FunctionDef)
+            function_node.nodes_of_class(
+                astroid.Return, skip_klass=astroid.FunctionDef)
         )
         if not returns:
             self.add_message("assignment-from-no-return", node=node)
@@ -1104,7 +1109,8 @@ accessed. Python regular expressions are accepted.",
         if not inferred:
             return
         if not (
-            isinstance(inferred, astroid.Const) and isinstance(inferred.value, str)
+            isinstance(inferred, astroid.Const) and isinstance(
+                inferred.value, str)
         ):
             # Add the message
             self.add_message("non-str-assignment-to-dunder-name", node=node)
@@ -1168,7 +1174,8 @@ accessed. Python regular expressions are accepted.",
         # Check for called function being an object instance function
         # If so, ignore the initial 'self' argument in the signature
         try:
-            is_classdef = isinstance(called.parent, astroid.scoped_nodes.ClassDef)
+            is_classdef = isinstance(
+                called.parent, astroid.scoped_nodes.ClassDef)
             if is_classdef and called_param_names[0] == "self":
                 called_param_names = called_param_names[1:]
         except IndexError:
@@ -1176,7 +1183,8 @@ accessed. Python regular expressions are accepted.",
 
         try:
             # extract argument names, if they have names
-            calling_parg_names = [p.name for p in call_site.positional_arguments]
+            calling_parg_names = [
+                p.name for p in call_site.positional_arguments]
 
             # Additionally get names of keyword arguments to use in a full match
             # against parameters
@@ -1206,7 +1214,8 @@ accessed. Python regular expressions are accepted.",
 
         second_arg = node.args[1]
         if _is_invalid_isinstance_type(second_arg):
-            self.add_message("isinstance-second-argument-not-valid-type", node=node)
+            self.add_message(
+                "isinstance-second-argument-not-valid-type", node=node)
 
     # pylint: disable=too-many-branches,too-many-locals
     @check_messages(*(list(MSGS.keys())))
@@ -1231,7 +1240,8 @@ accessed. Python regular expressions are accepted.",
                 # Don't emit if we can't make sure this object is callable.
                 pass
             else:
-                self.add_message("not-callable", node=node, args=node.func.as_string())
+                self.add_message("not-callable", node=node,
+                                 args=node.func.as_string())
 
         self._check_uninferable_call(node)
         try:
@@ -1297,7 +1307,8 @@ accessed. Python regular expressions are accepted.",
         num_positional_args += implicit_args + already_filled_positionals
 
         # Analyze the list of formal parameters.
-        args = list(itertools.chain(called.args.posonlyargs or (), called.args.args))
+        args = list(itertools.chain(
+            called.args.posonlyargs or (), called.args.args))
         num_mandatory_parameters = len(args) - len(called.args.defaults)
         parameters = []
         parameter_name_to_index = {}
@@ -1419,7 +1430,8 @@ accessed. Python regular expressions are accepted.",
                 and not has_no_context_keywords_variadic
                 and not overload_function
             ):
-                self.add_message("missing-kwoa", node=node, args=(name, callable_name))
+                self.add_message("missing-kwoa", node=node,
+                                 args=(name, callable_name))
 
     def _check_invalid_sequence_index(self, subscript: astroid.Subscript):
         # Look for index operations where the parent is a sequence type.
@@ -1627,7 +1639,8 @@ accessed. Python regular expressions are accepted.",
 
         for error in node.type_errors():
             # Let the error customize its output.
-            self.add_message("invalid-unary-operand-type", args=str(error), node=node)
+            self.add_message("invalid-unary-operand-type",
+                             args=str(error), node=node)
 
     @check_messages("unsupported-binary-operation")
     def _visit_binop(self, node):
@@ -1647,7 +1660,8 @@ accessed. Python regular expressions are accepted.",
                 for obj in (error.left_type, error.right_type)
             ):
                 continue
-            self.add_message("unsupported-binary-operation", args=str(error), node=node)
+            self.add_message("unsupported-binary-operation",
+                             args=str(error), node=node)
 
     def _check_membership_test(self, node):
         if is_inside_abstract_class(node):
@@ -1700,7 +1714,8 @@ accessed. Python regular expressions are accepted.",
                     pass
                 else:
                     if getattr(hash_fn, "value", True) is None:
-                        self.add_message("unhashable-dict-key", node=node.value)
+                        self.add_message(
+                            "unhashable-dict-key", node=node.value)
 
         if node.ctx == astroid.Load:
             supported_protocol = supports_getitem
@@ -1815,7 +1830,8 @@ class IterableChecker(BaseChecker):
         if not inferred:
             return
         if not is_iterable(inferred, check_async=check_async):
-            self.add_message("not-an-iterable", args=node.as_string(), node=node)
+            self.add_message("not-an-iterable",
+                             args=node.as_string(), node=node)
 
     def _check_mapping(self, node):
         if is_inside_abstract_class(node):

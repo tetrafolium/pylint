@@ -42,7 +42,8 @@ class CompareToZeroUsedTC(unittest.TestCase):
 
     def test_comparetozero_message(self):
         elif_test = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "data", "compare_to_zero.py"
+            os.path.dirname(os.path.abspath(__file__)
+                            ), "data", "compare_to_zero.py"
         )
         self._linter.check([elif_test])
         msgs = self._linter.reporter.messages

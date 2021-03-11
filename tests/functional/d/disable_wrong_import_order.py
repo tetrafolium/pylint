@@ -3,9 +3,9 @@ imports from being considered out-of-order in respect to it but does not prevent
 it from being considered for 'ungrouped-imports'."""
 # pylint: disable=unused-import,import-error,no-name-in-module
 
-from first_party.foo import bar # pylint: disable=wrong-import-order
+from first_party.foo import bar  # pylint: disable=wrong-import-order
 import logging
 import os.path
 import sys
 from astroid import are_exclusive
-from first_party.bar import foo # [ungrouped-imports]
+from first_party.bar import foo  # [ungrouped-imports]
