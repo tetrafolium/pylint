@@ -99,7 +99,7 @@ class NoWorkChecker(BaseChecker):
 class TestEstablishBaselineBenchmarks:
     """Naive benchmarks for the high-level pylint framework
 
-    Because this benchmarks the fundemental and common parts and changes seen here will
+    Because this benchmarks the fundamental and common parts and changes seen here will
     impact everything else"""
 
     empty_filepath = _empty_filepath()
@@ -166,7 +166,7 @@ class TestEstablishBaselineBenchmarks:
         """Establish a baseline with only 'master' checker being run in -j1
 
         We do not register any checkers except the default 'master', so the cost is just
-        that of the system with a lot of files registerd"""
+        that of the system with a lot of files registered"""
         if benchmark.disabled:
             benchmark(print, "skipping, only benchmark large file counts")
             return  # _only_ run this test is profiling

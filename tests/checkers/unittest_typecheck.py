@@ -30,13 +30,13 @@ from pylint.testutils import CheckerTestCase, Message, set_config
 try:
     from coverage import tracer as _  # pylint: disable=unused-import
 
-    C_EXTENTIONS_AVAILABLE = True
+    C_EXTENSIONS_AVAILABLE = True
 except ImportError:
     _ = None
-    C_EXTENTIONS_AVAILABLE = False
+    C_EXTENSIONS_AVAILABLE = False
 
 needs_c_extension = pytest.mark.skipif(
-    not C_EXTENTIONS_AVAILABLE,
+    not C_EXTENSIONS_AVAILABLE,
     reason="Requires coverage (source of C-extension)")
 
 
