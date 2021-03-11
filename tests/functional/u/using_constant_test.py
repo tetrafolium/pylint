@@ -3,7 +3,6 @@
 # pylint: disable=no-init,expression-not-assigned, useless-object-inheritance
 # pylint: disable=missing-parentheses-for-call-in-test, unnecessary-comprehension, condition-evals-to-constant
 
-
 import collections
 
 
@@ -12,7 +11,6 @@ def function():
 
 
 class Class(object):
-
     def method(self):
         pass
 

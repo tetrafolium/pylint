@@ -23,17 +23,20 @@ def test():
     try:
         pass
     except Exception:
+
         def chest():
             try:
                 pass
             except Exception:
                 raise
+
         raise
 
 
 def test1():
     try:
         if 1 > 2:
+
             def best():
                 raise  # [misplaced-bare-raise]
     except Exception:
@@ -66,7 +69,7 @@ class A(object):
 # not to rely on it.
 exc = None
 try:
-    1/0
+    1 / 0
 except ZeroDivisionError as exc:
     pass
 if exc:

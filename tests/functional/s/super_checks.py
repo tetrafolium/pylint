@@ -7,7 +7,6 @@ from unknown import Missing
 
 class Aaaa:
     """old style"""
-
     def hop(self):
         """hop"""
         super(Aaaa, self).hop()  # >=3.0:[no-member]
@@ -18,7 +17,6 @@ class Aaaa:
 
 class NewAaaa(object):
     """old style"""
-
     def hop(self):
         """hop"""
         super(NewAaaa, self).hop()  # [no-member]
@@ -29,21 +27,18 @@ class NewAaaa(object):
 
 class Py3kAaaa(NewAaaa):
     """new style"""
-
     def __init__(self):
         super().__init__()  # <3.0:[missing-super-argument]
 
 
 class Py3kWrongSuper(Py3kAaaa):
     """new style"""
-
     def __init__(self):
         super(NewAaaa, self).__init__()  # [bad-super-call]
 
 
 class WrongNameRegression(Py3kAaaa):
     """ test a regression with the message """
-
     def __init__(self):
         super(Missing, self).__init__()  # [bad-super-call]
 
@@ -55,7 +50,6 @@ class Getattr(object):
 
 class CrashSuper(object):
     """ test a crash with this checker """
-
     def __init__(self):
         super(Getattr.name, self).__init__()  # [bad-super-call]
 
@@ -73,15 +67,14 @@ class SuperDifferentScope(object):
         """Test that a bad-super-call is not emitted for this case."""
         class FalsePositive(Empty):
             """The following super is in another scope than `test`."""
-
             def __init__(self, arg):
                 super(FalsePositive, self).__init__(arg)
+
         super(object, 1).__init__()  # [bad-super-call]
 
 
 class UnknownBases(Missing):
     """Don't emit if we don't know all the bases."""
-
     def __init__(self):
         super(UnknownBases, self).__init__()
         super(UnknownBases, self).test()
@@ -89,6 +82,7 @@ class UnknownBases(Missing):
 
 
 # Test that we are detecting proper super errors.
+
 
 class BaseClass(object):
 
@@ -102,14 +96,13 @@ class BaseClass(object):
 
 
 class InvalidSuperChecks(BaseClass):
-
     def __init__(self):
         super(InvalidSuperChecks, self).not_a_method()  # [not-callable]
         super(InvalidSuperChecks, self).attribute_error()  # [no-member]
         super(InvalidSuperChecks, self).function(42)
         super(InvalidSuperChecks, self).function()  # [no-value-for-parameter]
-        super(InvalidSuperChecks, self).function(
-            42, 24, 24)  # [too-many-function-args]
+        super(InvalidSuperChecks,
+              self).function(42, 24, 24)  # [too-many-function-args]
         # +1: [unexpected-keyword-arg,no-value-for-parameter]
         super(InvalidSuperChecks, self).function(lala=42)
         # Even though BaseClass has a __getattr__, that won't
@@ -124,6 +117,7 @@ class InvalidSuperChecks(BaseClass):
 try:
     TimeoutExpired = subprocess.TimeoutExpired
 except AttributeError:
+
     class TimeoutExpired(subprocess.CalledProcessError):
         def __init__(self):
             returncode = -1
@@ -133,13 +127,11 @@ except AttributeError:
 
 class SuperWithType(object):
     """type(self) may lead to recursion loop in derived classes"""
-
     def __init__(self):
         super(type(self), self).__init__()  # [bad-super-call]
 
 
 class SuperWithSelfClass(object):
     """self.__class__ may lead to recursion loop in derived classes"""
-
     def __init__(self):
         super(self.__class__, self).__init__()  # [bad-super-call]

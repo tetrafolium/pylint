@@ -22,7 +22,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Generic Setup script, takes package info from __pkginfo__.py file."""
 
 # pylint: disable=import-outside-toplevel,arguments-differ,ungrouped-imports,exec-used
@@ -45,7 +44,6 @@ except ImportError:
     USE_SETUPTOOLS = 0
     easy_install_lib = None
 
-
 __docformat__ = "restructuredtext en"
 base_dir = os.path.dirname(__file__)
 
@@ -66,7 +64,6 @@ if exists(readme_path):
         long_description = stream.read()
 else:
     long_description = ""
-
 
 needs_pytest = {"pytest", "test", "ptr"}.intersection(sys.argv)
 pytest_runner = ["pytest-runner"] if needs_pytest else []
@@ -136,28 +133,26 @@ def install(**kwargs):
     cmdclass = {"build_py": build_py}
     if easy_install_lib:
         cmdclass["easy_install"] = easy_install
-    return setup(
-        name="pylint",
-        version=__pkginfo__["version"],
-        license=__pkginfo__["license"],
-        description=__pkginfo__["description"],
-        long_description=long_description,
-        author=__pkginfo__["author"],
-        author_email=__pkginfo__["author_email"],
-        url=__pkginfo__["web"],
-        scripts=ensure_scripts(scripts),
-        classifiers=__pkginfo__["classifiers"],
-        data_files=data_files,
-        ext_modules=ext_modules,
-        cmdclass=cmdclass,
-        extras_require=extras_require,
-        test_suite="test",
-        python_requires="~=3.5",
-        setup_requires=pytest_runner,
-        tests_require=["pytest", "pytest-benchmark"],
-        project_urls=project_urls,
-        **kwargs
-    )
+    return setup(name="pylint",
+                 version=__pkginfo__["version"],
+                 license=__pkginfo__["license"],
+                 description=__pkginfo__["description"],
+                 long_description=long_description,
+                 author=__pkginfo__["author"],
+                 author_email=__pkginfo__["author_email"],
+                 url=__pkginfo__["web"],
+                 scripts=ensure_scripts(scripts),
+                 classifiers=__pkginfo__["classifiers"],
+                 data_files=data_files,
+                 ext_modules=ext_modules,
+                 cmdclass=cmdclass,
+                 extras_require=extras_require,
+                 test_suite="test",
+                 python_requires="~=3.5",
+                 setup_requires=pytest_runner,
+                 tests_require=["pytest", "pytest-benchmark"],
+                 project_urls=project_urls,
+                 **kwargs)
 
 
 if __name__ == "__main__":

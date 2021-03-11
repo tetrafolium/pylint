@@ -4,7 +4,6 @@
 
 
 class Toto(object):
-
     def __class_getitem__(cls, params):
         # This is actually a special method which is always a class method.
         # See https://www.python.org/dev/peps/pep-0560/#class-getitem

@@ -7,7 +7,6 @@ from missing import Missing
 
 class MyClass(object):
     """class docstring"""
-
     def __init__(self):
         """init"""
         self.correct = 1
@@ -25,14 +24,12 @@ class XYZMixin(object):
     """access to undefined members should be ignored in mixin classes by
     default
     """
-
     def __init__(self):
         print(self.nonexistent)
 
 
 class NewClass(object):
     """use object.__setattr__"""
-
     def __init__(self):
         self.__setattr__('toto', 'tutu')
 
@@ -67,7 +64,6 @@ NoKnownBases().lalala()
 
 class MetaClass(object):
     """Look some methods in the implicit metaclass."""
-
     @classmethod
     def whatever(cls):
         return cls.mro() + cls.missing()  # [no-member]

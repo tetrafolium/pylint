@@ -24,7 +24,7 @@ isinstance("a 'string'", type("test"))
 isinstance(3.123213, collections.OrderedDict)
 isinstance(foo, (int, collections.Counter))
 isinstance("a string", ((int, type(False)), (float, set), str))
-isinstance(10, (int,) + (str, bool) + (dict, list, tuple))
+isinstance(10, (int, ) + (str, bool) + (dict, list, tuple))
 isinstance(10, tuple(Unknown))
 
 # Negative test cases

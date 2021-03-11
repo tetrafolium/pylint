@@ -12,7 +12,6 @@ import six
 numbers = [1, 2, 3]
 del numbers[0]
 
-
 del bytearray(b"123")[0]
 del dict(a=1, b=2)['a']
 del (1, 2, 3)[0]  # [unsupported-delete-operation]
@@ -43,22 +42,21 @@ del Subscriptable[0]  # [unsupported-delete-operation]
 def powers_of_two():
     k = 0
     while k < 10:
-        yield 2 ** k
+        yield 2**k
         k += 1
 
 
 del powers_of_two()[0]  # [unsupported-delete-operation]
 del powers_of_two[0]  # [unsupported-delete-operation]
 
-
 # check that primitive non subscriptable types are caught
-del True[0]  # [unsupported-delete-operation]
-del None[0]  # [unsupported-delete-operation]
-del 8.5[0]  # [unsupported-delete-operation]
-del 10[0]  # [unsupported-delete-operation]
+del True [0]  # [unsupported-delete-operation]
+del None [0]  # [unsupported-delete-operation]
+del 8.5 [0]  # [unsupported-delete-operation]
+del 10 [0]  # [unsupported-delete-operation]
 
 # sets are not subscriptable
-del {x ** 2 for x in range(10)}[0]  # [unsupported-delete-operation]
+del {x**2 for x in range(10)}[0]  # [unsupported-delete-operation]
 del set(numbers)[0]  # [unsupported-delete-operation]
 del frozenset(numbers)[0]  # [unsupported-delete-operation]
 

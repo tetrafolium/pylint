@@ -18,13 +18,10 @@ toto.yo()
 ElementTree.nonexistant_function()  # [no-member]
 ElementTree.another.nonexistant.function()  # [no-member]
 
-
 print(sys.stdout, 'hello world')
 print(sys.stdoout, 'bye bye world')  # [no-member]
 
-
 re.finditer('*', 'yo')
-
 
 'SOMEVAR' in os.environ  # [pointless-statement]
 

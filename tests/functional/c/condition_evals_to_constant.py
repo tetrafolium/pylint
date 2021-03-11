@@ -36,7 +36,6 @@ assert False or False  # [condition-evals-to-constant]
 assert True and True  # [condition-evals-to-constant]
 assert False and False  # [condition-evals-to-constant]
 
-
 # A bare constant that's not inside of a boolean operation will emit `using-constant-test` instead
 if True:  # pylint: disable=using-constant-test
     pass

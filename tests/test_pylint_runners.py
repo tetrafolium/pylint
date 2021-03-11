@@ -8,9 +8,8 @@ import pytest
 from pylint import run_epylint, run_pylint, run_pyreverse, run_symilar
 
 
-@pytest.mark.parametrize(
-    "runner", [run_pylint, run_epylint, run_pyreverse, run_symilar]
-)
+@pytest.mark.parametrize("runner",
+                         [run_pylint, run_epylint, run_pyreverse, run_symilar])
 def test_runner(runner):
     filepath = os.path.abspath(__file__)
     testargs = ["", filepath]

@@ -37,30 +37,26 @@ class TestVariablesChecker(CheckerTestCase):
 
     def test_bitbucket_issue_78(self):
         """ Issue 78 report a false positive for unused-module """
-        module = astroid.parse(
-            """
+        module = astroid.parse("""
         from sys import path
         path += ['stuff']
         def func():
             other = 1
             return len(other)
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(module)
 
-    @set_config(ignored_modules=("argparse",))
+    @set_config(ignored_modules=("argparse", ))
     def test_no_name_in_module_skipped(self):
         """Make sure that 'from ... import ...' does not emit a
         'no-name-in-module' with a module that is configured
         to be ignored.
         """
 
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         from argparse import THIS_does_not_EXIST
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_importfrom(node)
 
@@ -73,56 +69,45 @@ class TestVariablesChecker(CheckerTestCase):
             self.checker.leave_module(root)
 
     def test_redefined_builtin_ignored(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         from future.builtins import open
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_module(node)
 
-    @set_config(redefining_builtins_modules=("os",))
+    @set_config(redefining_builtins_modules=("os", ))
     def test_redefined_builtin_custom_modules(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         from os import open
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_module(node)
 
-    @set_config(redefining_builtins_modules=("os",))
+    @set_config(redefining_builtins_modules=("os", ))
     def test_redefined_builtin_modname_not_ignored(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         from future.builtins import open
-        """
-        )
+        """)
         with self.assertAddsMessages(
-            Message("redefined-builtin", node=node.body[0], args="open")
-        ):
+                Message("redefined-builtin", node=node.body[0], args="open")):
             self.checker.visit_module(node)
 
-    @set_config(redefining_builtins_modules=("os",))
+    @set_config(redefining_builtins_modules=("os", ))
     def test_redefined_builtin_in_function(self):
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def test():
             from os import open
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_module(node.root())
             self.checker.visit_functiondef(node)
 
     def test_unassigned_global(self):
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
             def func():
                 global sys  #@
                 import sys, lala
-        """
-        )
+        """)
         msg = Message("global-statement", node=node, confidence=UNDEFINED)
         with self.assertAddsMessages(msg):
             self.checker.visit_global(node)
@@ -132,8 +117,7 @@ class TestVariablesChecker(CheckerTestCase):
 
         https://github.com/PyCQA/pylint/issues/511
         """
-        module = astroid.parse(
-            """
+        module = astroid.parse("""
         def dec(inp):
             def inner(func):
                 print(inp)
@@ -148,8 +132,7 @@ class TestVariablesChecker(CheckerTestCase):
             @dec([x for x in DATA])
             def fun(self):
                 pass
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(module)
 
@@ -158,8 +141,7 @@ class TestVariablesChecker(CheckerTestCase):
 
         https://github.com/PyCQA/pylint/issues/3434
         """
-        module = astroid.parse(
-            """
+        module = astroid.parse("""
         import collections
 
 
@@ -168,8 +150,7 @@ class TestVariablesChecker(CheckerTestCase):
 
         class Foo(collections.namedtuple("Foo",[x+"_foo" for x in l])):
             pass
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(module)
 
@@ -178,15 +159,13 @@ class TestVariablesChecker(CheckerTestCase):
 
         https://github.com/PyCQA/pylint/issues/1976
         """
-        module = astroid.parse(
-            """
+        module = astroid.parse("""
         class MyObject:
             class MyType:
                 pass
             def my_method(self) -> MyType:
                 pass
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(module)
 
@@ -206,80 +185,63 @@ class TestVariablesCheckerWithTearDown(CheckerTestCase):
     @set_config(callbacks=("callback_", "_callback"))
     def test_custom_callback_string(self):
         """ Test the --calbacks option works. """
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def callback_one(abc):
              ''' should not emit unused-argument. '''
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_functiondef(node)
             self.checker.leave_functiondef(node)
 
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def two_callback(abc, defg):
              ''' should not emit unused-argument. '''
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_functiondef(node)
             self.checker.leave_functiondef(node)
 
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def normal_func(abc):
              ''' should emit unused-argument. '''
-        """
-        )
+        """)
         with self.assertAddsMessages(
-            Message("unused-argument", node=node["abc"], args="abc")
-        ):
+                Message("unused-argument", node=node["abc"], args="abc")):
             self.checker.visit_functiondef(node)
             self.checker.leave_functiondef(node)
 
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def cb_func(abc):
              ''' Previous callbacks are overridden. '''
-        """
-        )
+        """)
         with self.assertAddsMessages(
-            Message("unused-argument", node=node["abc"], args="abc")
-        ):
+                Message("unused-argument", node=node["abc"], args="abc")):
             self.checker.visit_functiondef(node)
             self.checker.leave_functiondef(node)
 
-    @set_config(redefining_builtins_modules=("os",))
+    @set_config(redefining_builtins_modules=("os", ))
     def test_redefined_builtin_modname_not_ignored(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         from future.builtins import open
-        """
-        )
+        """)
         with self.assertAddsMessages(
-            Message("redefined-builtin", node=node.body[0], args="open")
-        ):
+                Message("redefined-builtin", node=node.body[0], args="open")):
             self.checker.visit_module(node)
 
-    @set_config(redefining_builtins_modules=("os",))
+    @set_config(redefining_builtins_modules=("os", ))
     def test_redefined_builtin_in_function(self):
-        node = astroid.extract_node(
-            """
+        node = astroid.extract_node("""
         def test():
             from os import open
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.checker.visit_module(node.root())
             self.checker.visit_functiondef(node)
 
     def test_import_as_underscore(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         import math as _
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(node)
 
@@ -289,13 +251,11 @@ class TestVariablesCheckerWithTearDown(CheckerTestCase):
 
         # Issue 1824
         # https://github.com/PyCQA/pylint/issues/1824
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         class MyObject(object):
             method1 = lambda func: func()
             method2 = lambda function: function()
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(node)
 
@@ -305,11 +265,9 @@ class TestVariablesCheckerWithTearDown(CheckerTestCase):
 
         https://github.com/PyCQA/pylint/issues/760
         """
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         lambda x: lambda: x + 1
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(node)
 
@@ -317,23 +275,19 @@ class TestVariablesCheckerWithTearDown(CheckerTestCase):
     def test_ignored_argument_names_no_message(self):
         """Make sure is_ignored_argument_names properly ignores
         function arguments"""
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         def fooby(arg):
             pass
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(node)
 
     @set_config(ignored_argument_names=re.compile("args|kwargs"))
     def test_ignored_argument_names_starred_args(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         def fooby(*args, **kwargs):
             pass
-        """
-        )
+        """)
         with self.assertNoMessages():
             self.walk(node)
 

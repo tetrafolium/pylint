@@ -9,9 +9,8 @@ from pylint.testutils.constants import UPDATE_OPTION
 
 
 class Message(
-    collections.namedtuple(
-        "Message", ["msg_id", "line", "node", "args", "confidence"])
-):
+        collections.namedtuple(
+            "Message", ["msg_id", "line", "node", "args", "confidence"])):
     def __new__(cls, msg_id, line=None, node=None, args=None, confidence=None):
         return tuple.__new__(cls, (msg_id, line, node, args, confidence))
 
@@ -61,11 +60,9 @@ Try updating it with: 'python tests/test_functional.py {update_option}'""".forma
 
 
 class OutputLine(
-    collections.namedtuple(
-        "OutputLine", ["symbol", "lineno",
-                       "column", "object", "msg", "confidence"]
-    )
-):
+        collections.namedtuple(
+            "OutputLine",
+            ["symbol", "lineno", "column", "object", "msg", "confidence"])):
     @classmethod
     def from_msg(cls, msg):
         column = cls.get_column(msg.column)
@@ -75,9 +72,8 @@ class OutputLine(
             column,
             msg.obj or "",
             msg.msg.replace("\r\n", "\n"),
-            msg.confidence.name
-            if msg.confidence != interfaces.UNDEFINED
-            else interfaces.HIGH.name,
+            msg.confidence.name if msg.confidence != interfaces.UNDEFINED else
+            interfaces.HIGH.name,
         )
 
     @classmethod

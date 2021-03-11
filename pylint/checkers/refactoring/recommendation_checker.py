@@ -11,7 +11,7 @@ from pylint.checkers import utils
 
 class RecommendationChecker(checkers.BaseChecker):
 
-    __implements__ = (interfaces.IAstroidChecker,)
+    __implements__ = (interfaces.IAstroidChecker, )
     name = "refactoring"
     msgs = {
         "C0200": (
@@ -48,8 +48,7 @@ class RecommendationChecker(checkers.BaseChecker):
 
         inferred = utils.safe_infer(node.func)
         if not isinstance(inferred, astroid.BoundMethod) or not isinstance(
-            inferred.bound, astroid.Dict
-        ):
+                inferred.bound, astroid.Dict):
             return
 
         if isinstance(node.parent, (astroid.For, astroid.Comprehension)):
@@ -69,10 +68,8 @@ class RecommendationChecker(checkers.BaseChecker):
             return
         if not node.iter.args:
             return
-        is_constant_zero = (
-            isinstance(node.iter.args[0], astroid.Const)
-            and node.iter.args[0].value == 0
-        )
+        is_constant_zero = (isinstance(node.iter.args[0], astroid.Const)
+                            and node.iter.args[0].value == 0)
         if len(node.iter.args) == 2 and not is_constant_zero:
             return
         if len(node.iter.args) > 2:

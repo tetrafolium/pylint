@@ -58,7 +58,6 @@ except ZeroDivisionError as e:
     # +1: [raise-missing-from]
     raise KeyError(whatever, whatever=whatever)
 
-
 ################################################################################
 # Negatives (Same cases as above, except with `from`):
 
@@ -107,7 +106,6 @@ try:
 except ZeroDivisionError as e:
     raise KeyError(whatever, whatever=whatever) from foo
 
-
 ################################################################################
 # Other negatives:
 
@@ -147,11 +145,14 @@ except ZeroDivisionError as e:
 try:
     1 / 0
 except ZeroDivisionError as e:
+
     def f():
         raise KeyError
+
 
 try:
     1 / 0
 except ZeroDivisionError as e:
+
     class Foo:
         raise KeyError

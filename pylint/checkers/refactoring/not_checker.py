@@ -18,7 +18,7 @@ class NotChecker(checkers.BaseChecker):
     - "not" followed by a comparison should trigger a warning
     """
 
-    __implements__ = (interfaces.IAstroidChecker,)
+    __implements__ = (interfaces.IAstroidChecker, )
     msgs = {
         "C0113": (
             'Consider changing "%s" to "%s"',
@@ -39,7 +39,7 @@ class NotChecker(checkers.BaseChecker):
     }
     # sets are not ordered, so for example "not set(LEFT_VALS) <= set(RIGHT_VALS)" is
     # not equivalent to "set(LEFT_VALS) > set(RIGHT_VALS)"
-    skipped_nodes = (astroid.Set,)
+    skipped_nodes = (astroid.Set, )
     # 'builtins' py3, '__builtin__' py2
     skipped_classnames = [
         "%s.%s" % (builtins.__name__, qname) for qname in ("set", "frozenset")
@@ -74,16 +74,14 @@ class NotChecker(checkers.BaseChecker):
                     return
                 if isinstance(_type, self.skipped_nodes):
                     return
-                if (
-                    isinstance(_type, astroid.Instance)
-                    and _type.qname() in self.skipped_classnames
-                ):
+                if (isinstance(_type, astroid.Instance)
+                        and _type.qname() in self.skipped_classnames):
                     return
             suggestion = "%s %s %s" % (
                 left.as_string(),
                 self.reverse_op[operator],
                 right.as_string(),
             )
-            self.add_message(
-                "unneeded-not", node=node, args=(node.as_string(), suggestion)
-            )
+            self.add_message("unneeded-not",
+                             node=node,
+                             args=(node.as_string(), suggestion))

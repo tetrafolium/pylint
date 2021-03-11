@@ -1,6 +1,5 @@
 # pylint: disable=missing-docstring, comparison-with-itself
 
-
 if 2 is 2:  # [literal-comparison]
     pass
 
@@ -31,9 +30,7 @@ if [] is not [4, 5, 6]:  # [literal-comparison]
 if () is not {1, 2, 3}:  # [literal-comparison]
     pass
 
-
 CONST = 24
-
 
 if CONST is 0:  # [literal-comparison]
     pass

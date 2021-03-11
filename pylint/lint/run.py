@@ -59,13 +59,11 @@ class Run:
     """
 
     LinterClass = PyLinter
-    option_groups = (
-        (
-            "Commands",
-            "Options which are actually commands. Options in this \
+    option_groups = ((
+        "Commands",
+        "Options which are actually commands. Options in this \
 group are mutually exclusive.",
-        ),
-    )
+    ), )
 
     @staticmethod
     def _return_one(*args):  # pylint: disable=unused-argument
@@ -114,24 +112,36 @@ group are mutually exclusive.",
                 (
                     "init-hook",
                     {
-                        "action": "callback",
-                        "callback": Run._return_one,
-                        "type": "string",
-                        "metavar": "<code>",
-                        "level": 1,
-                        "help": "Python code to execute, usually for sys.path "
+                        "action":
+                        "callback",
+                        "callback":
+                        Run._return_one,
+                        "type":
+                        "string",
+                        "metavar":
+                        "<code>",
+                        "level":
+                        1,
+                        "help":
+                        "Python code to execute, usually for sys.path "
                         "manipulation such as pygtk.require().",
                     },
                 ),
                 (
                     "help-msg",
                     {
-                        "action": "callback",
-                        "type": "string",
-                        "metavar": "<msg-id>",
-                        "callback": self.cb_help_message,
-                        "group": "Commands",
-                        "help": "Display a help message for the given message id and "
+                        "action":
+                        "callback",
+                        "type":
+                        "string",
+                        "metavar":
+                        "<msg-id>",
+                        "callback":
+                        self.cb_help_message,
+                        "group":
+                        "Commands",
+                        "help":
+                        "Display a help message for the given message id and "
                         "exit. The value may be a comma separated list of message ids.",
                     },
                 ),
@@ -149,12 +159,18 @@ group are mutually exclusive.",
                 (
                     "list-msgs-enabled",
                     {
-                        "action": "callback",
-                        "metavar": "<msg-id>",
-                        "callback": self.cb_list_messages_enabled,
-                        "group": "Commands",
-                        "level": 1,
-                        "help": "Display a list of what messages are enabled "
+                        "action":
+                        "callback",
+                        "metavar":
+                        "<msg-id>",
+                        "callback":
+                        self.cb_list_messages_enabled,
+                        "group":
+                        "Commands",
+                        "level":
+                        1,
+                        "help":
+                        "Display a list of what messages are enabled "
                         "and disabled with the given configuration.",
                     },
                 ),
@@ -203,10 +219,14 @@ group are mutually exclusive.",
                 (
                     "generate-rcfile",
                     {
-                        "action": "callback",
-                        "callback": self.cb_generate_config,
-                        "group": "Commands",
-                        "help": "Generate a sample configuration file according to "
+                        "action":
+                        "callback",
+                        "callback":
+                        self.cb_generate_config,
+                        "group":
+                        "Commands",
+                        "help":
+                        "Generate a sample configuration file according to "
                         "the current configuration. You can put other options "
                         "before this one to get them in the generated "
                         "configuration.",
@@ -225,10 +245,14 @@ group are mutually exclusive.",
                 (
                     "errors-only",
                     {
-                        "action": "callback",
-                        "callback": self.cb_error_mode,
-                        "short": "E",
-                        "help": "In error mode, checkers without error messages are "
+                        "action":
+                        "callback",
+                        "callback":
+                        self.cb_error_mode,
+                        "short":
+                        "E",
+                        "help":
+                        "In error mode, checkers without error messages are "
                         "disabled and for others, only the ERROR messages are "
                         "displayed, and no reports are done by default.",
                     },
@@ -236,9 +260,12 @@ group are mutually exclusive.",
                 (
                     "py3k",
                     {
-                        "action": "callback",
-                        "callback": self.cb_python3_porting_mode,
-                        "help": "In Python 3 porting mode, all checkers will be "
+                        "action":
+                        "callback",
+                        "callback":
+                        self.cb_python3_porting_mode,
+                        "help":
+                        "In Python 3 porting mode, all checkers will be "
                         "disabled and only messages emitted by the porting "
                         "checker will be displayed.",
                     },
@@ -246,10 +273,14 @@ group are mutually exclusive.",
                 (
                     "verbose",
                     {
-                        "action": "callback",
-                        "callback": self.cb_verbose_mode,
-                        "short": "v",
-                        "help": "In verbose mode, extra non-checker-related info "
+                        "action":
+                        "callback",
+                        "callback":
+                        self.cb_verbose_mode,
+                        "short":
+                        "v",
+                        "help":
+                        "In verbose mode, extra non-checker-related info "
                         "will be displayed.",
                     },
                 ),
@@ -266,7 +297,8 @@ group are mutually exclusive.",
         linter.load_plugin_modules(self._plugins)
         # add some help section
         linter.add_help_section("Environment variables",
-                                config.ENV_HELP, level=1)
+                                config.ENV_HELP,
+                                level=1)
         linter.add_help_section(
             "Output",
             "Using the default text output, the message format is :                          \n"
@@ -310,9 +342,8 @@ group are mutually exclusive.",
         # run init hook, if present, before loading plugins
         if config_parser.has_option("MASTER", "init-hook"):
             cb_init_hook(
-                "init-hook", utils._unquote(
-                    config_parser.get("MASTER", "init-hook"))
-            )
+                "init-hook",
+                utils._unquote(config_parser.get("MASTER", "init-hook")))
         # is there some additional plugins in the file configuration, in
         if config_parser.has_option("MASTER", "load-plugins"):
             plugins = utils._splitstrip(
@@ -339,15 +370,16 @@ group are mutually exclusive.",
 
         if linter.config.jobs < 0:
             print(
-                "Jobs number (%d) should be greater than or equal to 0"
-                % linter.config.jobs,
+                "Jobs number (%d) should be greater than or equal to 0" %
+                linter.config.jobs,
                 file=sys.stderr,
             )
             sys.exit(32)
         if linter.config.jobs > 1 or linter.config.jobs == 0:
             if multiprocessing is None:
                 print(
-                    "Multiprocessing library is missing, " "fallback to single process",
+                    "Multiprocessing library is missing, "
+                    "fallback to single process",
                     file=sys.stderr,
                 )
                 linter.set_option("jobs", 1)
@@ -400,7 +432,7 @@ group are mutually exclusive.",
 
     def cb_generate_config(self, *args, **kwargs):
         """optik callback for sample config file generation"""
-        self.linter.generate_config(skipsections=("COMMANDS",))
+        self.linter.generate_config(skipsections=("COMMANDS", ))
         sys.exit(0)
 
     def cb_generate_manpage(self, *args, **kwargs):

@@ -14,7 +14,6 @@ def decorator(fun):
 
 class DemoClass(object):
     """Test class for method invocations."""
-
     @staticmethod
     def static_method(arg):
         """static method."""
@@ -71,7 +70,8 @@ function_default_arg(1, one=5)  # [redundant-keyword-arg]
 # Remaining tests are for coverage of correct names in messages.
 
 
-def LAMBDA(arg): return 1
+def LAMBDA(arg):
+    return 1
 
 
 LAMBDA()  # [no-value-for-parameter]
@@ -99,11 +99,13 @@ def method_tests():
 class Text(object):
     """ Regression """
 
-    if sys.version_info > (3,):
+    if sys.version_info > (3, ):
+
         def __new__(cls):
             """ empty """
             return object.__new__(cls)
     else:
+
         def __new__(cls):
             """ empty """
             return object.__new__(cls)
@@ -113,7 +115,6 @@ Text()
 
 
 class TestStaticMethod(object):
-
     @staticmethod
     def test(first, second=None, **kwargs):
         return first, second, kwargs
@@ -143,8 +144,8 @@ class TypeCheckConstructor(object):
 
 class Test(object):
     """ lambda needs Test instance as first argument """
-
-    def lam(self, icon): return (self, icon)
+    def lam(self, icon):
+        return (self, icon)
 
     def test(self):
         self.lam(42)
@@ -188,6 +189,7 @@ def no_context_but_redefined(*args):
 def no_context_one_elem(*args):
     expect_three(args)  # [no-value-for-parameter, no-value-for-parameter]
 
+
 # Don't emit no-value-for-parameter for this, since we
 # don't have the context at our disposal.
 
@@ -219,11 +221,7 @@ def find_problems2(prob_dates):
 
 def namedtuple_replace_issue_1036():
     cls = namedtuple('cls', 'a b c')
-    new_instance = cls(1, 2, 3)._replace(
-        a=24,
-        b=24,
-        c=42
-    )
+    new_instance = cls(1, 2, 3)._replace(a=24, b=24, c=42)
     # +1:[unexpected-keyword-arg,unexpected-keyword-arg]
     new_bad_instance = cls(1, 2, 3)._replace(d=24, e=32)
     return new_instance, new_bad_instance

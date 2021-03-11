@@ -12,4 +12,5 @@ def good():
 
     def test():
         global missing
+
     return test

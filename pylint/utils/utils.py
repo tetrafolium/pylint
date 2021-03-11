@@ -27,10 +27,10 @@ DEFAULT_LINE_LENGTH = 79
 def normalize_text(text, line_len=DEFAULT_LINE_LENGTH, indent=""):
     """Wrap the text on the given line length."""
     return "\n".join(
-        textwrap.wrap(
-            text, width=line_len, initial_indent=indent, subsequent_indent=indent
-        )
-    )
+        textwrap.wrap(text,
+                      width=line_len,
+                      initial_indent=indent,
+                      subsequent_indent=indent))
 
 
 def get_module_and_frameid(node):
@@ -78,7 +78,8 @@ def get_rst_section(section, options, doc=None):
 def safe_decode(line, encoding, *args, **kwargs):
     """return decoded line from encoding or decode with default encoding"""
     try:
-        return line.decode(encoding or sys.getdefaultencoding(), *args, **kwargs)
+        return line.decode(encoding or sys.getdefaultencoding(), *args,
+                           **kwargs)
     except LookupError:
         return line.decode(sys.getdefaultencoding(), *args, **kwargs)
 
@@ -118,8 +119,7 @@ def _modpath_from_file(filename, is_namespace, path=None):
         return modutils.check_modpath_has_init(path, parts) or is_namespace
 
     return modutils.modpath_from_file_with_callback(
-        filename, path=path, is_package_cb=_is_package_cb
-    )
+        filename, path=path, is_package_cb=_is_package_cb)
 
 
 def get_python_path(filepath):
@@ -147,7 +147,8 @@ def expand_modules(files_or_modules, black_list, black_list_re):
     for something in files_or_modules:
         if os.path.basename(something) in black_list:
             continue
-        if _basename_in_blacklist_re(os.path.basename(something), black_list_re):
+        if _basename_in_blacklist_re(os.path.basename(something),
+                                     black_list_re):
             continue
 
         module_path = get_python_path(something)
@@ -156,9 +157,8 @@ def expand_modules(files_or_modules, black_list, black_list_re):
             # this is a file or a directory
             try:
                 modname = ".".join(
-                    modutils.modpath_from_file(
-                        something, path=additional_search_path)
-                )
+                    modutils.modpath_from_file(something,
+                                               path=additional_search_path))
             except ImportError:
                 modname = os.path.splitext(os.path.basename(something))[0]
             if os.path.isdir(something):
@@ -170,8 +170,7 @@ def expand_modules(files_or_modules, black_list, black_list_re):
             modname = something
             try:
                 filepath = modutils.file_from_modpath(
-                    modname.split("."), path=additional_search_path
-                )
+                    modname.split("."), path=additional_search_path)
                 if filepath is None:
                     continue
             except (ImportError, SyntaxError) as ex:
@@ -184,9 +183,8 @@ def expand_modules(files_or_modules, black_list, black_list_re):
         modparts = (modname or something).split(".")
 
         try:
-            spec = modutils.file_info_from_modpath(
-                modparts, path=additional_search_path
-            )
+            spec = modutils.file_info_from_modpath(modparts,
+                                                   path=additional_search_path)
         except ImportError:
             # Might not be acceptable, don't crash.
             is_namespace = False
@@ -196,44 +194,38 @@ def expand_modules(files_or_modules, black_list, black_list_re):
             is_directory = modutils.is_directory(spec)
 
         if not is_namespace:
-            result.append(
-                {
-                    "path": filepath,
-                    "name": modname,
-                    "isarg": True,
-                    "basepath": filepath,
-                    "basename": modname,
-                }
-            )
+            result.append({
+                "path": filepath,
+                "name": modname,
+                "isarg": True,
+                "basepath": filepath,
+                "basename": modname,
+            })
 
         has_init = (
             not (modname.endswith(".__init__") or modname == "__init__")
-            and os.path.basename(filepath) == "__init__.py"
-        )
+            and os.path.basename(filepath) == "__init__.py")
         if has_init or is_namespace or is_directory:
             for subfilepath in modutils.get_module_files(
-                os.path.dirname(filepath), black_list, list_all=is_namespace
-            ):
+                    os.path.dirname(filepath), black_list,
+                    list_all=is_namespace):
                 if filepath == subfilepath:
                     continue
-                if _basename_in_blacklist_re(
-                    os.path.basename(subfilepath), black_list_re
-                ):
+                if _basename_in_blacklist_re(os.path.basename(subfilepath),
+                                             black_list_re):
                     continue
 
-                modpath = _modpath_from_file(
-                    subfilepath, is_namespace, path=additional_search_path
-                )
+                modpath = _modpath_from_file(subfilepath,
+                                             is_namespace,
+                                             path=additional_search_path)
                 submodname = ".".join(modpath)
-                result.append(
-                    {
-                        "path": subfilepath,
-                        "name": submodname,
-                        "isarg": False,
-                        "basepath": filepath,
-                        "basename": modname,
-                    }
-                )
+                result.append({
+                    "path": subfilepath,
+                    "name": submodname,
+                    "isarg": False,
+                    "basepath": filepath,
+                    "basename": modname,
+                })
     return result, errors
 
 
@@ -246,22 +238,17 @@ def register_plugins(linter, directory):
         base, extension = os.path.splitext(filename)
         if base in imported or base == "__pycache__":
             continue
-        if (
-            extension in PY_EXTS
-            and base != "__init__"
-            or (not extension and os.path.isdir(os.path.join(directory, base)))
-        ):
+        if (extension in PY_EXTS and base != "__init__" or
+            (not extension and os.path.isdir(os.path.join(directory, base)))):
             try:
                 module = modutils.load_module_from_file(
-                    os.path.join(directory, filename)
-                )
+                    os.path.join(directory, filename))
             except ValueError:
                 # empty module name (usually emacs auto-save files)
                 continue
             except ImportError as exc:
-                print(
-                    "Problem importing module %s: %s" % (filename, exc), file=sys.stderr
-                )
+                print("Problem importing module %s: %s" % (filename, exc),
+                      file=sys.stderr)
             else:
                 if hasattr(module, "register"):
                     module.register(linter)
@@ -290,12 +277,13 @@ def get_global_option(checker, option, default=None):
     return default
 
 
-def deprecated_option(
-    shortname=None, opt_type=None, help_msg=None, deprecation_msg=None
-):
+def deprecated_option(shortname=None,
+                      opt_type=None,
+                      help_msg=None,
+                      deprecation_msg=None):
     def _warn_deprecated(option, optname, *args):  # pylint: disable=unused-argument
         if deprecation_msg:
-            sys.stderr.write(deprecation_msg % (optname,))
+            sys.stderr.write(deprecation_msg % (optname, ))
 
     option = {
         "help": help_msg,
@@ -412,7 +400,6 @@ def _ini_format(stream, options):
 
 class IsortDriver:
     """A wrapper around isort API that changed between versions 4 and 5."""
-
     def __init__(self, config):
         if HAS_ISORT_5:
             self.isort5_config = isort.api.Config(

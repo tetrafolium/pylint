@@ -27,7 +27,9 @@ from pylint.message import MessageDefinition
                     "message two",
                     "msg-symbol-two",
                     "msg description",
-                    {"old_names": [("W1234", "old-symbol")]},
+                    {
+                        "old_names": [("W1234", "old-symbol")]
+                    },
                 ),
                 "W1234": ("message one", "msg-symbol-one", "msg description"),
             },
@@ -40,7 +42,9 @@ from pylint.message import MessageDefinition
                     "message two",
                     "msg-symbol-two",
                     "msg description",
-                    {"old_names": [("W1234", "old-symbol")]},
+                    {
+                        "old_names": [("W1234", "old-symbol")]
+                    },
                 ),
             },
             "Message id 'W1234' cannot have both 'msg-symbol-one' and 'old-symbol' as symbolic name.",
@@ -51,13 +55,17 @@ from pylint.message import MessageDefinition
                     "message one",
                     "msg-symbol-one",
                     "msg description",
-                    {"old_names": [("W1201", "old-symbol-one")]},
+                    {
+                        "old_names": [("W1201", "old-symbol-one")]
+                    },
                 ),
                 "W1235": (
                     "message two",
                     "msg-symbol-two",
                     "msg description",
-                    {"old_names": [("W1201", "old-symbol-two")]},
+                    {
+                        "old_names": [("W1201", "old-symbol-two")]
+                    },
                 ),
             },
             "Message id 'W1201' cannot have both 'old-symbol-one' and 'old-symbol-two' as symbolic name.",
@@ -76,7 +84,9 @@ from pylint.message import MessageDefinition
                     "message two",
                     "msg-symbol-two",
                     "msg description",
-                    {"old_names": [("W1230", "msg-symbol-one")]},
+                    {
+                        "old_names": [("W1230", "msg-symbol-one")]
+                    },
                 ),
                 "W1234": ("message one", "msg-symbol-one", "msg description"),
             },
@@ -90,7 +100,9 @@ from pylint.message import MessageDefinition
                     "message two",
                     "msg-symbol-two",
                     "msg description",
-                    {"old_names": [("W1230", "msg-symbol-one")]},
+                    {
+                        "old_names": [("W1230", "msg-symbol-one")]
+                    },
                 ),
             },
             "Message symbol 'msg-symbol-one' cannot be used for 'W1230' and 'W1234' at the same time. "
@@ -102,13 +114,17 @@ from pylint.message import MessageDefinition
                     "message one",
                     "msg-symbol-one",
                     "msg description",
-                    {"old_names": [("W1230", "old-symbol-one")]},
+                    {
+                        "old_names": [("W1230", "old-symbol-one")]
+                    },
                 ),
                 "W1235": (
                     "message two",
                     "msg-symbol-two",
                     "msg description",
-                    {"old_names": [("W1231", "old-symbol-one")]},
+                    {
+                        "old_names": [("W1231", "old-symbol-one")]
+                    },
                 ),
             },
             "Message symbol 'old-symbol-one' cannot be used for 'W1230' and 'W1231' at the same time. "
@@ -133,8 +149,10 @@ def test_register_error_new_id_duplicate_of_new(empty_store):
 
     class CheckerTwo(BaseChecker):
         name = "checker_two"
-        msgs = {"W1234": ("message two", "msg-symbol-two",
-                          "another msg description.")}
+        msgs = {
+            "W1234":
+            ("message two", "msg-symbol-two", "another msg description.")
+        }
 
     empty_store.register_messages_from_checker(CheckerOne())
     test_register_error(
@@ -150,9 +168,7 @@ def test_format_help(capsys, store):
     assert captured.out == ""
     store.help_message(["W1234", "E1234", "C1234"])
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """:msg-symbol (W1234): *message*
+    assert (captured.out == """:msg-symbol (W1234): *message*
   msg description. This message belongs to the achecker checker.
 
 :duplicate-keyword-arg (E1234): *Duplicate keyword argument %r in %s call*
@@ -162,8 +178,7 @@ def test_format_help(capsys, store):
 
 No such message id or symbol 'C1234'.
 
-"""
-    )
+""")
 
 
 def test_get_msg_display_string(store):
@@ -240,7 +255,6 @@ def test_renamed_message_register(store):
 
 def test_multiple_child_of_old_name(store):
     """ We can define multiple name with the same old name. """
-
     class FamillyChecker(BaseChecker):
         name = "famillychecker"
         msgs = {
@@ -248,13 +262,17 @@ def test_multiple_child_of_old_name(store):
                 "Child 1",
                 "child-one",
                 "Child one description.",
-                {"old_names": [("C1234", "mother")]},
+                {
+                    "old_names": [("C1234", "mother")]
+                },
             ),
             "W1236": (
                 "Child 2",
                 "child-two",
                 "Child two description",
-                {"old_names": [("C1234", "mother")]},
+                {
+                    "old_names": [("C1234", "mother")]
+                },
             ),
         }
 

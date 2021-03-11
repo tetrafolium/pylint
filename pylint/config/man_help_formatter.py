@@ -8,12 +8,13 @@ import time
 
 # pylint: disable=abstract-method; by design?
 class _ManHelpFormatter(optparse.HelpFormatter):
-    def __init__(
-        self, indent_increment=0, max_help_position=24, width=79, short_first=0
-    ):
-        optparse.HelpFormatter.__init__(
-            self, indent_increment, max_help_position, width, short_first
-        )
+    def __init__(self,
+                 indent_increment=0,
+                 max_help_position=24,
+                 width=79,
+                 short_first=0):
+        optparse.HelpFormatter.__init__(self, indent_increment,
+                                        max_help_position, width, short_first)
 
     def format_heading(self, heading):
         return ".SH %s\n" % heading.upper()
@@ -74,17 +75,14 @@ class _ManHelpFormatter(optparse.HelpFormatter):
 
     @staticmethod
     def format_synopsis(pgm):
-        return (
-            """.SH SYNOPSIS
+        return (""".SH SYNOPSIS
 .B  %s
 [
 .I OPTIONS
 ] [
 .I <arguments>
 ]
-"""
-            % pgm
-        )
+""" % pgm)
 
     @staticmethod
     def format_long_description(pgm, long_desc):
@@ -119,18 +117,19 @@ Please report bugs on the project\'s mailing list:
         )
 
         if hasattr(pkginfo, "copyright"):
-            tail += (
-                """
+            tail += ("""
 .SH COPYRIGHT
 %s
-"""
-                % pkginfo.copyright
-            )
+""" % pkginfo.copyright)
 
         return tail
 
 
-def _generate_manpage(optparser, pkginfo, section=1, stream=sys.stdout, level=0):
+def _generate_manpage(optparser,
+                      pkginfo,
+                      section=1,
+                      stream=sys.stdout,
+                      level=0):
     formatter = _ManHelpFormatter()
     formatter.output_level = level
     formatter.parser = optparser

@@ -12,7 +12,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the misc checker."""
 
 from pylint.checkers import misc
@@ -27,22 +26,23 @@ class TestFixme(CheckerTestCase):
                 # FIXME message
                 """
         with self.assertAddsMessages(
-            Message(msg_id="fixme", line=2, args="FIXME message")
-        ):
+                Message(msg_id="fixme", line=2, args="FIXME message")):
             self.checker.process_tokens(_tokenize_str(code))
 
     def test_todo_without_message(self):
         code = """a = 1
                 # TODO
                 """
-        with self.assertAddsMessages(Message(msg_id="fixme", line=2, args="TODO")):
+        with self.assertAddsMessages(
+                Message(msg_id="fixme", line=2, args="TODO")):
             self.checker.process_tokens(_tokenize_str(code))
 
     def test_xxx_without_space(self):
         code = """a = 1
                 #XXX
                 """
-        with self.assertAddsMessages(Message(msg_id="fixme", line=2, args="XXX")):
+        with self.assertAddsMessages(
+                Message(msg_id="fixme", line=2, args="XXX")):
             self.checker.process_tokens(_tokenize_str(code))
 
     def test_xxx_middle(self):
@@ -56,7 +56,8 @@ class TestFixme(CheckerTestCase):
         code = """a = 1
                 #FIXME
                 """
-        with self.assertAddsMessages(Message(msg_id="fixme", line=2, args="FIXME")):
+        with self.assertAddsMessages(
+                Message(msg_id="fixme", line=2, args="FIXME")):
             self.checker.process_tokens(_tokenize_str(code))
 
     @set_config(notes=[])
@@ -75,7 +76,8 @@ class TestFixme(CheckerTestCase):
                 # CODETAG
                 # FIXME
                 """
-        with self.assertAddsMessages(Message(msg_id="fixme", line=2, args="CODETAG")):
+        with self.assertAddsMessages(
+                Message(msg_id="fixme", line=2, args="CODETAG")):
             self.checker.process_tokens(_tokenize_str(code))
 
     def test_issue_2321_should_not_trigger(self):
@@ -86,9 +88,9 @@ class TestFixme(CheckerTestCase):
     def test_issue_2321_should_trigger(self):
         code = "# TODO this should not trigger a fixme"
         with self.assertAddsMessages(
-            Message(msg_id="fixme", line=1,
-                    args="TODO this should not trigger a fixme")
-        ):
+                Message(msg_id="fixme",
+                        line=1,
+                        args="TODO this should not trigger a fixme")):
             self.checker.process_tokens(_tokenize_str(code))
 
     def test_dont_trigger_on_todoist(self):

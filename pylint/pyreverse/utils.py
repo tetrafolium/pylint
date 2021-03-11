@@ -11,7 +11,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """
 generic classes/functions for pyreverse core/extensions
 """
@@ -20,7 +19,6 @@ import re
 import sys
 
 ########### pyreverse option utils ##############################
-
 
 RCFILE = ".pyreverserc"
 
@@ -118,7 +116,6 @@ VIS_MOD = {
 
 class FilterMixIn:
     """filter nodes according to a mode and nodes' visibility"""
-
     def __init__(self, mode):
         "init filter modes"
         __mode = 0
@@ -144,7 +141,6 @@ class ASTWalker:
     * leave_<class name> on leaving a node, where class name is the class of
     the node in lower case
     """
-
     def __init__(self, handler):
         self.handler = handler
         self._cache = {}
@@ -170,14 +166,10 @@ class ASTWalker:
         if methods is None:
             handler = self.handler
             kid = klass.__name__.lower()
-            e_method = getattr(
-                handler, "visit_%s" % kid, getattr(
-                    handler, "visit_default", None)
-            )
-            l_method = getattr(
-                handler, "leave_%s" % kid, getattr(
-                    handler, "leave_default", None)
-            )
+            e_method = getattr(handler, "visit_%s" % kid,
+                               getattr(handler, "visit_default", None))
+            l_method = getattr(handler, "leave_%s" % kid,
+                               getattr(handler, "leave_default", None))
             self._cache[klass] = (e_method, l_method)
         else:
             e_method, l_method = methods
@@ -198,7 +190,6 @@ class ASTWalker:
 
 class LocalsVisitor(ASTWalker):
     """visit a project by traversing the locals dictionary"""
-
     def __init__(self):
         ASTWalker.__init__(self, self)
         self._visited = set()

@@ -24,8 +24,7 @@ from pylint.testutils import GenericTestReporter as Reporter
 def _gen_file_data(idx=0):
     """Generates a file to use as a stream"""
     filepath = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "input", "similar1")
-    )
+        os.path.join(os.path.dirname(__file__), "input", "similar1"))
     file_data = (
         "--test-file_data-name-%d--" % idx,
         filepath,
@@ -41,7 +40,7 @@ def _gen_file_datas(count=1):
 class SequentialTestChecker(BaseChecker):
     """A checker that does not need to consolidate data across run invocations"""
 
-    __implements__ = (pylint.interfaces.IRawChecker,)
+    __implements__ = (pylint.interfaces.IRawChecker, )
 
     name = "sequential-checker"
     test_data = "sequential"
@@ -81,7 +80,6 @@ class ThirdSequentialTestChecker(SequentialTestChecker):
 
 class TestCheckParallelFramework:
     """Tests the check_parallel() function's framework"""
-
     def setup_class(self):
         self._prev_global_linter = pylint.lint.parallel._worker_linter
 
@@ -96,8 +94,8 @@ class TestCheckParallelFramework:
     def test_worker_check_single_file_uninitialised(self):
         pylint.lint.parallel._worker_linter = None
         with pytest.raises(  # Objects that do not match the linter interface will fail
-            AttributeError, match="'NoneType' object has no attribute 'open'"
-        ):
+                AttributeError,
+                match="'NoneType' object has no attribute 'open'"):
             worker_check_single_file(_gen_file_data())
 
     def test_worker_check_single_file_no_checkers(self):
@@ -189,7 +187,6 @@ class TestCheckParallelFramework:
 
 class TestCheckParallel:
     """Tests the check_parallel() function"""
-
     def test_sequential_checkers_work(self):
         """Tests original basic types of checker works as expected in -jN
 
@@ -208,12 +205,13 @@ class TestCheckParallel:
 
         # Invoke the lint process in a multiprocess way, although we only specify one
         # job.
-        check_parallel(
-            linter, jobs=1, files=single_file_container, arguments=None)
+        check_parallel(linter,
+                       jobs=1,
+                       files=single_file_container,
+                       arguments=None)
         assert len(linter.get_checkers()) == 2, (
             "We should only have the 'master' and 'sequential-checker' "
-            "checkers registered"
-        )
+            "checkers registered")
         assert {
             "by_module": {
                 "--test-file_data-name-0--": {
@@ -276,8 +274,10 @@ class TestCheckParallel:
 
         # Invoke the lint process in a multiprocess way, although we only specify one
         # job.
-        check_parallel(
-            linter, jobs=1, files=single_file_container, arguments=None)
+        check_parallel(linter,
+                       jobs=1,
+                       files=single_file_container,
+                       arguments=None)
 
         assert {
             "by_module": {
@@ -328,7 +328,8 @@ class TestCheckParallel:
             (2, 10, 3),
         ],
     )
-    def test_compare_workers_to_single_proc(self, num_files, num_jobs, num_checkers):
+    def test_compare_workers_to_single_proc(self, num_files, num_jobs,
+                                            num_checkers):
         """Compares the 3 key parameters for check_parallel() produces the same results
 
         The intent here is to ensure that the check_parallel() operates on each file,
@@ -342,8 +343,7 @@ class TestCheckParallel:
         # with the number of files.
         expected_stats = {
             "by_module": {
-                "--test-file_data-name-%d--"
-                % idx: {
+                "--test-file_data-name-%d--" % idx: {
                     "convention": 0,
                     "error": 0,
                     "fatal": 0,
@@ -380,9 +380,8 @@ class TestCheckParallel:
 
             if do_single_proc:
                 # establish the baseline
-                assert (
-                    linter.config.jobs == 1
-                ), "jobs>1 are ignored when calling _check_files"
+                assert (linter.config.jobs == 1
+                        ), "jobs>1 are ignored when calling _check_files"
                 linter._check_files(linter.get_ast, file_infos)
                 assert linter.msg_status == 0, "We should not fail the lint"
                 stats_single_proc = linter.stats

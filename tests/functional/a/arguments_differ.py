@@ -3,31 +3,26 @@
 
 
 class Parent(object):
-
     def test(self):
         pass
 
 
 class Child(Parent):
-
     def test(self, arg):  # [arguments-differ]
         pass
 
 
 class ParentDefaults(object):
-
     def test(self, arg=None, barg=None):
         pass
 
 
 class ChildDefaults(ParentDefaults):
-
     def test(self, arg=None):  # [arguments-differ]
         pass
 
 
 class Classmethod(object):
-
     @classmethod
     def func(cls, data):
         return data
@@ -38,7 +33,6 @@ class Classmethod(object):
 
 
 class ClassmethodChild(Classmethod):
-
     @staticmethod
     def func():  # [arguments-differ]
         pass
@@ -50,14 +44,12 @@ class ClassmethodChild(Classmethod):
 
 class Builtins(dict):
     """Ignore for builtins, for which we don't know the number of required args."""
-
     @classmethod
     def fromkeys(cls, arg, arg1):
         pass
 
 
 class Varargs(object):
-
     def has_kwargs(self, arg, **kwargs):
         pass
 
@@ -66,7 +58,6 @@ class Varargs(object):
 
 
 class VarargsChild(Varargs):
-
     def has_kwargs(self, arg):  # [arguments-differ]
         "Not okay to lose capabilities."
 
@@ -111,28 +102,24 @@ class Sub(Super):
 
 
 class Staticmethod(object):
-
     @staticmethod
     def func(data):
         return data
 
 
 class StaticmethodChild(Staticmethod):
-
     @classmethod
     def func(cls, data):
         return data
 
 
 class Property(object):
-
     @property
     def close(self):
         pass
 
 
 class PropertySetter(Property):
-
     @property
     def close(self):
         pass
@@ -143,20 +130,17 @@ class PropertySetter(Property):
 
 
 class StaticmethodChild2(Staticmethod):
-
     def func(self, data):
         super().func(data)
 
 
 class SuperClass(object):
-
     @staticmethod
     def impl(arg1, arg2, **kwargs):
         return arg1 + arg2
 
 
 class MyClass(SuperClass):
-
     def impl(self, *args, **kwargs):
         """
         Acceptable use of vararg in subclass because it does not violate LSP.
@@ -165,25 +149,21 @@ class MyClass(SuperClass):
 
 
 class FirstHasArgs(object):
-
     def test(self, *args):
         pass
 
 
 class SecondChangesArgs(FirstHasArgs):
-
     def test(self, first, second, *args):  # [arguments-differ]
         pass
 
 
 class Positional(object):
-
     def test(self, first, second):
         pass
 
 
 class PositionalChild(Positional):
-
     def test(self, *args):
         """
         Acceptable use of vararg in subclass because it does not violate LSP.
@@ -192,13 +172,11 @@ class PositionalChild(Positional):
 
 
 class Mixed(object):
-
     def mixed(self, first, second, *, third, fourth):
         pass
 
 
 class MixedChild1(Mixed):
-
     def mixed(self, first, *args, **kwargs):
         """
         Acceptable use of vararg in subclass because it does not violate LSP.
@@ -207,7 +185,6 @@ class MixedChild1(Mixed):
 
 
 class MixedChild2(Mixed):
-
     def mixed(self, first, *args, third, **kwargs):
         """
         Acceptable use of vararg in subclass because it does not violate LSP.
@@ -216,24 +193,20 @@ class MixedChild2(Mixed):
 
 
 class HasSpecialMethod(object):
-
     def __getitem__(self, key):
         return key
 
 
 class OverridesSpecialMethod(HasSpecialMethod):
-
     def __getitem__(self, cheie):
         return cheie + 1
 
 
 class ParentClass(object):
-
     def meth(self, arg, arg1):
         raise NotImplementedError
 
 
 class ChildClass(ParentClass):
-
     def meth(self, _arg, dummy):
         pass

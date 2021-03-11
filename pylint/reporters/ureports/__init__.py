@@ -6,7 +6,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Universal report objects and some formatting drivers.
 
 A way to create simple reports using python objects, primarily designed to be
@@ -19,7 +18,6 @@ from io import StringIO
 
 class BaseWriter:
     """base class for ureport writers"""
-
     def format(self, layout, stream=None, encoding=None):
         """format and write the given layout into the stream object
 

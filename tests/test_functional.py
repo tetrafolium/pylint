@@ -18,7 +18,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Functional full-module tests for PyLint."""
 import csv
 import os
@@ -40,7 +39,6 @@ from pylint.utils import HAS_ISORT_5
 
 class LintModuleOutputUpdate(testutils.LintModuleTest):
     """If message files should be updated instead of checked."""
-
     class TestDialect(csv.excel):
         delimiter = ":"
         lineterminator = "\n"
@@ -62,8 +60,8 @@ class LintModuleOutputUpdate(testutils.LintModuleTest):
 
 
 def get_tests():
-    input_dir = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), "functional")
+    input_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "functional")
     suite = []
     for dirpath, _, filenames in os.walk(input_dir):
         if dirpath.endswith("__pycache__"):
@@ -102,10 +100,8 @@ def test_functional(test_file, recwarn):
     except AssertionError:
         pass
     if warning is not None:
-        if (
-            test_file.base in TEST_WITH_EXPECTED_DEPRECATION
-            and sys.version_info.minor > 5
-        ):
+        if (test_file.base in TEST_WITH_EXPECTED_DEPRECATION
+                and sys.version_info.minor > 5):
             assert issubclass(warning.category, DeprecationWarning)
             assert "invalid escape sequence" in str(warning.message)
 

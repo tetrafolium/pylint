@@ -9,7 +9,6 @@ import typing
 
 
 class Subscriptable(object):
-
     def __class_getitem__(cls, params):
         pass
 

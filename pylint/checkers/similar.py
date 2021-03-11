@@ -41,7 +41,6 @@ REGEX_FOR_LINES_WITH_CONTENT = re.compile(r".*\w+")
 
 class Similar:
     """finds copy-pasted lines of code in a project"""
-
     def __init__(
         self,
         min_lines=4,
@@ -69,8 +68,7 @@ class Similar:
                     self.ignore_comments,
                     self.ignore_docstrings,
                     self.ignore_imports,
-                )
-            )
+                ))
         except UnicodeDecodeError:
             pass
 
@@ -109,18 +107,15 @@ class Similar:
             for lineset, idx in couples:
                 print("==%s:%s" % (lineset.name, idx))
             if lineset:
-                for line in lineset._real_lines[idx: idx + num]:
+                for line in lineset._real_lines[idx:idx + num]:
                     print("  ", line.rstrip())
             nb_lignes_dupliquees += num * (len(couples) - 1)
         nb_total_lignes = sum([len(lineset) for lineset in self.linesets])
-        print(
-            "TOTAL lines=%s duplicates=%s percent=%.2f"
-            % (
-                nb_total_lignes,
-                nb_lignes_dupliquees,
-                nb_lignes_dupliquees * 100.0 / nb_total_lignes,
-            )
-        )
+        print("TOTAL lines=%s duplicates=%s percent=%.2f" % (
+            nb_total_lignes,
+            nb_lignes_dupliquees,
+            nb_lignes_dupliquees * 100.0 / nb_total_lignes,
+        ))
 
     def _find_common(self, lineset1, lineset2):
         """find similarities in the two given linesets"""
@@ -135,8 +130,7 @@ class Similar:
             for index2 in find(lineset1[index1]):
                 num_lines_with_content = 0
                 for num, ((_, line1), (_, line2)) in enumerate(
-                    zip(lines1(index1), lines2(index2))
-                ):
+                        zip(lines1(index1), lines2(index2))):
                     if line1 != line2:
                         if num_lines_with_content > min_lines:
                             yield num, lineset1, index1, lineset2, index2
@@ -173,7 +167,8 @@ class Similar:
 
         The partner function of get_map_data()"""
         self.linesets = [
-            line for lineset in linesets_collection for line in lineset]
+            line for lineset in linesets_collection for line in lineset
+        ]
 
 
 def stripped_lines(lines, ignore_comments, ignore_docstrings, ignore_imports):
@@ -182,15 +177,15 @@ def stripped_lines(lines, ignore_comments, ignore_docstrings, ignore_imports):
     """
     if ignore_imports:
         tree = astroid.parse("".join(lines))
-        node_is_import_by_lineno = (
-            (node.lineno, isinstance(node, (astroid.Import, astroid.ImportFrom)))
-            for node in tree.body
-        )
+        node_is_import_by_lineno = ((node.lineno,
+                                     isinstance(
+                                         node,
+                                         (astroid.Import, astroid.ImportFrom)))
+                                    for node in tree.body)
         line_begins_import = {
             lineno: all(is_import for _, is_import in node_is_import_group)
             for lineno, node_is_import_group in groupby(
-                node_is_import_by_lineno, key=lambda x: x[0]
-            )
+                node_is_import_by_lineno, key=lambda x: x[0])
         }
         current_line_is_import = False
 
@@ -212,8 +207,7 @@ def stripped_lines(lines, ignore_comments, ignore_docstrings, ignore_imports):
                 line = ""
         if ignore_imports:
             current_line_is_import = line_begins_import.get(
-                lineno, current_line_is_import
-            )
+                lineno, current_line_is_import)
             if current_line_is_import:
                 line = ""
         if ignore_comments:
@@ -224,7 +218,6 @@ def stripped_lines(lines, ignore_comments, ignore_docstrings, ignore_imports):
 
 class LineSet:
     """Holds and indexes all the lines of a single source file"""
-
     def __init__(
         self,
         name,
@@ -235,9 +228,9 @@ class LineSet:
     ):
         self.name = name
         self._real_lines = lines
-        self._stripped_lines = stripped_lines(
-            lines, ignore_comments, ignore_docstrings, ignore_imports
-        )
+        self._stripped_lines = stripped_lines(lines, ignore_comments,
+                                              ignore_docstrings,
+                                              ignore_imports)
         self._index = self._mk_index()
 
     def __str__(self):
@@ -297,8 +290,7 @@ def report_similarities(sect, stats, old_stats):
     """make a layout with some stats about duplication"""
     lines = ["", "now", "previous", "difference"]
     lines += table_lines_from_stats(
-        stats, old_stats, ("nb_duplicated_lines", "percent_duplicated_lines")
-    )
+        stats, old_stats, ("nb_duplicated_lines", "percent_duplicated_lines"))
     sect.append(Table(children=lines, cols=4, rheaders=1, cheaders=1))
 
 
@@ -309,7 +301,7 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
     problems.
     """
 
-    __implements__ = (IRawChecker,)
+    __implements__ = (IRawChecker, )
     # configuration section name
     name = "similarities"
     # messages
@@ -355,13 +347,15 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
         ),
     )
     # reports
-    reports = (("RP0801", "Duplication", report_similarities),)  # type: ignore
+    reports = (("RP0801", "Duplication", report_similarities),
+               )  # type: ignore
 
     def __init__(self, linter=None):
         BaseChecker.__init__(self, linter)
-        Similar.__init__(
-            self, min_lines=4, ignore_comments=True, ignore_docstrings=True
-        )
+        Similar.__init__(self,
+                         min_lines=4,
+                         ignore_comments=True,
+                         ignore_docstrings=True)
         self.stats = None
 
     def set_option(self, optname, value, action=None, optdict=None):
@@ -382,9 +376,8 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
     def open(self):
         """init the checkers: reset linesets and statistics information"""
         self.linesets = []
-        self.stats = self.linter.add_stats(
-            nb_duplicated_lines=0, percent_duplicated_lines=0
-        )
+        self.stats = self.linter.add_stats(nb_duplicated_lines=0,
+                                           percent_duplicated_lines=0)
 
     def process_module(self, node):
         """process a module
@@ -394,8 +387,8 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
         stream must implement the readlines method
         """
         with node.stream() as stream:
-            self.append_stream(self.linter.current_name,
-                               stream, node.file_encoding)
+            self.append_stream(self.linter.current_name, stream,
+                               node.file_encoding)
 
     def close(self):
         """compute and display similarities on closing (i.e. end of parsing)"""
@@ -410,13 +403,14 @@ class SimilarChecker(BaseChecker, Similar, MapReduceMixin):
             msg.sort()
 
             if lineset:
-                for line in lineset._real_lines[idx: idx + num]:
+                for line in lineset._real_lines[idx:idx + num]:
                     msg.append(line.rstrip())
 
             self.add_message("R0801", args=(len(couples), "\n".join(msg)))
             duplicated += num * (len(couples) - 1)
         stats["nb_duplicated_lines"] = duplicated
-        stats["percent_duplicated_lines"] = total and duplicated * 100.0 / total
+        stats[
+            "percent_duplicated_lines"] = total and duplicated * 100.0 / total
 
     def get_map_data(self):
         """ Passthru override """
@@ -442,10 +436,8 @@ def usage(status=0):
     """display command line usage information"""
     print("finds copy pasted blocks in a set of files")
     print()
-    print(
-        "Usage: symilar [-d|--duplicates min_duplicated_lines] \
-[-i|--ignore-comments] [--ignore-docstrings] [--ignore-imports] file1..."
-    )
+    print("Usage: symilar [-d|--duplicates min_duplicated_lines] \
+[-i|--ignore-comments] [--ignore-docstrings] [--ignore-imports] file1...")
     sys.exit(status)
 
 
@@ -474,14 +466,14 @@ def Run(argv=None):
             usage()
         elif opt in ("-i", "--ignore-comments"):
             ignore_comments = True
-        elif opt in ("--ignore-docstrings",):
+        elif opt in ("--ignore-docstrings", ):
             ignore_docstrings = True
-        elif opt in ("--ignore-imports",):
+        elif opt in ("--ignore-imports", ):
             ignore_imports = True
     if not args:
         usage(1)
-    sim = Similar(min_lines, ignore_comments,
-                  ignore_docstrings, ignore_imports)
+    sim = Similar(min_lines, ignore_comments, ignore_docstrings,
+                  ignore_imports)
     for filename in args:
         with open(filename) as stream:
             sim.append_stream(filename, stream)

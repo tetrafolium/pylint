@@ -9,7 +9,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Test for the JSON reporter."""
 
 import json
@@ -21,19 +20,17 @@ from pylint.reporters import JSONReporter
 from pylint.reporters.ureports.nodes import EvaluationSection
 
 expected_score_message = "Expected score message"
-expected_result = [
-    [
-        ("column", 0),
-        ("line", 1),
-        ("message", "Line too long (1/2)"),
-        ("message-id", "C0301"),
-        ("module", "0123"),
-        ("obj", ""),
-        ("path", "0123"),
-        ("symbol", "line-too-long"),
-        ("type", "convention"),
-    ]
-]
+expected_result = [[
+    ("column", 0),
+    ("line", 1),
+    ("message", "Line too long (1/2)"),
+    ("message-id", "C0301"),
+    ("module", "0123"),
+    ("obj", ""),
+    ("path", "0123"),
+    ("symbol", "line-too-long"),
+    ("type", "convention"),
+]]
 
 
 def test_simple_json_output_no_score():

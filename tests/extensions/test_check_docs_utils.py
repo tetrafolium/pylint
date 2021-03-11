@@ -8,7 +8,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Unit tests for the pylint checkers in :mod:`pylint.extensions.check_docs`,
 in particular the parameter documentation checker `DocstringChecker`
 """
@@ -31,51 +30,42 @@ def test_space_indentation(string, count):
     "raise_node,expected",
     [
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         raise NotImplementedError #@
-    """
-            ),
+    """),
             {"NotImplementedError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         raise NotImplementedError("Not implemented!") #@
-    """
-            ),
+    """),
             {"NotImplementedError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         try:
             fake_func()
         except RuntimeError:
             raise #@
-    """
-            ),
+    """),
             {"RuntimeError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         try:
             fake_func()
         except RuntimeError:
             if another_func():
                 raise #@
-    """
-            ),
+    """),
             {"RuntimeError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         try:
             fake_func()
@@ -85,13 +75,11 @@ def test_space_indentation(string, count):
                 raise #@
             except NameError:
                 pass
-    """
-            ),
+    """),
             {"RuntimeError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         try:
             fake_func()
@@ -100,45 +88,38 @@ def test_space_indentation(string, count):
                 another_func()
             except NameError:
                 raise #@
-    """
-            ),
+    """),
             {"NameError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         try:
             fake_func()
         except:
             raise #@
-    """
-            ),
+    """),
             set(),
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     def my_func():
         try:
             fake_func()
         except (RuntimeError, ValueError):
             raise #@
-    """
-            ),
+    """),
             {"RuntimeError", "ValueError"},
         ),
         (
-            astroid.extract_node(
-                """
+            astroid.extract_node("""
     import not_a_module
     def my_func():
         try:
             fake_func()
         except not_a_module.Error:
             raise #@
-    """
-            ),
+    """),
             set(),
         ),
     ],

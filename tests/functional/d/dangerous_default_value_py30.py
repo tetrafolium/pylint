@@ -67,10 +67,7 @@ def function12(value=dict([('a', 1), ('b', 2)])):  # [dangerous-default-value]
     return value
 
 
-OINK = {
-    'a': 1,
-    'b': 2
-}
+OINK = {'a': 1, 'b': 2}
 
 
 def function13(value=OINK):  # [dangerous-default-value]

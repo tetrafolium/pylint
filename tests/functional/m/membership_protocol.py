@@ -12,9 +12,9 @@ from some_missing_module import ImportedClass
 1 in frozenset([1, 2, 3])
 
 # comprehensions
-1 in [x ** 2 % 10 for x in range(10)]
-1 in {x ** 2 % 10 for x in range(10)}
-1 in {x: x ** 2 % 10 for x in range(10)}
+1 in [x**2 % 10 for x in range(10)]
+1 in {x**2 % 10 for x in range(10)}
+1 in {x: x**2 % 10 for x in range(10)}
 
 # iterators
 1 in iter([1, 2, 3])
@@ -59,7 +59,7 @@ class CustomIterable(object):
 class OldStyleIterable(object):
     def __getitem__(self, key):
         if key < 10:
-            return 2 ** key
+            return 2**key
         else:
             raise IndexError("bad index")
 
@@ -110,6 +110,7 @@ class AbstractThing(object):
         else:
             # error should not be emitted here
             return value in self.valid_values
+
 
 # class is not named as abstract
 # but still is deduceably abstract

@@ -2,7 +2,6 @@
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 # pylint: disable=redefined-outer-name
 
-
 import pytest
 
 from pylint.checkers import BaseChecker
@@ -35,13 +34,17 @@ def store():
                 "message",
                 "msg-symbol",
                 "msg description.",
-                {"old_names": [("W0001", "old-symbol")]},
+                {
+                    "old_names": [("W0001", "old-symbol")]
+                },
             ),
             "E1234": (
                 "Duplicate keyword argument %r in %s call",
                 "duplicate-keyword-arg",
                 "Used when a function call passes the same keyword argument multiple times.",
-                {"maxversion": (2, 6)},
+                {
+                    "maxversion": (2, 6)
+                },
             ),
         }
 

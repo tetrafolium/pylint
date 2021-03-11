@@ -66,7 +66,7 @@ def foo5(x, y, z):
 
 def foo6(x, y):
     if x:
-        if y:   # [no-else-raise]
+        if y:  # [no-else-raise]
             a = 4
             raise Exception(x)
         else:

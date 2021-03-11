@@ -22,11 +22,8 @@ from pylint.utils import register_plugins
 
 def _empty_filepath():
     return os.path.abspath(
-        os.path.join(
-            os.path.dirname(
-                __file__), "..", "input", "benchmark_minimal_file.py"
-        )
-    )
+        os.path.join(os.path.dirname(__file__), "..", "input",
+                     "benchmark_minimal_file.py"))
 
 
 class SleepingChecker(BaseChecker):
@@ -35,7 +32,7 @@ class SleepingChecker(BaseChecker):
     As we apply a roughly constant amount of "work" in this checker any variance is
     likely to be caused by the pylint system."""
 
-    __implements__ = (pylint.interfaces.IRawChecker,)
+    __implements__ = (pylint.interfaces.IRawChecker, )
 
     name = "sleeper"
     msgs = {
@@ -60,7 +57,7 @@ class SleepingCheckerLong(BaseChecker):
     As we apply a roughly constant amount of "work" in this checker any variance is
     likely to be caused by the pylint system."""
 
-    __implements__ = (pylint.interfaces.IRawChecker,)
+    __implements__ = (pylint.interfaces.IRawChecker, )
 
     name = "long-sleeper"
     msgs = {
@@ -82,7 +79,7 @@ class SleepingCheckerLong(BaseChecker):
 class NoWorkChecker(BaseChecker):
     """ A checker that sleeps, the wall-clock time should change as we add threads """
 
-    __implements__ = (pylint.interfaces.IRawChecker,)
+    __implements__ = (pylint.interfaces.IRawChecker, )
 
     name = "sleeper"
     msgs = {
@@ -98,8 +95,7 @@ class NoWorkChecker(BaseChecker):
 
 
 @pytest.mark.benchmark(
-    group="baseline",
-)
+    group="baseline", )
 class TestEstablishBaselineBenchmarks:
     """Naive benchmarks for the high-level pylint framework
 
@@ -127,11 +123,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 1
         assert len(linter._checkers) == 1, "Should just have 'master'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_benchmark_j10(self, benchmark):
         """Establish a baseline of pylint performance with no work across threads
@@ -151,11 +145,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 10
         assert len(linter._checkers) == 1, "Should have 'master'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_benchmark_check_parallel_j10(self, benchmark):
         """ Should demonstrate times very close to `test_baseline_benchmark_j10` """
@@ -166,11 +158,9 @@ class TestEstablishBaselineBenchmarks:
 
         assert len(linter._checkers) == 1, "Should have 'master'"
         benchmark(check_parallel, linter, jobs=10, files=fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_lots_of_files_j1(self, benchmark):
         """Establish a baseline with only 'master' checker being run in -j1
@@ -186,11 +176,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 1
         assert len(linter._checkers) == 1, "Should have 'master'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_lots_of_files_j10(self, benchmark):
         """Establish a baseline with only 'master' checker being run in -j10
@@ -207,11 +195,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 10
         assert len(linter._checkers) == 1, "Should have 'master'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_lots_of_files_j1_empty_checker(self, benchmark):
         """Baselines pylint for a single extra checker being run in -j1, for N-files
@@ -228,11 +214,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 1
         assert len(linter._checkers) == 2, "Should have 'master' and 'sleeper'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_lots_of_files_j10_empty_checker(self, benchmark):
         """Baselines pylint for a single extra checker being run in -j10, for N-files
@@ -249,11 +233,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 10
         assert len(linter._checkers) == 2, "Should have 'master' and 'sleeper'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_benchmark_j1_single_working_checker(self, benchmark):
         """Establish a baseline of single-worker performance for PyLinter
@@ -276,11 +258,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 1
         assert len(linter._checkers) == 2, "Should have 'master' and 'sleeper'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_benchmark_j10_single_working_checker(self, benchmark):
         """Establishes baseline of multi-worker performance for PyLinter/check_parallel
@@ -304,11 +284,9 @@ class TestEstablishBaselineBenchmarks:
         assert linter.config.jobs == 10
         assert len(linter._checkers) == 2, "Should have 'master' and 'sleeper'"
         benchmark(linter.check, fileinfos)
-        assert (
-            linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            linter.reporter.messages
-        )
+        assert (linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    linter.reporter.messages)
 
     def test_baseline_benchmark_j1_all_checks_single_file(self, benchmark):
         """Runs a single file, with -j1, against all plug-ins
@@ -321,13 +299,12 @@ class TestEstablishBaselineBenchmarks:
         runner = benchmark(Run, fileinfos, reporter=Reporter(), exit=False)
         assert runner.linter.config.jobs == 1
         print("len(runner.linter._checkers)", len(runner.linter._checkers))
-        assert len(runner.linter._checkers) > 1, "Should have more than 'master'"
+        assert len(
+            runner.linter._checkers) > 1, "Should have more than 'master'"
 
-        assert (
-            runner.linter.msg_status == 0
-        ), "Expected no errors to be thrown: %s" % pprint.pformat(
-            runner.linter.reporter.messages
-        )
+        assert (runner.linter.msg_status == 0
+                ), "Expected no errors to be thrown: %s" % pprint.pformat(
+                    runner.linter.reporter.messages)
 
     def test_baseline_benchmark_j1_all_checks_lots_of_files(self, benchmark):
         """Runs lots of files, with -j1, against all plug-ins
@@ -341,9 +318,9 @@ class TestEstablishBaselineBenchmarks:
 
         # Register all checkers/extensions and enable them
         register_plugins(
-            linter, os.path.abspath(os.path.join(
-                os.path.dirname(__file__), "..", ".."))
-        )
+            linter,
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
+                                         "..")))
         linter.load_default_plugins()
         linter.enable("all")
 

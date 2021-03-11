@@ -19,11 +19,14 @@ _MESSAGE = {"msg": r"[a-z][a-z\-]+"}
 #  - followed by a line number with a +/- (optional),
 #  - followed by a list of bracketed message symbols.
 # Used to extract expected messages from testdata files.
-_EXPECTED_RE = re.compile(
-    r"\s*#\s*(?:(?P<line>[+-]?[0-9]+):)?"
-    r"(?:(?P<op>[><=]+) *(?P<version>[0-9.]+):)?"
-    r"\s*\[(?P<msgs>%(msg)s(?:,\s*%(msg)s)*)]" % _MESSAGE
-)
+_EXPECTED_RE = re.compile(r"\s*#\s*(?:(?P<line>[+-]?[0-9]+):)?"
+                          r"(?:(?P<op>[><=]+) *(?P<version>[0-9.]+):)?"
+                          r"\s*\[(?P<msgs>%(msg)s(?:,\s*%(msg)s)*)]" %
+                          _MESSAGE)
 
-_OPERATORS = {">": operator.gt, "<": operator.lt,
-              ">=": operator.ge, "<=": operator.le}
+_OPERATORS = {
+    ">": operator.gt,
+    "<": operator.lt,
+    ">=": operator.ge,
+    "<=": operator.le
+}

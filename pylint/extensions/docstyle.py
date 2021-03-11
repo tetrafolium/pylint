@@ -53,7 +53,7 @@ class DocStringStyleChecker(checkers.BaseChecker):
             self.add_message(
                 "docstring-first-line-empty",
                 node=node,
-                args=(node_type,),
+                args=(node_type, ),
                 confidence=HIGH,
             )
 

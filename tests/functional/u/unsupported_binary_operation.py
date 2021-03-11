@@ -2,16 +2,14 @@
 # pylint: disable=missing-docstring,too-few-public-methods,pointless-statement
 # pylint: disable=expression-not-assigned, invalid-name, useless-object-inheritance
 
-
 from unknown import Unknown
 import collections
-
 
 1 + "a"  # [unsupported-binary-operation]
 1 - []  # [unsupported-binary-operation]
 1 * {}  # [unsupported-binary-operation]
 1 / collections  # [unsupported-binary-operation]
-1 ** (lambda x: x)  # [unsupported-binary-operation]
+1**(lambda x: x)  # [unsupported-binary-operation]
 {} * {}  # [unsupported-binary-operation]
 {} - {}  # [unsupported-binary-operation]
 {} | {}  # [unsupported-binary-operation]
@@ -83,7 +81,6 @@ FFF = 1
 FFF += A()  # [unsupported-binary-operation]
 TTT = 1
 TTT += []  # [unsupported-binary-operation]
-
 
 # Don't emit for this case since we don't know what unknown is.
 

@@ -52,10 +52,12 @@ class LintModuleTest:
                 missing.append(requirement)
         if missing:
             pytest.skip("Requires %s to be present." % ",".join(missing))
-        except_implementations = self._test_file.options["except_implementations"]
+        except_implementations = self._test_file.options[
+            "except_implementations"]
         if except_implementations:
-            implementations = [i.strip()
-                               for i in except_implementations.split(",")]
+            implementations = [
+                i.strip() for i in except_implementations.split(",")
+            ]
             if platform.python_implementation() in implementations:
                 msg = "Test cannot run with Python implementation %r"
                 pytest.skip(msg % platform.python_implementation())
@@ -66,10 +68,8 @@ class LintModuleTest:
                 pytest.skip("Test cannot run on platform %r" % sys.platform)
 
     def _should_be_skipped_due_to_version(self):
-        return (
-            sys.version_info < self._test_file.options["min_pyver"]
-            or sys.version_info > self._test_file.options["max_pyver"]
-        )
+        return (sys.version_info < self._test_file.options["min_pyver"]
+                or sys.version_info > self._test_file.options["max_pyver"])
 
     def __str__(self):
         return "%s (%s.%s)" % (
@@ -112,7 +112,8 @@ class LintModuleTest:
         return messages
 
     @staticmethod
-    def multiset_difference(expected_entries: set, actual_entries: set) -> Tuple[set]:
+    def multiset_difference(expected_entries: set,
+                            actual_entries: set) -> Tuple[set]:
         """Takes two multisets and compares them.
 
         A multiset is a dict with the cardinality of the key as the value."""
@@ -156,9 +157,9 @@ class LintModuleTest:
         received_msgs = Counter()
         received_output_lines = []
         for msg in messages:
-            assert (
-                msg.symbol != "fatal"
-            ), "Pylint analysis failed because of '{}'".format(msg.msg)
+            assert (msg.symbol !=
+                    "fatal"), "Pylint analysis failed because of '{}'".format(
+                        msg.msg)
             received_msgs[msg.line, msg.symbol] += 1
             received_output_lines.append(OutputLine.from_msg(msg))
         return received_msgs, received_output_lines
@@ -168,17 +169,17 @@ class LintModuleTest:
         self._linter.check(modules_to_check)
         expected_messages, expected_output = self._get_expected()
         actual_messages, actual_output = self._get_actual()
-        assert (
-            expected_messages == actual_messages
-        ), self.error_msg_for_unequal_messages(actual_messages, expected_messages)
-        self._check_output_text(
-            expected_messages, expected_output, actual_output)
+        assert (expected_messages == actual_messages
+                ), self.error_msg_for_unequal_messages(actual_messages,
+                                                       expected_messages)
+        self._check_output_text(expected_messages, expected_output,
+                                actual_output)
 
-    def error_msg_for_unequal_messages(self, actual_messages, expected_messages):
+    def error_msg_for_unequal_messages(self, actual_messages,
+                                       expected_messages):
         msg = ['Wrong results for file "%s":' % (self._test_file.base)]
-        missing, unexpected = self.multiset_difference(
-            expected_messages, actual_messages
-        )
+        missing, unexpected = self.multiset_difference(expected_messages,
+                                                       actual_messages)
         if missing:
             msg.append("\nExpected in testdata:")
             msg.extend(" %3d: %s" % msg for msg in sorted(missing))
@@ -188,17 +189,18 @@ class LintModuleTest:
         error_msg = "\n".join(msg)
         return error_msg
 
-    def error_msg_for_unequal_output(self, expected_lines, received_lines) -> str:
+    def error_msg_for_unequal_output(self, expected_lines,
+                                     received_lines) -> str:
         missing = set(expected_lines) - set(received_lines)
         unexpected = set(received_lines) - set(expected_lines)
         error_msg = (
             "Wrong output for '{_file}.txt':\n"
             "You can update the expected output automatically with: '"
-            'python tests/test_functional.py {update_option} -k "test_functional[{_file}]"\'\n\n'.format(
+            'python tests/test_functional.py {update_option} -k "test_functional[{_file}]"\'\n\n'
+            .format(
                 update_option=UPDATE_OPTION,
                 _file=self._test_file.base,
-            )
-        )
+            ))
         sort_by_line_number = operator.attrgetter("lineno")
         if missing:
             error_msg += "\n- Missing lines:\n"
@@ -213,5 +215,4 @@ class LintModuleTest:
     def _check_output_text(self, _, expected_output, actual_output):
         """This is a function because we want to be able to update the text in LintModuleOutputUpdate"""
         assert expected_output == actual_output, self.error_msg_for_unequal_output(
-            expected_output, actual_output
-        )
+            expected_output, actual_output)

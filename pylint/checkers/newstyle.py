@@ -16,7 +16,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """check for new / old style related problems
 """
 import astroid
@@ -42,7 +41,7 @@ class NewStyleConflictChecker(BaseChecker):
     * "super" usage
     """
 
-    __implements__ = (IAstroidChecker,)
+    __implements__ = (IAstroidChecker, )
 
     # configuration section name
     name = "newstyle"
@@ -70,11 +69,8 @@ class NewStyleConflictChecker(BaseChecker):
 
             call = expr.expr
             # skip the test if using super
-            if not (
-                isinstance(call, astroid.Call)
-                and isinstance(call.func, astroid.Name)
-                and call.func.name == "super"
-            ):
+            if not (isinstance(call, astroid.Call) and isinstance(
+                    call.func, astroid.Name) and call.func.name == "super"):
                 continue
 
             # super should not be used on an old style class
@@ -86,27 +82,24 @@ class NewStyleConflictChecker(BaseChecker):
                 # calling super(type(self), self) can lead to recursion loop
                 # in derived classes
                 arg0 = call.args[0]
-                if (
-                    isinstance(arg0, astroid.Call)
-                    and isinstance(arg0.func, astroid.Name)
-                    and arg0.func.name == "type"
-                ):
+                if (isinstance(arg0, astroid.Call)
+                        and isinstance(arg0.func, astroid.Name)
+                        and arg0.func.name == "type"):
                     self.add_message("bad-super-call",
-                                     node=call, args=("type",))
+                                     node=call,
+                                     args=("type", ))
                     continue
 
                 # calling super(self.__class__, self) can lead to recursion loop
                 # in derived classes
-                if (
-                    len(call.args) >= 2
-                    and isinstance(call.args[1], astroid.Name)
-                    and call.args[1].name == "self"
-                    and isinstance(arg0, astroid.Attribute)
-                    and arg0.attrname == "__class__"
-                ):
-                    self.add_message(
-                        "bad-super-call", node=call, args=("self.__class__",)
-                    )
+                if (len(call.args) >= 2
+                        and isinstance(call.args[1], astroid.Name)
+                        and call.args[1].name == "self"
+                        and isinstance(arg0, astroid.Attribute)
+                        and arg0.attrname == "__class__"):
+                    self.add_message("bad-super-call",
+                                     node=call,
+                                     args=("self.__class__", ))
                     continue
 
                 try:
@@ -125,7 +118,8 @@ class NewStyleConflictChecker(BaseChecker):
                         name = call.args[0].name
                     if name:
                         self.add_message("bad-super-call",
-                                         node=call, args=(name,))
+                                         node=call,
+                                         args=(name, ))
 
     visit_asyncfunctiondef = visit_functiondef
 

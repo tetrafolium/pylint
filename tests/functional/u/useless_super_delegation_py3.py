@@ -5,7 +5,6 @@ from typing import List
 
 
 class NotUselessSuper(object):
-
     def not_passing_keyword_only(self, first, *, second):
         return super().not_passing_keyword_only(first)
 
@@ -20,7 +19,6 @@ class AlsoNotUselessSuper(NotUselessSuper):
 
 
 class UselessSuper(object):
-
     def useless(self, *, first):  # [useless-super-delegation]
         super().useless(first=first)
 

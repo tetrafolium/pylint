@@ -12,7 +12,6 @@ my_single_dispatch = singledispatch
 
 
 class FakeSingleDispatch(object):
-
     @staticmethod
     def register(function):
         return function

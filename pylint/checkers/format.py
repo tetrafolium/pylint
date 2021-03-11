@@ -40,7 +40,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Python code format's checker.
 
 By default try to follow Guido's style guide :
@@ -160,7 +159,9 @@ MSGS = {
         "More than one statement on a single line",
         "multiple-statements",
         "Used when more than on statement are found on the same line.",
-        {"scope": WarningScope.NODE},
+        {
+            "scope": WarningScope.NODE
+        },
     ),
     "C0325": (
         "Unnecessary parens after %r keyword",
@@ -182,13 +183,9 @@ MSGS = {
 
 
 def _last_token_on_line_is(tokens, line_end, token):
-    return (
-        line_end > 0
-        and tokens.token(line_end - 1) == token
-        or line_end > 1
-        and tokens.token(line_end - 2) == token
-        and tokens.type(line_end - 1) == tokenize.COMMENT
-    )
+    return (line_end > 0 and tokens.token(line_end - 1) == token
+            or line_end > 1 and tokens.token(line_end - 2) == token
+            and tokens.type(line_end - 1) == tokenize.COMMENT)
 
 
 # The contexts for hanging indents.
@@ -209,7 +206,6 @@ WITH_BODY = "multi"
 
 class TokenWrapper:
     """A wrapper for readable access to token information."""
-
     def __init__(self, tokens):
         self._tokens = tokens
 
@@ -257,37 +253,41 @@ class FormatChecker(BaseTokenChecker):
         (
             "ignore-long-lines",
             {
-                "type": "regexp",
-                "metavar": "<regexp>",
-                "default": r"^\s*(# )?<?https?://\S+>?$",
-                "help": (
-                    "Regexp for a line that is allowed to be longer than " "the limit."
-                ),
+                "type":
+                "regexp",
+                "metavar":
+                "<regexp>",
+                "default":
+                r"^\s*(# )?<?https?://\S+>?$",
+                "help": ("Regexp for a line that is allowed to be longer than "
+                         "the limit."),
             },
         ),
         (
             "single-line-if-stmt",
             {
-                "default": False,
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": (
-                    "Allow the body of an if to be on the same "
-                    "line as the test if there is no else."
-                ),
+                "default":
+                False,
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help": ("Allow the body of an if to be on the same "
+                         "line as the test if there is no else."),
             },
         ),
         (
             "single-line-class-stmt",
             {
-                "default": False,
-                "type": "yn",
-                "metavar": "<y_or_n>",
-                "help": (
-                    "Allow the body of a class to be on the same "
-                    "line as the declaration if body contains "
-                    "single statement."
-                ),
+                "default":
+                False,
+                "type":
+                "yn",
+                "metavar":
+                "<y_or_n>",
+                "help": ("Allow the body of a class to be on the same "
+                         "line as the declaration if body contains "
+                         "single statement."),
             },
         ),
         (
@@ -302,34 +302,43 @@ class FormatChecker(BaseTokenChecker):
         (
             "indent-string",
             {
-                "default": "    ",
-                "type": "non_empty_string",
-                "metavar": "<string>",
-                "help": "String used as indentation unit. This is usually "
+                "default":
+                "    ",
+                "type":
+                "non_empty_string",
+                "metavar":
+                "<string>",
+                "help":
+                "String used as indentation unit. This is usually "
                 '"    " (4 spaces) or "\\t" (1 tab).',
             },
         ),
         (
             "indent-after-paren",
             {
-                "type": "int",
-                "metavar": "<int>",
-                "default": 4,
-                "help": "Number of spaces of indent required inside a hanging "
+                "type":
+                "int",
+                "metavar":
+                "<int>",
+                "default":
+                4,
+                "help":
+                "Number of spaces of indent required inside a hanging "
                 "or continued line.",
             },
         ),
         (
             "expected-line-ending-format",
             {
-                "type": "choice",
-                "metavar": "<empty or LF or CRLF>",
-                "default": "",
+                "type":
+                "choice",
+                "metavar":
+                "<empty or LF or CRLF>",
+                "default":
+                "",
                 "choices": ["", "LF", "CRLF"],
-                "help": (
-                    "Expected format of line ending, "
-                    "e.g. empty (any line ending), LF or CRLF."
-                ),
+                "help": ("Expected format of line ending, "
+                         "e.g. empty (any line ending), LF or CRLF."),
             },
         ),
     )
@@ -355,7 +364,8 @@ class FormatChecker(BaseTokenChecker):
     def process_module(self, _module):
         pass
 
-    def _check_keyword_parentheses(self, tokens: List[TokenInfo], start: int) -> None:
+    def _check_keyword_parentheses(self, tokens: List[TokenInfo],
+                                   start: int) -> None:
         """Check that there are not unnecessary parens after a keyword.
 
         Parens are unnecessary if there is exactly one balanced outer pair on a
@@ -385,10 +395,8 @@ class FormatChecker(BaseTokenChecker):
                 return
             # Since the walrus operator doesn't exist below python3.8, the tokenizer
             # generates independent tokens
-            if (
-                token.string == ":="  # <-- python3.8+ path
-                or token.string + tokens[i + 1].string == ":="
-            ):
+            if (token.string == ":="  # <-- python3.8+ path
+                    or token.string + tokens[i + 1].string == ":="):
                 contains_walrus_operator = True
                 walrus_operator_depth = depth
             if token.string == "(":
@@ -398,9 +406,11 @@ class FormatChecker(BaseTokenChecker):
                 if depth:
                     continue
                 # ')' can't happen after if (foo), since it would be a syntax error.
-                if tokens[i + 1].string in (":", ")", "]", "}", "in") or tokens[
-                    i + 1
-                ].type in (tokenize.NEWLINE, tokenize.ENDMARKER, tokenize.COMMENT):
+                if tokens[i + 1].string in (
+                        ":", ")", "]", "}",
+                        "in") or tokens[i + 1].type in (tokenize.NEWLINE,
+                                                        tokenize.ENDMARKER,
+                                                        tokenize.COMMENT):
                     # The empty tuple () is always accepted.
                     if contains_walrus_operator and walrus_operator_depth - 1 == depth:
                         # Reset variable for possible following expressions
@@ -410,17 +420,17 @@ class FormatChecker(BaseTokenChecker):
                         return
                     if keyword_token == "not":
                         if not found_and_or:
-                            self.add_message(
-                                "superfluous-parens", line=line_num, args=keyword_token
-                            )
+                            self.add_message("superfluous-parens",
+                                             line=line_num,
+                                             args=keyword_token)
                     elif keyword_token in ("return", "yield"):
-                        self.add_message(
-                            "superfluous-parens", line=line_num, args=keyword_token
-                        )
+                        self.add_message("superfluous-parens",
+                                         line=line_num,
+                                         args=keyword_token)
                     elif not found_and_or:
-                        self.add_message(
-                            "superfluous-parens", line=line_num, args=keyword_token
-                        )
+                        self.add_message("superfluous-parens",
+                                         line=line_num,
+                                         args=keyword_token)
                 return
             elif depth == 1:
                 # This is a tuple, which is always acceptable.
@@ -443,7 +453,8 @@ class FormatChecker(BaseTokenChecker):
 
     def _prepare_token_dispatcher(self):
         dispatch = {}
-        for tokens, handler in [(_KEYWORD_TOKENS, self._check_keyword_parentheses)]:
+        for tokens, handler in [(_KEYWORD_TOKENS,
+                                 self._check_keyword_parentheses)]:
             for token in tokens:
                 dispatch[token] = handler
         return dispatch
@@ -524,8 +535,7 @@ class FormatChecker(BaseTokenChecker):
             # Get the line where the too-many-lines (or its message id)
             # was disabled or default to 1.
             message_definition = self.linter.msgs_store.get_message_definitions(
-                "too-many-lines"
-            )[0]
+                "too-many-lines")[0]
             names = (message_definition.msgid, "too-many-lines")
             line = next(
                 filter(None, map(self.linter._pragma_lineno.get, names)), 1)
@@ -555,8 +565,8 @@ class FormatChecker(BaseTokenChecker):
         expected = self.config.expected_line_ending_format
         if expected:
             # reduce multiple \n\n\n\n to one \n
-            line_ending = reduce(lambda x, y: x + y if x !=
-                                 y else x, line_ending, "")
+            line_ending = reduce(lambda x, y: x + y
+                                 if x != y else x, line_ending, "")
             line_ending = "LF" if line_ending == "\n" else "CRLF"
             if line_ending != expected:
                 self.add_message(
@@ -579,10 +589,8 @@ class FormatChecker(BaseTokenChecker):
         # is not directly represented in the AST. We infer it
         # by taking the last line of the body and adding 1, which
         # should be the line of finally:
-        elif (
-            isinstance(
-                node.parent, nodes.TryFinally) and node in node.parent.finalbody
-        ):
+        elif (isinstance(node.parent, nodes.TryFinally)
+              and node in node.parent.finalbody):
             prev_line = node.parent.body[0].tolineno + 1
         else:
             prev_line = node.parent.statement().fromlineno
@@ -615,29 +623,24 @@ class FormatChecker(BaseTokenChecker):
         # For try... except... finally..., the two nodes
         # appear to be on the same line due to how the AST is built.
         if isinstance(node, nodes.TryExcept) and isinstance(
-            node.parent, nodes.TryFinally
-        ):
+                node.parent, nodes.TryFinally):
             return
-        if (
-            isinstance(node.parent, nodes.If)
-            and not node.parent.orelse
-            and self.config.single_line_if_stmt
-        ):
+        if (isinstance(node.parent, nodes.If) and not node.parent.orelse
+                and self.config.single_line_if_stmt):
             return
-        if (
-            isinstance(node.parent, nodes.ClassDef)
-            and len(node.parent.body) == 1
-            and self.config.single_line_class_stmt
-        ):
+        if (isinstance(node.parent, nodes.ClassDef)
+                and len(node.parent.body) == 1
+                and self.config.single_line_class_stmt):
             return
 
         # Function overloads that use ``Ellipsis`` are exempted.
-        if isinstance(node, nodes.Expr) and (
-            isinstance(node.value, nodes.Ellipsis)
-            or (isinstance(node.value, nodes.Const) and node.value.value is Ellipsis)
-        ):
+        if isinstance(node,
+                      nodes.Expr) and (isinstance(node.value, nodes.Ellipsis)
+                                       or (isinstance(node.value, nodes.Const)
+                                           and node.value.value is Ellipsis)):
             frame = node.frame()
-            if is_overload_stub(frame) or is_protocol_class(node_frame_class(frame)):
+            if is_overload_stub(frame) or is_protocol_class(
+                    node_frame_class(frame)):
                 return
 
         self.add_message("multiple-statements", node=node)
@@ -653,9 +656,9 @@ class FormatChecker(BaseTokenChecker):
         # exclude \f (formfeed) from the rstrip
         stripped_line = line.rstrip("\t\n\r\v ")
         if line[len(stripped_line):] not in ("\n", "\r\n"):
-            self.add_message(
-                "trailing-whitespace", line=i, col_offset=len(stripped_line)
-            )
+            self.add_message("trailing-whitespace",
+                             line=i,
+                             col_offset=len(stripped_line))
 
     def check_line_length(self, line: str, i: int) -> None:
         """
@@ -665,7 +668,8 @@ class FormatChecker(BaseTokenChecker):
         ignore_long_line = self.config.ignore_long_lines
         line = line.rstrip()
         if len(line) > max_chars and not ignore_long_line.search(line):
-            self.add_message("line-too-long", line=i,
+            self.add_message("line-too-long",
+                             line=i,
                              args=(len(line), max_chars))
 
     @staticmethod
@@ -674,10 +678,8 @@ class FormatChecker(BaseTokenChecker):
         Remove the `# pylint ...` pattern from lines
         """
         lines = options_pattern_obj.string
-        purged_lines = (
-            lines[: options_pattern_obj.start(1)].rstrip()
-            + lines[options_pattern_obj.end(1):]
-        )
+        purged_lines = (lines[:options_pattern_obj.start(1)].rstrip() +
+                        lines[options_pattern_obj.end(1):])
         return purged_lines
 
     @staticmethod
@@ -792,8 +794,8 @@ class FormatChecker(BaseTokenChecker):
             self.add_message(
                 "bad-indentation",
                 line=line_num,
-                args=(level * unit_size + len(suppl),
-                      i_type, expected * unit_size),
+                args=(level * unit_size + len(suppl), i_type,
+                      expected * unit_size),
             )
 
 

@@ -23,13 +23,13 @@ def test_return_while():
 
 
 while True:
+
     def short_fun():
         """A function with a loop."""
         for _ in range(10):
             break
 else:  # [useless-else-on-loop]
     print('or else!')
-
 
 while True:
     while False:

@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,no-init,unused-argument,invalid-name,too-few-public-methods
 
+
 class A:
     def __init__(self):
         self.store = {}

@@ -8,6 +8,7 @@ from __future__ import print_function
 def function0():
     """"""
 
+
 # +1: [missing-function-docstring]
 
 
@@ -24,6 +25,7 @@ def function2(value):
 def function3(value):
     """docstring"""
     print(value)
+
 
 # +1: [missing-class-docstring]
 
@@ -63,7 +65,6 @@ class AAAA(object):
 
 class DDDD(AAAA):
     """yeah !"""
-
     def __init__(self):
         AAAA.__init__(self)
 
@@ -79,11 +80,13 @@ class DDDD(AAAA):
     def method4(self):
         pass
 
+
 # pylint: disable=missing-docstring
 
 
 def function4():
     pass
+
 
 # pylint: disable=empty-docstring
 
@@ -102,4 +105,5 @@ def function7():
     def inner():
         # Not documented
         return 42
+
     return inner()

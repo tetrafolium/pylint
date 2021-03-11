@@ -51,18 +51,18 @@ class TestStringChecker(CheckerTestCase):
             self.checker.visit_binop(node)
 
         for code in (
-            "'%s' % 1",
-            "'%(key)s' % {'key' : 1}",
-            "'%d' % 1",
-            "'%(key)d' % {'key' : 1}",
-            "'%f' % 1",
-            "'%(key)f' % {'key' : 1}",
-            "'%d' % 1.1",
-            "'%(key)d' % {'key' : 1.1}",
-            "'%s' % []",
-            "'%(key)s' % {'key' : []}",
-            "'%s' % None",
-            "'%(key)s' % {'key' : None}",
+                "'%s' % 1",
+                "'%(key)s' % {'key' : 1}",
+                "'%d' % 1",
+                "'%(key)d' % {'key' : 1}",
+                "'%f' % 1",
+                "'%(key)f' % {'key' : 1}",
+                "'%d' % 1.1",
+                "'%(key)d' % {'key' : 1.1}",
+                "'%s' % []",
+                "'%(key)s' % {'key' : []}",
+                "'%s' % None",
+                "'%(key)s' % {'key' : None}",
         ):
             with self.assertNoMessages():
                 node = astroid.extract_node(code)
@@ -78,10 +78,9 @@ class TestStringChecker(CheckerTestCase):
         ]:
             node = astroid.extract_node(code)
             with self.assertAddsMessages(
-                Message(
-                    "bad-string-format-type", node=node, args=(arg_type, format_type)
-                )
-            ):
+                    Message("bad-string-format-type",
+                            node=node,
+                            args=(arg_type, format_type))):
                 self.checker.visit_binop(node)
 
 

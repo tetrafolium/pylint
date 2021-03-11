@@ -6,7 +6,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the pylint checker in :mod:`pylint.extensions.bad_builtin
 """
 from os import path as osp
@@ -33,8 +32,8 @@ def disable():
 
 
 def test_types_redefined(linter):
-    elif_test = osp.join(osp.dirname(osp.abspath(__file__)),
-                         "data", "bad_builtin.py")
+    elif_test = osp.join(osp.dirname(osp.abspath(__file__)), "data",
+                         "bad_builtin.py")
     with fix_import_path([elif_test]):
         linter.check([elif_test])
     msgs = sorted(linter.reporter.messages, key=lambda item: item.line)
