@@ -14,9 +14,9 @@ from missing import Missing
 
 __all__ = [
     'Dummy',
-    '', # [undefined-all-variable]
+    '',  # [undefined-all-variable]
     Missing,
-    SomeUndefined, # [undefined-variable]
+    SomeUndefined,  # [undefined-variable]
     'NonExistant',  # [undefined-all-variable]
     'path',
     'func',  # [undefined-all-variable]
@@ -28,17 +28,22 @@ class Dummy(object):
     """A class defined in this module."""
     pass
 
+
 DUMMY = Dummy()
+
 
 def function():
     """Function docstring
     """
     pass
 
+
 function()
+
 
 class Klass(object):
     """A klass which contains a function"""
+
     def func(self):
         """A klass method"""
         inner = None

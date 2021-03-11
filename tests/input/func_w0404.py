@@ -9,18 +9,19 @@ from xml.etree import ElementTree
 from email import encoders
 import email.encoders
 
-import sys  #pylint: disable=ungrouped-imports,wrong-import-order
+import sys  # pylint: disable=ungrouped-imports,wrong-import-order
 __revision__ = 0
+
 
 def no_reimport():
     """docstring"""
-    import os  #pylint: disable=import-outside-toplevel
+    import os  # pylint: disable=import-outside-toplevel
     print(os)
 
 
 def reimport():
     """This function contains a reimport."""
-    import sys  #pylint: disable=import-outside-toplevel
+    import sys  # pylint: disable=import-outside-toplevel
     del sys
 
 

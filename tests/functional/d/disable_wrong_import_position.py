@@ -2,6 +2,5 @@
 invalidating subsequent imports."""
 # pylint: disable=unused-import
 
-CONSTANT = True  # pylint: disable=wrong-import-position
-
 import sys
+CONSTANT = True  # pylint: disable=wrong-import-position

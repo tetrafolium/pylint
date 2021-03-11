@@ -1,5 +1,6 @@
 """Checks use of "else if" triggers a refactor message"""
 
+
 def my_function():
     """docstring"""
     myint = 2

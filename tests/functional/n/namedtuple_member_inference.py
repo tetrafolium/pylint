@@ -12,6 +12,7 @@ Thing = namedtuple('Thing', ())
 
 Fantastic = namedtuple('Fantastic', ['foo'])
 
+
 def test():
     """Test member access in named tuples."""
     print(Thing.x)  # [no-member]

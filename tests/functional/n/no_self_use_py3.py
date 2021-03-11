@@ -7,6 +7,7 @@ class A:
     def get(self, key, default=None):
         return self.store.get(key, default)
 
+
 class B(A):
     def get_memo(self, obj):
         return super().get(obj)

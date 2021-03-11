@@ -107,7 +107,8 @@ for number in ['1', '2', '3']:
     result += another_number
 
 result = ''
-for number in ['1', '2', '3']: result += number  # [consider-using-join]
+for number in ['1', '2', '3']:
+    result += number  # [consider-using-join]
 
 result = ''
 for number in ['1']:

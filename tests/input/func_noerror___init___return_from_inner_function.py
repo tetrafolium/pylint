@@ -3,8 +3,10 @@
 
 __revision__ = 1
 
+
 class Aaa(object):
     """docstring"""
+
     def __init__(self):
         def inner_function(arg):
             """inner docstring"""

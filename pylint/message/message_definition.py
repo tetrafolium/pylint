@@ -43,7 +43,8 @@ class MessageDefinition:
         if len(msgid) != 5:
             raise InvalidMessageError("Invalid message id %r" % msgid)
         if msgid[0] not in MSG_TYPES:
-            raise InvalidMessageError("Bad message type %s in %r" % (msgid[0], msgid))
+            raise InvalidMessageError(
+                "Bad message type %s in %r" % (msgid[0], msgid))
 
     def __repr__(self):
         return "MessageDefinition:%s (%s)" % (self.symbol, self.msgid)
@@ -68,9 +69,11 @@ class MessageDefinition:
         if self.minversion or self.maxversion:
             restr = []
             if self.minversion:
-                restr.append("< %s" % ".".join([str(n) for n in self.minversion]))
+                restr.append("< %s" % ".".join(
+                    [str(n) for n in self.minversion]))
             if self.maxversion:
-                restr.append(">= %s" % ".".join([str(n) for n in self.maxversion]))
+                restr.append(">= %s" % ".".join(
+                    [str(n) for n in self.maxversion]))
             restr = " or ".join(restr)
             if checkerref:
                 desc += " It can't be emitted when using Python %s." % restr

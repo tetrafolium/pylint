@@ -155,7 +155,8 @@ def _is_conditional_import(node):
     """
     parent = node.parent
     return isinstance(
-        parent, (astroid.TryExcept, astroid.ExceptHandler, astroid.If, astroid.IfExp)
+        parent, (astroid.TryExcept, astroid.ExceptHandler,
+                 astroid.If, astroid.IfExp)
     )
 
 
@@ -204,7 +205,8 @@ class Python3Checker(checkers.BaseChecker):
             "backtick",
             'Used when the deprecated "``" (backtick) operator is used '
             "instead  of the str() function.",
-            {"scope": WarningScope.NODE, "old_names": [("W0333", "old-backtick")]},
+            {"scope": WarningScope.NODE, "old_names": [
+                ("W0333", "old-backtick")]},
         ),
         "E1609": (
             "Import * only allowed at module level",
@@ -981,7 +983,8 @@ class Python3Checker(checkers.BaseChecker):
             if isinstance(generator.target, astroid.AssignName)
         }
         scope = node.parent.scope()
-        scope_names = scope.nodes_of_class(astroid.Name, skip_klass=astroid.FunctionDef)
+        scope_names = scope.nodes_of_class(
+            astroid.Name, skip_klass=astroid.FunctionDef)
         has_redefined_assign_name = any(
             assign_name
             for assign_name in scope.nodes_of_class(
@@ -1048,7 +1051,8 @@ class Python3Checker(checkers.BaseChecker):
                     self.add_message("no-absolute-import", node=node)
                     self._future_absolute_import = True
             if not _is_conditional_import(node) and not node.level:
-                self._warn_if_deprecated(node, node.modname, {x[0] for x in node.names})
+                self._warn_if_deprecated(node, node.modname, {
+                                         x[0] for x in node.names})
 
         if node.names[0][0] == "*":
             if self.linter.is_message_enabled("import-star-module-level"):
@@ -1068,7 +1072,8 @@ class Python3Checker(checkers.BaseChecker):
     def visit_classdef(self, node):
         if "__metaclass__" in node.locals:
             self.add_message("metaclass-assignment", node=node)
-        locals_and_methods = set(node.locals).union(x.name for x in node.mymethods())
+        locals_and_methods = set(node.locals).union(
+            x.name for x in node.mymethods())
         if "__eq__" in locals_and_methods and "__hash__" not in locals_and_methods:
             self.add_message("eq-without-hash", node=node)
 
@@ -1170,7 +1175,8 @@ class Python3Checker(checkers.BaseChecker):
                         and node.func.attrname in DICT_METHODS
                     ):
                         if not _in_iterating_context(node):
-                            checker = "dict-{}-not-iterating".format(node.func.attrname)
+                            checker = "dict-{}-not-iterating".format(
+                                node.func.attrname)
                             self.add_message(checker, node=node)
             except astroid.InferenceError:
                 pass
@@ -1221,7 +1227,8 @@ class Python3Checker(checkers.BaseChecker):
             if _is_builtin(found_node):
                 if node.func.name in ("filter", "map", "range", "zip"):
                     if not _in_iterating_context(node):
-                        checker = "{}-builtin-not-iterating".format(node.func.name)
+                        checker = "{}-builtin-not-iterating".format(
+                            node.func.name)
                         self.add_message(checker, node=node)
                 if node.func.name == "open" and node.keywords:
                     kwargs = node.keywords
@@ -1275,7 +1282,8 @@ class Python3Checker(checkers.BaseChecker):
                         # Exceptions with .message clearly defined are an exception
                         if exception_message in inferred.instance_attrs:
                             continue
-                        self.add_message("exception-message-attribute", node=node)
+                        self.add_message(
+                            "exception-message-attribute", node=node)
                 if isinstance(inferred, astroid.Module):
                     self._warn_if_deprecated(
                         node, inferred.name, {node.attrname}, report_on_modules=False
@@ -1302,7 +1310,8 @@ class Python3Checker(checkers.BaseChecker):
 
         # Find any names
         scope = node.parent.scope()
-        scope_names = scope.nodes_of_class(astroid.Name, skip_klass=astroid.FunctionDef)
+        scope_names = scope.nodes_of_class(
+            astroid.Name, skip_klass=astroid.FunctionDef)
         scope_names = list(scope_names)
         potential_leaked_names = [
             scope_name
@@ -1376,7 +1385,8 @@ class Python3TokenChecker(checkers.BaseTokenChecker):
             "old-ne-operator",
             'Used when the deprecated "<>" operator is used instead '
             'of "!=". This is removed in Python 3.',
-            {"maxversion": (3, 0), "old_names": [("W0331", "old-old-ne-operator")]},
+            {"maxversion": (3, 0), "old_names": [
+                ("W0331", "old-old-ne-operator")]},
         ),
         "E1608": (
             "Use of old octal literal",

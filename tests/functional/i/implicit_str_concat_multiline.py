@@ -1,4 +1,4 @@
-#pylint: disable=bad-continuation,missing-docstring
+# pylint: disable=bad-continuation,missing-docstring
 
 TEST_TUPLE = ('a', 'b'  # [implicit-str-concat]
               'c')

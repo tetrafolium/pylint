@@ -38,7 +38,8 @@ from pylint.checkers import BaseChecker, BaseTokenChecker, utils
 from pylint.checkers.utils import check_messages
 from pylint.interfaces import IAstroidChecker, IRawChecker, ITokenChecker
 
-_AST_NODE_STR_TYPES = ("__builtin__.unicode", "__builtin__.str", "builtins.str")
+_AST_NODE_STR_TYPES = ("__builtin__.unicode",
+                       "__builtin__.str", "builtins.str")
 # Prefixes for both strings and bytes literals per
 # https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals
 _PREFIXES = {
@@ -69,7 +70,8 @@ _PREFIXES = {
 }
 SINGLE_QUOTED_REGEX = re.compile("(%s)?'''" % "|".join(_PREFIXES))
 DOUBLE_QUOTED_REGEX = re.compile('(%s)?"""' % "|".join(_PREFIXES))
-QUOTE_DELIMITER_REGEX = re.compile("(%s)?(\"|')" % "|".join(_PREFIXES), re.DOTALL)
+QUOTE_DELIMITER_REGEX = re.compile(
+    "(%s)?(\"|')" % "|".join(_PREFIXES), re.DOTALL)
 
 MSGS = {
     "E1300": (
@@ -344,7 +346,8 @@ class StringFormatChecker(BaseChecker):
                         )
             elif isinstance(args, (OTHER_NODES, astroid.Tuple)):
                 type_name = type(args).__name__
-                self.add_message("format-needs-mapping", node=node, args=type_name)
+                self.add_message("format-needs-mapping",
+                                 node=node, args=type_name)
             # else:
             # The RHS of the format specifier is a name or
             # expression.  It may be a mapping object, so
@@ -467,7 +470,8 @@ class StringFormatChecker(BaseChecker):
 
         positional_arguments = call_site.positional_arguments
         named_arguments = call_site.keyword_arguments
-        named_fields = {field[0] for field in fields if isinstance(field[0], str)}
+        named_fields = {field[0]
+                        for field in fields if isinstance(field[0], str)}
         if num_args and manual_pos:
             self.add_message("format-combined-specification", node=node)
             return
@@ -573,7 +577,8 @@ class StringFormatChecker(BaseChecker):
                     warn_error = False
                     if hasattr(previous, "getitem"):
                         try:
-                            previous = previous.getitem(astroid.Const(specifier))
+                            previous = previous.getitem(
+                                astroid.Const(specifier))
                         except (
                             astroid.AstroidIndexError,
                             astroid.AstroidTypeError,
@@ -829,7 +834,7 @@ class StringConstantChecker(BaseTokenChecker):
             # There must be a next character; having a backslash at the end
             # of the string would be a SyntaxError.
             next_char = string_body[index + 1]
-            match = string_body[index : index + 2]
+            match = string_body[index: index + 2]
             if next_char in self.UNICODE_ESCAPE_CHARACTERS:
                 if "u" in prefix:
                     pass
@@ -918,7 +923,8 @@ def _get_quote_delimiter(string_token: str) -> str:
     """
     match = QUOTE_DELIMITER_REGEX.match(string_token)
     if not match:
-        raise ValueError("string token %s is not a well-formed string" % string_token)
+        raise ValueError(
+            "string token %s is not a well-formed string" % string_token)
     return match.group(2)
 
 

@@ -9,9 +9,11 @@ import logging as renamed_logging
 
 __revision__ = ''
 
+
 class Logger(object):
     """Fake logger"""
     pass
+
 
 logger = renamed_logging.getLogger(__name__)
 fake_logger = Logger()

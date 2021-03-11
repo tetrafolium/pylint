@@ -4,6 +4,7 @@ iterating/mapping context.
 """
 # pylint: disable=missing-docstring,invalid-name,too-few-public-methods,no-init,no-self-use,import-error,unused-argument,bad-mcs-method-argument,wrong-import-position,no-else-return, useless-object-inheritance, unnecessary-comprehension
 from __future__ import print_function
+from some_missing_module import Iterable
 
 # primitives
 numbers = [1, 2, 3]
@@ -46,11 +47,14 @@ for i in {x: 10 - x for x in range(10)}:
     pass
 
 # generators
+
+
 def powers_of_two():
     k = 0
     while k < 10:
         yield 2 ** k
         k += 1
+
 
 for i in powers_of_two():
     pass
@@ -59,8 +63,11 @@ for i in powers_of_two:  # [not-an-iterable]
     pass
 
 # check for custom iterators
+
+
 class A(object):
     pass
+
 
 class B(object):
     def __iter__(self):
@@ -72,8 +79,10 @@ class B(object):
     def next(self):
         return 1
 
+
 class C(object):
     "old-style iterator"
+
     def __getitem__(self, k):
         if k > 10:
             raise IndexError
@@ -81,6 +90,7 @@ class C(object):
 
     def __len__(self):
         return 10
+
 
 for i in C():
     print(i)
@@ -118,16 +128,19 @@ for i in 10:  # [not-an-iterable]
 
 
 # skip uninferable instances
-from some_missing_module import Iterable
+
 
 class MyClass(Iterable):
     pass
+
 
 m = MyClass()
 for i in m:
     print(i)
 
 # skip checks if statement is inside mixin/base/abstract class
+
+
 class ManagedAccessViewMixin(object):
     access_requirements = None
 
@@ -140,6 +153,7 @@ class ManagedAccessViewMixin(object):
         # no error should be emitted here
         for requirement in klasses:
             print(requirement)
+
 
 class BaseType(object):
     valid_values = None
@@ -154,6 +168,7 @@ class BaseType(object):
                     return True
             return False
 
+
 class AbstractUrlMarkManager(object):
     def __init__(self):
         self._lineparser = None
@@ -167,6 +182,8 @@ class AbstractUrlMarkManager(object):
 
 # class is not named as abstract
 # but still is deduceably abstract
+
+
 class UrlMarkManager(object):
     def __init__(self):
         self._lineparser = None

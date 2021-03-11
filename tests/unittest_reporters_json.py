@@ -48,5 +48,6 @@ def test_simple_json_output():
         ]
     ]
     report_result = json.loads(output.getvalue())
-    report_result = [sorted(report_result[0].items(), key=lambda item: item[0])]
+    report_result = [sorted(report_result[0].items(),
+                            key=lambda item: item[0])]
     assert report_result == expected_result

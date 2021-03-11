@@ -1,6 +1,9 @@
 # pylint: disable=missing-docstring, no-member, unused-argument, invalid-name,unused-variable
 # pylint: disable=too-few-public-methods,wrong-import-position, useless-object-inheritance
 
+from typing import List
+
+
 class NotUselessSuper(object):
 
     def not_passing_keyword_only(self, first, *, second):
@@ -18,7 +21,7 @@ class AlsoNotUselessSuper(NotUselessSuper):
 
 class UselessSuper(object):
 
-    def useless(self, *, first): # [useless-super-delegation]
+    def useless(self, *, first):  # [useless-super-delegation]
         super(UselessSuper, self).useless(first=first)
 
 
@@ -26,16 +29,15 @@ class Egg():
     def __init__(self, thing: object) -> None:
         pass
 
+
 class Spam(Egg):
     def __init__(self, thing: int) -> None:
         super().__init__(thing)
 
+
 class Ham(Egg):
-    def __init__(self, thing: object) -> None: # [useless-super-delegation]
+    def __init__(self, thing: object) -> None:  # [useless-super-delegation]
         super().__init__(thing)
-
-
-from typing import List
 
 
 class Test:

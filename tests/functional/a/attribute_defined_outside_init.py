@@ -13,7 +13,7 @@ class A(object):
         self.x = x
 
     def set_z(self, z):
-        self.z = z # [attribute-defined-outside-init]
+        self.z = z  # [attribute-defined-outside-init]
 
     def setUp(self):
         self.x = 0
@@ -23,7 +23,7 @@ class A(object):
 class B(A):
 
     def test(self):
-        self.z = 44 # [attribute-defined-outside-init]
+        self.z = 44  # [attribute-defined-outside-init]
 
 
 class C(object):
@@ -58,7 +58,7 @@ class Mixin(object):
 
     def test_mixin(self):
         """Don't emit attribute-defined-outside-init for mixin classes."""
-        if self.defined_already: # pylint: disable=access-member-before-definition
+        if self.defined_already:  # pylint: disable=access-member-before-definition
             self.defined_already = None
 
 
@@ -78,6 +78,7 @@ class Mine:
     @prop.setter
     def prop(self, value):
         self.__prop = value
+
 
 class DataClass:
     def __post_init__(self):

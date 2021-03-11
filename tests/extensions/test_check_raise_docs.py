@@ -54,7 +54,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         raise_node = node.body[0]
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -72,7 +73,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         raise_node = node.body[0]
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -91,7 +93,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         raise_node = node.body[0]
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -195,7 +198,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
             raise re.error('hi') #@
         '''
         for prefix in ["~", "!"]:
-            raise_node = astroid.extract_node(code_snippet.format(prefix=prefix))
+            raise_node = astroid.extract_node(
+                code_snippet.format(prefix=prefix))
             with self.assertNoMessages():
                 self.checker.visit_raise(raise_node)
 
@@ -216,7 +220,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         raise_node = node.body[0]
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -349,7 +354,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         node = raise_node.frame()
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -372,7 +378,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         node = raise_node.frame()
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -397,7 +404,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         node = raise_node.frame()
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -637,7 +645,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
             raise re.error('hi') #@
         '''
         for prefix in ["~", "!"]:
-            raise_node = astroid.extract_node(code_snippet.format(prefix=prefix))
+            raise_node = astroid.extract_node(
+                code_snippet.format(prefix=prefix))
             with self.assertNoMessages():
                 self.checker.visit_raise(raise_node)
 
@@ -656,7 +665,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         node = raise_node.frame()
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -676,7 +686,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         node = raise_node.frame()
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             self.checker.visit_raise(raise_node)
 
@@ -757,7 +768,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
             raise re.error('hi') #@
         '''
         for prefix in ["~", "!"]:
-            raise_node = astroid.extract_node(code_snippet.format(prefix=prefix))
+            raise_node = astroid.extract_node(
+                code_snippet.format(prefix=prefix))
             with self.assertNoMessages():
                 self.checker.visit_raise(raise_node)
 
@@ -799,7 +811,8 @@ class TestDocstringCheckerRaise(CheckerTestCase):
         )
         node = raise_node.frame()
         with self.assertAddsMessages(
-            Message(msg_id="missing-raises-doc", node=node, args=("RuntimeError",))
+            Message(msg_id="missing-raises-doc",
+                    node=node, args=("RuntimeError",))
         ):
             # we do NOT expect a warning about the OSError in inner_func!
             self.checker.visit_raise(raise_node)

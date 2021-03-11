@@ -217,7 +217,8 @@ def register_plugins(linter, directory):
             or (not extension and isdir(join(directory, base)))
         ):
             try:
-                module = modutils.load_module_from_file(join(directory, filename))
+                module = modutils.load_module_from_file(
+                    join(directory, filename))
             except ValueError:
                 # empty module name (usually emacs auto-save files)
                 continue

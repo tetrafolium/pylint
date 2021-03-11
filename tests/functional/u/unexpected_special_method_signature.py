@@ -3,45 +3,54 @@
 # pylint: disable=missing-docstring, unused-argument, too-few-public-methods
 # pylint: disable=invalid-name,too-many-arguments,bad-staticmethod-argument, useless-object-inheritance
 
+
 class Invalid(object):
 
-    def __enter__(self, other): # [unexpected-special-method-signature]
+    def __enter__(self, other):  # [unexpected-special-method-signature]
         pass
 
-    def __del__(self, other): # [unexpected-special-method-signature]
+    def __del__(self, other):  # [unexpected-special-method-signature]
         pass
 
-    def __format__(self, other, other2): # [unexpected-special-method-signature]
+    # [unexpected-special-method-signature]
+    def __format__(self, other, other2):
         pass
 
-    def __setattr__(self): # [unexpected-special-method-signature]
+    def __setattr__(self):  # [unexpected-special-method-signature]
         pass
 
-    def __round__(self, invalid, args): # [unexpected-special-method-signature]
+    # [unexpected-special-method-signature]
+    def __round__(self, invalid, args):
         pass
 
-    def __deepcopy__(self, memo, other): # [unexpected-special-method-signature]
+    # [unexpected-special-method-signature]
+    def __deepcopy__(self, memo, other):
         pass
 
-    def __iter__(): # [no-method-argument]
+    def __iter__():  # [no-method-argument]
         pass
 
     @staticmethod
-    def __getattr__(self, nanana): # [unexpected-special-method-signature]
+    def __getattr__(self, nanana):  # [unexpected-special-method-signature]
         pass
 
 
 class FirstBadContextManager(object):
     def __enter__(self):
         return self
-    def __exit__(self, exc_type): # [unexpected-special-method-signature]
+
+    def __exit__(self, exc_type):  # [unexpected-special-method-signature]
         pass
+
 
 class SecondBadContextManager(object):
     def __enter__(self):
         return self
-    def __exit__(self, exc_type, value, tb, stack): # [unexpected-special-method-signature]
+
+    # [unexpected-special-method-signature]
+    def __exit__(self, exc_type, value, tb, stack):
         pass
+
 
 class ThirdBadContextManager(object):
     def __enter__(self):
@@ -54,15 +63,20 @@ class ThirdBadContextManager(object):
 
 class Async(object):
 
-    def __aiter__(self, extra): # [unexpected-special-method-signature]
+    def __aiter__(self, extra):  # [unexpected-special-method-signature]
         pass
-    def __anext__(self, extra, argument): # [unexpected-special-method-signature]
+
+    # [unexpected-special-method-signature]
+    def __anext__(self, extra, argument):
         pass
-    def __await__(self, param): # [unexpected-special-method-signature]
+
+    def __await__(self, param):  # [unexpected-special-method-signature]
         pass
-    def __aenter__(self, first): # [unexpected-special-method-signature]
+
+    def __aenter__(self, first):  # [unexpected-special-method-signature]
         pass
-    def __aexit__(self): # [unexpected-special-method-signature]
+
+    def __aexit__(self):  # [unexpected-special-method-signature]
         pass
 
 
@@ -104,17 +118,22 @@ class Valid(object):
 class FirstGoodContextManager(object):
     def __enter__(self):
         return self
+
     def __exit__(self, exc_type, value, tb):
         pass
+
 
 class SecondGoodContextManager(object):
     def __enter__(self):
         return self
+
     def __exit__(self, exc_type=None, value=None, tb=None):
         pass
+
 
 class ThirdGoodContextManager(object):
     def __enter__(self):
         return self
+
     def __exit__(self, exc_type, *args):
         pass

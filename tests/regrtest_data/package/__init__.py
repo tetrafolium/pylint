@@ -9,6 +9,7 @@ __revision__ = 0
 # E0602 - Undefined variable '__path__'
 __path__ += "folder"
 
+
 class AudioTime:
     """test precedence over the AudioTime submodule"""
 

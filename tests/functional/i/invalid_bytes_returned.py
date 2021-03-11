@@ -54,7 +54,7 @@ class ThirdBadBytes(object):
 class AmbiguousBytes(object):
     """ Uninferable return value """
 
-    __bytes__ = lambda self: Missing
+    def __bytes__(self): return Missing
 
 
 class AnotherAmbiguousBytes(object):

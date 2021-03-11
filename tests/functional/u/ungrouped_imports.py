@@ -14,7 +14,7 @@ except ImportError:
 from os import pardir
 import scipy
 from os import sep
-from astroid import exceptions # [ungrouped-imports]
+from astroid import exceptions  # [ungrouped-imports]
 if True:
     import logging.handlers  # [ungrouped-imports]
 from os.path import join  # [ungrouped-imports]

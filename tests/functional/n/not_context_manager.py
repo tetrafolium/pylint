@@ -3,16 +3,26 @@
 # pylint: disable=too-few-public-methods, invalid-name, import-error, missing-docstring
 # pylint: disable=no-init,wrong-import-position, useless-object-inheritance
 # Tests no messages for objects that implement the protocol
+from missing import Missing
+from contextlib import contextmanager
+
+
 class Manager(object):
     def __enter__(self):
         pass
+
     def __exit__(self, type_, value, traceback):
         pass
+
+
 with Manager():
     pass
 
+
 class AnotherManager(Manager):
     pass
+
+
 with AnotherManager():
     pass
 
@@ -20,14 +30,19 @@ with AnotherManager():
 # Tests message for class that doesn't implement the protocol
 class NotAManager(object):
     pass
-with NotAManager():  #[not-context-manager]
+
+
+with NotAManager():  # [not-context-manager]
     pass
 
 # Tests contextlib.contextmanager usage is recognized as correct.
-from contextlib import contextmanager
+
+
 @contextmanager
 def dec():
     yield
+
+
 with dec():  # valid use
     pass
 
@@ -40,19 +55,20 @@ with dec:  # [not-context-manager]
 
 # Tests no messages about context manager protocol
 # if the type can't be inferred.
-from missing import Missing
 with Missing():
     pass
 
 # Tests context managers as names.
 
+
 def penelopa():
     return 42
+
 
 hopa = dec()
 tropa = penelopa()
 
-with tropa: # [not-context-manager]
+with tropa:  # [not-context-manager]
     pass
 
 with hopa:
@@ -65,10 +81,12 @@ with hopa:
 def wrapper():
     return dec()
 
+
 with wrapper():
     pass
 
 # Tests for properties returning managers.
+
 
 class Property(object):
 
@@ -87,36 +105,45 @@ with lala.ctx:
     # result of accessing a property.
     pass
 
-with lala.not_ctx: # [not-context-manager]
+with lala.not_ctx:  # [not-context-manager]
     pass
 
 
 class TestKnownBases(Missing):
     pass
 
+
 with TestKnownBases():
     pass
 
 # Ignore mixins.
+
+
 class ManagerMixin(object):
     def test(self):
         with self:
             pass
 
+
 class FullContextManager(ManagerMixin):
     def __enter__(self):
         return self
+
     def __exit__(self, *args):
         pass
 
 # Test a false positive with returning a generator
 # from a context manager.
+
+
 def generator():
     yield 42
+
 
 @contextmanager
 def context_manager_returning_generator():
     return generator()
+
 
 with context_manager_returning_generator():
     pass
@@ -125,11 +152,14 @@ FIRST = [context_manager_returning_generator()]
 with FIRST[0]:
     pass
 
+
 def other_indirect_func():
     return generator()
+
 
 def not_context_manager():
     return other_indirect_func()
 
-with not_context_manager(): # [not-context-manager]
+
+with not_context_manager():  # [not-context-manager]
     pass

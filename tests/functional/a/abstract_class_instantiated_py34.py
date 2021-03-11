@@ -8,12 +8,12 @@ defines abstract methods.
 import abc
 
 
-
 class BadClass(abc.ABC):
     @abc.abstractmethod
     def test(self):
         pass
 
+
 def main():
     """ do nothing """
-    BadClass() # [abstract-class-instantiated]
+    BadClass()  # [abstract-class-instantiated]

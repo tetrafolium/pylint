@@ -5,7 +5,7 @@ from __future__ import print_function
 from enum import Enum
 
 
-class Aaaa(object): # [too-few-public-methods]
+class Aaaa(object):  # [too-few-public-methods]
 
     def __init__(self):
         pass
@@ -40,6 +40,7 @@ class BossMonster(Enum):
 
 class DumbList:
     """A class can define only special methods."""
+
     def __init__(self, iterable):
         self._list = list(iterable)
 

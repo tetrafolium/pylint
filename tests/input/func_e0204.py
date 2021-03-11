@@ -15,6 +15,7 @@ class Abcd(object):
     def abdc(yoo):
         """another test"""
         print(yoo)
+
     def edf(self):
         """just another method"""
         print('yapudju in', self)

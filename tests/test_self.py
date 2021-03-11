@@ -136,7 +136,8 @@ class TestRunTC(object):
 
     def test_pkginfo(self):
         """Make pylint check itself."""
-        self._runtest(["pylint.__pkginfo__"], reporter=TextReporter(StringIO()), code=0)
+        self._runtest(["pylint.__pkginfo__"],
+                      reporter=TextReporter(StringIO()), code=0)
 
     def test_all(self):
         """Make pylint check itself."""
@@ -155,7 +156,8 @@ class TestRunTC(object):
         self._runtest([join(HERE, "input", "noext")], code=0)
 
     def test_w0704_ignored(self):
-        self._runtest([join(HERE, "input", "ignore_except_pass_by_default.py")], code=0)
+        self._runtest(
+            [join(HERE, "input", "ignore_except_pass_by_default.py")], code=0)
 
     def test_exit_zero(self):
         self._runtest(
@@ -187,7 +189,7 @@ class TestRunTC(object):
         pattern = r"\[{}".format(MAIN_CHECKER_NAME.upper())
         master = re.search(pattern, output)
         assert master is not None, "{} not found in {}".format(pattern, output)
-        out = StringIO(output[master.start() :])
+        out = StringIO(output[master.start():])
         parser = configparser.RawConfigParser()
         parser.read_file(out)
         messages = utils._splitstrip(parser.get("MESSAGES CONTROL", "disable"))
@@ -203,7 +205,8 @@ class TestRunTC(object):
         out = StringIO()
         with pytest.raises(IOError) as excinfo:
             self._run_pylint(["--rcfile=/tmp/norcfile.txt"], out=out)
-        assert "The config file /tmp/norcfile.txt doesn't exist!" == str(excinfo.value)
+        assert "The config file /tmp/norcfile.txt doesn't exist!" == str(
+            excinfo.value)
 
     def test_help_message_option(self):
         self._runtest(["--help-msg", "W0101"], code=0)
@@ -252,7 +255,8 @@ class TestRunTC(object):
     def test_py3k_jobs_option(self):
         rc_code = 0
         self._runtest(
-            [join(HERE, "functional", "u", "unnecessary_lambda.py"), "--py3k", "-j 2"],
+            [join(HERE, "functional", "u", "unnecessary_lambda.py"),
+             "--py3k", "-j 2"],
             code=rc_code,
         )
 
@@ -301,12 +305,13 @@ class TestRunTC(object):
 
         to_remove = "No config file found, using default configuration"
         if to_remove in actual_output:
-            actual_output = actual_output[len(to_remove) :]
+            actual_output = actual_output[len(to_remove):]
         if actual_output.startswith("Using config file "):
             # If ~/.pylintrc is present remove the
             # Using config file...  line
-            actual_output = actual_output[actual_output.find("\n") :]
-        assert self._clean_paths(expected_output.strip()) == actual_output.strip()
+            actual_output = actual_output[actual_output.find("\n"):]
+        assert self._clean_paths(
+            expected_output.strip()) == actual_output.strip()
 
     def test_import_itself_not_accounted_for_relative_imports(self):
         expected = "Your code has been rated at 10.00/10"
@@ -318,7 +323,8 @@ class TestRunTC(object):
     def test_reject_empty_indent_strings(self):
         expected = "indent string can't be empty"
         module = join(HERE, "data", "clientmodule_test.py")
-        self._test_output([module, "--indent-string="], expected_output=expected)
+        self._test_output([module, "--indent-string="],
+                          expected_output=expected)
 
     def test_json_report_when_file_has_syntax_error(self):
         out = StringIO()
@@ -528,7 +534,8 @@ class TestRunTC(object):
             "pylint.lint._read_stdin", return_value="import os\n"
         ) as mock_stdin:
             self._test_output(
-                ["--from-stdin", input_path, "--disable=all", "--enable=unused-import"],
+                ["--from-stdin", input_path, "--disable=all",
+                    "--enable=unused-import"],
                 expected_output=expected_output,
             )
             assert mock_stdin.call_count == 1
@@ -613,7 +620,8 @@ class TestRunTC(object):
         self._run_pylint(["--version"], out=out)
         check(out.getvalue().splitlines())
 
-        result = subprocess.check_output([sys.executable, "-m", "pylint", "--version"])
+        result = subprocess.check_output(
+            [sys.executable, "-m", "pylint", "--version"])
         result = result.decode("utf-8")
         check(result.splitlines())
 

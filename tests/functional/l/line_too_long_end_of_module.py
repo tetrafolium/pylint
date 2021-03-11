@@ -1,4 +1,4 @@
-#pylint: disable=missing-docstring, line-too-long
+# pylint: disable=missing-docstring, line-too-long
 
 # Hey this is a very long commented line just to trigger pylint's line-too-long message. It is just above a dummy function with a very long code line.
 def dummy_function():

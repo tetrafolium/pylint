@@ -7,6 +7,7 @@ exec 'a = 1' in {}
 
 exec 'a = 1' in globals()
 
+
 def func():
     """exec in local scope"""
     exec 'b = 1'

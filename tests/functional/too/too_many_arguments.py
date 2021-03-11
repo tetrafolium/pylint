@@ -1,6 +1,10 @@
 # pylint: disable=missing-docstring,wrong-import-position
 
-def stupid_function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9): # [too-many-arguments]
+from functools import partial
+
+
+# [too-many-arguments]
+def stupid_function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9):
     return arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
 
 
@@ -18,7 +22,6 @@ MyClass().mymethod2()()
 
 
 # Check a false positive does not occur
-from functools import partial
 
 
 def root_function(first, second, third):

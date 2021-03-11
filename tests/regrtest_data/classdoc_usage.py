@@ -3,6 +3,7 @@
 __revision__ = None
 # pylint: disable=useless-object-inheritance
 
+
 class SomeClass(object):
     """cds"""
     doc = __doc__

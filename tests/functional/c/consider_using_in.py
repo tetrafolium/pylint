@@ -27,15 +27,20 @@ value == 1 and value == 2  # not a "in"-case because of "and"
 value == 1 and value == 2 or value == 3  # not only 'or's
 value == 1 or value == 2 or 3 < value < 4  # not only '=='
 value == 1  # value not checked against multiple values
-value == 1 or value == 2 or value == 3 and value == 4  # not all checks are concatenated with 'or'
+# not all checks are concatenated with 'or'
+value == 1 or value == 2 or value == 3 and value == 4
 value == 1 or 2 < value < 3  # length of 'ops' != 1 for second check
-value is 1 or value is 2  # 'in' compares using '==' not 'is' and therefore not considered
+# 'in' compares using '==' not 'is' and therefore not considered
+value is 1 or value is 2
 not value == 1 and not value == 2
 value1 == 1 or value2 == 2  # different variables and only one comparison for each
 value1 == value2 == 1 or value1 == 2  # not checking multi-compares for '=='
-value1 != 1 == value2 and value2 != value1 != 2  # not checking multi-compares for '!='
-value1 == 1 or value1 == value2 or value2 == 3  # value1 or value2 do not occur in every check
-value1 == 1 or value1 == 2 or value2 == 1 or value2 == 2  # value1 or value2 do not occur in every check
+# not checking multi-compares for '!='
+value1 != 1 == value2 and value2 != value1 != 2
+# value1 or value2 do not occur in every check
+value1 == 1 or value1 == value2 or value2 == 3
+# value1 or value2 do not occur in every check
+value1 == 1 or value1 == 2 or value2 == 1 or value2 == 2
 'value' == 1 or 'value' == 2  # only detect variables for now
 
 
@@ -43,4 +48,5 @@ def oops():
     return 5 / 0
 
 
-some_value = value == 4 or value == 5 or value == oops() # We only look for names and constants
+# We only look for names and constants
+some_value = value == 4 or value == 5 or value == oops()

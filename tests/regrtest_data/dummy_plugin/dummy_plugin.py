@@ -3,7 +3,8 @@ from pylint.checkers import BaseChecker
 
 class DummyPlugin1(BaseChecker):
     name = 'dummy_plugin'
-    msgs = {'I9061': ('Dummy short desc 01', 'dummy-message-01', 'Dummy long desc')}
+    msgs = {'I9061': ('Dummy short desc 01',
+                      'dummy-message-01', 'Dummy long desc')}
     options = (
         ('dummy_option_1', {
             'type': 'string',
@@ -15,7 +16,8 @@ class DummyPlugin1(BaseChecker):
 
 class DummyPlugin2(BaseChecker):
     name = 'dummy_plugin'
-    msgs = {'I9060': ('Dummy short desc 02', 'dummy-message-02', 'Dummy long desc')}
+    msgs = {'I9060': ('Dummy short desc 02',
+                      'dummy-message-02', 'Dummy long desc')}
     options = (
         ('dummy_option_2', {
             'type': 'string',

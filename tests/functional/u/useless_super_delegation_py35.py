@@ -8,5 +8,6 @@ class NotUselessSuper(object):
 
 class UselessSuper(object):
 
-    def useless(self, first, *, second=None, **kwargs): # [useless-super-delegation]
+    # [useless-super-delegation]
+    def useless(self, first, *, second=None, **kwargs):
         return super(UselessSuper, self).useless(first, second=second, **kwargs)

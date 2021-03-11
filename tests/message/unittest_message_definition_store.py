@@ -137,12 +137,14 @@ def test_register_error_new_id_duplicate_of_new(empty_store):
 
     class CheckerTwo(BaseChecker):
         name = "checker_two"
-        msgs = {"W1234": ("message two", "msg-symbol-two", "another msg description.")}
+        msgs = {"W1234": ("message two", "msg-symbol-two",
+                          "another msg description.")}
 
     empty_store.register_messages_from_checker(CheckerOne())
     test_register_error(
         empty_store,
-        {"W1234": ("message two", "msg-symbol-two", "another msg description.")},
+        {"W1234": ("message two", "msg-symbol-two",
+                   "another msg description.")},
         "Message id 'W1234' cannot have both 'msg-symbol-one' and 'msg-symbol-two' as symbolic name.",
     )
 
@@ -233,7 +235,8 @@ class TestMessageDefinitionStore(object):
 
     def test_renamed_message_register(self, store):
         assert "msg-symbol" == store.get_message_definitions("W0001")[0].symbol
-        assert "msg-symbol" == store.get_message_definitions("old-symbol")[0].symbol
+        assert "msg-symbol" == store.get_message_definitions("old-symbol")[
+            0].symbol
 
 
 def test_multiple_child_of_old_name(store):

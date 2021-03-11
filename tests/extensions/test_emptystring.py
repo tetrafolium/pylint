@@ -29,7 +29,8 @@ def disable(disable):
 
 def test_emptystring_message(linter):
     elif_test = osp.join(
-        osp.dirname(osp.abspath(__file__)), "data", "empty_string_comparison.py"
+        osp.dirname(osp.abspath(__file__)
+                    ), "data", "empty_string_comparison.py"
     )
     linter.check([elif_test])
     msgs = linter.reporter.messages

@@ -29,7 +29,8 @@ PragmaRepresenter = namedtuple("PragmaRepresenter", "action messages")
 
 
 ATOMIC_KEYWORDS = frozenset(("disable-all", "skip-file"))
-MESSAGE_KEYWORDS = frozenset(("disable-msg", "enable-msg", "disable", "enable"))
+MESSAGE_KEYWORDS = frozenset(
+    ("disable-msg", "enable-msg", "disable", "enable"))
 # sorted is necessary because sets are unordered collections and ALL_KEYWORDS
 #  string should not vary between executions
 #  reverse is necessary in order to have the longest keywords first, so that, for example,
@@ -110,10 +111,12 @@ def parse_pragma(pylint_pragma: str) -> Generator[PragmaRepresenter, None, None]
                         "The keyword is unknown", previous_token
                     )
                 # Nothing at all detected before this assignment
-                raise InvalidPragmaError("Missing keyword before assignment", "")
+                raise InvalidPragmaError(
+                    "Missing keyword before assignment", "")
             assignment_required = False
         elif assignment_required:
-            raise InvalidPragmaError("The = sign is missing after the keyword", action)
+            raise InvalidPragmaError(
+                "The = sign is missing after the keyword", action)
         elif kind == "KEYWORD":
             if action:
                 yield emit_pragma_representer(action, messages)

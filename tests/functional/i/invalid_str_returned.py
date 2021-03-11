@@ -54,7 +54,7 @@ class ThirdBadStr(object):
 class AmbiguousStr(object):
     """ Uninferable return value """
 
-    __str__ = lambda self: Missing
+    def __str__(self): return Missing
 
 
 class AnotherAmbiguousStr(object):

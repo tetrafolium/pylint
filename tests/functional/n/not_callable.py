@@ -1,40 +1,50 @@
 # pylint: disable=missing-docstring,no-self-use,too-few-public-methods,wrong-import-position, useless-object-inheritance
 
+import missing  # pylint: disable=import-error
 REVISION = None
 
-REVISION() # [not-callable]
+REVISION()  # [not-callable]
+
 
 def correct():
     return 1
 
+
 REVISION = correct()
+
 
 class Correct(object):
     """callable object"""
 
+
 class MetaCorrect(object):
     """callable object"""
+
     def __call__(self):
         return self
+
 
 INSTANCE = Correct()
 CALLABLE_INSTANCE = MetaCorrect()
 CORRECT = CALLABLE_INSTANCE()
-INCORRECT = INSTANCE() # [not-callable]
+INCORRECT = INSTANCE()  # [not-callable]
 LIST = []
-INCORRECT = LIST() # [not-callable]
+INCORRECT = LIST()  # [not-callable]
 DICT = {}
-INCORRECT = DICT() # [not-callable]
+INCORRECT = DICT()  # [not-callable]
 TUPLE = ()
-INCORRECT = TUPLE() # [not-callable]
+INCORRECT = TUPLE()  # [not-callable]
 INT = 1
-INCORRECT = INT() # [not-callable]
+INCORRECT = INT()  # [not-callable]
 
 # Test calling properties. Pylint can detect when using only the
 # getter, but it doesn't infer properly when having a getter
 # and a setter.
+
+
 class MyProperty(property):
     """ test subclasses """
+
 
 class PropertyTest(object):
     """ class """
@@ -62,11 +72,13 @@ class PropertyTest(object):
         """ Set the attribute """
         self.attr = value
 
+
 PROP = PropertyTest()
-PROP.test(40) # [not-callable]
-PROP.custom() # [not-callable]
+PROP.test(40)  # [not-callable]
+PROP.custom()  # [not-callable]
 
 # Safe from not-callable when using properties.
+
 
 class SafeProperty(object):
     @property
@@ -106,6 +118,7 @@ class SafeProperty(object):
     def does_not_make_sense(self):
         raise NotImplementedError
 
+
 PROP1 = SafeProperty()
 PROP1.static(2)
 PROP1.klass(2)
@@ -117,9 +130,8 @@ PROP1.instance()
 PROP1.does_not_make_sense()
 
 
-import missing # pylint: disable=import-error
-
 class UnknownBaseCallable(missing.Blah):
     pass
+
 
 UnknownBaseCallable()()
