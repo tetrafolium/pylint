@@ -36,10 +36,8 @@ def free_foo(bar_, lala):
 
 class TestNonLocal:
     """Test class for nonlocal assignment of self"""
-
     def function(self, param):
         """This function uses nonlocal to reassign self"""
-
         def _set_param(param):
             nonlocal self
             self = param  # [self-cls-assignment]

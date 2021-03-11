@@ -8,7 +8,6 @@ from abc import ABCMeta
 
 class Undefined:
     """ test various annotation problems. """
-
     def test(self) -> Undefined:  # [undefined-variable]
         """ used Undefined, which is Undefined in this scope. """
 
@@ -22,6 +21,7 @@ class Undefined:
         def func() -> Undefined:
             """ empty """
             return 2
+
         return func
 
 
@@ -33,7 +33,6 @@ class Undefined1:
 
     class InnerScope:
         """ Test inner scope definition. """
-
         def test_undefined(self) -> Undef:  # [undefined-variable]
             """ Looking at a higher scope is impossible. """
 
@@ -89,8 +88,10 @@ class FourthGood(ThirdGood):
 class FifthGood(metaclass=abc.Metaclass):
     """Metaclasses can come from imported modules."""
 
+
 # The following used to raise used-before-assignment
 # pylint: disable=missing-docstring, multiple-statements
 
 
-def used_before_assignment(*, arg): return arg + 1
+def used_before_assignment(*, arg):
+    return arg + 1

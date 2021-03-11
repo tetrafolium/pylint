@@ -14,7 +14,7 @@ __revision__ = None
 
 class Statement(object):
     """ ... """
-
     def __init__(self):
         pass
+
     object = None

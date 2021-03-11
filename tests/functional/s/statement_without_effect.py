@@ -17,7 +17,6 @@ __revision__.lower()
 # +1:[pointless-string-statement]
 """inline doc string should use a separated message"""
 
-
 __revision__.lower()  # [unnecessary-semicolon]
 
 list() and tuple()  # [expression-not-assigned]
@@ -48,7 +47,6 @@ class ClassLevelAttributeTest(object):
 
     # empty lines are good, too.
     """ Still a valid class level attribute docstring. """
-
     def __init__(self):
         self.attr = 42
         """ Good attribute docstring """

@@ -38,7 +38,6 @@ for number in ['1', '2', '3']:
 for number in ['1', '2', '3']:  # 'result'-definition missing
     result += number
 
-
 # Variations of 'number'
 result = ''  # no concatenation (iterator-name differs)
 for name in ['1', '2', '3']:
@@ -50,7 +49,6 @@ for _ in ['1', '2', '3']:
 # 'exprlist' is not a single name
 for index, number in ['1', '2', '3']:
     result += number
-
 
 # Variations of 'iterable'
 result = ''
@@ -77,7 +75,6 @@ for number in ['1', '2', '3']:
 result = ''
 for number in undefined_iterable:
     result += number  # [consider-using-join]
-
 
 # Variations of loop-body
 result = ''  # addition is not the only part of the body

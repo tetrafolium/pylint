@@ -7,7 +7,6 @@ __revision__ = 0
 
 class Abcd(object):
     """dummy class"""
-
     def __init__(truc):
         """method without self"""
         print(1)

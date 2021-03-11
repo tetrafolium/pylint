@@ -10,7 +10,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Functional full-module tests for PyLint."""
 
 import csv
@@ -31,7 +30,6 @@ class test_dialect(csv.excel):
 
 csv.register_dialect("test", test_dialect)
 
-
 # Notes:
 # - for the purpose of this test, the confidence levels HIGH and UNDEFINED
 #   are treated as the same.
@@ -50,11 +48,12 @@ class LintModuleOutputUpdate(testutils.LintModuleTest):
         except IOError:
             return io.StringIO()
 
-    def _check_output_text(self, expected_messages, expected_lines, received_lines):
+    def _check_output_text(self, expected_messages, expected_lines,
+                           received_lines):
         if not expected_messages:
             return
-        emitted, remaining = self._split_lines(
-            expected_messages, expected_lines)
+        emitted, remaining = self._split_lines(expected_messages,
+                                               expected_lines)
         if emitted != received_lines:
             remaining.extend(received_lines)
             remaining.sort(key=lambda m: (m[1], m[0], m[3]))
@@ -65,8 +64,8 @@ class LintModuleOutputUpdate(testutils.LintModuleTest):
 
 
 def get_tests():
-    input_dir = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), "functional")
+    input_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "functional")
     suite = []
     for dirpath, dirnames, filenames in os.walk(input_dir):
         if dirpath.endswith("__pycache__"):
@@ -83,10 +82,8 @@ TESTS_NAMES = [t.base for t in TESTS]
 
 @pytest.mark.parametrize("test_file", TESTS, ids=TESTS_NAMES)
 def test_functional(test_file):
-    LintTest = (
-        LintModuleOutputUpdate(
-            test_file) if UPDATE else testutils.LintModuleTest(test_file)
-    )
+    LintTest = (LintModuleOutputUpdate(test_file)
+                if UPDATE else testutils.LintModuleTest(test_file))
     LintTest.setUp()
     LintTest._runTest()
 

@@ -14,7 +14,6 @@ __revision__ = 0
 
 class Seq(object):
     """ sequence """
-
     def __init__(self):
         self.items = range(2)
 
@@ -27,7 +26,6 @@ class Seq(object):
 
 class Iter(object):
     """ Iterator """
-
     def __iter__(self):
         for number in range(2):
             yield number
@@ -48,6 +46,7 @@ def good_unpacking2():
 
 class MetaIter(type):
     "metaclass that makes classes that use it iterables"
+
     def __iter__(cls):
         return iter((1, 2))
 
@@ -100,7 +99,6 @@ a, b = nonseq_func  # [unpacking-non-sequence]
 
 class ClassUnpacking(object):
     """ Check unpacking as instance attributes. """
-
     def test(self):
         """ test unpacking in instance attributes. """
 
@@ -118,6 +116,7 @@ class ClassUnpacking(object):
 
 class TestBase(object):
     'base class with `test` method implementation'
+
     @staticmethod
     def test(data):
         'default implementation'

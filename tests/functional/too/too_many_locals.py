@@ -42,8 +42,7 @@ def too_many_arguments_function(arga, argu, argi, arge, argt, args):
     return arga
 
 
-def ignored_arguments_function(arga, argu, argi,
-                               _arge=0, _argt=1, _args=None):
+def ignored_arguments_function(arga, argu, argi, _arge=0, _argt=1, _args=None):
     """pylint will ignore _arge, _argt, _args.
 
     Consequently pylint will only coun 13 arguments.

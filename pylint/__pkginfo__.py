@@ -67,7 +67,6 @@ classifiers = [
     "Topic :: Software Development :: Testing",
 ]
 
-
 long_desc = """\
  Pylint is a Python source code analyzer which looks for programming
  errors, helps enforcing a coding standard and sniffs for some code
@@ -86,5 +85,6 @@ long_desc = """\
  and "symilar" (an independent similarities checker)."""
 
 scripts = [
-    join("bin", filename) for filename in ("pylint", "symilar", "epylint", "pyreverse")
+    join("bin", filename)
+    for filename in ("pylint", "symilar", "epylint", "pyreverse")
 ]

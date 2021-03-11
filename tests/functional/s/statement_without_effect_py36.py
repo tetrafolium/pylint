@@ -10,7 +10,6 @@ class ClassLevelAttributeTest(object):
 
     some_other_variable: int = 42
     """Data docstring"""
-
     def func(self):
         """Some Empty Docstring"""
 

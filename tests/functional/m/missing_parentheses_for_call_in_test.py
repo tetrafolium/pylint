@@ -14,7 +14,6 @@ def nonbool_function():
 
 
 class Class(object):
-
     @staticmethod
     def bool_method():
         return False
@@ -53,7 +52,8 @@ elif instance.bool_method:  # [missing-parentheses-for-call-in-test]
     pass
 
 
-def bool_lambda(): return True
+def bool_lambda():
+    return True
 
 
 if bool_lambda:  # [missing-parentheses-for-call-in-test]
@@ -63,7 +63,8 @@ if not bool_lambda():
     pass
 
 
-def nonbool_lambda(): return 42
+def nonbool_lambda():
+    return 42
 
 
 if nonbool_lambda:  # [missing-parentheses-for-call-in-test]

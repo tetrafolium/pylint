@@ -7,7 +7,6 @@ try:
 except Exception:  # [broad-except]
     print('error')
 
-
 try:
     __revision__ += 1
 except BaseException:  # [broad-except]

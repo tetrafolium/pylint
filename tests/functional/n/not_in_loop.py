@@ -4,8 +4,10 @@
 # pylint: disable=no-else-continue
 
 while True:
+
     def ala():
         continue  # [not-in-loop]
+
 
 while True:
     pass
@@ -18,8 +20,10 @@ def lala():
 
 
 while True:
+
     class A(object):
         continue  # [not-in-loop]
+
 
 for _ in range(10):
     pass

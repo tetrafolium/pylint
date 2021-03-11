@@ -13,7 +13,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Utility methods for docstring checking."""
 
 import re
@@ -47,11 +46,9 @@ def get_setters_property_name(node):
     """
     decorators = node.decorators.nodes if node.decorators else []
     for decorator in decorators:
-        if (
-            isinstance(decorator, astroid.Attribute)
-            and decorator.attrname == "setter"
-            and isinstance(decorator.expr, astroid.Name)
-        ):
+        if (isinstance(decorator, astroid.Attribute)
+                and decorator.attrname == "setter"
+                and isinstance(decorator.expr, astroid.Name)):
             return decorator.expr.name
     return None
 
@@ -138,8 +135,8 @@ def possible_exc_types(node):
 
         if handler and handler.type:
             inferred_excs = astroid.unpack_infer(handler.type)
-            excs = (
-                exc.name for exc in inferred_excs if exc is not astroid.Uninferable)
+            excs = (exc.name for exc in inferred_excs
+                    if exc is not astroid.Uninferable)
     else:
         target = _get_raise_target(node)
         if isinstance(target, astroid.ClassDef):
@@ -151,25 +148,26 @@ def possible_exc_types(node):
                     continue
 
                 val = utils.safe_infer(ret.value)
-                if (
-                    val
-                    and isinstance(val, (astroid.Instance, astroid.ClassDef))
-                    and utils.inherit_from_std_ex(val)
-                ):
+                if (val and isinstance(val,
+                                       (astroid.Instance, astroid.ClassDef))
+                        and utils.inherit_from_std_ex(val)):
                     excs.append(val.name)
 
     try:
-        return {exc for exc in excs if not utils.node_ignores_exception(node, exc)}
+        return {
+            exc
+            for exc in excs if not utils.node_ignores_exception(node, exc)
+        }
     except astroid.InferenceError:
         return set()
 
 
 def docstringify(docstring, default_type="default"):
     for docstring_type in [
-        SphinxDocstring,
-        EpytextDocstring,
-        GoogleDocstring,
-        NumpyDocstring,
+            SphinxDocstring,
+            EpytextDocstring,
+            GoogleDocstring,
+            NumpyDocstring,
     ]:
         instance = docstring_type(docstring)
         if instance.is_valid():
@@ -242,23 +240,17 @@ class SphinxDocstring(Docstring):
     re_simple_container_type = r"""
         {type}                        # a container type
         [\(\[] [^\n\s]+ [\)\]]        # with the contents of the container
-    """.format(
-        type=re_type
-    )
+    """.format(type=re_type)
 
     re_multiple_simple_type = r"""
         (?:{container_type}|{type})
         (?:(?:\s+(?:of|or)\s+|\s*,\s*)(?:{container_type}|{type}))*
-    """.format(
-        type=re_type, container_type=re_simple_container_type
-    )
+    """.format(type=re_type, container_type=re_simple_container_type)
 
     re_xref = r"""
         (?::\w+:)?                    # optional tag
         `{}`                         # what to reference
-        """.format(
-        re_type
-    )
+        """.format(re_type)
 
     re_param_raw = r"""
         :                       # initial colon
@@ -277,9 +269,7 @@ class SphinxDocstring(Docstring):
         (\w+)                   # Parameter name
         \s*                     # whitespace
         :                       # final colon
-        """.format(
-        type=re_type, container_type=re_simple_container_type
-    )
+        """.format(type=re_type, container_type=re_simple_container_type)
     re_param_in_docstring = re.compile(re_param_raw, re.X | re.S)
 
     re_type_raw = r"""
@@ -288,20 +278,16 @@ class SphinxDocstring(Docstring):
         ({type})                # Parameter name
         \s*                     # whitespace
         :                       # final colon
-        """.format(
-        type=re_multiple_simple_type
-    )
+        """.format(type=re_multiple_simple_type)
     re_type_in_docstring = re.compile(re_type_raw, re.X | re.S)
 
     re_property_type_raw = r"""
         :type:                  # Sphinx keyword
         \s+                     # whitespace
         {type}                  # type declaration
-        """.format(
-        type=re_multiple_simple_type
-    )
-    re_property_type_in_docstring = re.compile(
-        re_property_type_raw, re.X | re.S)
+        """.format(type=re_multiple_simple_type)
+    re_property_type_in_docstring = re.compile(re_property_type_raw,
+                                               re.X | re.S)
 
     re_raise_raw = r"""
         :                       # initial colon
@@ -313,9 +299,7 @@ class SphinxDocstring(Docstring):
         ({type})                # exception type
         \s*                     # whitespace
         :                       # final colon
-        """.format(
-        type=re_multiple_simple_type
-    )
+        """.format(type=re_multiple_simple_type)
     re_raise_in_docstring = re.compile(re_raise_raw, re.X | re.S)
 
     re_rtype_in_docstring = re.compile(r":rtype:")
@@ -330,8 +314,7 @@ class SphinxDocstring(Docstring):
             or self.re_raise_in_docstring.search(self.doc)
             or self.re_rtype_in_docstring.search(self.doc)
             or self.re_returns_in_docstring.search(self.doc)
-            or self.re_property_type_in_docstring.search(self.doc)
-        )
+            or self.re_property_type_in_docstring.search(self.doc))
 
     def exceptions(self):
         types = set()
@@ -385,8 +368,8 @@ class SphinxDocstring(Docstring):
             if param_type is not None:
                 params_with_type.add(name)
 
-        params_with_type.update(re.findall(
-            self.re_type_in_docstring, self.doc))
+        params_with_type.update(re.findall(self.re_type_in_docstring,
+                                           self.doc))
         return params_with_doc, params_with_type
 
 
@@ -402,20 +385,16 @@ class EpytextDocstring(SphinxDocstring):
     """
 
     re_param_in_docstring = re.compile(
-        SphinxDocstring.re_param_raw.replace(":", "@", 1), re.X | re.S
-    )
+        SphinxDocstring.re_param_raw.replace(":", "@", 1), re.X | re.S)
 
     re_type_in_docstring = re.compile(
-        SphinxDocstring.re_type_raw.replace(":", "@", 1), re.X | re.S
-    )
+        SphinxDocstring.re_type_raw.replace(":", "@", 1), re.X | re.S)
 
     re_property_type_in_docstring = re.compile(
-        SphinxDocstring.re_property_type_raw.replace(":", "@", 1), re.X | re.S
-    )
+        SphinxDocstring.re_property_type_raw.replace(":", "@", 1), re.X | re.S)
 
     re_raise_in_docstring = re.compile(
-        SphinxDocstring.re_raise_raw.replace(":", "@", 1), re.X | re.S
-    )
+        SphinxDocstring.re_raise_raw.replace(":", "@", 1), re.X | re.S)
 
     re_rtype_in_docstring = re.compile(
         r"""
@@ -451,16 +430,12 @@ class GoogleDocstring(Docstring):
     re_container_type = r"""
         (?:{type}|{xref})             # a container type
         [\(\[] [^\n]+ [\)\]]          # with the contents of the container
-    """.format(
-        type=re_type, xref=re_xref
-    )
+    """.format(type=re_type, xref=re_xref)
 
     re_multiple_type = r"""
         (?:{container_type}|{type}|{xref})
         (?:(?:\s+(?:of|or)\s+|\s*,\s*)(?:{container_type}|{type}|{xref}))*
-    """.format(
-        type=re_type, xref=re_xref, container_type=re_container_type
-    )
+    """.format(type=re_type, xref=re_xref, container_type=re_container_type)
 
     _re_section_template = r"""
         ^([ ]*)   {0} \s*:   \s*$     # Google parameter header
@@ -485,37 +460,29 @@ class GoogleDocstring(Docstring):
             (?:,\s+optional)?
             [)] )? \s* :                # optional type declaration
         \s*  (.*)                       # beginning of optional description
-    """.format(
-            type=re_multiple_type
-        ),
+    """.format(type=re_multiple_type),
         re.X | re.S | re.M,
     )
 
-    re_raise_section = re.compile(
-        _re_section_template.format(r"Raises"), re.X | re.S | re.M
-    )
+    re_raise_section = re.compile(_re_section_template.format(r"Raises"),
+                                  re.X | re.S | re.M)
 
     re_raise_line = re.compile(
         r"""
         \s*  ({type}) \s* :              # identifier
         \s*  (.*)                        # beginning of optional description
-    """.format(
-            type=re_multiple_type
-        ),
+    """.format(type=re_multiple_type),
         re.X | re.S | re.M,
     )
 
-    re_returns_section = re.compile(
-        _re_section_template.format(r"Returns?"), re.X | re.S | re.M
-    )
+    re_returns_section = re.compile(_re_section_template.format(r"Returns?"),
+                                    re.X | re.S | re.M)
 
     re_returns_line = re.compile(
         r"""
         \s* ({type}:)?                    # identifier
         \s* (.*)                          # beginning of description
-    """.format(
-            type=re_multiple_type
-        ),
+    """.format(type=re_multiple_type),
         re.X | re.S | re.M,
     )
 
@@ -523,15 +490,12 @@ class GoogleDocstring(Docstring):
         r"""
         ^{type}:                       # indentifier
         \s* (.*)                       # Summary line / description
-    """.format(
-            type=re_multiple_type
-        ),
+    """.format(type=re_multiple_type),
         re.X | re.S | re.M,
     )
 
-    re_yields_section = re.compile(
-        _re_section_template.format(r"Yields?"), re.X | re.S | re.M
-    )
+    re_yields_section = re.compile(_re_section_template.format(r"Yields?"),
+                                   re.X | re.S | re.M)
 
     re_yields_line = re_returns_line
 
@@ -543,8 +507,7 @@ class GoogleDocstring(Docstring):
             or self.re_raise_section.search(self.doc)
             or self.re_returns_section.search(self.doc)
             or self.re_yields_section.search(self.doc)
-            or self.re_property_returns_line.search(self._first_line())
-        )
+            or self.re_property_returns_line.search(self._first_line()))
 
     def has_params(self):
         if not self.doc:
@@ -592,8 +555,7 @@ class GoogleDocstring(Docstring):
             self.re_param_section.search(first_line)
             or self.re_raise_section.search(first_line)
             or self.re_returns_section.search(first_line)
-            or self.re_yields_section.search(first_line)
-        )
+            or self.re_yields_section.search(first_line))
 
     def has_property_type(self):
         if not self.doc:
@@ -743,44 +705,35 @@ class NumpyDocstring(GoogleDocstring):
         \s*  (?:({type})(?:,\s+optional)?)? # optional type declaration
         \n                              # description starts on a new line
         \s* (.*)                        # description
-    """.format(
-            type=GoogleDocstring.re_multiple_type
-        ),
+    """.format(type=GoogleDocstring.re_multiple_type),
         re.X | re.S,
     )
 
-    re_raise_section = re.compile(
-        _re_section_template.format(r"Raises"), re.X | re.S | re.M
-    )
+    re_raise_section = re.compile(_re_section_template.format(r"Raises"),
+                                  re.X | re.S | re.M)
 
     re_raise_line = re.compile(
         r"""
         \s* ({type})$   # type declaration
         \s* (.*)        # optional description
-    """.format(
-            type=GoogleDocstring.re_type
-        ),
+    """.format(type=GoogleDocstring.re_type),
         re.X | re.S | re.M,
     )
 
-    re_returns_section = re.compile(
-        _re_section_template.format(r"Returns?"), re.X | re.S | re.M
-    )
+    re_returns_section = re.compile(_re_section_template.format(r"Returns?"),
+                                    re.X | re.S | re.M)
 
     re_returns_line = re.compile(
         r"""
         \s* (?:\w+\s+:\s+)? # optional name
         ({type})$                         # type declaration
         \s* (.*)                          # optional description
-    """.format(
-            type=GoogleDocstring.re_multiple_type
-        ),
+    """.format(type=GoogleDocstring.re_multiple_type),
         re.X | re.S | re.M,
     )
 
-    re_yields_section = re.compile(
-        _re_section_template.format(r"Yields?"), re.X | re.S | re.M
-    )
+    re_yields_section = re.compile(_re_section_template.format(r"Yields?"),
+                                   re.X | re.S | re.M)
 
     re_yields_line = re_returns_line
 

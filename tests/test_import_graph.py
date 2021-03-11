@@ -27,12 +27,12 @@ def dest():
 
 
 def test_dependencies_graph(dest):
-    imports._dependencies_graph(
-        dest, {"labas": ["hoho", "yep"], "hoho": ["yep"]})
+    imports._dependencies_graph(dest, {
+        "labas": ["hoho", "yep"],
+        "hoho": ["yep"]
+    })
     with open(dest) as stream:
-        assert (
-            stream.read().strip()
-            == """
+        assert (stream.read().strip() == """
 digraph "dependencies_graph" {
 rankdir=LR
 charset="utf-8"
@@ -44,8 +44,7 @@ URL="." node[shape="box"]
 "hoho" -> "labas" [];
 "yep" -> "labas" [];
 }
-""".strip()
-        )
+""".strip())
 
 
 @pytest.fixture
@@ -76,7 +75,7 @@ def test_checker_dep_graphs(linter):
     l.global_set_option("int-import-graph", "int_import.dot")
     l.global_set_option("int-import-graph", "int_import.dot")
     # ignore this file causing spurious MemoryError w/ some python version (>=2.3?)
-    l.global_set_option("ignore", ("func_unknown_encoding.py",))
+    l.global_set_option("ignore", ("func_unknown_encoding.py", ))
     l.check("input")
     l.generate_reports()
     assert exists("import.dot")

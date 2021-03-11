@@ -13,8 +13,11 @@ def pprint():
     print("%s" % (PARG_1, PARG_2))  # E1305
     print("%(PARG_1)d %d" % {'PARG_1': 1, 'PARG_2': 2})  # E1302
     print("%(PARG_1)d %(PARG_2)d" % {'PARG_1': 1})  # E1304
-    print("%(PARG_1)d %(PARG_2)d" %
-          {'PARG_1': 1, 'PARG_2': 2, 'PARG_3': 3})  # W1301
+    print("%(PARG_1)d %(PARG_2)d" % {
+        'PARG_1': 1,
+        'PARG_2': 2,
+        'PARG_3': 3
+    })  # W1301
     print("%(PARG_1)d %(PARG_2)d" % {'PARG_1': 1, 2: 3})  # W1300 E1304
     print("%(PARG_1)d %(PARG_2)d" % (2, 3))  # 1303
     print("%(PARG_1)d %(PARG_2)d" % [2, 3])  # 1303

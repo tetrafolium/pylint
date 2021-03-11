@@ -13,10 +13,12 @@ class Obj(object):
     # C0202, classmethod
     def class1(cls):
         pass
+
     class1 = classmethod(class1)
 
     def class2(other):
         pass
+
     class2 = classmethod(class2)
 
 
@@ -35,8 +37,10 @@ class Meta(type):
     # C0205, metaclass classmethod
     def class1(cls):
         pass
+
     class1 = classmethod(class1)
 
     def class2(other):
         pass
+
     class2 = classmethod(class2)

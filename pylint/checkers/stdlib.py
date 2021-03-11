@@ -18,7 +18,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Checkers for various standard library functions."""
 
 import sys
@@ -72,7 +71,7 @@ def _check_mode_str(mode):
 
 
 class StdlibChecker(BaseChecker):
-    __implements__ = (IAstroidChecker,)
+    __implements__ = (IAstroidChecker, )
     name = "stdlib"
 
     msgs = {
@@ -90,7 +89,9 @@ class StdlibChecker(BaseChecker):
             "subtle bugs when the time they represent matches "
             "midnight UTC. This behaviour was fixed in Python 3.5. "
             "See http://bugs.python.org/issue13936 for reference.",
-            {"maxversion": (3, 5)},
+            {
+                "maxversion": (3, 5)
+            },
         ),
         "W1503": (
             "Redundant use of %s with constant value %r",
@@ -238,7 +239,8 @@ class StdlibChecker(BaseChecker):
                 "platform.linux_distribution",
                 "platform.dist",
             },
-            (3, 6, 0): {"importlib._bootstrap_external.FileLoader.load_module"},
+            (3, 6, 0):
+            {"importlib._bootstrap_external.FileLoader.load_module"},
         },
     }
 
@@ -343,23 +345,22 @@ class StdlibChecker(BaseChecker):
 
         qname = inferred.qname()
         if any(name in self.deprecated[0] for name in (qname, func_name)):
-            self.add_message("deprecated-method", node=node, args=(func_name,))
+            self.add_message("deprecated-method",
+                             node=node,
+                             args=(func_name, ))
         else:
             for since_vers, func_list in self.deprecated[py_vers].items():
                 if since_vers <= sys.version_info and any(
-                    name in func_list for name in (qname, func_name)
-                ):
+                        name in func_list for name in (qname, func_name)):
                     self.add_message("deprecated-method",
-                                     node=node, args=(func_name,))
+                                     node=node,
+                                     args=(func_name, ))
                     break
 
     def _check_redundant_assert(self, node, infer):
-        if (
-            isinstance(infer, astroid.BoundMethod)
-            and node.args
-            and isinstance(node.args[0], astroid.Const)
-            and infer.name in ["assertTrue", "assertFalse"]
-        ):
+        if (isinstance(infer, astroid.BoundMethod) and node.args
+                and isinstance(node.args[0], astroid.Const)
+                and infer.name in ["assertTrue", "assertFalse"]):
             self.add_message(
                 "redundant-unittest-assert",
                 args=(infer.name, node.args[0].value),
@@ -374,22 +375,25 @@ class StdlibChecker(BaseChecker):
             inferred = next(node.infer())
         except astroid.InferenceError:
             return
-        if isinstance(inferred, Instance) and inferred.qname() == "datetime.time":
+        if isinstance(inferred,
+                      Instance) and inferred.qname() == "datetime.time":
             self.add_message("boolean-datetime", node=node)
 
     def _check_open_mode(self, node):
         """Check that the mode argument of an open or file call is valid."""
         try:
-            mode_arg = utils.get_argument_from_call(
-                node, position=1, keyword="mode")
+            mode_arg = utils.get_argument_from_call(node,
+                                                    position=1,
+                                                    keyword="mode")
         except utils.NoSuchArgumentError:
             return
         if mode_arg:
             mode_arg = utils.safe_infer(mode_arg)
-            if isinstance(mode_arg, astroid.Const) and not _check_mode_str(
-                mode_arg.value
-            ):
-                self.add_message("bad-open-mode", node=node,
+            if isinstance(
+                    mode_arg,
+                    astroid.Const) and not _check_mode_str(mode_arg.value):
+                self.add_message("bad-open-mode",
+                                 node=node,
                                  args=mode_arg.value)
 
     def _check_env_function(self, node, infer):
@@ -431,7 +435,8 @@ class StdlibChecker(BaseChecker):
                 allow_none=True,
             )
 
-    def _check_invalid_envvar_value(self, node, infer, message, call_arg, allow_none):
+    def _check_invalid_envvar_value(self, node, infer, message, call_arg,
+                                    allow_none):
         if call_arg in (astroid.Uninferable, None):
             return
 
@@ -443,10 +448,12 @@ class StdlibChecker(BaseChecker):
             elif not isinstance(call_arg.value, str):
                 emit = True
             if emit:
-                self.add_message(message, node=node,
+                self.add_message(message,
+                                 node=node,
                                  args=(name, call_arg.pytype()))
         else:
-            self.add_message(message, node=node,
+            self.add_message(message,
+                             node=node,
                              args=(name, call_arg.pytype()))
 
 

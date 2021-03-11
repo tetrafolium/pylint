@@ -23,7 +23,6 @@ class Provider(object):
 
 class Client(object):
     """use provider class"""
-
     def __init__(self):
         self._prov = Provider()
         self._prov_attr = Provider.cattr
@@ -77,14 +76,12 @@ class Mixin(object):
 
 class Getattr(object):
     """no-member shouldn't be emitted for classes with dunder getattr."""
-
     def __getattr__(self, attr):
         return self.__dict__[attr]
 
 
 class Getattribute(object):
     """no-member shouldn't be emitted for classes with dunder getattribute."""
-
     def __getattribute__(self, attr):
         return 42
 
@@ -136,7 +133,6 @@ except AttributeError:
 
 class SuperChecks(str, str):  # pylint: disable=duplicate-bases
     """Don't fail when the MRO is invalid."""
-
     def test(self):
         super(SuperChecks, self).lalala()
 
@@ -177,7 +173,6 @@ def no_conjugate_member(magic_flag):
 
 class NoDunderNameInInstance(object):
     """Emit a warning when accessing __name__ from an instance."""
-
     def __init__(self):
         self.var = self.__name__  # [no-member]
 
@@ -191,7 +186,6 @@ class InvalidAccessBySlots(object):
 
 
 class MetaWithDynamicGetattr(type):
-
     def __getattr__(cls, attr):
         return attr
 
@@ -212,8 +206,7 @@ class ClassWithMangledAttribute(object):
         print(self.name + "xD")
 
 
-ClassWithMangledAttribute()._ClassWithMangledAttribute__bar(
-)  # pylint: disable=protected-access
+ClassWithMangledAttribute()._ClassWithMangledAttribute__bar()  # pylint: disable=protected-access
 
 
 class Cls(enum.IntEnum):

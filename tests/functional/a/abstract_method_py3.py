@@ -22,7 +22,6 @@ class AbstractB(Abstract):
     this class is checking that it does not output an error msg for
     unimplemeted methods in abstract classes
     """
-
     def cccc(self):
         """should be overridden in concrete class"""
         raise NotImplementedError()
@@ -30,7 +29,6 @@ class AbstractB(Abstract):
 
 class Concrete(Abstract):  # [abstract-method]
     """Concrete class"""
-
     def aaaa(self):
         """overidden form Abstract"""
 
@@ -82,6 +80,7 @@ class AbstractSizable(Structure):
     @abc.abstractmethod
     def length(self):
         pass
+
     __len__ = length
 
 

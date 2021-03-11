@@ -1,7 +1,7 @@
 # pylint: disable=missing-docstring, useless-object-inheritance
 
-class Aaaa(object):  # [too-many-public-methods]
 
+class Aaaa(object):  # [too-many-public-methods]
     def __init__(self):
         pass
 
@@ -74,7 +74,6 @@ class Aaaa(object):  # [too-many-public-methods]
 
 class BBB(Aaaa):
     """Don't emit for methods defined in the parent."""
-
     def meth1(self):
         """trop"""
 

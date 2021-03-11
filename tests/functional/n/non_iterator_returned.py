@@ -7,7 +7,6 @@ import six
 
 class FirstGoodIterator(object):
     """ yields in iterator. """
-
     def __iter__(self):
         for index in range(10):
             yield index
@@ -15,7 +14,6 @@ class FirstGoodIterator(object):
 
 class SecondGoodIterator(object):
     """ __iter__ and next """
-
     def __iter__(self):
         return self
 
@@ -30,14 +28,12 @@ class SecondGoodIterator(object):
 
 class ThirdGoodIterator(object):
     """ Returns other iterator, not the current instance """
-
     def __iter__(self):
         return SecondGoodIterator()
 
 
 class FourthGoodIterator(object):
     """ __iter__ returns iter(...) """
-
     def __iter__(self):
         return iter(range(10))
 
@@ -57,7 +53,6 @@ class IteratorClass(object):
 
 class FifthGoodIterator(object):
     """__iter__ returns a class which uses an iterator-metaclass."""
-
     def __iter__(self):
         return IteratorClass
 
@@ -78,27 +73,23 @@ class FileBasedIterator(object):
 
 class FirstBadIterator(object):
     """ __iter__ returns a list """
-
     def __iter__(self):  # [non-iterator-returned]
         return []
 
 
 class SecondBadIterator(object):
     """ __iter__ without next """
-
     def __iter__(self):  # [non-iterator-returned]
         return self
 
 
 class ThirdBadIterator(object):
     """ __iter__ returns an instance of another non-iterator """
-
     def __iter__(self):  # [non-iterator-returned]
         return SecondBadIterator()
 
 
 class FourthBadIterator(object):
     """__iter__ returns a class."""
-
     def __iter__(self):  # [non-iterator-returned]
         return ThirdBadIterator

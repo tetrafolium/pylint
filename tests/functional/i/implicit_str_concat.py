@@ -15,8 +15,7 @@ print('a', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' 'ccc')
 
 # The following shouldn't raise a warning because string literals are
 # on different lines
-TEST_LIST5 = ('a', 'b'
-              'c')
+TEST_LIST5 = ('a', 'b' 'c')
 
 # The following shouldn't raise a warning because of the escaped newline
 TEST_LIST6 = ('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \
@@ -24,7 +23,8 @@ TEST_LIST6 = ('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \
 
 # But we should emit when there is an actual juxtaposition
 # +1: [implicit-str-concat]
-TEST_LIST7 = ('a' 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \
+TEST_LIST7 = ('a'
+              'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \
               ccc')
 
 # No warning for bytes

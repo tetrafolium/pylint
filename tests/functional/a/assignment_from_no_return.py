@@ -7,15 +7,14 @@ def some_func():
 
 def decorate(func):
     """Decorate *fn* to return ``self`` to enable chained method calls."""
-
     def wrapper(self, *args, **kw):
         func(self, *args, **kw)
         return 42
+
     return wrapper
 
 
 class Class:
-
     def some_method(self):
         pass
 
@@ -34,7 +33,6 @@ VALUE = some_func()  # [assignment-from-no-return]
 
 class Parent:
     """Parent class"""
-
     def compute(self):
         """This isn't supported by all child classes"""
 
@@ -50,7 +48,6 @@ class Parent:
 
 class Child(Parent):
     """Child class"""
-
     def compute(self):
         """This is supported for this child class"""
 

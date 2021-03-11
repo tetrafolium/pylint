@@ -9,9 +9,7 @@ from pylint.exceptions import InvalidMessageError, UnknownMessageError
 
 
 class MessageIdStore:
-
     """The MessageIdStore store MessageId and make sure that there is a 1-1 relation between msgid and symbol."""
-
     def __init__(self):
         self.__msgid_to_symbol = {}
         self.__symbol_to_msgid = {}
@@ -35,15 +33,14 @@ class MessageIdStore:
         return self.__symbol_to_msgid[symbol]
 
     def register_message_definition(self, message_definition):
-        self.check_msgid_and_symbol(
-            message_definition.msgid, message_definition.symbol)
-        self.add_msgid_and_symbol(
-            message_definition.msgid, message_definition.symbol)
+        self.check_msgid_and_symbol(message_definition.msgid,
+                                    message_definition.symbol)
+        self.add_msgid_and_symbol(message_definition.msgid,
+                                  message_definition.symbol)
         for old_msgid, old_symbol in message_definition.old_names:
             self.check_msgid_and_symbol(old_msgid, old_symbol)
-            self.add_legacy_msgid_and_symbol(
-                old_msgid, old_symbol, message_definition.msgid
-            )
+            self.add_legacy_msgid_and_symbol(old_msgid, old_symbol,
+                                             message_definition.msgid)
 
     def add_msgid_and_symbol(self, msgid: str, symbol: str) -> None:
         """Add valid message id.
@@ -53,7 +50,8 @@ class MessageIdStore:
         self.__msgid_to_symbol[msgid] = symbol
         self.__symbol_to_msgid[symbol] = msgid
 
-    def add_legacy_msgid_and_symbol(self, msgid: str, symbol: str, new_msgid: str):
+    def add_legacy_msgid_and_symbol(self, msgid: str, symbol: str,
+                                    new_msgid: str):
         """Add valid legacy message id.
 
         There is a little duplication with add_msgid_and_symbol to avoid a function call,
@@ -88,8 +86,7 @@ class MessageIdStore:
         error_message = "Message id '{msgid}' cannot have both ".format(
             msgid=msgid)
         error_message += "'{other_symbol}' and '{symbol}' as symbolic name.".format(
-            other_symbol=symbols[0], symbol=symbols[1]
-        )
+            other_symbol=symbols[0], symbol=symbols[1])
         raise InvalidMessageError(error_message)
 
     @staticmethod
@@ -121,8 +118,7 @@ class MessageIdStore:
             symbol = msgid_or_symbol
         if not msgid or not symbol:
             error_msg = "No such message id or symbol '{msgid_or_symbol}'.".format(
-                msgid_or_symbol=msgid_or_symbol
-            )
+                msgid_or_symbol=msgid_or_symbol)
             raise UnknownMessageError(error_msg)
         # logging.debug(
         #    "Return for {} and msgid {} is {}".format(

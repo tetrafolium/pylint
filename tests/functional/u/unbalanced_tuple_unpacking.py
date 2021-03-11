@@ -84,6 +84,7 @@ def do_stuff9():
 
 class UnbalancedUnpacking(object):
     """ Test unbalanced tuple unpacking in instance attributes. """
+
     # pylint: disable=attribute-defined-outside-init, invalid-name, too-few-public-methods
 
     def test(self):
