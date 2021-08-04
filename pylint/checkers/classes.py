@@ -297,7 +297,7 @@ def _different_parameters(original, overridden, dummy_parameter_regex):
 
     # Allow positional/keyword variadic in overridden to match against any
     # positional/keyword argument in original.
-    # Keep any arguments that are found seperately in overridden to satisfy
+    # Keep any arguments that are found separately in overridden to satisfy
     # later tests
     if overridden.args.vararg:
         overidden_names = [v.name for v in overridden_parameters]

@@ -319,27 +319,27 @@ class TestSpellingChecker(CheckerTestCase):
     @set_config(spelling_dict=spell_dict)
     def test_more_than_one_error_in_same_line_for_same_word_on_docstring(self):
         stmt = astroid.extract_node(
-            'class ComentAbc(object):\n   """Check teh dummy comment teh"""\n   pass'
+            'class ComentAbc(object):\n   """Check the dummy comment the"""\n   pass'
         )
         with self.assertAddsMessages(
                 Message(
                     "wrong-spelling-in-docstring",
                     line=2,
                     args=(
-                        "teh",
-                        "Check teh dummy comment teh",
+                        "the",
+                        "Check the dummy comment the",
                         "      ^^^",
-                        self._get_msg_suggestions("teh"),
+                        self._get_msg_suggestions("the"),
                     ),
                 ),
                 Message(
                     "wrong-spelling-in-docstring",
                     line=2,
                     args=(
-                        "teh",
-                        "Check teh dummy comment teh",
+                        "the",
+                        "Check the dummy comment the",
                         "                        ^^^",
-                        self._get_msg_suggestions("teh"),
+                        self._get_msg_suggestions("the"),
                     ),
                 ),
         ):
