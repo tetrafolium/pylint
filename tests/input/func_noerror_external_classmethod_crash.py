@@ -6,12 +6,12 @@ signature overriding
 
 def fetch_config(mainattr=None):
     """return a class method"""
-
     def fetch_order(cls, attr, var):
         """a class method"""
         if attr == mainattr:
             return var
         return None
+
     fetch_order = classmethod(fetch_order)
     return fetch_order
 

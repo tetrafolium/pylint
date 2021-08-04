@@ -9,8 +9,7 @@ from pylint.checkers.refactoring import LenChecker
 
 
 def test_class_tree_detection():
-    module = astroid.parse(
-        """
+    module = astroid.parse("""
 class ClassWithBool(list):
     def __bool__(self):
         return True
@@ -23,8 +22,7 @@ class ChildClassWithBool(ClassWithBool):
 
 class ChildClassWithoutBool(ClassWithoutBool):
     pass
-"""
-    )
+""")
     with_bool, without_bool, child_with_bool, child_without_bool = module.body
     assert LenChecker().base_classes_of_node(with_bool) == [
         "ClassWithBool",

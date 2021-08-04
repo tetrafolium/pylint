@@ -38,10 +38,7 @@ def test_ignore_comments():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-comments", SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 10 similar lines in 2 files
 ==%s:0
 ==%s:0
@@ -56,10 +53,7 @@ def test_ignore_comments():
    nine
    ''' ten
 TOTAL lines=60 duplicates=10 percent=16.67
-"""
-            % (SIMILAR1, SIMILAR2)
-        ).strip()
-    )
+""" % (SIMILAR1, SIMILAR2)).strip())
 
 
 def test_ignore_docsrings():
@@ -67,10 +61,7 @@ def test_ignore_docsrings():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-docstrings", SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 8 similar lines in 2 files
 ==%s:6
 ==%s:6
@@ -92,10 +83,7 @@ def test_ignore_docsrings():
    four
    five
 TOTAL lines=60 duplicates=13 percent=21.67
-"""
-            % ((SIMILAR1, SIMILAR2) * 2)
-        ).strip()
-    )
+""" % ((SIMILAR1, SIMILAR2) * 2)).strip())
 
 
 def test_ignore_imports():
@@ -103,12 +91,9 @@ def test_ignore_imports():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-imports", SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == """
+    assert (output.getvalue().strip() == """
 TOTAL lines=60 duplicates=0 percent=0.00
-""".strip()
-    )
+""".strip())
 
 
 def test_multiline_imports():
@@ -116,10 +101,7 @@ def test_multiline_imports():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run([MULTILINE, MULTILINE])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 8 similar lines in 2 files
 ==%s:0
 ==%s:0
@@ -132,10 +114,7 @@ def test_multiline_imports():
      quuuuux,
    )
 TOTAL lines=16 duplicates=8 percent=50.00
-"""
-            % (MULTILINE, MULTILINE)
-        ).strip()
-    )
+""" % (MULTILINE, MULTILINE)).strip())
 
 
 def test_ignore_multiline_imports():
@@ -143,12 +122,9 @@ def test_ignore_multiline_imports():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run(["--ignore-imports", MULTILINE, MULTILINE])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == """
+    assert (output.getvalue().strip() == """
 TOTAL lines=16 duplicates=0 percent=0.00
-""".strip()
-    )
+""".strip())
 
 
 def test_no_hide_code_with_imports():
@@ -164,10 +140,7 @@ def test_ignore_nothing():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run([SIMILAR1, SIMILAR2])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 5 similar lines in 2 files
 ==%s:0
 ==%s:0
@@ -177,10 +150,7 @@ def test_ignore_nothing():
    four
    five
 TOTAL lines=60 duplicates=5 percent=8.33
-"""
-            % (SIMILAR1, SIMILAR2)
-        ).strip()
-    )
+""" % (SIMILAR1, SIMILAR2)).strip())
 
 
 def test_lines_without_meaningful_content_do_not_trigger_similarity():
@@ -188,10 +158,7 @@ def test_lines_without_meaningful_content_do_not_trigger_similarity():
     with redirect_stdout(output), pytest.raises(SystemExit) as ex:
         similar.Run([SIMILAR3, SIMILAR4])
     assert ex.value.code == 0
-    assert (
-        output.getvalue().strip()
-        == (
-            """
+    assert (output.getvalue().strip() == ("""
 14 similar lines in 2 files
 ==%s:11
 ==%s:11
@@ -210,10 +177,7 @@ def test_lines_without_meaningful_content_do_not_trigger_similarity():
        )
    )
 TOTAL lines=50 duplicates=14 percent=28.00
-"""
-            % (SIMILAR3, SIMILAR4)
-        ).strip()
-    )
+""" % (SIMILAR3, SIMILAR4)).strip())
 
 
 def test_help():
@@ -367,8 +331,7 @@ def test_get_map_data():
 
     assert len(expected_linelists) == len(data)
     for source_fname, expected_lines, lineset_obj in zip(
-        source_streams, expected_linelists, data
-    ):
+            source_streams, expected_linelists, data):
         assert source_fname == lineset_obj.name
         # There doesn't seem to be a faster way of doing this, yet.
         lines = (line for idx, line in lineset_obj.enumerate_stripped())

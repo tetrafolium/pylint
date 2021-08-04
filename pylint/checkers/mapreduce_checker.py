@@ -7,7 +7,6 @@ import abc
 
 class MapReduceMixin(metaclass=abc.ABCMeta):
     """ A mixin design to allow multiprocess/threaded runs of a Checker """
-
     @abc.abstractmethod
     def get_map_data(self):
         """ Returns mergable/reducible data that will be examined """

@@ -5,7 +5,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Text formatting drivers for ureports"""
 
 from pylint.reporters.ureports import BaseWriter
@@ -18,7 +17,6 @@ class TextWriter(BaseWriter):
     """format layouts as text
     (ReStructured inspiration but not totally handled yet)
     """
-
     def begin_format(self):
         super().begin_format()
         self.list_level = 0

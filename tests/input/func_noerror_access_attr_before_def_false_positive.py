@@ -15,7 +15,6 @@ class SeeTelnet(telnetlib.Telnet):
     """
     Extension of telnetlib.
     """
-
     def __init__(self, host=None, port=0):
         """
         Constructor.
@@ -89,7 +88,6 @@ class DefinedOutsideInit(object):
     """use_attr is seen as the method defining attr because its in
     first position
     """
-
     def __init__(self):
         self.reset()
 

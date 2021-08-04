@@ -143,7 +143,10 @@ class TestRunTC:
     @staticmethod
     def _clean_paths(output):
         """Normalize path to the tests directory."""
-        return re.sub(CLEAN_PATH, "", output.replace("\\", "/"), flags=re.MULTILINE)
+        return re.sub(CLEAN_PATH,
+                      "",
+                      output.replace("\\", "/"),
+                      flags=re.MULTILINE)
 
     def _test_output(self, args, expected_output):
         out = StringIO()
@@ -155,7 +158,8 @@ class TestRunTC:
     def test_pkginfo(self):
         """Make pylint check itself."""
         self._runtest(["pylint.__pkginfo__"],
-                      reporter=TextReporter(StringIO()), code=0)
+                      reporter=TextReporter(StringIO()),
+                      code=0)
 
     def test_all(self):
         """Make pylint check itself."""
@@ -179,8 +183,9 @@ class TestRunTC:
 
     def test_exit_zero(self):
         self._runtest(
-            ["--exit-zero", join(HERE, "regrtest_data", "syntax_error.py")], code=0
-        )
+            ["--exit-zero",
+             join(HERE, "regrtest_data", "syntax_error.py")],
+            code=0)
 
     def test_generate_config_option(self):
         self._runtest(["--generate-rcfile"], code=0)
@@ -239,7 +244,10 @@ class TestRunTC:
         strio = StringIO()
         assert strio.encoding is None
         self._runtest(
-            [join(HERE, "regrtest_data", "no_stdout_encoding.py"), "--enable=all"],
+            [
+                join(HERE, "regrtest_data", "no_stdout_encoding.py"),
+                "--enable=all"
+            ],
             out=strio,
             code=28,
         )
@@ -255,10 +263,8 @@ class TestRunTC:
             # We expect similarities to fail and an error
             code=MSG_TYPES_STATUS["E"],
         )
-        assert (
-            "Unexpected keyword argument 'fourth' in function call"
-            in out.getvalue().strip()
-        )
+        assert ("Unexpected keyword argument 'fourth' in function call" in
+                out.getvalue().strip())
 
     def test_parallel_execution_missing_arguments(self):
         self._runtest(["-j 2", "not_here", "not_here_too"], code=1)
@@ -274,8 +280,10 @@ class TestRunTC:
     def test_py3k_jobs_option(self):
         rc_code = 0
         self._runtest(
-            [join(HERE, "functional", "u", "unnecessary_lambda.py"),
-             "--py3k", "-j 2"],
+            [
+                join(HERE, "functional", "u", "unnecessary_lambda.py"),
+                "--py3k", "-j 2"
+            ],
             code=rc_code,
         )
 
@@ -285,31 +293,22 @@ class TestRunTC:
 
     def test_enable_all_works(self):
         module = join(HERE, "data", "clientmodule_test.py")
-        expected = textwrap.dedent(
-            """
+        expected = textwrap.dedent("""
         ************* Module data.clientmodule_test
         {0}:10:8: W0612: Unused variable 'local_variable' (unused-variable)
         {0}:18:4: C0116: Missing function or method docstring (missing-function-docstring)
         {0}:22:0: C0115: Missing class docstring (missing-class-docstring)
-        """.format(
-                module
-            )
-        )
-        self._test_output(
-            [module, "--disable=all", "--enable=all", "-rn"], expected_output=expected
-        )
+        """.format(module))
+        self._test_output([module, "--disable=all", "--enable=all", "-rn"],
+                          expected_output=expected)
 
     def test_wrong_import_position_when_others_disabled(self):
         module1 = join(HERE, "regrtest_data", "import_something.py")
         module2 = join(HERE, "regrtest_data", "wrong_import_position.py")
-        expected_output = textwrap.dedent(
-            """
+        expected_output = textwrap.dedent("""
         ************* Module wrong_import_position
         {}:11:0: C0413: Import "import os" should be placed at the top of the module (wrong-import-position)
-        """.format(
-                module2
-            )
-        )
+        """.format(module2))
         args = [
             module2,
             module1,
@@ -335,9 +334,8 @@ class TestRunTC:
     def test_import_itself_not_accounted_for_relative_imports(self):
         expected = "Your code has been rated at 10.00/10"
         package = join(HERE, "regrtest_data", "dummy")
-        self._test_output(
-            [package, "--disable=locally-disabled", "-rn"], expected_output=expected
-        )
+        self._test_output([package, "--disable=locally-disabled", "-rn"],
+                          expected_output=expected)
 
     def test_reject_empty_indent_strings(self):
         expected = "indent string can't be empty"
@@ -426,14 +424,10 @@ class TestRunTC:
 
     def test_error_mode_shows_no_score(self):
         module = join(HERE, "regrtest_data", "application_crash.py")
-        expected_output = textwrap.dedent(
-            """
+        expected_output = textwrap.dedent("""
         ************* Module application_crash
         {}:1:6: E0602: Undefined variable 'something_undefined' (undefined-variable)
-        """.format(
-                module
-            )
-        )
+        """.format(module))
         self._test_output([module, "-E"], expected_output=expected_output)
 
     def test_evaluation_score_shown_by_default(self):
@@ -444,17 +438,15 @@ class TestRunTC:
     def test_confidence_levels(self):
         expected = "Your code has been rated at"
         path = join(HERE, "regrtest_data", "meta.py")
-        self._test_output(
-            [path, "--confidence=HIGH,INFERENCE"], expected_output=expected
-        )
+        self._test_output([path, "--confidence=HIGH,INFERENCE"],
+                          expected_output=expected)
 
     def test_bom_marker(self):
         path = join(HERE, "regrtest_data", "meta.py")
         config_path = join(HERE, "regrtest_data", ".pylintrc")
         expected = "Your code has been rated at 10.00/10"
-        self._test_output(
-            [path, "--rcfile=%s" % config_path, "-rn"], expected_output=expected
-        )
+        self._test_output([path, "--rcfile=%s" % config_path, "-rn"],
+                          expected_output=expected)
 
     def test_pylintrc_plugin_duplicate_options(self):
         dummy_plugin_path = join(HERE, "regrtest_data", "dummy_plugin")
@@ -476,44 +468,33 @@ class TestRunTC:
         )
         expected = (
             "[DUMMY_PLUGIN]\n\n# Dummy option 1\ndummy_option_1=dummy value 1\n\n"
-            "# Dummy option 2\ndummy_option_2=dummy value 2"
-        )
-        self._test_output(
-            ["--rcfile=%s" % config_path, "--generate-rcfile"], expected_output=expected
-        )
+            "# Dummy option 2\ndummy_option_2=dummy value 2")
+        self._test_output(["--rcfile=%s" % config_path, "--generate-rcfile"],
+                          expected_output=expected)
         sys.path.remove(dummy_plugin_path)
 
     def test_pylintrc_comments_in_values(self):
         path = join(HERE, "regrtest_data", "test_pylintrc_comments.py")
         config_path = join(HERE, "regrtest_data", "comments_pylintrc")
-        expected = textwrap.dedent(
-            """
+        expected = textwrap.dedent("""
         ************* Module test_pylintrc_comments
         {0}:2:0: W0311: Bad indentation. Found 1 spaces, expected 4 (bad-indentation)
         {0}:1:0: C0114: Missing module docstring (missing-module-docstring)
         {0}:1:0: C0116: Missing function or method docstring (missing-function-docstring)
-        """.format(
-                path
-            )
-        )
-        self._test_output(
-            [path, "--rcfile=%s" % config_path, "-rn"], expected_output=expected
-        )
+        """.format(path))
+        self._test_output([path, "--rcfile=%s" % config_path, "-rn"],
+                          expected_output=expected)
 
     def test_no_crash_with_formatting_regex_defaults(self):
-        self._runtest(
-            ["--ignore-patterns=a"], reporter=TextReporter(StringIO()), code=32
-        )
+        self._runtest(["--ignore-patterns=a"],
+                      reporter=TextReporter(StringIO()),
+                      code=32)
 
     def test_getdefaultencoding_crashes_with_lc_ctype_utf8(self):
         module = join(HERE, "regrtest_data", "application_crash.py")
-        expected_output = textwrap.dedent(
-            """
+        expected_output = textwrap.dedent("""
         {}:1:6: E0602: Undefined variable 'something_undefined' (undefined-variable)
-        """.format(
-                module
-            )
-        )
+        """.format(module))
         with _configure_lc_ctype("UTF-8"):
             self._test_output([module, "-E"], expected_output=expected_output)
 
@@ -530,9 +511,8 @@ class TestRunTC:
             with open(module, "w") as test_target:
                 test_target.write("a,b = object()")
 
-            self._test_output(
-                [module, "--output-format=parseable"], expected_output=file_name
-            )
+            self._test_output([module, "--output-format=parseable"],
+                              expected_output=file_name)
         finally:
             os.remove(module)
             os.removedirs(fake_path)
@@ -547,15 +527,16 @@ class TestRunTC:
     def test_stdin(self, input_path, module, expected_path):
         expected_output = (
             "************* Module {module}\n"
-            "{path}:1:0: W0611: Unused import os (unused-import)\n\n"
-        ).format(path=expected_path, module=module)
+            "{path}:1:0: W0611: Unused import os (unused-import)\n\n").format(
+                path=expected_path, module=module)
 
-        with mock.patch(
-            "pylint.lint.pylinter._read_stdin", return_value="import os\n"
-        ) as mock_stdin:
+        with mock.patch("pylint.lint.pylinter._read_stdin",
+                        return_value="import os\n") as mock_stdin:
             self._test_output(
-                ["--from-stdin", input_path, "--disable=all",
-                    "--enable=unused-import"],
+                [
+                    "--from-stdin", input_path, "--disable=all",
+                    "--enable=unused-import"
+                ],
                 expected_output=expected_output,
             )
             assert mock_stdin.call_count == 1
@@ -567,22 +548,18 @@ class TestRunTC:
     def test_relative_imports(self, write_bpy_to_disk, tmpdir):
         a = tmpdir.join("a")
 
-        b_code = textwrap.dedent(
-            """
+        b_code = textwrap.dedent("""
             from .c import foobar
             from .d import bla  # module does not exist
 
             foobar('hello')
             bla()
-            """
-        )
+            """)
 
-        c_code = textwrap.dedent(
-            """
+        c_code = textwrap.dedent("""
             def foobar(arg):
                 pass
-            """
-        )
+            """)
 
         a.mkdir()
         a.join("__init__.py").write("")
@@ -594,8 +571,7 @@ class TestRunTC:
             # why don't we start pylint in a subprocess?
             expected = (
                 "************* Module a.b\n"
-                "a/b.py:3:0: E0401: Unable to import 'a.d' (import-error)\n\n"
-            )
+                "a/b.py:3:0: E0401: Unable to import 'a.d' (import-error)\n\n")
 
             if write_bpy_to_disk:
                 # --from-stdin is not used here
@@ -606,7 +582,8 @@ class TestRunTC:
 
             # this code needs to work w/ and w/o a file named a/b.py on the
             # harddisk.
-            with mock.patch("pylint.lint.pylinter._read_stdin", return_value=b_code):
+            with mock.patch("pylint.lint.pylinter._read_stdin",
+                            return_value=b_code):
                 self._test_output(
                     [
                         "--from-stdin",
@@ -623,11 +600,13 @@ class TestRunTC:
             "a.py:1:4: E0001: invalid syntax (<unknown>, line 1) (syntax-error)"
         )
 
-        with mock.patch(
-            "pylint.lint.pylinter._read_stdin", return_value="for\n"
-        ) as mock_stdin:
+        with mock.patch("pylint.lint.pylinter._read_stdin",
+                        return_value="for\n") as mock_stdin:
             self._test_output(
-                ["--from-stdin", "a.py", "--disable=all", "--enable=syntax-error"],
+                [
+                    "--from-stdin", "a.py", "--disable=all",
+                    "--enable=syntax-error"
+                ],
                 expected_output=expected_output,
             )
             assert mock_stdin.call_count == 1
@@ -761,7 +740,8 @@ class TestRunTC:
                 cwd=str(tmpdir),
             )
 
-    def test_allow_import_of_files_found_in_modules_during_parallel_check(self, tmpdir):
+    def test_allow_import_of_files_found_in_modules_during_parallel_check(
+        self, tmpdir):
         test_directory = tmpdir / "test_directory"
         test_directory.mkdir()
         spam_module = test_directory / "spam.py"
@@ -823,8 +803,7 @@ class TestRunTC:
     def test_regression_parallel_mode_without_filepath(self):
         # Test that parallel mode properly passes filepath
         # https://github.com/PyCQA/pylint/issues/3564
-        path = join(
-            HERE, "regrtest_data", "regression_missing_init_3564", "subdirectory/"
-        )
-        self._test_output(
-            [path, "-j2"], expected_output="No such file or directory")
+        path = join(HERE, "regrtest_data", "regression_missing_init_3564",
+                    "subdirectory/")
+        self._test_output([path, "-j2"],
+                          expected_output="No such file or directory")

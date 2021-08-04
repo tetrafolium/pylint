@@ -8,7 +8,6 @@ from pylint.testutils.checker_test_case import CheckerTestCase
 
 def set_config(**kwargs):
     """Decorator for setting config values on a checker."""
-
     def _wrapper(fun):
         @functools.wraps(fun)
         def _forward(self):

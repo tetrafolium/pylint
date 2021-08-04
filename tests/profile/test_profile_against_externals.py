@@ -21,14 +21,12 @@ def _get_py_files(scanpath):
     filepaths = []
     for dirpath, dirnames, filenames in os.walk(scanpath):
         dirnames[:] = [
-            dirname for dirname in dirnames if dirname != "__pycache__"]
-        filepaths.extend(
-            [
-                os.path.join(dirpath, filename)
-                for filename in filenames
-                if filename.endswith(".py")
-            ]
-        )
+            dirname for dirname in dirnames if dirname != "__pycache__"
+        ]
+        filepaths.extend([
+            os.path.join(dirpath, filename) for filename in filenames
+            if filename.endswith(".py")
+        ])
     return filepaths
 
 
@@ -36,25 +34,19 @@ def _get_py_files(scanpath):
     not os.environ.get("PYTEST_PROFILE_EXTERNAL", False),
     reason="PYTEST_PROFILE_EXTERNAL, not set, assuming not a profile run",
 )
-@pytest.mark.parametrize(
-    "name,git_repo", [("numpy", "https://github.com/numpy/numpy.git")]
-)
+@pytest.mark.parametrize("name,git_repo",
+                         [("numpy", "https://github.com/numpy/numpy.git")])
 def test_run(tmp_path, name, git_repo):
     """ Runs pylint against external sources """
     checkoutdir = tmp_path / name
     checkoutdir.mkdir()
-    os.system(
-        "git clone --depth=1 {git_repo} {checkoutdir}".format(
-            git_repo=git_repo, checkoutdir=str(checkoutdir)
-        )
-    )
+    os.system("git clone --depth=1 {git_repo} {checkoutdir}".format(
+        git_repo=git_repo, checkoutdir=str(checkoutdir)))
     filepaths = _get_py_files(scanpath=str(checkoutdir))
     print("Have %d files" % len(filepaths))
 
     runner = Run(filepaths, reporter=Reporter(), do_exit=False)
 
-    print(
-        "Had %d files with %d messages"
-        % (len(filepaths), len(runner.linter.reporter.messages))
-    )
+    print("Had %d files with %d messages" %
+          (len(filepaths), len(runner.linter.reporter.messages)))
     pprint.pprint(runner.linter.reporter.messages)

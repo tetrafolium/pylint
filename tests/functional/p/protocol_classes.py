@@ -4,7 +4,6 @@ import typing
 
 class Hasher(typing.Protocol):
     """A hashing algorithm, e.g. :func:`hashlib.sha256`."""
-
     def update(self, blob: bytes):
         ...
 
@@ -17,7 +16,6 @@ Generic = typing.TypeVar("Generic")
 
 class HasherGeneric(typing.Protocol[Generic]):
     """A hashing algorithm, e.g. :func:`hashlib.sha256`."""
-
     def update(self, blob: bytes):
         ...
 
@@ -31,7 +29,6 @@ class Protocol:  # pylint:disable=too-few-public-methods
 
 class HasherFake(Protocol):
     """A hashing algorithm, e.g. :func:`hashlib.sha256`."""
-
     def update(self, blob: bytes):  # [no-self-use, unused-argument]
         ...
 

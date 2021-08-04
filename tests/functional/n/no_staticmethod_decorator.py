@@ -7,12 +7,12 @@ scope and if static method's argument is a member of the class
 
 class MyClass(object):
     """Some class"""
-
     def __init__(self):
         pass
 
     def smethod():
         """static method-to-be"""
+
     smethod = staticmethod(smethod)  # [no-staticmethod-decorator]
 
     if True:
@@ -24,6 +24,7 @@ class MyClass(object):
 
     def other_method():
         """some method"""
+
     smethod2 = staticmethod(other_method)  # [no-staticmethod-decorator]
 
 

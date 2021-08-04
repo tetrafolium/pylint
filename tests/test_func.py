@@ -14,7 +14,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """functional/non regression tests for pylint"""
 
 import re
@@ -28,7 +27,6 @@ from pylint.testutils import UPDATE_FILE, UPDATE_OPTION, _get_tests_info, linter
 # Configure paths
 INPUT_DIR = join(dirname(abspath(__file__)), "input")
 MSG_DIR = join(dirname(abspath(__file__)), "messages")
-
 
 FILTER_RGX = None
 INFO_TEST_RGX = re.compile(r"^func_i\d\d\d\d$")
@@ -61,14 +59,12 @@ class LintTestUsingModule:
         self._test(tocheck)
 
     def _check_result(self, got):
-        error_msg = (
-            "Wrong output for '{_file}':\n"
-            "You can update the expected output automatically with: '"
-            "python tests/test_func.py {update_option}'\n\n".format(
-                update_option=UPDATE_OPTION,
-                _file=self.output,
-            )
-        )
+        error_msg = ("Wrong output for '{_file}':\n"
+                     "You can update the expected output automatically with: '"
+                     "python tests/test_func.py {update_option}'\n\n".format(
+                         update_option=UPDATE_OPTION,
+                         _file=self.output,
+                     ))
         assert self._get_expected() == got, error_msg
 
     def _test(self, tocheck):
@@ -115,10 +111,15 @@ def gen_tests(filter_rgx):
     if filter_rgx:
         is_to_run = re.compile(filter_rgx).search
     else:
-        def is_to_run(x): return 1
+
+        def is_to_run(x):
+            return 1
+
     tests = []
-    for module_file, messages_file in _get_tests_info(INPUT_DIR, MSG_DIR, "func_", ""):
-        if not is_to_run(module_file) or module_file.endswith((".pyc", "$py.class")):
+    for module_file, messages_file in _get_tests_info(INPUT_DIR, MSG_DIR,
+                                                      "func_", ""):
+        if not is_to_run(module_file) or module_file.endswith(
+            (".pyc", "$py.class")):
             continue
         base = module_file.replace(".py", "").split("_")[1]
         dependencies = _get_tests_info(INPUT_DIR, MSG_DIR, base, ".py")
@@ -153,7 +154,8 @@ def test_functionality(module_file, messages_file, dependencies, recwarn):
 
 
 def __test_functionality(module_file, messages_file, dependencies):
-    lint_test = LintTestUpdate() if UPDATE_FILE.exists() else LintTestUsingModule()
+    lint_test = LintTestUpdate() if UPDATE_FILE.exists(
+    ) else LintTestUsingModule()
     lint_test.module = module_file.replace(".py", "")
     lint_test.output = messages_file
     lint_test.depends = dependencies or None

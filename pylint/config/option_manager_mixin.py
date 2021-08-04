@@ -1,7 +1,6 @@
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-
 import collections
 import configparser
 import contextlib
@@ -54,7 +53,6 @@ def _patch_optparse():
 
 class OptionsManagerMixIn:
     """Handle configuration from both a configuration file and command line options"""
-
     def __init__(self, usage, config_file=None):
         self.config_file = config_file
         self.reset_parsers(usage)
@@ -71,8 +69,7 @@ class OptionsManagerMixIn:
     def reset_parsers(self, usage=""):
         # configuration file parser
         self.cfgfile_parser = configparser.ConfigParser(
-            inline_comment_prefixes=("#", ";")
-        )
+            inline_comment_prefixes=("#", ";"))
         # command line parser
         self.cmdline_parser = OptionParser(Option, usage=usage)
         self.cmdline_parser.options_manager = self
@@ -100,13 +97,12 @@ class OptionsManagerMixIn:
             )
         else:
             for opt, optdict in non_group_spec_options:
-                self.add_optik_option(
-                    provider, self.cmdline_parser, opt, optdict)
+                self.add_optik_option(provider, self.cmdline_parser, opt,
+                                      optdict)
         for gname, gdoc in groups:
             gname = gname.upper()
             goptions = [
-                option
-                for option in provider.options
+                option for option in provider.options
                 if option[1].get("group", "").upper() == gname
             ]
             self.add_option_group(gname, gdoc, goptions, provider)
@@ -116,17 +112,14 @@ class OptionsManagerMixIn:
         if group_name in self._mygroups:
             group = self._mygroups[group_name]
         else:
-            group = optparse.OptionGroup(
-                self.cmdline_parser, title=group_name.capitalize()
-            )
+            group = optparse.OptionGroup(self.cmdline_parser,
+                                         title=group_name.capitalize())
             self.cmdline_parser.add_option_group(group)
             group.level = provider.level
             self._mygroups[group_name] = group
             # add section to the config file
-            if (
-                group_name != "DEFAULT"
-                and group_name not in self.cfgfile_parser._sections
-            ):
+            if (group_name != "DEFAULT"
+                    and group_name not in self.cfgfile_parser._sections):
                 self.cfgfile_parser.add_section(group_name)
         # add provider's specific options
         for opt, optdict in options:
@@ -151,11 +144,8 @@ class OptionsManagerMixIn:
         # default is handled here and *must not* be given to optik if you
         # want the whole machinery to work
         if "default" in optdict:
-            if (
-                "help" in optdict
-                and optdict.get("default") is not None
-                and optdict["action"] not in ("store_true", "store_false")
-            ):
+            if ("help" in optdict and optdict.get("default") is not None and
+                    optdict["action"] not in ("store_true", "store_false")):
                 optdict["help"] += " [current: %default]"
             del optdict["default"]
         args = ["--" + str(opt)]
@@ -199,8 +189,7 @@ class OptionsManagerMixIn:
                 if section in skipsections:
                     continue
                 options = [
-                    (n, d, v)
-                    for (n, d, v) in options
+                    (n, d, v) for (n, d, v) in options
                     if d.get("type") is not None and not d.get("deprecated")
                 ]
                 if not options:
@@ -214,9 +203,8 @@ class OptionsManagerMixIn:
         for section in sections:
             if printed:
                 print("\n", file=stream)
-            utils.format_section(
-                stream, section.upper(), sorted(options_by_section[section])
-            )
+            utils.format_section(stream, section.upper(),
+                                 sorted(options_by_section[section]))
             printed = True
 
     def generate_manpage(self, pkginfo, section=1, stream=sys.stdout):
@@ -228,7 +216,8 @@ class OptionsManagerMixIn:
                 formatter.format_head(self.cmdline_parser, pkginfo, section),
                 file=stream,
             )
-            print(self.cmdline_parser.format_option_help(formatter), file=stream)
+            print(self.cmdline_parser.format_option_help(formatter),
+                  file=stream)
             print(formatter.format_tail(pkginfo), file=stream)
 
     def load_provider_defaults(self):
@@ -249,11 +238,14 @@ class OptionsManagerMixIn:
             helpfunc = functools.partial(self.helpfunc, level=helplevel)
 
             helpmsg = "%s verbose help." % " ".join(["more"] * helplevel)
-            optdict = {"action": "callback",
-                       "callback": helpfunc, "help": helpmsg}
+            optdict = {
+                "action": "callback",
+                "callback": helpfunc,
+                "help": helpmsg
+            }
             provider = self.options_providers[0]
             self.add_optik_option(provider, self.cmdline_parser, opt, optdict)
-            provider.options += ((opt, optdict),)
+            provider.options += ((opt, optdict), )
             helplevel += 1
         if config_file is None:
             config_file = self.config_file
@@ -352,9 +344,9 @@ class OptionsManagerMixIn:
 
     def add_help_section(self, title, description, level=0):
         """add a dummy option section for help purpose """
-        group = optparse.OptionGroup(
-            self.cmdline_parser, title=title.capitalize(), description=description
-        )
+        group = optparse.OptionGroup(self.cmdline_parser,
+                                     title=title.capitalize(),
+                                     description=description)
         group.level = level
         self._maxlevel = max(self._maxlevel, level)
         self.cmdline_parser.add_option_group(group)

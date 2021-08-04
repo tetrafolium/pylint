@@ -22,7 +22,10 @@ def _regexp_validator(_, name, value):
 
 # pylint: disable=unused-argument
 def _regexp_csv_validator(_, name, value):
-    return [_regexp_validator(_, name, val) for val in _csv_validator(_, name, value)]
+    return [
+        _regexp_validator(_, name, val)
+        for val in _csv_validator(_, name, value)
+    ]
 
 
 def _choice_validator(choices, name, value):
@@ -64,18 +67,27 @@ def _multiple_choices_validating_option(opt, name, value):
 
 
 VALIDATORS = {
-    "string": utils._unquote,
-    "int": int,
-    "float": float,
-    "regexp": re.compile,
-    "regexp_csv": _regexp_csv_validator,
-    "csv": _csv_validator,
-    "yn": _yn_validator,
-    "choice": lambda opt, name, value: _choice_validator(opt["choices"], name, value),
-    "multiple_choice": lambda opt, name, value: _multiple_choice_validator(
-        opt["choices"], name, value
-    ),
-    "non_empty_string": _non_empty_string_validator,
+    "string":
+    utils._unquote,
+    "int":
+    int,
+    "float":
+    float,
+    "regexp":
+    re.compile,
+    "regexp_csv":
+    _regexp_csv_validator,
+    "csv":
+    _csv_validator,
+    "yn":
+    _yn_validator,
+    "choice":
+    lambda opt, name, value: _choice_validator(opt["choices"], name, value),
+    "multiple_choice":
+    lambda opt, name, value: _multiple_choice_validator(
+        opt["choices"], name, value),
+    "non_empty_string":
+    _non_empty_string_validator,
 }
 
 
@@ -89,8 +101,8 @@ def _call_validator(opttype, optdict, option, value):
             return VALIDATORS[opttype](value)
         except Exception as e:
             raise optparse.OptionValueError(
-                "%s value (%r) should be of type %s" % (option, value, opttype)
-            ) from e
+                "%s value (%r) should be of type %s" %
+                (option, value, opttype)) from e
 
 
 def _validate(value, optdict, name=""):
@@ -133,18 +145,16 @@ class Option(optparse.Option):
         if self.type in ("choice", "multiple_choice"):
             if self.choices is None:
                 raise optparse.OptionError(
-                    "must supply a list of choices for type 'choice'", self
-                )
+                    "must supply a list of choices for type 'choice'", self)
             if not isinstance(self.choices, (tuple, list)):
                 raise optparse.OptionError(
-                    "choices must be a list of strings ('%s' supplied)"
-                    % str(type(self.choices)).split("'")[1],
+                    "choices must be a list of strings ('%s' supplied)" %
+                    str(type(self.choices)).split("'")[1],
                     self,
                 )
         elif self.choices is not None:
             raise optparse.OptionError(
-                "must not supply choices for type %r" % self.type, self
-            )
+                "must not supply choices for type %r" % self.type, self)
 
     # pylint: disable=unsupported-assignment-operation
     optparse.Option.CHECK_METHODS[2] = _check_choice  # type: ignore
@@ -161,4 +171,5 @@ class Option(optparse.Option):
         # And then take whatever action is expected of us.
         # This is a separate method to make life easier for
         # subclasses to add new actions.
-        return self.take_action(self.action, self.dest, opt, value, values, parser)
+        return self.take_action(self.action, self.dest, opt, value, values,
+                                parser)

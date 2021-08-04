@@ -1,6 +1,5 @@
 # pylint: disable=missing-docstring,too-few-public-methods
 class AbstractFoo:
-
     def kwonly_1(self, first, *, second, third):
         "Normal positional with two positional only params."
 
@@ -21,7 +20,6 @@ class AbstractFoo:
 
 
 class Foo(AbstractFoo):
-
     def kwonly_1(self, first, *, second):  # [arguments-differ]
         "One positional and only one positional only param."
 
@@ -42,6 +40,5 @@ class Foo(AbstractFoo):
 
 
 class Foo2(AbstractFoo):
-
     def kwonly_6(self, first, *args, **kwargs):  # valid override
         "One positional with the rest variadics to pass through parent params"

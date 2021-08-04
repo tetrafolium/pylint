@@ -1,7 +1,7 @@
 # pylint: disable=too-few-public-methods, missing-docstring, no-self-use, useless-object-inheritance
 
-class Abcd(object):
 
+class Abcd(object):
     def __init__(self):
         self.aarg = False
 
@@ -13,7 +13,6 @@ class Abcd(object):
 
 
 class Cdef(Abcd):
-
     def __init__(self, aaa):
         Abcd.__init__(self)
         self.aaa = aaa

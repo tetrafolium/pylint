@@ -40,7 +40,6 @@ other_function(param=2)
 
 
 class Parent:
-
     @typing.overload
     def __init__(self, *, first, second, third):
         pass
@@ -53,22 +52,17 @@ class Parent:
     def __init__(self, *, first):
         pass
 
-    def __init__(
-            self,
-            *,
-            first,
-            second: typing.Optional[str] = None,
-            third: typing.Optional[str] = None):
+    def __init__(self,
+                 *,
+                 first,
+                 second: typing.Optional[str] = None,
+                 third: typing.Optional[str] = None):
         self._first = first
         self._second = second
         self._third = third
 
 
 class Child(Parent):
-    def __init__(
-            self,
-            *,
-            first,
-            second):
+    def __init__(self, *, first, second):
         super().__init__(first=first, second=second)
         self._first = first + second

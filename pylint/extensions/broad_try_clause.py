@@ -4,7 +4,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Looks for try/except statements with too much code in the try clause."""
 
 from astroid.node_classes import For, If, While, With
@@ -34,17 +33,15 @@ class BroadTryClauseChecker(checkers.BaseChecker):
     }
 
     priority = -2
-    options = (
-        (
-            "max-try-statements",
-            {
-                "default": 1,
-                "type": "int",
-                "metavar": "<int>",
-                "help": "Maximum number of statements allowed in a try clause",
-            },
-        ),
-    )
+    options = ((
+        "max-try-statements",
+        {
+            "default": 1,
+            "type": "int",
+            "metavar": "<int>",
+            "help": "Maximum number of statements allowed in a try clause",
+        },
+    ), )
 
     def _count_statements(self, try_node):
         statement_count = len(try_node.body)
@@ -59,11 +56,11 @@ class BroadTryClauseChecker(checkers.BaseChecker):
         try_clause_statements = self._count_statements(node)
         if try_clause_statements > self.config.max_try_statements:
             msg = "try clause contains {} statements, expected at most {}".format(
-                try_clause_statements, self.config.max_try_statements
-            )
-            self.add_message(
-                "too-many-try-statements", node.lineno, node=node, args=msg
-            )
+                try_clause_statements, self.config.max_try_statements)
+            self.add_message("too-many-try-statements",
+                             node.lineno,
+                             node=node,
+                             args=msg)
 
     def visit_tryfinally(self, node):
         self.visit_tryexcept(node)

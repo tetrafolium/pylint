@@ -4,7 +4,6 @@
 
 class A:
     """A parent class"""
-
     @property
     def test(self):
         """A property"""
@@ -13,7 +12,6 @@ class A:
 
 class B:
     """A child class"""
-
     @property
     def test(self):
         """Overriding implementation of prop which calls the parent"""

@@ -11,7 +11,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Utilities for creating VCG and Dot diagrams"""
 
 from pylint.graph import DotBackend
@@ -21,7 +20,6 @@ from pylint.pyreverse.vcgutils import VCGPrinter
 
 class DiagramWriter:
     """base class for writing project diagrams"""
-
     def __init__(self, config, styles):
         self.config = config
         self.pkg_edges, self.inh_edges, self.imp_edges, self.association_edges = styles
@@ -42,39 +40,36 @@ class DiagramWriter:
     def write_packages(self, diagram):
         """write a package diagram"""
         # sorted to get predictable (hence testable) results
-        for i, obj in enumerate(sorted(diagram.modules(), key=lambda x: x.title)):
+        for i, obj in enumerate(
+                sorted(diagram.modules(), key=lambda x: x.title)):
             self.printer.emit_node(i, label=self.get_title(obj), shape="box")
             obj.fig_id = i
         # package dependencies
         for rel in diagram.get_relationships("depends"):
-            self.printer.emit_edge(
-                rel.from_object.fig_id, rel.to_object.fig_id, **self.pkg_edges
-            )
+            self.printer.emit_edge(rel.from_object.fig_id,
+                                   rel.to_object.fig_id, **self.pkg_edges)
 
     def write_classes(self, diagram):
         """write a class diagram"""
         # sorted to get predictable (hence testable) results
-        for i, obj in enumerate(sorted(diagram.objects, key=lambda x: x.title)):
+        for i, obj in enumerate(sorted(diagram.objects,
+                                       key=lambda x: x.title)):
             self.printer.emit_node(i, **self.get_values(obj))
             obj.fig_id = i
         # inheritance links
         for rel in diagram.get_relationships("specialization"):
-            self.printer.emit_edge(
-                rel.from_object.fig_id, rel.to_object.fig_id, **self.inh_edges
-            )
+            self.printer.emit_edge(rel.from_object.fig_id,
+                                   rel.to_object.fig_id, **self.inh_edges)
         # implementation links
         for rel in diagram.get_relationships("implements"):
-            self.printer.emit_edge(
-                rel.from_object.fig_id, rel.to_object.fig_id, **self.imp_edges
-            )
+            self.printer.emit_edge(rel.from_object.fig_id,
+                                   rel.to_object.fig_id, **self.imp_edges)
         # generate associations
         for rel in diagram.get_relationships("association"):
-            self.printer.emit_edge(
-                rel.from_object.fig_id,
-                rel.to_object.fig_id,
-                label=rel.name,
-                **self.association_edges
-            )
+            self.printer.emit_edge(rel.from_object.fig_id,
+                                   rel.to_object.fig_id,
+                                   label=rel.name,
+                                   **self.association_edges)
 
     def set_printer(self, file_name, basename):
         """set printer"""
@@ -95,15 +90,15 @@ class DiagramWriter:
 
 class DotWriter(DiagramWriter):
     """write dot graphs from a diagram definition and a project"""
-
     def __init__(self, config):
         styles = [
             dict(arrowtail="none", arrowhead="open"),
             dict(arrowtail="none", arrowhead="empty"),
             dict(arrowtail="node", arrowhead="empty", style="dashed"),
-            dict(
-                fontcolor="green", arrowtail="none", arrowhead="diamond", style="solid"
-            ),
+            dict(fontcolor="green",
+                 arrowtail="none",
+                 arrowhead="diamond",
+                 style="solid"),
         ]
         DiagramWriter.__init__(self, config, styles)
 
@@ -130,7 +125,9 @@ class DotWriter(DiagramWriter):
             for func in obj.methods:
                 if func.args.args:
                     args = [
-                        arg.name for arg in func.args.args if arg.name != "self"]
+                        arg.name for arg in func.args.args
+                        if arg.name != "self"
+                    ]
                 else:
                     args = []
                 label = r"%s%s(%s)\l" % (label, func.name, ", ".join(args))
@@ -146,7 +143,6 @@ class DotWriter(DiagramWriter):
 
 class VCGWriter(DiagramWriter):
     """write vcg graphs from a diagram definition and a project"""
-
     def __init__(self, config):
         styles = [
             dict(arrowstyle="solid", backarrowstyle="none", backarrowsize=0),

@@ -97,6 +97,7 @@ def unknown_bases():
 
     class MyException(bala):
         pass
+
     raise MyException
 
 

@@ -1,5 +1,6 @@
 # pylint: disable=missing-docstring,too-few-public-methods, useless-object-inheritance
 
+
 # [unused-argument, unused-argument]
 def test_unused(first, second, _not_used):
     pass
@@ -11,6 +12,7 @@ def test_prefixed_with_ignored(first, ignored_second):
 
 def test_prefixed_with_unused(first, unused_second):
     first()
+
 
 # for Sub.inherited, only the warning for "aay" is desired.
 # The warnings for "aab" and "aac"  are most likely false positives though,

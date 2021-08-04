@@ -1,6 +1,5 @@
 # pylint: disable=missing-docstring, too-few-public-methods
 class MyClass:
-
     async def method(self):
         pass
 

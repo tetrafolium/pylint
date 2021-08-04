@@ -112,7 +112,6 @@ c = bool(len('TEST') or 42)  # [len-as-condition]
 
 
 def github_issue_1879():
-
     class ClassWithBool(list):
         def __bool__(self):
             return True
@@ -149,9 +148,13 @@ def github_issue_1879():
     import pandas as pd
     pandas_df = pd.DataFrame()
     if len(pandas_df):
-        print("this works, but pylint tells me not to use len() without comparison")
+        print(
+            "this works, but pylint tells me not to use len() without comparison"
+        )
     if len(pandas_df) > 0:
-        print("this works and pylint likes it, but it's not the solution intended by PEP-8")
+        print(
+            "this works and pylint likes it, but it's not the solution intended by PEP-8"
+        )
     if pandas_df:
         print("this does not work (truth value of dataframe is ambiguous)")
 

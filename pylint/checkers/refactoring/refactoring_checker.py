@@ -44,20 +44,17 @@ def _is_trailing_comma(tokens: List[tokenize.TokenInfo], index: int) -> bool:
     # Must have remaining tokens on the same line such as NEWLINE
     left_tokens = itertools.islice(tokens, index + 1, None)
 
-    def same_start_token(
-        other_token: tokenize.TokenInfo, _token: tokenize.TokenInfo = token
-    ) -> bool:
+    def same_start_token(other_token: tokenize.TokenInfo,
+                         _token: tokenize.TokenInfo = token) -> bool:
         return other_token.start[0] == _token.start[0]
 
     same_line_remaining_tokens = list(
-        itertools.takewhile(same_start_token, left_tokens)
-    )
+        itertools.takewhile(same_start_token, left_tokens))
     # Note: If the newline is tokenize.NEWLINE and not tokenize.NL
     # then the newline denotes the end of expression
-    is_last_element = all(
-        other_token.type in (tokenize.NEWLINE, tokenize.COMMENT)
-        for other_token in same_line_remaining_tokens
-    )
+    is_last_element = all(other_token.type in (tokenize.NEWLINE,
+                                               tokenize.COMMENT)
+                          for other_token in same_line_remaining_tokens)
     if not same_line_remaining_tokens or not is_last_element:
         return False
 
@@ -121,13 +118,17 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             "Used when a function or a method has too many nested "
             "blocks. This makes the code less understandable and "
             "maintainable.",
-            {"old_names": [("R0101", "old-too-many-nested-blocks")]},
+            {
+                "old_names": [("R0101", "old-too-many-nested-blocks")]
+            },
         ),
         "R1703": (
             "The if statement can be replaced with %s",
             "simplifiable-if-statement",
             "Used when an if statement can be replaced with 'bool(test)'. ",
-            {"old_names": [("R0102", "old-simplifiable-if-statement")]},
+            {
+                "old_names": [("R0102", "old-simplifiable-if-statement")]
+            },
         ),
         "R1704": (
             "Redefining argument with the local name %r",
@@ -287,18 +288,24 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         (
             "max-nested-blocks",
             {
-                "default": 5,
-                "type": "int",
-                "metavar": "<int>",
-                "help": "Maximum number of nested blocks for function / method body",
+                "default":
+                5,
+                "type":
+                "int",
+                "metavar":
+                "<int>",
+                "help":
+                "Maximum number of nested blocks for function / method body",
             },
         ),
         (
             "never-returning-functions",
             {
-                "default": ("sys.exit",),
-                "type": "csv",
-                "help": "Complete name of functions that never returns. When checking "
+                "default": ("sys.exit", ),
+                "type":
+                "csv",
+                "help":
+                "Complete name of functions that never returns. When checking "
                 "for inconsistent-return-statements if a never returning function is "
                 "called then it will be considered as an explicit return statement "
                 "and no message will be printed.",
@@ -328,13 +335,14 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
     @decorators.cachedproperty
     def _dummy_rgx(self):
-        return lint_utils.get_global_option(self, "dummy-variables-rgx", default=None)
+        return lint_utils.get_global_option(self,
+                                            "dummy-variables-rgx",
+                                            default=None)
 
     @staticmethod
     def _is_bool_const(node):
         return isinstance(node.value, astroid.Const) and isinstance(
-            node.value.value, bool
-        )
+            node.value.value, bool)
 
     def _is_actual_elif(self, node):
         """Check if the given node is an actual elif
@@ -383,13 +391,11 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
             # Check if we assign to the same value
             first_branch_targets = [
-                target.name
-                for target in first_branch.targets
+                target.name for target in first_branch.targets
                 if isinstance(target, astroid.AssignName)
             ]
             else_branch_targets = [
-                target.name
-                for target in else_branch.targets
+                target.name for target in else_branch.targets
                 if isinstance(target, astroid.AssignName)
             ]
             if not first_branch_targets or not else_branch_targets:
@@ -422,7 +428,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             return
 
         self.add_message("simplifiable-if-statement",
-                         node=node, args=(reduced_to,))
+                         node=node,
+                         args=(reduced_to, ))
 
     def process_tokens(self, tokens):
         # Process tokens and look for 'if' or 'elif'
@@ -463,16 +470,16 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             return
 
         for defined_argument in scope.args.nodes_of_class(
-            astroid.AssignName, skip_klass=(astroid.Lambda,)
-        ):
+                astroid.AssignName, skip_klass=(astroid.Lambda, )):
             if defined_argument.name == name_node.name:
                 self.add_message(
                     "redefined-argument-from-local",
                     node=name_node,
-                    args=(name_node.name,),
+                    args=(name_node.name, ),
                 )
 
-    @utils.check_messages("redefined-argument-from-local", "too-many-nested-blocks")
+    @utils.check_messages("redefined-argument-from-local",
+                          "too-many-nested-blocks")
     def visit_for(self, node):
         self._check_nested_blocks(node)
 
@@ -503,31 +510,31 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
         if _if_statement_is_always_returning(node, returning_node_class):
             orelse = node.orelse[0]
-            followed_by_elif = (
-                orelse.lineno, orelse.col_offset) in self._elifs
-            self.add_message(
-                msg_id, node=node, args="elif" if followed_by_elif else "else"
-            )
+            followed_by_elif = (orelse.lineno,
+                                orelse.col_offset) in self._elifs
+            self.add_message(msg_id,
+                             node=node,
+                             args="elif" if followed_by_elif else "else")
 
     def _check_superfluous_else_return(self, node):
         return self._check_superfluous_else(
-            node, msg_id="no-else-return", returning_node_class=astroid.Return
-        )
+            node, msg_id="no-else-return", returning_node_class=astroid.Return)
 
     def _check_superfluous_else_raise(self, node):
-        return self._check_superfluous_else(
-            node, msg_id="no-else-raise", returning_node_class=astroid.Raise
-        )
+        return self._check_superfluous_else(node,
+                                            msg_id="no-else-raise",
+                                            returning_node_class=astroid.Raise)
 
     def _check_superfluous_else_break(self, node):
-        return self._check_superfluous_else(
-            node, msg_id="no-else-break", returning_node_class=astroid.Break
-        )
+        return self._check_superfluous_else(node,
+                                            msg_id="no-else-break",
+                                            returning_node_class=astroid.Break)
 
     def _check_superfluous_else_continue(self, node):
         return self._check_superfluous_else(
-            node, msg_id="no-else-continue", returning_node_class=astroid.Continue
-        )
+            node,
+            msg_id="no-else-continue",
+            returning_node_class=astroid.Continue)
 
     @staticmethod
     def _type_and_name_are_equal(node_a, node_b):
@@ -550,12 +557,10 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
         # Look for a single variable assignment on the LHS and a subscript on RHS
         stmt = node.body[0]
-        if not (
-            isinstance(stmt, astroid.Assign)
-            and len(node.body[0].targets) == 1
-            and isinstance(node.body[0].targets[0], astroid.AssignName)
-            and isinstance(stmt.value, astroid.Subscript)
-        ):
+        if not (isinstance(stmt, astroid.Assign)
+                and len(node.body[0].targets) == 1
+                and isinstance(node.body[0].targets[0], astroid.AssignName)
+                and isinstance(stmt.value, astroid.Subscript)):
             return False
 
         # The subscript's slice needs to be the same as the test variable.
@@ -563,11 +568,9 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         slice_value = stmt.value.slice
         if isinstance(slice_value, astroid.Index):
             slice_value = slice_value.value
-        if not (
-            self._type_and_name_are_equal(
-                stmt.value.value, node.test.ops[0][1])
-            and self._type_and_name_are_equal(slice_value, node.test.left)
-        ):
+        if not (self._type_and_name_are_equal(stmt.value.value,
+                                              node.test.ops[0][1]) and
+                self._type_and_name_are_equal(slice_value, node.test.left)):
             return False
 
         # The object needs to be a dictionary instance
@@ -577,15 +580,11 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         if_block_ok = self._is_dict_get_block(node)
         if if_block_ok and not node.orelse:
             self.add_message("consider-using-get", node=node)
-        elif (
-            if_block_ok
-            and len(node.orelse) == 1
-            and isinstance(node.orelse[0], astroid.Assign)
-            and self._type_and_name_are_equal(
-                node.orelse[0].targets[0], node.body[0].targets[0]
-            )
-            and len(node.orelse[0].targets) == 1
-        ):
+        elif (if_block_ok and len(node.orelse) == 1
+              and isinstance(node.orelse[0], astroid.Assign)
+              and self._type_and_name_are_equal(node.orelse[0].targets[0],
+                                                node.body[0].targets[0])
+              and len(node.orelse[0].targets) == 1):
             self.add_message("consider-using-get", node=node)
 
     @utils.check_messages(
@@ -612,13 +611,11 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
     def _check_simplifiable_ifexp(self, node):
         if not isinstance(node.body, astroid.Const) or not isinstance(
-            node.orelse, astroid.Const
-        ):
+                node.orelse, astroid.Const):
             return
 
         if not isinstance(node.body.value, bool) or not isinstance(
-            node.orelse.value, bool
-        ):
+                node.orelse.value, bool):
             return
 
         if isinstance(node.test, astroid.Compare):
@@ -634,11 +631,11 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             return
 
         self.add_message("simplifiable-if-expression",
-                         node=node, args=(reduced_to,))
+                         node=node,
+                         args=(reduced_to, ))
 
-    @utils.check_messages(
-        "too-many-nested-blocks", "inconsistent-return-statements", "useless-return"
-    )
+    @utils.check_messages("too-many-nested-blocks",
+                          "inconsistent-return-statements", "useless-return")
     def leave_functiondef(self, node):
         # check left-over nested blocks stack
         self._emit_nested_blocks_message_if_needed(self._nested_blocks)
@@ -657,14 +654,16 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def _check_stop_iteration_inside_generator(self, node):
         """Check if an exception of type StopIteration is raised inside a generator"""
         frame = node.frame()
-        if not isinstance(frame, astroid.FunctionDef) or not frame.is_generator():
+        if not isinstance(frame,
+                          astroid.FunctionDef) or not frame.is_generator():
             return
         if utils.node_ignores_exception(node, StopIteration):
             return
         if not node.exc:
             return
         exc = utils.safe_infer(node.exc)
-        if not exc or not isinstance(exc, (astroid.Instance, astroid.ClassDef)):
+        if not exc or not isinstance(exc,
+                                     (astroid.Instance, astroid.ClassDef)):
             return
         if self._check_exception_inherit_from_stopiteration(exc):
             self.add_message("stop-iteration-return", node=node)
@@ -674,17 +673,14 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         """Return True if the exception node in argument inherit from StopIteration"""
         stopiteration_qname = "{}.StopIteration".format(
             utils.EXCEPTIONS_MODULE)
-        return any(_class.qname() == stopiteration_qname for _class in exc.mro())
+        return any(_class.qname() == stopiteration_qname
+                   for _class in exc.mro())
 
     def _check_consider_using_comprehension_constructor(self, node):
-        if (
-            isinstance(node.func, astroid.Name)
-            and node.args
-            and isinstance(node.args[0], astroid.ListComp)
-        ):
+        if (isinstance(node.func, astroid.Name) and node.args
+                and isinstance(node.args[0], astroid.ListComp)):
             if node.func.name == "dict" and not isinstance(
-                node.args[0].elt, astroid.Call
-            ):
+                    node.args[0].elt, astroid.Call):
                 message_name = "consider-using-dict-comprehension"
                 self.add_message(message_name, node=node)
             elif node.func.name == "set":
@@ -707,36 +703,33 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     @staticmethod
     def _has_exit_in_scope(scope):
         exit_func = scope.locals.get("exit")
-        return bool(
-            exit_func and isinstance(
-                exit_func[0], (astroid.ImportFrom, astroid.Import))
-        )
+        return bool(exit_func
+                    and isinstance(exit_func[0],
+                                   (astroid.ImportFrom, astroid.Import)))
 
     def _check_quit_exit_call(self, node):
 
-        if isinstance(node.func, astroid.Name) and node.func.name in BUILTIN_EXIT_FUNCS:
+        if isinstance(node.func,
+                      astroid.Name) and node.func.name in BUILTIN_EXIT_FUNCS:
             # If we have `exit` imported from `sys` in the current or global scope, exempt this instance.
             local_scope = node.scope()
             if self._has_exit_in_scope(local_scope) or self._has_exit_in_scope(
-                node.root()
-            ):
+                    node.root()):
                 return
             self.add_message("consider-using-sys-exit", node=node)
 
     def _check_super_with_arguments(self, node):
-        if not isinstance(node.func, astroid.Name) or node.func.name != "super":
+        if not isinstance(node.func,
+                          astroid.Name) or node.func.name != "super":
             return
 
         # pylint: disable=too-many-boolean-expressions
-        if (
-            len(node.args) != 2
-            or not isinstance(node.args[1], astroid.Name)
-            or node.args[1].name != "self"
-            or not isinstance(node.args[0], astroid.Name)
-            or not isinstance(node.args[1], astroid.Name)
-            or node_frame_class(node) is None
-            or node.args[0].name != node_frame_class(node).name
-        ):
+        if (len(node.args) != 2 or not isinstance(node.args[1], astroid.Name)
+                or node.args[1].name != "self"
+                or not isinstance(node.args[0], astroid.Name)
+                or not isinstance(node.args[1], astroid.Name)
+                or node_frame_class(node) is None
+                or node.args[0].name != node_frame_class(node).name):
             return
 
         self.add_message("super-with-arguments", node=node)
@@ -749,7 +742,6 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         :param node: Check to see if this Call node is a next function
         :type node: :class:`astroid.node_classes.Call`
         """
-
         def _looks_like_infinite_iterator(param):
             inferred = utils.safe_infer(param)
             if inferred:
@@ -766,13 +758,10 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             # The next builtin can only have up to two
             # positional arguments and no keyword arguments
             has_sentinel_value = len(node.args) > 1
-            if (
-                isinstance(frame, astroid.FunctionDef)
-                and frame.is_generator()
-                and not has_sentinel_value
-                and not utils.node_ignores_exception(node, StopIteration)
-                and not _looks_like_infinite_iterator(node.args[0])
-            ):
+            if (isinstance(frame, astroid.FunctionDef)
+                    and frame.is_generator() and not has_sentinel_value
+                    and not utils.node_ignores_exception(node, StopIteration)
+                    and not _looks_like_infinite_iterator(node.args[0])):
                 self.add_message("stop-iteration-return", node=node)
 
     def _check_nested_blocks(self, node):
@@ -840,7 +829,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
             if isinstance(isinstance_types, astroid.Tuple):
                 elems = [
-                    class_type.as_string() for class_type in isinstance_types.itered()
+                    class_type.as_string()
+                    for class_type in isinstance_types.itered()
                 ]
             else:
                 elems = [isinstance_types.as_string()]
@@ -848,7 +838,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
         # Remove all keys which not duplicated
         return {
-            key: value for key, value in all_types.items() if key in duplicated_objects
+            key: value
+            for key, value in all_types.items() if key in duplicated_objects
         }
 
     def _check_consider_merging_isinstance(self, node):
@@ -872,11 +863,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             return
 
         for value in node.values:
-            if (
-                not isinstance(value, astroid.Compare)
-                or len(value.ops) != 1
-                or value.ops[0][0] not in allowed_ops[node.op]
-            ):
+            if (not isinstance(value, astroid.Compare) or len(value.ops) != 1
+                    or value.ops[0][0] not in allowed_ops[node.op]):
                 return
             for comparable in value.left, value.ops[0][1]:
                 if isinstance(comparable, astroid.Call):
@@ -903,12 +891,12 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         comprehension = "in" if node.op == "or" else "not in"
         values = list(collections.OrderedDict.fromkeys(values))
         values.remove(common_variable)
-        values_string = ", ".join(values) if len(
-            values) != 1 else values[0] + ","
-        suggestion = "%s %s (%s)" % (
-            common_variable, comprehension, values_string)
+        values_string = ", ".join(
+            values) if len(values) != 1 else values[0] + ","
+        suggestion = "%s %s (%s)" % (common_variable, comprehension,
+                                     values_string)
 
-        self.add_message("consider-using-in", node=node, args=(suggestion,))
+        self.add_message("consider-using-in", node=node, args=(suggestion, ))
 
     def _check_chained_comparison(self, node):
         """Check if there is any chained comparison in the expression.
@@ -946,16 +934,17 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                             uses[value]["lower_bound"].add(comparison_node)
                 left_operand = right_operand
 
-        uses = collections.defaultdict(
-            lambda: {"lower_bound": set(), "upper_bound": set()}
-        )
+        uses = collections.defaultdict(lambda: {
+            "lower_bound": set(),
+            "upper_bound": set()
+        })
         for comparison_node in node.values:
             if isinstance(comparison_node, astroid.Compare):
                 _find_lower_upper_bounds(comparison_node, uses)
 
         for _, bounds in uses.items():
-            num_shared = len(
-                bounds["lower_bound"].intersection(bounds["upper_bound"]))
+            num_shared = len(bounds["lower_bound"].intersection(
+                bounds["upper_bound"]))
             num_lower_bounds = len(bounds["lower_bound"])
             num_upper_bounds = len(bounds["upper_bound"])
             if num_shared < num_lower_bounds and num_shared < num_upper_bounds:
@@ -995,10 +984,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         and keeps track of whether reductions have been made."""
         children = list(bool_op.get_children())
         intermediate = [
-            self._simplify_boolean_operation(child)
-            if isinstance(child, astroid.BoolOp)
-            else child
-            for child in children
+            self._simplify_boolean_operation(child) if isinstance(
+                child, astroid.BoolOp) else child for child in children
         ]
         result = self._apply_boolean_simplification_rules(
             bool_op.op, intermediate)
@@ -1052,18 +1039,19 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
     @staticmethod
     def _is_simple_assignment(node):
-        return (
-            isinstance(node, astroid.Assign)
-            and len(node.targets) == 1
-            and isinstance(node.targets[0], astroid.node_classes.AssignName)
-            and isinstance(node.value, astroid.node_classes.Name)
-        )
+        return (isinstance(node, astroid.Assign)
+                and len(node.targets) == 1 and isinstance(
+                    node.targets[0], astroid.node_classes.AssignName)
+                and isinstance(node.value, astroid.node_classes.Name))
 
     def _check_swap_variables(self, node):
         if not node.next_sibling() or not node.next_sibling().next_sibling():
             return
-        assignments = [node, node.next_sibling(
-        ), node.next_sibling().next_sibling()]
+        assignments = [
+            node,
+            node.next_sibling(),
+            node.next_sibling().next_sibling()
+        ]
         if not all(self._is_simple_assignment(node) for node in assignments):
             return
         if any(node in self._reported_swap_nodes for node in assignments):
@@ -1089,8 +1077,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             return
 
         if all(
-            isinstance(value, astroid.Compare) for value in (truth_value, false_value)
-        ):
+                isinstance(value, astroid.Compare)
+                for value in (truth_value, false_value)):
             return
 
         inferred_truth_value = utils.safe_infer(truth_value)
@@ -1109,7 +1097,7 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                 cond=cond.as_string(),
                 false=false_value.as_string(),
             )
-        self.add_message(message, node=node, args=(suggestion,))
+        self.add_message(message, node=node, args=(suggestion, ))
 
     visit_return = visit_assign
 
@@ -1133,16 +1121,14 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             if isinstance(target, astroid.AssignName)
         }
 
-        is_concat_loop = (
-            aug_assign.op == "+="
-            and isinstance(aug_assign.target, astroid.AssignName)
-            and len(for_loop.body) == 1
-            and aug_assign.target.name in result_assign_names
-            and isinstance(assign.value, astroid.Const)
-            and isinstance(assign.value.value, str)
-            and isinstance(aug_assign.value, astroid.Name)
-            and aug_assign.value.name == for_loop.target.name
-        )
+        is_concat_loop = (aug_assign.op == "+="
+                          and isinstance(aug_assign.target, astroid.AssignName)
+                          and len(for_loop.body) == 1
+                          and aug_assign.target.name in result_assign_names
+                          and isinstance(assign.value, astroid.Const)
+                          and isinstance(assign.value.value, str)
+                          and isinstance(aug_assign.value, astroid.Name)
+                          and aug_assign.value.name == for_loop.target.name)
         if is_concat_loop:
             self.add_message("consider-using-join", node=aug_assign)
 
@@ -1155,21 +1141,16 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         self._check_unnecessary_comprehension(node)
 
     def _check_unnecessary_comprehension(self, node):
-        if (
-            isinstance(node.parent, astroid.GeneratorExp)
-            or len(node.ifs) != 0
-            or len(node.parent.generators) != 1
-            or node.is_async
-        ):
+        if (isinstance(node.parent, astroid.GeneratorExp) or len(node.ifs) != 0
+                or len(node.parent.generators) != 1 or node.is_async):
             return
 
-        if (
-            isinstance(node.parent, astroid.DictComp)
-            and isinstance(node.parent.key, astroid.Name)
-            and isinstance(node.parent.value, astroid.Name)
-            and isinstance(node.target, astroid.Tuple)
-            and all(isinstance(elt, astroid.AssignName) for elt in node.target.elts)
-        ):
+        if (isinstance(node.parent, astroid.DictComp)
+                and isinstance(node.parent.key, astroid.Name)
+                and isinstance(node.parent.value, astroid.Name)
+                and isinstance(node.target, astroid.Tuple) and all(
+                    isinstance(elt, astroid.AssignName)
+                    for elt in node.target.elts)):
             expr_list = [node.parent.key.name, node.parent.value.name]
             target_list = [elt.name for elt in node.target.elts]
 
@@ -1184,19 +1165,11 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             else:
                 expr_list = []
             target = node.parent.generators[0].target
-            target_list = (
-                target.name
-                if isinstance(target, astroid.AssignName)
-                else (
-                    [
-                        elt.name
-                        for elt in target.elts
-                        if isinstance(elt, astroid.AssignName)
-                    ]
-                    if isinstance(target, astroid.Tuple)
-                    else []
-                )
-            )
+            target_list = (target.name
+                           if isinstance(target, astroid.AssignName) else ([
+                               elt.name for elt in target.elts
+                               if isinstance(elt, astroid.AssignName)
+                           ] if isinstance(target, astroid.Tuple) else []))
         else:
             return
         if expr_list == target_list != []:
@@ -1209,16 +1182,13 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
         All of: condition, true_value and false_value should not be a complex boolean expression
         """
-        return (
-            isinstance(node, astroid.BoolOp)
-            and node.op == "or"
-            and len(node.values) == 2
-            and isinstance(node.values[0], astroid.BoolOp)
-            and not isinstance(node.values[1], astroid.BoolOp)
-            and node.values[0].op == "and"
-            and not isinstance(node.values[0].values[1], astroid.BoolOp)
-            and len(node.values[0].values) == 2
-        )
+        return (isinstance(node, astroid.BoolOp) and node.op == "or"
+                and len(node.values) == 2
+                and isinstance(node.values[0], astroid.BoolOp)
+                and not isinstance(node.values[1], astroid.BoolOp)
+                and node.values[0].op == "and"
+                and not isinstance(node.values[0].values[1], astroid.BoolOp)
+                and len(node.values[0].values) == 2)
 
     @staticmethod
     def _and_or_ternary_arguments(node):
@@ -1228,8 +1198,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
     def visit_functiondef(self, node):
         self._return_nodes[node.name] = list(
-            node.nodes_of_class(astroid.Return, skip_klass=astroid.FunctionDef)
-        )
+            node.nodes_of_class(astroid.Return,
+                                skip_klass=astroid.FunctionDef))
 
     def _check_consistent_returns(self, node: astroid.FunctionDef) -> None:
         """Check that all return statements inside a function are consistent.
@@ -1244,13 +1214,13 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         """
         # explicit return statements are those with a not None value
         explicit_returns = [
-            _node for _node in self._return_nodes[node.name] if _node.value is not None
+            _node for _node in self._return_nodes[node.name]
+            if _node.value is not None
         ]
         if not explicit_returns:
             return
-        if len(explicit_returns) == len(
-            self._return_nodes[node.name]
-        ) and self._is_node_return_ended(node):
+        if len(explicit_returns) == len(self._return_nodes[
+                node.name]) and self._is_node_return_ended(node):
             return
         self.add_message("inconsistent-return-statements", node=node)
 
@@ -1265,10 +1235,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         """
         # Do not check if inner function definition are return ended.
         is_if_returning = any(
-            self._is_node_return_ended(_ifn)
-            for _ifn in node.body
-            if not isinstance(_ifn, astroid.FunctionDef)
-        )
+            self._is_node_return_ended(_ifn) for _ifn in node.body
+            if not isinstance(_ifn, astroid.FunctionDef))
         if not node.orelse:
             # If there is not orelse part then the if statement is returning if :
             # - there is at least one return statement in its siblings;
@@ -1278,10 +1246,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             return is_if_returning
         # If there is an orelse part then both if body and orelse part should return.
         is_orelse_returning = any(
-            self._is_node_return_ended(_ore)
-            for _ore in node.orelse
-            if not isinstance(_ore, astroid.FunctionDef)
-        )
+            self._is_node_return_ended(_ore) for _ore in node.orelse
+            if not isinstance(_ore, astroid.FunctionDef))
         return is_if_returning and is_orelse_returning
 
     def _is_raise_node_return_ended(self, node: astroid.Raise) -> bool:
@@ -1305,7 +1271,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             # to infer it.
             return True
         exc = utils.safe_infer(node.exc)
-        if exc is None or exc is astroid.Uninferable or not hasattr(exc, "pytype"):
+        if exc is None or exc is astroid.Uninferable or not hasattr(
+                exc, "pytype"):
             return False
         exc_name = exc.pytype().split(".")[-1]
         handlers = utils.get_exception_handlers(node, exc_name)
@@ -1313,7 +1280,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         if handlers:
             # among all the handlers handling the exception at least one
             # must end with a return statement
-            return any(self._is_node_return_ended(_handler) for _handler in handlers)
+            return any(
+                self._is_node_return_ended(_handler) for _handler in handlers)
         # if no handlers handle the exception then it's ok
         return True
 
@@ -1353,10 +1321,13 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             }
             all_but_handler = set(node.get_children()) - handlers
             return any(
-                self._is_node_return_ended(_child) for _child in all_but_handler
-            ) and all(self._is_node_return_ended(_child) for _child in handlers)
+                self._is_node_return_ended(_child)
+                for _child in all_but_handler) and all(
+                    self._is_node_return_ended(_child) for _child in handlers)
         # recurses on the children of the node
-        return any(self._is_node_return_ended(_child) for _child in node.get_children())
+        return any(
+            self._is_node_return_ended(_child)
+            for _child in node.get_children())
 
     @staticmethod
     def _has_return_in_siblings(node: astroid.node_classes.NodeNG) -> bool:
@@ -1370,7 +1341,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             next_sibling = next_sibling.next_sibling()
         return False
 
-    def _is_function_def_never_returning(self, node: astroid.FunctionDef) -> bool:
+    def _is_function_def_never_returning(self,
+                                         node: astroid.FunctionDef) -> bool:
         """Return True if the function never returns. False otherwise.
 
         Args:
@@ -1405,5 +1377,6 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             if last.value is None:
                 self.add_message("useless-return", node=node)
             # return None"
-            elif isinstance(last.value, astroid.Const) and (last.value.value is None):
+            elif isinstance(last.value,
+                            astroid.Const) and (last.value.value is None):
                 self.add_message("useless-return", node=node)

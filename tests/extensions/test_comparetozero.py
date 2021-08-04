@@ -8,7 +8,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Tests for the pylint checker in :mod:`pylint.extensions.emptystring"""
 
 import os
@@ -41,10 +40,8 @@ class CompareToZeroUsedTC(unittest.TestCase):
         cls._linter.disable("I")
 
     def test_comparetozero_message(self):
-        elif_test = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)
-                            ), "data", "compare_to_zero.py"
-        )
+        elif_test = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "data", "compare_to_zero.py")
         self._linter.check([elif_test])
         msgs = self._linter.reporter.messages
         self.assertEqual(len(msgs), 4)

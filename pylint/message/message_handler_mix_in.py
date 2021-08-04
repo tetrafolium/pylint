@@ -51,41 +51,46 @@ class MessagesHandlerMixIn:
                 msgid)
             for message_definition in message_definitions:
                 if msgid == message_definition.msgid:
-                    MessagesHandlerMixIn.__by_id_managed_msgs.append(
-                        (
-                            self.current_name,
-                            message_definition.msgid,
-                            message_definition.symbol,
-                            line,
-                            is_disabled,
-                        )
-                    )
+                    MessagesHandlerMixIn.__by_id_managed_msgs.append((
+                        self.current_name,
+                        message_definition.msgid,
+                        message_definition.symbol,
+                        line,
+                        is_disabled,
+                    ))
         except UnknownMessageError:
             pass
 
     def disable(self, msgid, scope="package", line=None, ignore_unknown=False):
         """don't output message of the given id"""
-        self._set_msg_status(
-            msgid, enable=False, scope=scope, line=line, ignore_unknown=ignore_unknown
-        )
+        self._set_msg_status(msgid,
+                             enable=False,
+                             scope=scope,
+                             line=line,
+                             ignore_unknown=ignore_unknown)
         self._register_by_id_managed_msg(msgid, line)
 
     def enable(self, msgid, scope="package", line=None, ignore_unknown=False):
         """reenable message of the given id"""
-        self._set_msg_status(
-            msgid, enable=True, scope=scope, line=line, ignore_unknown=ignore_unknown
-        )
+        self._set_msg_status(msgid,
+                             enable=True,
+                             scope=scope,
+                             line=line,
+                             ignore_unknown=ignore_unknown)
         self._register_by_id_managed_msg(msgid, line, is_disabled=False)
 
-    def _set_msg_status(
-        self, msgid, enable, scope="package", line=None, ignore_unknown=False
-    ):
+    def _set_msg_status(self,
+                        msgid,
+                        enable,
+                        scope="package",
+                        line=None,
+                        ignore_unknown=False):
         assert scope in ("package", "module")
 
         if msgid == "all":
             for _msgid in MSG_TYPES:
-                self._set_msg_status(_msgid, enable, scope,
-                                     line, ignore_unknown)
+                self._set_msg_status(_msgid, enable, scope, line,
+                                     ignore_unknown)
             if enable and not self._python3_porting_mode:
                 # Don't activate the python 3 porting checker if it wasn't activated explicitly.
                 self.disable("python3")
@@ -130,19 +135,19 @@ class MessagesHandlerMixIn:
         if scope == "module":
             self.file_state.set_msg_status(msg, line, enable)
             if not enable and msg.symbol != "locally-disabled":
-                self.add_message(
-                    "locally-disabled", line=line, args=(msg.symbol, msg.msgid)
-                )
+                self.add_message("locally-disabled",
+                                 line=line,
+                                 args=(msg.symbol, msg.msgid))
         else:
             msgs = self._msgs_state
             msgs[msg.msgid] = enable
             # sync configuration object
             self.config.enable = [
-                self._message_symbol(mid) for mid, val in sorted(msgs.items()) if val
+                self._message_symbol(mid) for mid, val in sorted(msgs.items())
+                if val
             ]
             self.config.disable = [
-                self._message_symbol(mid)
-                for mid, val in sorted(msgs.items())
+                self._message_symbol(mid) for mid, val in sorted(msgs.items())
                 if not val
             ]
 
@@ -153,7 +158,10 @@ class MessagesHandlerMixIn:
         exist.
         """
         try:
-            return [md.symbol for md in self.msgs_store.get_message_definitions(msgid)]
+            return [
+                md.symbol
+                for md in self.msgs_store.get_message_definitions(msgid)
+            ]
         except UnknownMessageError:
             return msgid
 
@@ -208,13 +216,11 @@ class MessagesHandlerMixIn:
 
                 # Doesn't consider scopes, as a disable can be in a different scope
                 # than that of the current line.
-                closest_lines = reversed(
-                    [
-                        (message_line, enable)
-                        for message_line, enable in lines.items()
-                        if message_line <= line
-                    ]
-                )
+                closest_lines = reversed([
+                    (message_line, enable)
+                    for message_line, enable in lines.items()
+                    if message_line <= line
+                ])
                 last_line, is_enabled = next(closest_lines, (None, None))
                 if last_line is not None:
                     fallback = is_enabled
@@ -222,9 +228,13 @@ class MessagesHandlerMixIn:
                 return self._msgs_state.get(msgid, fallback)
             return self._msgs_state.get(msgid, True)
 
-    def add_message(
-        self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None
-    ):
+    def add_message(self,
+                    msgid,
+                    line=None,
+                    node=None,
+                    args=None,
+                    confidence=None,
+                    col_offset=None):
         """Adds a message given by ID or name.
 
         If provided, the message string is expanded using args.
@@ -237,9 +247,8 @@ class MessagesHandlerMixIn:
             confidence = UNDEFINED
         message_definitions = self.msgs_store.get_message_definitions(msgid)
         for message_definition in message_definitions:
-            self.add_one_message(
-                message_definition, line, node, args, confidence, col_offset
-            )
+            self.add_one_message(message_definition, line, node, args,
+                                 confidence, col_offset)
 
     @staticmethod
     def check_message_definition(message_definition, line, node):
@@ -249,26 +258,22 @@ class MessagesHandlerMixIn:
             if message_definition.scope == WarningScope.LINE:
                 if line is None:
                     raise InvalidMessageError(
-                        "Message %s must provide line, got None"
-                        % message_definition.msgid
-                    )
+                        "Message %s must provide line, got None" %
+                        message_definition.msgid)
                 if node is not None:
                     raise InvalidMessageError(
                         "Message %s must only provide line, "
-                        "got line=%s, node=%s" % (
-                            message_definition.msgid, line, node)
-                    )
+                        "got line=%s, node=%s" %
+                        (message_definition.msgid, line, node))
             elif message_definition.scope == WarningScope.NODE:
                 # Node-based warnings may provide an override line.
                 if node is None:
                     raise InvalidMessageError(
-                        "Message %s must provide Node, got None"
-                        % message_definition.msgid
-                    )
+                        "Message %s must provide Node, got None" %
+                        message_definition.msgid)
 
-    def add_one_message(
-        self, message_definition, line, node, args, confidence, col_offset
-    ):
+    def add_one_message(self, message_definition, line, node, args, confidence,
+                        col_offset):
         self.check_message_definition(message_definition, line, node)
         if line is None and node is not None:
             line = node.fromlineno
@@ -276,11 +281,11 @@ class MessagesHandlerMixIn:
             col_offset = node.col_offset
 
         # should this message be displayed
-        if not self.is_message_enabled(message_definition.msgid, line, confidence):
+        if not self.is_message_enabled(message_definition.msgid, line,
+                                       confidence):
             self.file_state.handle_ignored_message(
-                self.get_message_state_scope(
-                    message_definition.msgid, line, confidence
-                ),
+                self.get_message_state_scope(message_definition.msgid, line,
+                                             confidence),
                 message_definition.msgid,
                 line,
                 node,
@@ -317,8 +322,7 @@ class MessagesHandlerMixIn:
                 (abspath, path, module, obj, line or 1, col_offset or 0),
                 msg,
                 confidence,
-            )
-        )
+            ))
 
     def _get_checkers_infos(self):
         by_checker = {}

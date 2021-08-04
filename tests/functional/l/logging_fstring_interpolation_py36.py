@@ -5,7 +5,6 @@ from datetime import datetime
 
 import logging as renamed_logging
 
-
 local_var_1 = 4
 local_var_2 = "run!"
 

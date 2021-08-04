@@ -1,7 +1,6 @@
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
 
-
 import optparse
 from typing import Any, Dict, Tuple
 
@@ -71,7 +70,7 @@ class OptionsProviderMixIn:
                     _list.append(value)
                 setattr(self.config, optname, _list)
             elif isinstance(_list, tuple):
-                setattr(self.config, optname, _list + (value,))
+                setattr(self.config, optname, _list + (value, ))
             else:
                 _list.append(value)
         elif action == "callback":
@@ -86,8 +85,7 @@ class OptionsProviderMixIn:
             if option[0] == opt:
                 return option[1]
         raise optparse.OptionError(
-            "no such option %s in section %r" % (opt, self.name), opt
-        )
+            "no such option %s in section %r" % (opt, self.name), opt)
 
     def options_by_section(self):
         """return an iterator on options grouped by section
@@ -97,8 +95,7 @@ class OptionsProviderMixIn:
         sections = {}
         for optname, optdict in self.options:
             sections.setdefault(optdict.get("group"), []).append(
-                (optname, optdict, self.option_value(optname))
-            )
+                (optname, optdict, self.option_value(optname)))
         if None in sections:
             yield None, sections.pop(None)
         for section, options in sorted(sections.items()):

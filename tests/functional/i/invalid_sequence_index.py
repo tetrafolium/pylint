@@ -54,7 +54,9 @@ def function8():
     class TupleTest(tuple):
         """Subclass of tuple"""
         pass
+
     return TupleTest()[None]  # [invalid-sequence-index]
+
 
 # getitem tests with good indices
 
@@ -78,7 +80,6 @@ def function12():
     """list index implements __index__"""
     class IndexType(object):
         """Class with __index__ method"""
-
         def __index__(self):
             """Allow objects of this class to be used as slice indices"""
             return 0
@@ -90,7 +91,6 @@ def function13():
     """list index implements __index__ in a superclass"""
     class IndexType(object):
         """Class with __index__ method"""
-
         def __index__(self):
             """Allow objects of this class to be used as slice indices"""
             return 0
@@ -117,6 +117,7 @@ def function16():
     class TupleTest(tuple):
         """Subclass of tuple"""
         pass
+
     return TupleTest()[0]  # no error
 
 
@@ -124,10 +125,10 @@ def function17():
     """Index of subclass of tuple with custom __getitem__ is None"""
     class TupleTest(tuple):
         """Subclass of tuple with custom __getitem__"""
-
         def __getitem__(self, index):
             """Allow non-integer indices"""
             return 0
+
     return TupleTest()[None]  # no error
 
 
@@ -135,7 +136,6 @@ def function18():
     """Index of subclass of tuple with __getitem__ in superclass is None"""
     class TupleTest(tuple):
         """Subclass of tuple with custom __getitem__"""
-
         def __getitem__(self, index):
             """Allow non-integer indices"""
             return 0
@@ -145,6 +145,7 @@ def function18():
         pass
 
     return SubTupleTest()[None]  # no error
+
 
 # Test with set and delete statements
 
@@ -166,6 +167,7 @@ def function21():
     class ListTest(list):
         """Inherit all list get/set/del handlers"""
         pass
+
     test = ListTest()
 
     # Set and delete with invalid indices
@@ -181,9 +183,9 @@ def function22():
     """Get, set, and delete on a subclass of list that overrides __setitem__"""
     class ListTest(list):
         """Override setitem but not get or del"""
-
         def __setitem__(self, key, value):
             pass
+
     test = ListTest()
 
     # failure on the getitem with None
@@ -201,9 +203,9 @@ def function23():
     """Get, set, and delete on a subclass of list that overrides __delitem__"""
     class ListTest(list):
         """Override delitem but not get or set"""
-
         def __delitem__(self, key):
             pass
+
     test = ListTest()
 
     # failure on the getitem with None
@@ -221,9 +223,9 @@ def function24():
     """Get, set, and delete on a subclass of list that overrides __getitem__"""
     class ListTest(list):
         """Override gelitem but not del or set"""
-
         def __getitem__(self, key):
             pass
+
     test = ListTest()
 
     # setitem with invalid index
@@ -235,6 +237,7 @@ def function24():
     test[0][0] = 0  # getitem with int and setitem with int, no error
     test[0] = 0  # setitem with int, no error
     del test[0]  # delitem with int, no error
+
 
 # Teest ExtSlice usage
 
@@ -248,9 +251,9 @@ def function26():
     """Extended slice used with an object that implements __getitem__"""
     class ExtSliceTest(object):
         """Permit extslice syntax by implementing __getitem__"""
-
         def __getitem__(self, index):
             return 0
+
     return ExtSliceTest()[..., 0]  # no error
 
 
@@ -258,6 +261,7 @@ def function27():
     """Don't warn in the case where the indexed object has unknown base classes."""
     class UnknownBase(Unknown):
         pass
+
     slices = UnknownBase["aaaa"] + UnknownBase()[object]
     ext_slices = UnknownBase[..., 0] + UnknownBase()[..., 0]
     return slices, ext_slices
@@ -265,7 +269,6 @@ def function27():
 
 def function28():
     """Don't emit for classes with the right implementation."""
-
     class Meta(type):
         def __getitem__(cls, arg):
             return 24

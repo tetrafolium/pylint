@@ -43,7 +43,7 @@ def tolerated_statements():
     """This is ok"""
     bool_var = True
     someint = 2
-    if not(bool_var == False and someint == 1):
+    if not (bool_var == False and someint == 1):
         pass
     if 2 not in [3, 4]:
         pass
@@ -61,6 +61,5 @@ def tolerated_statements():
 
 class Klass(object):
     """This is also ok"""
-
     def __ne__(self, other):
         return not self == other

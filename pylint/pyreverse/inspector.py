@@ -9,7 +9,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """
 Visitor doing some postprocessing on the astroid tree.
 Try to resolve definitions (namespace) dictionary, relationship...
@@ -63,7 +62,6 @@ def interfaces(node, herited=True, handler_func=_iface_hdlr):
 
 class IdGeneratorMixIn:
     """Mixin adding the ability to generate integer uid."""
-
     def __init__(self, start_value=0):
         self.id_count = start_value
 
@@ -99,7 +97,6 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
     * implements,
       list of implemented interface _objects_ (only on astroid.Class nodes)
     """
-
     def __init__(self, project, inherited_interfaces=0, tag=False):
         IdGeneratorMixIn.__init__(self)
         utils.LocalsVisitor.__init__(self)
@@ -276,7 +273,7 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
         package_dir = os.path.dirname(self.project.path)
         if context_name == mod_path:
             return 0
-        if modutils.is_standard_module(mod_path, (package_dir,)):
+        if modutils.is_standard_module(mod_path, (package_dir, )):
             return 1
         return 0
 
@@ -285,8 +282,8 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
         module = node.root()
         context_name = module.name
         if relative:
-            mod_path = "%s.%s" % (
-                ".".join(context_name.split(".")[:-1]), mod_path)
+            mod_path = "%s.%s" % (".".join(
+                context_name.split(".")[:-1]), mod_path)
         if self.compute_module(context_name, mod_path):
             # handle dependencies
             if not hasattr(module, "depends"):
@@ -298,7 +295,6 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
 
 class Project:
     """a project handle a set of modules / packages"""
-
     def __init__(self, name=""):
         self.name = name
         self.path = None
@@ -328,9 +324,10 @@ class Project:
         )
 
 
-def project_from_files(
-    files, func_wrapper=_astroid_wrapper, project_name="no name", black_list=("CVS",)
-):
+def project_from_files(files,
+                       func_wrapper=_astroid_wrapper,
+                       project_name="no name",
+                       black_list=("CVS", )):
     """return a Project from a list of files or modules"""
     # build the project representation
     astroid_manager = manager.AstroidManager()
@@ -351,9 +348,8 @@ def project_from_files(
         # recurse in package except if __init__ was explicitly given
         if ast.package and something.find("__init__") == -1:
             # recurse on others packages / modules if this is a package
-            for fpath in modutils.get_module_files(
-                os.path.dirname(ast.file), black_list
-            ):
+            for fpath in modutils.get_module_files(os.path.dirname(ast.file),
+                                                   black_list):
                 ast = func_wrapper(astroid_manager.ast_from_file, fpath)
                 if ast is None or ast.name == base_name:
                     continue

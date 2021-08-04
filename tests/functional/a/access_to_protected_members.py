@@ -23,6 +23,7 @@ class MyClass(object):
         """Docstring."""
         cls._cls_protected += 1
         print(cls._cls_protected)
+
     clsmeth = classmethod(clsmeth)
 
     def _private_method(self):
@@ -31,7 +32,6 @@ class MyClass(object):
 
 class Subclass(MyClass):
     """Subclass with protected members."""
-
     def __init__(self):
         MyClass._protected = 5
         super()._private_method()
@@ -63,7 +63,6 @@ class Issue1031(object):
 
 class Issue1802(object):
     """Test for GitHub issue 1802"""
-
     def __init__(self, value):
         self._foo = value
         self.__private = 2 * value

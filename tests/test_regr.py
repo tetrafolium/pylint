@@ -12,7 +12,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """non regression tests for pylint, which requires a too specific configuration
 to be incorporated in the automatic functional test framework
 """
@@ -70,7 +69,8 @@ def Equals(expected):
         (join(REGR_DATA, "module_global.py"), Equals("")),
         (join(REGR_DATA, "decimal_inference.py"), Equals("")),
         (join(REGR_DATA, "absimp", "string.py"), Equals("")),
-        (join(REGR_DATA, "bad_package"), lambda x: "Unused import missing" in x),
+        (join(REGR_DATA,
+              "bad_package"), lambda x: "Unused import missing" in x),
     ],
 )
 def test_package(finalize_linter, file_name, check):
@@ -92,8 +92,7 @@ def test_crash(finalize_linter, file_name):
 
 
 @pytest.mark.parametrize(
-    "fname", [x for x in os.listdir(REGR_DATA) if x.endswith("_crash.py")]
-)
+    "fname", [x for x in os.listdir(REGR_DATA) if x.endswith("_crash.py")])
 def test_descriptor_crash(fname, finalize_linter):
     finalize_linter.check(join(REGR_DATA, fname))
     finalize_linter.reporter.finalize().strip()

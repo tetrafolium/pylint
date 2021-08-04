@@ -83,7 +83,6 @@ class PotentiallySecondGood(object):
 
 
 class Metaclass(type):
-
     def __iter__(cls):
         for value in range(10):
             yield str(value)

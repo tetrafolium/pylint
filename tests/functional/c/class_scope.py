@@ -7,15 +7,24 @@ __revision__ = None
 class Well(object):
     """well"""
     attr = 42
-    def get_attr(arg=attr): return arg * 24
+
+    def get_attr(arg=attr):
+        return arg * 24
+
     # +1: [undefined-variable, used-before-assignment]
-    def get_attr_bad(arg=revattr): return revattr * 42
+    def get_attr_bad(arg=revattr):
+        return revattr * 42
+
     revattr = 24
-    def bad_lambda(): return get_attr_bad  # [undefined-variable]
+
+    def bad_lambda():
+        return get_attr_bad  # [undefined-variable]
+
     bad_gen = list(attr + i for i in range(10))  # [undefined-variable]
 
     class Data(object):
         """base hidden class"""
+
     class Sub(Data):
         """whaou, is Data found???"""
         attr = Data()  # [undefined-variable]

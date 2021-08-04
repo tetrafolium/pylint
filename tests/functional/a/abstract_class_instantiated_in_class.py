@@ -1,7 +1,6 @@
 """Don't warn if the class is instantiated in its own body."""
 # pylint: disable=missing-docstring, useless-object-inheritance
 
-
 import abc
 
 import six
@@ -9,7 +8,6 @@ import six
 
 @six.add_metaclass(abc.ABCMeta)
 class Ala(object):
-
     @abc.abstractmethod
     def bala(self):
         pass

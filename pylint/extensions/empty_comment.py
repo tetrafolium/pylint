@@ -16,13 +16,10 @@ def is_line_commented(line):
 def comment_part_of_string(line, comment_idx):
     """ checks if the symbol at comment_idx is part of a string """
 
-    if (
-        line[:comment_idx].count(b"'") % 2 == 1
-        and line[comment_idx:].count(b"'") % 2 == 1
-    ) or (
-        line[:comment_idx].count(b'"') % 2 == 1
-        and line[comment_idx:].count(b'"') % 2 == 1
-    ):
+    if (line[:comment_idx].count(b"'") % 2 == 1
+            and line[comment_idx:].count(b"'") % 2 == 1) or (
+                line[:comment_idx].count(b'"') % 2 == 1
+                and line[comment_idx:].count(b'"') % 2 == 1):
         return True
     return False
 
@@ -35,9 +32,8 @@ class CommentChecker(BaseChecker):
         "R2044": (
             "Line with empty comment",
             "empty-comment",
-            (
-                "Used when a # symbol appears on a line not followed by an actual comment"
-            ),
+            ("Used when a # symbol appears on a line not followed by an actual comment"
+             ),
         )
     }
     options = ()

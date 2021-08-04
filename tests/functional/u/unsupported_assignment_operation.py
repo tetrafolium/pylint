@@ -12,7 +12,6 @@ import six
 numbers = [1, 2, 3]
 numbers[0] = 42
 
-
 bytearray(b"123")[0] = 42
 dict(a=1, b=2)['a'] = 42
 (1, 2, 3)[0] = 42  # [unsupported-assignment-operation]
@@ -43,22 +42,21 @@ Subscriptable[0] = 24  # [unsupported-assignment-operation]
 def powers_of_two():
     k = 0
     while k < 10:
-        yield 2 ** k
+        yield 2**k
         k += 1
 
 
 powers_of_two()[0] = 42  # [unsupported-assignment-operation]
 powers_of_two[0] = 42  # [unsupported-assignment-operation]
 
-
 # check that primitive non subscriptable types are caught
-True[0] = 24  # [unsupported-assignment-operation]
-None[0] = 42  # [unsupported-assignment-operation]
-8.5[0] = 24  # [unsupported-assignment-operation]
-10[0] = 24  # [unsupported-assignment-operation]
+True [0] = 24  # [unsupported-assignment-operation]
+None [0] = 42  # [unsupported-assignment-operation]
+8.5 [0] = 24  # [unsupported-assignment-operation]
+10 [0] = 24  # [unsupported-assignment-operation]
 
 # sets are not subscriptable
-{x ** 2 for x in range(10)}[0] = 24  # [unsupported-assignment-operation]
+{x**2 for x in range(10)}[0] = 24  # [unsupported-assignment-operation]
 set(numbers)[0] = 24  # [unsupported-assignment-operation]
 frozenset(numbers)[0] = 42  # [unsupported-assignment-operation]
 

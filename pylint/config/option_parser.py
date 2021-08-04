@@ -8,8 +8,7 @@ from pylint.config.option import Option
 
 def _level_options(group, outputlevel):
     return [
-        option
-        for option in group.option_list
+        option for option in group.option_list
         if (getattr(option, "level", 0) or 0) <= outputlevel
         and option.help is not optparse.SUPPRESS_HELP
     ]
@@ -17,8 +16,10 @@ def _level_options(group, outputlevel):
 
 class OptionParser(optparse.OptionParser):
     def __init__(self, option_class, *args, **kwargs):
-        optparse.OptionParser.__init__(
-            self, option_class=Option, *args, **kwargs)
+        optparse.OptionParser.__init__(self,
+                                       option_class=Option,
+                                       *args,
+                                       **kwargs)
 
     def format_option_help(self, formatter=None):
         if formatter is None:
@@ -34,8 +35,7 @@ class OptionParser(optparse.OptionParser):
             result.append("\n")
         for group in self.option_groups:
             if group.level <= outputlevel and (
-                group.description or _level_options(group, outputlevel)
-            ):
+                    group.description or _level_options(group, outputlevel)):
                 result.append(group.format_help(formatter))
                 result.append("\n")
         formatter.dedent()

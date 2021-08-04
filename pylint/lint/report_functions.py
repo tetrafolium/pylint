@@ -11,8 +11,7 @@ def report_total_messages_stats(sect, stats, previous_stats):
     """make total errors / warnings report"""
     lines = ["type", "number", "previous", "difference"]
     lines += checkers.table_lines_from_stats(
-        stats, previous_stats, ("convention", "refactor", "warning", "error")
-    )
+        stats, previous_stats, ("convention", "refactor", "warning", "error"))
     sect.append(report_nodes.Table(children=lines, cols=4, rheaders=1))
 
 
@@ -21,13 +20,9 @@ def report_messages_stats(sect, stats, _):
     if not stats["by_msg"]:
         # don't print this report when we didn't detected any errors
         raise exceptions.EmptyReportError()
-    in_order = sorted(
-        [
-            (value, msg_id)
-            for msg_id, value in stats["by_msg"].items()
-            if not msg_id.startswith("I")
-        ]
-    )
+    in_order = sorted([(value, msg_id)
+                       for msg_id, value in stats["by_msg"].items()
+                       if not msg_id.startswith("I")])
     in_order.reverse()
     lines = ("message id", "occurrences")
     for value, msg_id in in_order:
@@ -52,15 +47,13 @@ def report_messages_by_module_stats(sect, stats, _):
             by_mod[module][m_type] = percent
     sorted_result = []
     for module, mod_info in by_mod.items():
-        sorted_result.append(
-            (
-                mod_info["error"],
-                mod_info["warning"],
-                mod_info["refactor"],
-                mod_info["convention"],
-                module,
-            )
-        )
+        sorted_result.append((
+            mod_info["error"],
+            mod_info["warning"],
+            mod_info["refactor"],
+            mod_info["convention"],
+            module,
+        ))
     sorted_result.sort()
     sorted_result.reverse()
     lines = ["module", "error", "warning", "refactor", "convention"]

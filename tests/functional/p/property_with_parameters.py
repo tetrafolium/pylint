@@ -10,7 +10,6 @@ class Cls:
 
 class MyClassBase(metaclass=ABCMeta):
     """MyClassBase."""
-
     @abstractproperty
     def example(self):
         """Getter."""

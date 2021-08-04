@@ -34,7 +34,7 @@ class LenChecker(checkers.BaseChecker):
     * bool(len(sequence))
     """
 
-    __implements__ = (interfaces.IAstroidChecker,)
+    __implements__ = (interfaces.IAstroidChecker, )
 
     # configuration section name
     name = "refactoring"
@@ -70,20 +70,18 @@ class LenChecker(checkers.BaseChecker):
         if not utils.is_test_condition(node, parent):
             return
         len_arg = node.args[0]
-        generator_or_comprehension = (
-            ListComp, SetComp, DictComp, GeneratorExp)
+        generator_or_comprehension = (ListComp, SetComp, DictComp,
+                                      GeneratorExp)
         if isinstance(len_arg, generator_or_comprehension):
             # The node is a generator or comprehension as in len([x for x in ...])
             self.add_message("len-as-condition", node=node)
             return
         instance = next(len_arg.infer())
         mother_classes = self.base_classes_of_node(instance)
-        affected_by_pep8 = any(
-            t in mother_classes for t in ["str", "tuple", "list", "set"]
-        )
-        if "range" in mother_classes or (
-            affected_by_pep8 and not self.instance_has_bool(instance)
-        ):
+        affected_by_pep8 = any(t in mother_classes
+                               for t in ["str", "tuple", "list", "set"])
+        if "range" in mother_classes or (affected_by_pep8 and
+                                         not self.instance_has_bool(instance)):
             self.add_message("len-as-condition", node=node)
 
     @staticmethod
@@ -100,15 +98,13 @@ class LenChecker(checkers.BaseChecker):
         """`not len(S)` must become `not S` regardless if the parent block
         is a test condition or something else (boolean expression)
         e.g. `if not len(S):`"""
-        if (
-            isinstance(node, astroid.UnaryOp)
-            and node.op == "not"
-            and utils.is_call_of_name(node.operand, "len")
-        ):
+        if (isinstance(node, astroid.UnaryOp) and node.op == "not"
+                and utils.is_call_of_name(node.operand, "len")):
             self.add_message("len-as-condition", node=node)
 
     @staticmethod
-    def base_classes_of_node(instance: astroid.nodes.ClassDef) -> List[astroid.Name]:
+    def base_classes_of_node(
+            instance: astroid.nodes.ClassDef) -> List[astroid.Name]:
         """Return all the classes names that a ClassDef inherit from including 'object'."""
         try:
             return [instance.name] + [x.name for x in instance.ancestors()]

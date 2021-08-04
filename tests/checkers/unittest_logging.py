@@ -10,7 +10,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Unittest for the logging checker."""
 import sys
 
@@ -26,89 +25,75 @@ class TestLoggingModuleDetection(CheckerTestCase):
     CHECKER_CLASS = logging.LoggingChecker
 
     def test_detects_standard_logging_module(self):
-        stmts = astroid.extract_node(
-            """
+        stmts = astroid.extract_node("""
         import logging #@
         logging.warn('%s' % '%s')  #@
-        """
-        )
+        """)
         self.checker.visit_module(None)
         self.checker.visit_import(stmts[0])
         with self.assertAddsMessages(
-            Message("logging-not-lazy", node=stmts[1], args=("lazy %",))
-        ):
+                Message("logging-not-lazy", node=stmts[1], args=("lazy %", ))):
             self.checker.visit_call(stmts[1])
 
     def test_dont_crash_on_invalid_format_string(self):
-        node = astroid.parse(
-            """
+        node = astroid.parse("""
         import logging
         logging.error('0} - {1}'.format(1, 2))
-        """
-        )
+        """)
         self.walk(node)
 
     def test_detects_renamed_standard_logging_module(self):
-        stmts = astroid.extract_node(
-            """
+        stmts = astroid.extract_node("""
         import logging as blogging #@
         blogging.warn('%s' % '%s')  #@
-        """
-        )
+        """)
         self.checker.visit_module(None)
         self.checker.visit_import(stmts[0])
         with self.assertAddsMessages(
-            Message("logging-not-lazy", node=stmts[1], args=("lazy %",))
-        ):
+                Message("logging-not-lazy", node=stmts[1], args=("lazy %", ))):
             self.checker.visit_call(stmts[1])
 
     @set_config(logging_modules=["logging", "my.logging"])
     def test_nonstandard_logging_module(self):
-        stmts = astroid.extract_node(
-            """
+        stmts = astroid.extract_node("""
         from my import logging as blogging #@
         blogging.warn('%s' % '%s')  #@
-        """
-        )
+        """)
         self.checker.visit_module(None)
         self.checker.visit_import(stmts[0])
         with self.assertAddsMessages(
-            Message("logging-not-lazy", node=stmts[1], args=("lazy %",))
-        ):
+                Message("logging-not-lazy", node=stmts[1], args=("lazy %", ))):
             self.checker.visit_call(stmts[1])
 
     def _assert_logging_format_no_messages(self, stmt):
-        stmts = astroid.extract_node(
-            """
+        stmts = astroid.extract_node("""
         import logging #@
         logging.error<placeholder> #@
-        """.replace(
-                "<placeholder>", stmt
-            )
-        )
+        """.replace("<placeholder>", stmt))
         self.checker.visit_module(None)
         self.checker.visit_import(stmts[0])
         with self.assertNoMessages():
             self.checker.visit_call(stmts[1])
 
-    def _assert_logging_format_message(self, msg, stmt, args=None, with_too_many=False):
-        stmts = astroid.extract_node(
-            """
+    def _assert_logging_format_message(self,
+                                       msg,
+                                       stmt,
+                                       args=None,
+                                       with_too_many=False):
+        stmts = astroid.extract_node("""
         import logging #@
         logging.error<placeholder> #@
-        """.replace(
-                "<placeholder>", stmt
-            )
-        )
+        """.replace("<placeholder>", stmt))
         self.checker.visit_module(None)
         self.checker.visit_import(stmts[0])
-        messages = [Message(msg, node=stmts[1], args=args,
-                            confidence=UNDEFINED)]
+        messages = [
+            Message(msg, node=stmts[1], args=args, confidence=UNDEFINED)
+        ]
         if with_too_many:
             messages.append(
                 Message("logging-too-many-args",
-                        node=stmts[1], confidence=UNDEFINED)
-            )
+                        node=stmts[1],
+                        confidence=UNDEFINED))
         with self.assertAddsMessages(*messages):
             self.checker.visit_call(stmts[1])
 
@@ -135,8 +120,7 @@ class TestLoggingModuleDetection(CheckerTestCase):
         self._assert_logging_format_too_few_args("('{}, {}', 1)")
         self._assert_logging_format_too_few_args("('{0}, {1}', 1)")
         self._assert_logging_format_too_few_args(
-            "('{named1}, {named2}', {'named1': 1})"
-        )
+            "('{named1}, {named2}', {'named1': 1})")
         self._assert_logging_format_too_few_args("('{0}, {named}', 1)")
         self._assert_logging_format_too_few_args(
             "('{}, {named}', {'named': 1})")
@@ -151,12 +135,12 @@ class TestLoggingModuleDetection(CheckerTestCase):
         self._assert_logging_format_too_many_args(
             "('{}, {named}', 1, 2, {'named': 1})")
         self._assert_logging_format_too_many_args(
-            "('{0}, {named}', 1, 2, {'named': 1})"
-        )
+            "('{0}, {named}', 1, 2, {'named': 1})")
 
-    @pytest.mark.skipif(sys.version_info < (3, 6), reason="F-string require >=3.6")
+    @pytest.mark.skipif(sys.version_info < (3, 6),
+                        reason="F-string require >=3.6")
     @set_config(logging_format_style="new")
     def test_fstr_not_new_format_style_matching_arguments(self):
         msg = "logging-fstring-interpolation"
-        args = ("lazy %",)
+        args = ("lazy %", )
         self._assert_logging_format_message(msg, "(f'{named}')", args)

@@ -10,7 +10,6 @@ raise Exception, 1
 
 class Test(object):
     """dummy"""
-
     def __init__(self):
         # warning: Calling a dict.iter*() method
         {1: 2}.iteritems()

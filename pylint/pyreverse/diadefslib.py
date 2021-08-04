@@ -15,7 +15,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """handle diagram generation options for class diagram or default diagrams
 """
 
@@ -31,7 +30,6 @@ BUILTINS_NAME = "builtins"
 
 class DiaDefGenerator:
     """handle diagram generation options"""
-
     def __init__(self, linker, handler):
         """common Diagram Handler initialization"""
         self.config = handler.config
@@ -98,19 +96,21 @@ class DiaDefGenerator:
         """return associated nodes of a class node"""
         if level == 0:
             return
-        for association_nodes in list(klass_node.instance_attrs_type.values()) + list(
-            klass_node.locals_type.values()
-        ):
+        for association_nodes in list(
+                klass_node.instance_attrs_type.values()) + list(
+                    klass_node.locals_type.values()):
             for node in association_nodes:
                 if isinstance(node, astroid.Instance):
                     node = node._proxied
-                if not (isinstance(node, astroid.ClassDef) and self.show_node(node)):
+                if not (isinstance(node, astroid.ClassDef)
+                        and self.show_node(node)):
                     continue
                 yield node
 
     def extract_classes(self, klass_node, anc_level, association_level):
         """extract recursively classes related to klass_node"""
-        if self.classdiagram.has_node(klass_node) or not self.show_node(klass_node):
+        if self.classdiagram.has_node(
+                klass_node) or not self.show_node(klass_node):
             return
         self.add_class(klass_node)
 
@@ -127,7 +127,6 @@ class DefaultDiadefGenerator(LocalsVisitor, DiaDefGenerator):
     * a package diagram including project's modules
     * a class diagram including project's classes
     """
-
     def __init__(self, linker, handler):
         DiaDefGenerator.__init__(self, linker, handler)
         LocalsVisitor.__init__(self)
@@ -151,7 +150,7 @@ class DefaultDiadefGenerator(LocalsVisitor, DiaDefGenerator):
         """
         if self.pkgdiagram:
             return self.pkgdiagram, self.classdiagram
-        return (self.classdiagram,)
+        return (self.classdiagram, )
 
     def visit_module(self, node):
         """visit an astroid.Module node
@@ -180,7 +179,6 @@ class ClassDiadefGenerator(DiaDefGenerator):
     """generate a class diagram definition including all classes related to a
     given class
     """
-
     def __init__(self, linker, handler):
         DiaDefGenerator.__init__(self, linker, handler)
 
@@ -211,7 +209,6 @@ class DiadefsHandler:
 
     get it from user (i.e. xml files) or generate them
     """
-
     def __init__(self, config):
         self.config = config
 

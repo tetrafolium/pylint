@@ -11,8 +11,7 @@ BAD_ESCAPE_BLOCK = b'''
     abc
     \z
 '''
-BAD_ESCAPE_PARENS = (b'abc'
-                     b'\z')  # [anomalous-backslash-in-string]
+BAD_ESCAPE_PARENS = (b'abc' b'\z')  # [anomalous-backslash-in-string]
 GOOD_ESCAPE = '\b'
 
 # Valid raw strings

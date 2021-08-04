@@ -7,7 +7,6 @@ positional-only arguments (PEP 570).
 
 class Foobar:
     """Class for frobulating the Foobar."""
-
     @classmethod
     def buildme(cls, /, value):
         """Construct object using alternate method."""

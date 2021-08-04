@@ -22,7 +22,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Check format checker helper functions"""
 
 import os
@@ -40,74 +39,68 @@ class TestMultiStatementLine(CheckerTestCase):
     CHECKER_CLASS = FormatChecker
 
     def testSingleLineIfStmts(self):
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         if True: pass  #@
-        """
-        )
+        """)
         self.checker.config.single_line_if_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_if_stmt = True
         with self.assertNoMessages():
             self.visitFirst(stmt)
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         if True: pass  #@
         else:
             pass
-        """
-        )
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        """)
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
 
     def testSingleLineClassStmts(self):
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         class MyError(Exception): pass  #@
-        """
-        )
+        """)
         self.checker.config.single_line_class_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_class_stmt = True
         with self.assertNoMessages():
             self.visitFirst(stmt)
 
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         class MyError(Exception): a='a'  #@
-        """
-        )
+        """)
         self.checker.config.single_line_class_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_class_stmt = True
         with self.assertNoMessages():
             self.visitFirst(stmt)
 
-        stmt = astroid.extract_node(
-            """
+        stmt = astroid.extract_node("""
         class MyError(Exception): a='a'; b='b'  #@
-        """
-        )
+        """)
         self.checker.config.single_line_class_stmt = False
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
         self.checker.config.single_line_class_stmt = True
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
 
     def testTryExceptFinallyNoMultipleStatement(self):
-        tree = astroid.extract_node(
-            """
+        tree = astroid.extract_node("""
         try:  #@
             pass
         except:
             pass
         finally:
-            pass"""
-        )
+            pass""")
         with self.assertNoMessages():
             self.visitFirst(tree)
 
@@ -129,7 +122,8 @@ class TestMultiStatementLine(CheckerTestCase):
         def concat2(arg1: str) -> str: ...
         """
         stmt = astroid.extract_node(code)
-        with self.assertAddsMessages(Message("multiple-statements", node=stmt.body[0])):
+        with self.assertAddsMessages(
+                Message("multiple-statements", node=stmt.body[0])):
             self.visitFirst(stmt)
 
 
@@ -158,17 +152,23 @@ class TestSuperfluousParentheses(CheckerTestCase):
     def testCheckKeywordParensHandlesUnnecessaryParens(self):
         cases = [
             (Message("superfluous-parens", line=1, args="if"), "if (foo):", 0),
-            (Message("superfluous-parens", line=1, args="if"), "if ((foo, bar)):", 0),
-            (Message("superfluous-parens", line=1, args="if"), "if (foo(bar)):", 0),
+            (Message("superfluous-parens", line=1,
+                     args="if"), "if ((foo, bar)):", 0),
+            (Message("superfluous-parens", line=1,
+                     args="if"), "if (foo(bar)):", 0),
             (
                 Message("superfluous-parens", line=1, args="return"),
                 "return ((x for x in x))",
                 0,
             ),
-            (Message("superfluous-parens", line=1, args="not"), "not (foo)", 0),
-            (Message("superfluous-parens", line=1, args="not"), "if not (foo):", 1),
-            (Message("superfluous-parens", line=1, args="if"), "if (not (foo)):", 0),
-            (Message("superfluous-parens", line=1, args="not"), "if (not (foo)):", 2),
+            (Message("superfluous-parens", line=1,
+                     args="not"), "not (foo)", 0),
+            (Message("superfluous-parens", line=1,
+                     args="not"), "if not (foo):", 1),
+            (Message("superfluous-parens", line=1,
+                     args="if"), "if (not (foo)):", 0),
+            (Message("superfluous-parens", line=1,
+                     args="not"), "if (not (foo)):", 2),
             (
                 Message("superfluous-parens", line=1, args="for"),
                 "for (x) in (1, 2, 3):",
@@ -191,8 +191,8 @@ class TestSuperfluousParentheses(CheckerTestCase):
         code = "if (odd := is_odd(i))"
         offset = 0
         with self.assertNoMessages():
-            self.checker._check_keyword_parentheses(
-                _tokenize_str(code), offset)
+            self.checker._check_keyword_parentheses(_tokenize_str(code),
+                                                    offset)
 
     def testPositiveSuperfluousParensWalrusOperatorIf(self):
         """Test positive superfluous parens with the walrus operator"""
@@ -211,8 +211,8 @@ class TestSuperfluousParentheses(CheckerTestCase):
         cases = [("if (foo):", 0), ("assert (1 == 1)", 0)]
 
         for code, offset in cases:
-            self.checker._check_keyword_parentheses(
-                _tokenize_str(code), offset)
+            self.checker._check_keyword_parentheses(_tokenize_str(code),
+                                                    offset)
             got = self.linter.release_messages()
             assert isinstance(got[-1].args, str)
 
@@ -228,8 +228,8 @@ print('Hello world!')
     def testKeywordParensFalsePositive(self):
         code = "if 'bar' in (DICT or {}):"
         with self.assertNoMessages():
-            self.checker._check_keyword_parentheses(
-                _tokenize_str(code), start=2)
+            self.checker._check_keyword_parentheses(_tokenize_str(code),
+                                                    start=2)
 
 
 class TestCheckSpace(CheckerTestCase):
@@ -242,12 +242,10 @@ class TestCheckSpace(CheckerTestCase):
         reading a file does
         """
         with self.assertNoMessages():
-            encoding_token = tokenize.TokenInfo(
-                tokenize.ENCODING, "utf-8", (0, 0), (0, 0), ""
-            )
-            tokens = [encoding_token] + _tokenize_str(
-                "if (\n        None):\n    pass\n"
-            )
+            encoding_token = tokenize.TokenInfo(tokenize.ENCODING, "utf-8",
+                                                (0, 0), (0, 0), "")
+            tokens = [encoding_token
+                      ] + _tokenize_str("if (\n        None):\n    pass\n")
             self.checker.process_tokens(tokens)
 
 
@@ -258,20 +256,17 @@ def test_disable_global_option_end_of_line():
     """
     file_ = tempfile.NamedTemporaryFile("w", delete=False)
     with file_:
-        file_.write(
-            """
+        file_.write("""
 mylist = [
     None
         ]
-    """
-        )
+    """)
     try:
         linter = lint.PyLinter()
         checker = FormatChecker(linter)
         linter.register_checker(checker)
         args = linter.load_command_line_configuration(
-            [file_.name, "-d", "bad-continuation"]
-        )
+            [file_.name, "-d", "bad-continuation"])
         myreporter = reporters.CollectingReporter()
         linter.set_reporter(myreporter)
         linter.check(args)

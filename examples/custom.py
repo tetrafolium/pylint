@@ -24,7 +24,8 @@ class MyAstroidChecker(BaseChecker):
         # a unique symbol that identifies the message,
         # and a detailed help message
         # that will be included in the documentation.
-        "W0001": ("Message that will be emitted", "message-symbol", "Message help")
+        "W0001":
+        ("Message that will be emitted", "message-symbol", "Message help")
     }
     # This class variable declares the options
     # that are configurable by the user.
@@ -36,14 +37,13 @@ class MyAstroidChecker(BaseChecker):
         (
             "store-locals-indicator",
             {
-                "default": "properties",
-                "help": (
-                    "The expression name that indicates that the locals should "
-                    "be stored"
-                ),
+                "default":
+                "properties",
+                "help":
+                ("The expression name that indicates that the locals should "
+                 "be stored"),
             },
-        ),
-    )
+        ), )
 
     def visit_call(self, node):
         """Called when a :class:`.astroid.node_classes.Call` node is visited.
@@ -53,12 +53,10 @@ class MyAstroidChecker(BaseChecker):
         :param node: The node to check.
         :type node: astroid.node_classes.Call
         """
-        if not (
-            isinstance(node.func, astroid.Attribute)
-            and isinstance(node.func.expr, astroid.Name)
-            and node.func.expr.name == self.config.store_locals_indicator
-            and node.func.attrname == "create"
-        ):
+        if not (isinstance(node.func, astroid.Attribute)
+                and isinstance(node.func.expr, astroid.Name)
+                and node.func.expr.name == self.config.store_locals_indicator
+                and node.func.attrname == "create"):
             return
         in_class = node.frame()
         for param in node.args:

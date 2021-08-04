@@ -4,7 +4,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Checker for deprecated builtins."""
 import astroid
 
@@ -20,7 +19,7 @@ BUILTIN_HINTS["filter"] = BUILTIN_HINTS["map"]
 
 class BadBuiltinChecker(BaseChecker):
 
-    __implements__ = (IAstroidChecker,)
+    __implements__ = (IAstroidChecker, )
     name = "deprecated_builtins"
     msgs = {
         "W0141": (
@@ -33,18 +32,20 @@ class BadBuiltinChecker(BaseChecker):
         )
     }
 
-    options = (
-        (
-            "bad-functions",
-            {
-                "default": BAD_FUNCTIONS,
-                "type": "csv",
-                "metavar": "<builtin function names>",
-                "help": "List of builtins function names that should not be "
-                "used, separated by a comma",
-            },
-        ),
-    )
+    options = ((
+        "bad-functions",
+        {
+            "default":
+            BAD_FUNCTIONS,
+            "type":
+            "csv",
+            "metavar":
+            "<builtin function names>",
+            "help":
+            "List of builtins function names that should not be "
+            "used, separated by a comma",
+        },
+    ), )
 
     @check_messages("bad-builtin")
     def visit_call(self, node):

@@ -10,7 +10,6 @@ from pylint.__pkginfo__ import version as pylint_version
 PY38_PLUS = sys.version_info[:2] >= (3, 8)
 PY310_PLUS = sys.version_info[:2] >= (3, 10)
 
-
 PY_EXTS = (".py", ".pyc", ".pyo", ".pyw", ".so", ".dll")
 
 MSG_STATE_CONFIDENCE = 2

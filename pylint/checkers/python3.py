@@ -34,7 +34,6 @@
 # Copyright (c) 2020 Athos Ribeiro <athoscr@fedoraproject.org>
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Check Python 2 code for Python 2/3 source-compatible issues."""
 import itertools
 import re
@@ -142,17 +141,13 @@ def _in_iterating_context(node):
     # If the call is in an unpacking, there's no need to warn,
     # since it can be considered iterating.
     elif isinstance(parent, astroid.Assign) and isinstance(
-        parent.targets[0], (astroid.List, astroid.Tuple)
-    ):
+            parent.targets[0], (astroid.List, astroid.Tuple)):
         if len(parent.targets[0].elts) > 1:
             return True
     # If the call is in a containment check, we consider that to
     # be an iterating context
-    elif (
-        isinstance(parent, astroid.Compare)
-        and len(parent.ops) == 1
-        and parent.ops[0][0] in ["in", "not in"]
-    ):
+    elif (isinstance(parent, astroid.Compare) and len(parent.ops) == 1
+          and parent.ops[0][0] in ["in", "not in"]):
         return True
     # Also if it's an `yield from`, that's fair
     elif isinstance(parent, astroid.YieldFrom):
@@ -166,9 +161,8 @@ def _is_conditional_import(node):
     """Checks if an import node is in the context of a conditional."""
     parent = node.parent
     return isinstance(
-        parent, (astroid.TryExcept, astroid.ExceptHandler,
-                 astroid.If, astroid.IfExp)
-    )
+        parent,
+        (astroid.TryExcept, astroid.ExceptHandler, astroid.If, astroid.IfExp))
 
 
 Branch = namedtuple("Branch", ["node", "is_py2_only"])
@@ -201,7 +195,9 @@ class Python3Checker(checkers.BaseChecker):
             "Python3 will not allow implicit unpacking of "
             "exceptions in except clauses. "
             "See https://www.python.org/dev/peps/pep-3110/",
-            {"old_names": [("W0712", "old-unpacking-in-except")]},
+            {
+                "old_names": [("W0712", "old-unpacking-in-except")]
+            },
         ),
         "E1604": (
             "Use raise ErrorClass(args) instead of raise ErrorClass, args.",
@@ -209,22 +205,28 @@ class Python3Checker(checkers.BaseChecker):
             "Used when the alternate raise syntax "
             "'raise foo, bar' is used "
             "instead of 'raise foo(bar)'.",
-            {"old_names": [("W0121", "old-old-raise-syntax")]},
+            {
+                "old_names": [("W0121", "old-old-raise-syntax")]
+            },
         ),
         "E1605": (
             "Use of the `` operator",
             "backtick",
             'Used when the deprecated "``" (backtick) operator is used '
             "instead  of the str() function.",
-            {"scope": WarningScope.NODE, "old_names": [
-                ("W0333", "old-backtick")]},
+            {
+                "scope": WarningScope.NODE,
+                "old_names": [("W0333", "old-backtick")]
+            },
         ),
         "E1609": (
             "Import * only allowed at module level",
             "import-star-module-level",
             "Used when the import star syntax is used somewhere "
             "else than the module level.",
-            {"maxversion": (3, 0)},
+            {
+                "maxversion": (3, 0)
+            },
         ),
         "W1601": (
             "apply built-in referenced",
@@ -371,14 +373,18 @@ class Python3Checker(checkers.BaseChecker):
             "indexing-exception",
             "Indexing exceptions will not work on Python 3. Use "
             "`exception.args[index]` instead.",
-            {"old_names": [("W0713", "old-indexing-exception")]},
+            {
+                "old_names": [("W0713", "old-indexing-exception")]
+            },
         ),
         "W1625": (
             "Raising a string exception",
             "raising-string",
             "Used when a string exception is raised. This will not "
             "work on Python 3.",
-            {"old_names": [("W0701", "old-raising-string")]},
+            {
+                "old_names": [("W0701", "old-raising-string")]
+            },
         ),
         "W1626": (
             "reload built-in referenced",
@@ -438,7 +444,9 @@ class Python3Checker(checkers.BaseChecker):
             "map-builtin-not-iterating",
             "Used when the map built-in is referenced in a non-iterating "
             "context (returns an iterator in Python 3)",
-            {"old_names": [("W1631", "implicit-map-evaluation")]},
+            {
+                "old_names": [("W1631", "implicit-map-evaluation")]
+            },
         ),
         "W1637": (
             "zip built-in referenced when not iterating",
@@ -603,319 +611,307 @@ class Python3Checker(checkers.BaseChecker):
         ),
     }
 
-    _bad_builtins = frozenset(
-        [
-            "apply",
-            "basestring",
-            "buffer",
-            "cmp",
-            "coerce",
-            "execfile",
-            "file",
-            "input",  # Not missing, but incompatible semantics
-            "intern",
-            "long",
-            "raw_input",
-            "reduce",
-            "round",  # Not missing, but incompatible semantics
-            "StandardError",
-            "unichr",
-            "unicode",
-            "xrange",
-            "reload",
-        ]
-    )
+    _bad_builtins = frozenset([
+        "apply",
+        "basestring",
+        "buffer",
+        "cmp",
+        "coerce",
+        "execfile",
+        "file",
+        "input",  # Not missing, but incompatible semantics
+        "intern",
+        "long",
+        "raw_input",
+        "reduce",
+        "round",  # Not missing, but incompatible semantics
+        "StandardError",
+        "unichr",
+        "unicode",
+        "xrange",
+        "reload",
+    ])
 
-    _unused_magic_methods = frozenset(
-        [
-            "__coerce__",
-            "__delslice__",
-            "__getslice__",
-            "__setslice__",
-            "__oct__",
-            "__hex__",
-            "__nonzero__",
-            "__cmp__",
-            "__div__",
-            "__idiv__",
-            "__rdiv__",
-        ]
-    )
+    _unused_magic_methods = frozenset([
+        "__coerce__",
+        "__delslice__",
+        "__getslice__",
+        "__setslice__",
+        "__oct__",
+        "__hex__",
+        "__nonzero__",
+        "__cmp__",
+        "__div__",
+        "__idiv__",
+        "__rdiv__",
+    ])
 
-    _invalid_encodings = frozenset(
-        [
-            "base64_codec",
-            "base64",
-            "base_64",
-            "bz2_codec",
-            "bz2",
-            "hex_codec",
-            "hex",
-            "quopri_codec",
-            "quopri",
-            "quotedprintable",
-            "quoted_printable",
-            "uu_codec",
-            "uu",
-            "zlib_codec",
-            "zlib",
-            "zip",
-            "rot13",
-            "rot_13",
-        ]
-    )
+    _invalid_encodings = frozenset([
+        "base64_codec",
+        "base64",
+        "base_64",
+        "bz2_codec",
+        "bz2",
+        "hex_codec",
+        "hex",
+        "quopri_codec",
+        "quopri",
+        "quotedprintable",
+        "quoted_printable",
+        "uu_codec",
+        "uu",
+        "zlib_codec",
+        "zlib",
+        "zip",
+        "rot13",
+        "rot_13",
+    ])
 
     _bad_python3_module_map = {
-        "sys-max-int": {"sys": frozenset(["maxint"])},
+        "sys-max-int": {
+            "sys": frozenset(["maxint"])
+        },
         "deprecated-itertools-function": {
-            "itertools": frozenset(
-                ["izip", "ifilter", "imap", "izip_longest", "ifilterfalse"]
-            )
+            "itertools":
+            frozenset(
+                ["izip", "ifilter", "imap", "izip_longest", "ifilterfalse"])
         },
         "deprecated-types-field": {
-            "types": frozenset(
-                [
-                    "EllipsisType",
-                    "XRangeType",
-                    "ComplexType",
-                    "StringType",
-                    "TypeType",
-                    "LongType",
-                    "UnicodeType",
-                    "ClassType",
-                    "BufferType",
-                    "StringTypes",
-                    "NotImplementedType",
-                    "NoneType",
-                    "InstanceType",
-                    "FloatType",
-                    "SliceType",
-                    "UnboundMethodType",
-                    "ObjectType",
-                    "IntType",
-                    "TupleType",
-                    "ListType",
-                    "DictType",
-                    "FileType",
-                    "DictionaryType",
-                    "BooleanType",
-                    "DictProxyType",
-                ]
-            )
+            "types":
+            frozenset([
+                "EllipsisType",
+                "XRangeType",
+                "ComplexType",
+                "StringType",
+                "TypeType",
+                "LongType",
+                "UnicodeType",
+                "ClassType",
+                "BufferType",
+                "StringTypes",
+                "NotImplementedType",
+                "NoneType",
+                "InstanceType",
+                "FloatType",
+                "SliceType",
+                "UnboundMethodType",
+                "ObjectType",
+                "IntType",
+                "TupleType",
+                "ListType",
+                "DictType",
+                "FileType",
+                "DictionaryType",
+                "BooleanType",
+                "DictProxyType",
+            ])
         },
-        "bad-python3-import": frozenset(
-            [
-                "anydbm",
-                "BaseHTTPServer",
-                "__builtin__",
-                "CGIHTTPServer",
-                "ConfigParser",
-                "copy_reg",
-                "cPickle",
-                "cStringIO",
-                "Cookie",
-                "cookielib",
-                "dbhash",
-                "dumbdbm",
-                "dumbdb",
-                "Dialog",
-                "DocXMLRPCServer",
-                "FileDialog",
-                "FixTk",
-                "gdbm",
-                "htmlentitydefs",
-                "HTMLParser",
-                "httplib",
-                "markupbase",
-                "Queue",
-                "repr",
-                "robotparser",
-                "ScrolledText",
-                "SimpleDialog",
-                "SimpleHTTPServer",
-                "SimpleXMLRPCServer",
-                "StringIO",
-                "dummy_thread",
-                "SocketServer",
-                "test.test_support",
-                "Tkinter",
-                "Tix",
-                "Tkconstants",
-                "tkColorChooser",
-                "tkCommonDialog",
-                "Tkdnd",
-                "tkFileDialog",
-                "tkFont",
-                "tkMessageBox",
-                "tkSimpleDialog",
-                "UserList",
-                "UserString",
-                "whichdb",
-                "_winreg",
-                "xmlrpclib",
-                "audiodev",
-                "Bastion",
-                "bsddb185",
-                "bsddb3",
-                "Canvas",
-                "cfmfile",
-                "cl",
-                "commands",
-                "compiler",
-                "dircache",
-                "dl",
-                "exception",
-                "fpformat",
-                "htmllib",
-                "ihooks",
-                "imageop",
-                "imputil",
-                "linuxaudiodev",
-                "md5",
-                "mhlib",
-                "mimetools",
-                "MimeWriter",
-                "mimify",
-                "multifile",
-                "mutex",
-                "new",
-                "popen2",
-                "posixfile",
-                "pure",
-                "rexec",
-                "rfc822",
-                "sets",
-                "sha",
-                "sgmllib",
-                "sre",
-                "stringold",
-                "sunaudio",
-                "sv",
-                "test.testall",
-                "thread",
-                "timing",
-                "toaiff",
-                "user",
-                "urllib2",
-                "urlparse",
-            ]
-        ),
+        "bad-python3-import":
+        frozenset([
+            "anydbm",
+            "BaseHTTPServer",
+            "__builtin__",
+            "CGIHTTPServer",
+            "ConfigParser",
+            "copy_reg",
+            "cPickle",
+            "cStringIO",
+            "Cookie",
+            "cookielib",
+            "dbhash",
+            "dumbdbm",
+            "dumbdb",
+            "Dialog",
+            "DocXMLRPCServer",
+            "FileDialog",
+            "FixTk",
+            "gdbm",
+            "htmlentitydefs",
+            "HTMLParser",
+            "httplib",
+            "markupbase",
+            "Queue",
+            "repr",
+            "robotparser",
+            "ScrolledText",
+            "SimpleDialog",
+            "SimpleHTTPServer",
+            "SimpleXMLRPCServer",
+            "StringIO",
+            "dummy_thread",
+            "SocketServer",
+            "test.test_support",
+            "Tkinter",
+            "Tix",
+            "Tkconstants",
+            "tkColorChooser",
+            "tkCommonDialog",
+            "Tkdnd",
+            "tkFileDialog",
+            "tkFont",
+            "tkMessageBox",
+            "tkSimpleDialog",
+            "UserList",
+            "UserString",
+            "whichdb",
+            "_winreg",
+            "xmlrpclib",
+            "audiodev",
+            "Bastion",
+            "bsddb185",
+            "bsddb3",
+            "Canvas",
+            "cfmfile",
+            "cl",
+            "commands",
+            "compiler",
+            "dircache",
+            "dl",
+            "exception",
+            "fpformat",
+            "htmllib",
+            "ihooks",
+            "imageop",
+            "imputil",
+            "linuxaudiodev",
+            "md5",
+            "mhlib",
+            "mimetools",
+            "MimeWriter",
+            "mimify",
+            "multifile",
+            "mutex",
+            "new",
+            "popen2",
+            "posixfile",
+            "pure",
+            "rexec",
+            "rfc822",
+            "sets",
+            "sha",
+            "sgmllib",
+            "sre",
+            "stringold",
+            "sunaudio",
+            "sv",
+            "test.testall",
+            "thread",
+            "timing",
+            "toaiff",
+            "user",
+            "urllib2",
+            "urlparse",
+        ]),
         "deprecated-string-function": {
-            "string": frozenset(
-                [
-                    "maketrans",
-                    "atof",
-                    "atoi",
-                    "atol",
-                    "capitalize",
-                    "expandtabs",
-                    "find",
-                    "rfind",
-                    "index",
-                    "rindex",
-                    "count",
-                    "lower",
-                    "letters",
-                    "split",
-                    "rsplit",
-                    "splitfields",
-                    "join",
-                    "joinfields",
-                    "lstrip",
-                    "rstrip",
-                    "strip",
-                    "swapcase",
-                    "translate",
-                    "upper",
-                    "ljust",
-                    "rjust",
-                    "center",
-                    "zfill",
-                    "replace",
-                    "lowercase",
-                    "letters",
-                    "uppercase",
-                    "atol_error",
-                    "atof_error",
-                    "atoi_error",
-                    "index_error",
-                ]
-            )
+            "string":
+            frozenset([
+                "maketrans",
+                "atof",
+                "atoi",
+                "atol",
+                "capitalize",
+                "expandtabs",
+                "find",
+                "rfind",
+                "index",
+                "rindex",
+                "count",
+                "lower",
+                "letters",
+                "split",
+                "rsplit",
+                "splitfields",
+                "join",
+                "joinfields",
+                "lstrip",
+                "rstrip",
+                "strip",
+                "swapcase",
+                "translate",
+                "upper",
+                "ljust",
+                "rjust",
+                "center",
+                "zfill",
+                "replace",
+                "lowercase",
+                "letters",
+                "uppercase",
+                "atol_error",
+                "atof_error",
+                "atoi_error",
+                "index_error",
+            ])
         },
-        "deprecated-operator-function": {"operator": frozenset({"div"})},
+        "deprecated-operator-function": {
+            "operator": frozenset({"div"})
+        },
         "deprecated-urllib-function": {
-            "urllib": frozenset(
-                {
-                    "addbase",
-                    "addclosehook",
-                    "addinfo",
-                    "addinfourl",
-                    "always_safe",
-                    "basejoin",
-                    "ftpcache",
-                    "ftperrors",
-                    "ftpwrapper",
-                    "getproxies",
-                    "getproxies_environment",
-                    "getproxies_macosx_sysconf",
-                    "main",
-                    "noheaders",
-                    "pathname2url",
-                    "proxy_bypass",
-                    "proxy_bypass_environment",
-                    "proxy_bypass_macosx_sysconf",
-                    "quote",
-                    "quote_plus",
-                    "reporthook",
-                    "splitattr",
-                    "splithost",
-                    "splitnport",
-                    "splitpasswd",
-                    "splitport",
-                    "splitquery",
-                    "splittag",
-                    "splittype",
-                    "splituser",
-                    "splitvalue",
-                    "unquote",
-                    "unquote_plus",
-                    "unwrap",
-                    "url2pathname",
-                    "urlcleanup",
-                    "urlencode",
-                    "urlopen",
-                    "urlretrieve",
-                }
-            )
+            "urllib":
+            frozenset({
+                "addbase",
+                "addclosehook",
+                "addinfo",
+                "addinfourl",
+                "always_safe",
+                "basejoin",
+                "ftpcache",
+                "ftperrors",
+                "ftpwrapper",
+                "getproxies",
+                "getproxies_environment",
+                "getproxies_macosx_sysconf",
+                "main",
+                "noheaders",
+                "pathname2url",
+                "proxy_bypass",
+                "proxy_bypass_environment",
+                "proxy_bypass_macosx_sysconf",
+                "quote",
+                "quote_plus",
+                "reporthook",
+                "splitattr",
+                "splithost",
+                "splitnport",
+                "splitpasswd",
+                "splitport",
+                "splitquery",
+                "splittag",
+                "splittype",
+                "splituser",
+                "splitvalue",
+                "unquote",
+                "unquote_plus",
+                "unwrap",
+                "url2pathname",
+                "urlcleanup",
+                "urlencode",
+                "urlopen",
+                "urlretrieve",
+            })
         },
-        "deprecated-sys-function": {"sys": frozenset({"exc_clear"})},
+        "deprecated-sys-function": {
+            "sys": frozenset({"exc_clear"})
+        },
     }
 
     _deprecated_attrs = frozenset(
         itertools.chain.from_iterable(
-            attr
-            for module_map in _bad_python3_module_map.values()
-            if isinstance(module_map, dict)
-            for attr in module_map.values()
-        )
-    )
+            attr for module_map in _bad_python3_module_map.values()
+            if isinstance(module_map, dict) for attr in module_map.values()))
 
-    _relevant_call_attrs = (
-        DICT_METHODS | _deprecated_attrs | {"encode", "decode", "translate"}
-    )
+    _relevant_call_attrs = (DICT_METHODS | _deprecated_attrs
+                            | {"encode", "decode", "translate"})
 
-    _python_2_tests = frozenset(
-        [
-            astroid.extract_node(x).repr_tree()
-            for x in [
-                "sys.version_info[0] == 2",
-                "sys.version_info[0] < 3",
-                "sys.version_info == (2, 7)",
-                "sys.version_info <= (2, 7)",
-                "sys.version_info < (3, 0)",
-            ]
+    _python_2_tests = frozenset([
+        astroid.extract_node(x).repr_tree() for x in [
+            "sys.version_info[0] == 2",
+            "sys.version_info[0] < 3",
+            "sys.version_info == (2, 7)",
+            "sys.version_info <= (2, 7)",
+            "sys.version_info < (3, 0)",
         ]
-    )
+    ])
 
     def __init__(self, *args, **kwargs):
         self._future_division = False
@@ -926,21 +922,17 @@ class Python3Checker(checkers.BaseChecker):
 
     # pylint: disable=keyword-arg-before-vararg, arguments-differ
     def add_message(self, msg_id, always_warn=False, *args, **kwargs):
-        if always_warn or not (
-            self._branch_stack and self._branch_stack[-1].is_py2_only
-        ):
+        if always_warn or not (self._branch_stack
+                               and self._branch_stack[-1].is_py2_only):
             super().add_message(msg_id, *args, **kwargs)
 
     def _is_py2_test(self, node):
         if isinstance(node.test, astroid.Attribute) and isinstance(
-            node.test.expr, astroid.Name
-        ):
+                node.test.expr, astroid.Name):
             if node.test.expr.name == "six" and node.test.attrname == "PY2":
                 return True
-        elif (
-            isinstance(node.test, astroid.Compare)
-            and node.test.repr_tree() in self._python_2_tests
-        ):
+        elif (isinstance(node.test, astroid.Compare)
+              and node.test.repr_tree() in self._python_2_tests):
             return True
         return False
 
@@ -975,7 +967,8 @@ class Python3Checker(checkers.BaseChecker):
                 # classmethod 1 argument should cause a failure, if it is a
                 # staticmethod 0 arguments should cause a failure.
                 failing_arg_count = 1
-                if utils.decorated_with(node, [bases.BUILTINS + ".staticmethod"]):
+                if utils.decorated_with(node,
+                                        [bases.BUILTINS + ".staticmethod"]):
                     failing_arg_count = 0
                 if len(node.args.args) == failing_arg_count:
                     self.add_message("next-method-defined", node=node)
@@ -994,27 +987,22 @@ class Python3Checker(checkers.BaseChecker):
             if isinstance(generator.target, astroid.AssignName)
         }
         scope = node.parent.scope()
-        scope_names = scope.nodes_of_class(
-            astroid.Name, skip_klass=astroid.FunctionDef)
+        scope_names = scope.nodes_of_class(astroid.Name,
+                                           skip_klass=astroid.FunctionDef)
         has_redefined_assign_name = any(
-            assign_name
-            for assign_name in scope.nodes_of_class(
-                astroid.AssignName, skip_klass=astroid.FunctionDef
-            )
-            if assign_name.name in names and assign_name.lineno > node.lineno
-        )
+            assign_name for assign_name in scope.nodes_of_class(
+                astroid.AssignName, skip_klass=astroid.FunctionDef)
+            if assign_name.name in names and assign_name.lineno > node.lineno)
         if has_redefined_assign_name:
             return
 
         emitted_for_names = set()
         scope_names = list(scope_names)
         for scope_name in scope_names:
-            if (
-                scope_name.name not in names
-                or scope_name.lineno <= node.lineno
-                or scope_name.name in emitted_for_names
-                or scope_name.scope() == node
-            ):
+            if (scope_name.name not in names
+                    or scope_name.lineno <= node.lineno
+                    or scope_name.name in emitted_for_names
+                    or scope_name.scope() == node):
                 continue
 
             emitted_for_names.add(scope_name.name)
@@ -1028,8 +1016,7 @@ class Python3Checker(checkers.BaseChecker):
         if node.name not in self._bad_builtins:
             return
         if node_ignores_exception(node) or isinstance(
-            find_try_except_wrapper_node(node), astroid.ExceptHandler
-        ):
+                find_try_except_wrapper_node(node), astroid.ExceptHandler):
             return
 
         message = node.name.lower() + "-builtin"
@@ -1039,14 +1026,19 @@ class Python3Checker(checkers.BaseChecker):
     def visit_print(self, node):
         self.add_message("print-statement", node=node, always_warn=True)
 
-    def _warn_if_deprecated(self, node, module, attributes, report_on_modules=True):
+    def _warn_if_deprecated(self,
+                            node,
+                            module,
+                            attributes,
+                            report_on_modules=True):
         for message, module_map in self._bad_python3_module_map.items():
             if module in module_map and module not in self._modules_warned_about:
                 if isinstance(module_map, frozenset):
                     if report_on_modules:
                         self._modules_warned_about.add(module)
                         self.add_message(message, node=node)
-                elif attributes and module_map[module].intersection(attributes):
+                elif attributes and module_map[module].intersection(
+                        attributes):
                     self.add_message(message, node=node)
 
     def visit_importfrom(self, node):
@@ -1062,8 +1054,9 @@ class Python3Checker(checkers.BaseChecker):
                     self.add_message("no-absolute-import", node=node)
                     self._future_absolute_import = True
             if not _is_conditional_import(node) and not node.level:
-                self._warn_if_deprecated(node, node.modname, {
-                                         x[0] for x in node.names})
+                self._warn_if_deprecated(node, node.modname,
+                                         {x[0]
+                                          for x in node.names})
 
         if node.names[0][0] == "*":
             if self.linter.is_message_enabled("import-star-module-level"):
@@ -1083,8 +1076,8 @@ class Python3Checker(checkers.BaseChecker):
     def visit_classdef(self, node):
         if "__metaclass__" in node.locals:
             self.add_message("metaclass-assignment", node=node)
-        locals_and_methods = set(node.locals).union(
-            x.name for x in node.mymethods())
+        locals_and_methods = set(node.locals).union(x.name
+                                                    for x in node.mymethods())
         if "__eq__" in locals_and_methods and "__hash__" not in locals_and_methods:
             self.add_message("eq-without-hash", node=node)
 
@@ -1094,16 +1087,10 @@ class Python3Checker(checkers.BaseChecker):
             for arg in (node.left, node.right):
                 inferred = utils.safe_infer(arg)
                 # If we can infer the object and that object is not an int, bail out.
-                if inferred and not (
-                    (
-                        isinstance(inferred, astroid.Const)
-                        and isinstance(inferred.value, int)
-                    )
-                    or (
-                        isinstance(inferred, astroid.Instance)
-                        and inferred.name == "int"
-                    )
-                ):
+                if inferred and not ((isinstance(inferred, astroid.Const)
+                                      and isinstance(inferred.value, int)) or
+                                     (isinstance(inferred, astroid.Instance)
+                                      and inferred.name == "int")):
                     break
             else:
                 self.add_message("old-division", node=node)
@@ -1111,16 +1098,19 @@ class Python3Checker(checkers.BaseChecker):
     def _check_cmp_argument(self, node):
         # Check that the `cmp` argument is used
         kwargs = []
-        if isinstance(node.func, astroid.Attribute) and node.func.attrname == "sort":
+        if isinstance(node.func,
+                      astroid.Attribute) and node.func.attrname == "sort":
             inferred = utils.safe_infer(node.func.expr)
             if not inferred:
                 return
 
             builtins_list = "{}.list".format(bases.BUILTINS)
-            if isinstance(inferred, astroid.List) or inferred.qname() == builtins_list:
+            if isinstance(inferred,
+                          astroid.List) or inferred.qname() == builtins_list:
                 kwargs = node.keywords
 
-        elif isinstance(node.func, astroid.Name) and node.func.name == "sorted":
+        elif isinstance(node.func,
+                        astroid.Name) and node.func.name == "sorted":
             inferred = utils.safe_infer(node.func)
             if not inferred:
                 return
@@ -1146,7 +1136,8 @@ class Python3Checker(checkers.BaseChecker):
 
     @staticmethod
     def _has_only_n_positional_args(node, number_of_args):
-        return len(node.args) == number_of_args and all(node.args) and not node.keywords
+        return len(node.args) == number_of_args and all(
+            node.args) and not node.keywords
 
     @staticmethod
     def _could_be_string(inferred_types):
@@ -1154,10 +1145,8 @@ class Python3Checker(checkers.BaseChecker):
         for inferred_type in inferred_types:
             if inferred_type is astroid.Uninferable:
                 confidence = INFERENCE_FAILURE
-            elif not (
-                isinstance(inferred_type, astroid.Const)
-                and isinstance(inferred_type.value, str)
-            ):
+            elif not (isinstance(inferred_type, astroid.Const)
+                      and isinstance(inferred_type.value, str)):
                 return None
         return confidence
 
@@ -1169,8 +1158,7 @@ class Python3Checker(checkers.BaseChecker):
 
             try:
                 for inferred_receiver in _infer_if_relevant_attr(
-                    node.func, self._relevant_call_attrs
-                ):
+                        node.func, self._relevant_call_attrs):
                     if inferred_receiver is astroid.Uninferable:
                         continue
                     inferred_types.add(inferred_receiver)
@@ -1181,10 +1169,8 @@ class Python3Checker(checkers.BaseChecker):
                             {node.func.attrname},
                             report_on_modules=False,
                         )
-                    if (
-                        _inferred_value_is_dict(inferred_receiver)
-                        and node.func.attrname in DICT_METHODS
-                    ):
+                    if (_inferred_value_is_dict(inferred_receiver)
+                            and node.func.attrname in DICT_METHODS):
                         if not _in_iterating_context(node):
                             checker = "dict-{}-not-iterating".format(
                                 node.func.attrname)
@@ -1194,19 +1180,14 @@ class Python3Checker(checkers.BaseChecker):
             if node.args:
                 is_str_confidence = self._could_be_string(inferred_types)
                 if is_str_confidence:
-                    if (
-                        node.func.attrname in ("encode", "decode")
-                        and len(node.args) >= 1
-                        and node.args[0]
-                    ):
+                    if (node.func.attrname in ("encode", "decode")
+                            and len(node.args) >= 1 and node.args[0]):
                         first_arg = node.args[0]
                         self._validate_encoding(first_arg, node)
-                    if (
-                        node.func.attrname == "translate"
-                        and self._has_only_n_positional_args(node, 2)
-                        and self._is_none(node.args[0])
-                        and self._is_constant_string_or_name(node.args[1])
-                    ):
+                    if (node.func.attrname == "translate"
+                            and self._has_only_n_positional_args(node, 2)
+                            and self._is_none(node.args[0]) and
+                            self._is_constant_string_or_name(node.args[1])):
                         # The above statement looking for calls of the form:
                         #
                         # foo.translate(None, 'abc123')
@@ -1273,7 +1254,8 @@ class Python3Checker(checkers.BaseChecker):
     def visit_delattr(self, node):
         self.visit_attribute(node)
 
-    @utils.check_messages("exception-message-attribute", "xreadlines-attribute")
+    @utils.check_messages("exception-message-attribute",
+                          "xreadlines-attribute")
     def visit_attribute(self, node):
         """Look for removed attributes"""
         if node.attrname == "xreadlines":
@@ -1283,29 +1265,26 @@ class Python3Checker(checkers.BaseChecker):
         exception_message = "message"
         try:
             for inferred in _infer_if_relevant_attr(
-                node, self._deprecated_attrs | {exception_message}
-            ):
-                if isinstance(inferred, astroid.Instance) and utils.inherit_from_std_ex(
-                    inferred
-                ):
+                    node, self._deprecated_attrs | {exception_message}):
+                if isinstance(inferred, astroid.Instance
+                              ) and utils.inherit_from_std_ex(inferred):
                     if node.attrname == exception_message:
 
                         # Exceptions with .message clearly defined are an exception
                         if exception_message in inferred.instance_attrs:
                             continue
-                        self.add_message(
-                            "exception-message-attribute", node=node)
+                        self.add_message("exception-message-attribute",
+                                         node=node)
                 if isinstance(inferred, astroid.Module):
-                    self._warn_if_deprecated(
-                        node, inferred.name, {node.attrname}, report_on_modules=False
-                    )
+                    self._warn_if_deprecated(node,
+                                             inferred.name, {node.attrname},
+                                             report_on_modules=False)
         except astroid.InferenceError:
             return
 
     @utils.check_messages("unpacking-in-except", "comprehension-escape")
     def visit_excepthandler(self, node):
         """Visit an except handler block and check for exception unpacking."""
-
         def _is_used_in_except_block(node, block):
             current = node
             while current and current is not block:
@@ -1321,28 +1300,23 @@ class Python3Checker(checkers.BaseChecker):
 
         # Find any names
         scope = node.parent.scope()
-        scope_names = scope.nodes_of_class(
-            astroid.Name, skip_klass=astroid.FunctionDef)
+        scope_names = scope.nodes_of_class(astroid.Name,
+                                           skip_klass=astroid.FunctionDef)
         scope_names = list(scope_names)
         potential_leaked_names = [
-            scope_name
-            for scope_name in scope_names
-            if scope_name.name == node.name.name
-            and scope_name.lineno > node.lineno
-            and not _is_used_in_except_block(scope_name, node)
+            scope_name for scope_name in scope_names
+            if scope_name.name == node.name.name and scope_name.lineno >
+            node.lineno and not _is_used_in_except_block(scope_name, node)
         ]
         reassignments_for_same_name = {
             assign_name.lineno
             for assign_name in scope.nodes_of_class(
-                astroid.AssignName, skip_klass=astroid.FunctionDef
-            )
+                astroid.AssignName, skip_klass=astroid.FunctionDef)
             if assign_name.name == node.name.name
         }
         for leaked_name in potential_leaked_names:
-            if any(
-                node.lineno < elem < leaked_name.lineno
-                for elem in reassignments_for_same_name
-            ):
+            if any(node.lineno < elem < leaked_name.lineno
+                   for elem in reassignments_for_same_name):
                 continue
             self.add_message("exception-escape", node=leaked_name)
 
@@ -1389,15 +1363,19 @@ class Python3TokenChecker(checkers.BaseTokenChecker):
             'Used when "l" or "L" is used to mark a long integer. '
             "This will not work in Python 3, since `int` and `long` "
             "types have merged.",
-            {"maxversion": (3, 0)},
+            {
+                "maxversion": (3, 0)
+            },
         ),
         "E1607": (
             "Use of the <> operator",
             "old-ne-operator",
             'Used when the deprecated "<>" operator is used instead '
             'of "!=". This is removed in Python 3.',
-            {"maxversion": (3, 0), "old_names": [
-                ("W0331", "old-old-ne-operator")]},
+            {
+                "maxversion": (3, 0),
+                "old_names": [("W0331", "old-old-ne-operator")]
+            },
         ),
         "E1608": (
             "Use of old octal literal",
@@ -1405,14 +1383,18 @@ class Python3TokenChecker(checkers.BaseTokenChecker):
             "Used when encountering the old octal syntax, "
             "removed in Python 3. To use the new syntax, "
             "prepend 0o on the number.",
-            {"maxversion": (3, 0)},
+            {
+                "maxversion": (3, 0)
+            },
         ),
         "E1610": (
             "Non-ascii bytes literals not supported in 3.x",
             "non-ascii-bytes-literal",
             "Used when non-ascii bytes literals are found in a program. "
             "They are no longer supported in Python 3.",
-            {"maxversion": (3, 0)},
+            {
+                "maxversion": (3, 0)
+            },
         ),
     }
 

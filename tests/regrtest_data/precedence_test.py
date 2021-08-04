@@ -17,5 +17,4 @@ from __future__ import print_function
 from package import AudioTime
 __revision__ = 0
 
-
 print(AudioTime.DECIMAL)

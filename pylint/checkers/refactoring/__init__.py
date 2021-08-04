@@ -32,17 +32,16 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Looks for code which can be refactored."""
-
 
 from pylint.checkers.refactoring.len_checker import LenChecker
 from pylint.checkers.refactoring.not_checker import NotChecker
 from pylint.checkers.refactoring.recommendation_checker import RecommendationChecker
 from pylint.checkers.refactoring.refactoring_checker import RefactoringChecker
 
-__all__ = ["LenChecker", "NotChecker",
-           "RecommendationChecker", "RefactoringChecker"]
+__all__ = [
+    "LenChecker", "NotChecker", "RecommendationChecker", "RefactoringChecker"
+]
 
 
 def register(linter):

@@ -7,7 +7,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
 """Module to add McCabe checker class for pylint. """
 
 from mccabe import PathGraph as Mccabe_PathGraph
@@ -66,29 +65,11 @@ class PathGraphingAstVisitor(Mccabe_PathGraphingAstVisitor):
     def visitSimpleStatement(self, node):
         self._append_node(node)
 
-    visitAssert = (
-        visitAssign
-    ) = (
-        visitAugAssign
-    ) = (
-        visitDelete
-    ) = (
+    visitAssert = (visitAssign) = (visitAugAssign) = (visitDelete) = (
         visitPrint
-    ) = (
-        visitRaise
-    ) = (
-        visitYield
-    ) = (
-        visitImport
-    ) = (
-        visitCall
-    ) = (
+    ) = (visitRaise) = (visitYield) = (visitImport) = (visitCall) = (
         visitSubscript
-    ) = (
-        visitPass
-    ) = (
-        visitContinue
-    ) = (
+    ) = (visitPass) = (visitContinue) = (
         visitBreak
     ) = visitGlobal = visitReturn = visitExpr = visitAwait = visitSimpleStatement
 
@@ -157,17 +138,15 @@ class McCabeMethodChecker(checkers.BaseChecker):
             "McCabe Complexity Cyclomatic",
         )
     }
-    options = (
-        (
-            "max-complexity",
-            {
-                "default": 10,
-                "type": "int",
-                "metavar": "<int>",
-                "help": "McCabe complexity cyclomatic threshold",
-            },
-        ),
-    )
+    options = ((
+        "max-complexity",
+        {
+            "default": 10,
+            "type": "int",
+            "metavar": "<int>",
+            "help": "McCabe complexity cyclomatic threshold",
+        },
+    ), )
 
     @check_messages("too-complex")
     def visit_module(self, node):
@@ -185,9 +164,10 @@ class McCabeMethodChecker(checkers.BaseChecker):
                 node_name = "This '%s'" % node.__class__.__name__.lower()
             if complexity <= self.config.max_complexity:
                 continue
-            self.add_message(
-                "too-complex", node=node, confidence=HIGH, args=(node_name, complexity)
-            )
+            self.add_message("too-complex",
+                             node=node,
+                             confidence=HIGH,
+                             args=(node_name, complexity))
 
 
 def register(linter):

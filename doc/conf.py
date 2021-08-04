@@ -95,7 +95,6 @@ pygments_style = "sphinx"
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
 
-
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
@@ -144,7 +143,8 @@ smartquotes = False
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    "**": ["localtoc.html", "globaltoc.html", "relations.html", "sourcelink.html"]
+    "**":
+    ["localtoc.html", "globaltoc.html", "relations.html", "sourcelink.html"]
 }
 
 # Additional templates that should be rendered to pages, maps page names to
@@ -180,7 +180,6 @@ html_show_sourcelink = True
 # Output file base name for HTML help builder.
 htmlhelp_basename = "Pylintdoc"
 
-
 # -- Options for LaTeX output --------------------------------------------------
 
 # The paper size ('letter' or 'a4').
@@ -191,15 +190,13 @@ htmlhelp_basename = "Pylintdoc"
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
-latex_documents = [
-    (
-        "index",
-        "Pylint.tex",
-        "Pylint Documentation",
-        "Logilab, PyCQA and contributors",
-        "manual",
-    )
-]
+latex_documents = [(
+    "index",
+    "Pylint.tex",
+    "Pylint Documentation",
+    "Logilab, PyCQA and contributors",
+    "manual",
+)]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
@@ -224,15 +221,12 @@ latex_documents = [
 # If false, no module index is generated.
 # latex_domain_indices = True
 
-
 # -- Options for manual page output --------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ("index", "pylint", "Pylint Documentation",
-     ["Logilab, PyCQA and contributors"], 1)
-]
+man_pages = [("index", "pylint", "Pylint Documentation",
+              ["Logilab, PyCQA and contributors"], 1)]
 
 intersphinx_mapping = {
     "astroid": ("https://astroid.readthedocs.io/en/latest/", None),

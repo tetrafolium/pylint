@@ -31,7 +31,6 @@ class bad_class_name(object):  # [invalid-name]
 
 class CorrectClassName(object):
     """Class with a good name."""
-
     def __init__(self):
         self._good_private_name = 10
         self.__good_real_private_name = 11
@@ -72,7 +71,6 @@ V = [WHAT_Ever_inListComp for WHAT_Ever_inListComp in GOOD_CONST_NAME]
 
 def class_builder():
     """Function returning a class object."""
-
     class EmbeddedClass(object):
         """Useless class."""
 
@@ -138,8 +136,11 @@ def _private_scope_function_with_long_descriptive_name():
 
 
 LONG_CONSTANT_NAME_IN_PUBLIC_SCOPE_ARE_OKAY = True
+
+
 # We don't emit for non-const nodes
-def good_name_for_funcs(): return None
+def good_name_for_funcs():
+    return None
 
 
 good_name_for_lists = [1, 2, 3]

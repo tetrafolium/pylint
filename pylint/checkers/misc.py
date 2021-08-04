@@ -19,8 +19,6 @@
 
 # Licensed under the GPL: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 # For details: https://github.com/PyCQA/pylint/blob/master/COPYING
-
-
 """Check source code is ascii only or has an encoding declaration (PEP 263)"""
 
 import re
@@ -33,7 +31,6 @@ from pylint.utils.pragma_parser import OPTION_PO, PragmaParserError, parse_pragm
 
 
 class ByIdManagedMessagesChecker(BaseChecker):
-
     """checks for messages that are enabled or disabled by id instead of symbol."""
 
     __implements__ = IRawChecker
@@ -53,23 +50,22 @@ class ByIdManagedMessagesChecker(BaseChecker):
     def process_module(self, module):
         """inspect the source file to find messages activated or deactivated by id."""
         managed_msgs = MessagesHandlerMixIn.get_by_id_managed_msgs()
-        for (mod_name, msg_id, msg_symbol, lineno, is_disabled) in managed_msgs:
+        for (mod_name, msg_id, msg_symbol, lineno,
+             is_disabled) in managed_msgs:
             if mod_name == module.name:
                 if is_disabled:
                     txt = "Id '{ident}' is used to disable '{symbol}' message emission".format(
-                        ident=msg_id, symbol=msg_symbol
-                    )
+                        ident=msg_id, symbol=msg_symbol)
                 else:
                     txt = "Id '{ident}' is used to enable '{symbol}' message emission".format(
-                        ident=msg_id, symbol=msg_symbol
-                    )
+                        ident=msg_id, symbol=msg_symbol)
                 self.add_message("use-symbolic-message-instead",
-                                 line=lineno, args=txt)
+                                 line=lineno,
+                                 args=txt)
         MessagesHandlerMixIn.clear_by_id_managed_msgs()
 
 
 class EncodingChecker(BaseChecker):
-
     """checks for:
     * warning notes in the code like FIXME, XXX
     * encoding issues.
@@ -91,21 +87,24 @@ class EncodingChecker(BaseChecker):
         (
             "notes",
             {
-                "type": "csv",
-                "metavar": "<comma separated values>",
+                "type":
+                "csv",
+                "metavar":
+                "<comma separated values>",
                 "default": ("FIXME", "XXX", "TODO"),
-                "help": (
-                    "List of note tags to take in consideration, "
-                    "separated by a comma."
-                ),
+                "help": ("List of note tags to take in consideration, "
+                         "separated by a comma."),
             },
         ),
         (
             "notes-rgx",
             {
-                "type": "string",
-                "metavar": "<regexp>",
-                "help": "Regular expression of note tags to take in consideration.",
+                "type":
+                "string",
+                "metavar":
+                "<regexp>",
+                "help":
+                "Regular expression of note tags to take in consideration.",
             },
         ),
     )
@@ -127,7 +126,8 @@ class EncodingChecker(BaseChecker):
         except UnicodeDecodeError:
             pass
         except LookupError:
-            if line.startswith("#") and "coding" in line and file_encoding in line:
+            if line.startswith(
+                    "#") and "coding" in line and file_encoding in line:
                 self.add_message(
                     "syntax-error",
                     line=lineno,
@@ -151,9 +151,8 @@ class EncodingChecker(BaseChecker):
         """inspect the source to find fixme problems"""
         if not self.config.notes:
             return
-        comments = (
-            token_info for token_info in tokens if token_info.type == tokenize.COMMENT
-        )
+        comments = (token_info for token_info in tokens
+                    if token_info.type == tokenize.COMMENT)
         for comment in comments:
             # trim '#' and whitespaces
             comment_text = comment.string[1:].lstrip()
@@ -164,11 +163,9 @@ class EncodingChecker(BaseChecker):
                 try:
                     values = []
                     try:
-                        for pragma_repr in (
-                            p_rep
-                            for p_rep in parse_pragma(disable_option_match.group(2))
-                            if p_rep.action == "disable"
-                        ):
+                        for pragma_repr in (p_rep for p_rep in parse_pragma(
+                                disable_option_match.group(2))
+                                            if p_rep.action == "disable"):
                             values.extend(pragma_repr.messages)
                     except PragmaParserError:
                         # Printing useful information dealing with this error is done in the lint package

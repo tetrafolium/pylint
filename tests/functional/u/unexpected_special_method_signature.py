@@ -5,7 +5,6 @@
 
 
 class Invalid(object):
-
     def __enter__(self, other):  # [unexpected-special-method-signature]
         pass
 
@@ -62,7 +61,6 @@ class ThirdBadContextManager(object):
 
 
 class Async(object):
-
     def __aiter__(self, extra):  # [unexpected-special-method-signature]
         pass
 
@@ -81,7 +79,6 @@ class Async(object):
 
 
 class Valid(object):
-
     def __new__(cls, test, multiple, args):
         pass
 

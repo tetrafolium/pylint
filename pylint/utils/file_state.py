@@ -10,7 +10,6 @@ from pylint.constants import MSG_STATE_SCOPE_MODULE, WarningScope
 
 class FileState:
     """Hold internal state specific to the currently analyzed file"""
-
     def __init__(self, modname=None):
         self.base_name = modname
         self._module_msgs_state = {}
@@ -52,10 +51,8 @@ class FileState:
         #
         # this is necessary to disable locally messages applying to class /
         # function using their fromlineno
-        if (
-            isinstance(node, (nodes.Module, nodes.ClassDef, nodes.FunctionDef))
-            and node.body
-        ):
+        if (isinstance(node, (nodes.Module, nodes.ClassDef, nodes.FunctionDef))
+                and node.body):
             firstchildlineno = node.body[0].fromlineno
         else:
             firstchildlineno = last
@@ -83,8 +80,8 @@ class FileState:
                         state = lines[line]
                         original_lineno = line
                     if not state:
-                        self._suppression_mapping[(
-                            msgid, line)] = original_lineno
+                        self._suppression_mapping[(msgid,
+                                                   line)] = original_lineno
                     try:
                         self._module_msgs_state[msgid][line] = state
                     except KeyError:
@@ -99,9 +96,8 @@ class FileState:
         except KeyError:
             self._module_msgs_state[msg.msgid] = {line: status}
 
-    def handle_ignored_message(
-        self, state_scope, msgid, line, node, args, confidence
-    ):  # pylint: disable=unused-argument
+    def handle_ignored_message(self, state_scope, msgid, line, node, args,
+                               confidence):  # pylint: disable=unused-argument
         """Report an ignored message.
 
         state_scope is either MSG_STATE_SCOPE_MODULE or MSG_STATE_SCOPE_CONFIG,
@@ -123,8 +119,7 @@ class FileState:
                     # here due to incomplete context
                     if warning != "R0401":
                         yield "useless-suppression", line, (
-                            msgs_store.get_msg_display_string(warning),
-                        )
+                            msgs_store.get_msg_display_string(warning), )
         # don't use iteritems here, _ignored_msgs may be modified by add_message
         for (warning, from_), lines in list(self._ignored_msgs.items()):
             for line in lines:

@@ -28,7 +28,6 @@
 # pylint: disable=redefined-builtin,invalid-name
 """pylint packaging information"""
 
-
 from os.path import join
 
 # For an official release, use dev_version = None
@@ -82,5 +81,6 @@ classifiers = [
 ]
 
 scripts = [
-    join("bin", filename) for filename in ("pylint", "symilar", "epylint", "pyreverse")
+    join("bin", filename)
+    for filename in ("pylint", "symilar", "epylint", "pyreverse")
 ]

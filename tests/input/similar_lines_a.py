@@ -36,7 +36,7 @@ class Amet:
         metus = "ut"
         lobortis = "urna."
         Integer = "nisl"
-        (mauris,) = "interdum"
+        (mauris, ) = "interdum"
         non = "odio"
         semper = "aliquam"
         malesuada = "nunc."

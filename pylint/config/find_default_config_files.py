@@ -30,9 +30,11 @@ def find_default_config_files():
     config_names = rc_names + ("pyproject.toml", "setup.cfg")
     for config_name in config_names:
         if os.path.isfile(config_name):
-            if config_name.endswith(".toml") and not _toml_has_config(config_name):
+            if config_name.endswith(
+                    ".toml") and not _toml_has_config(config_name):
                 continue
-            if config_name.endswith(".cfg") and not _cfg_has_config(config_name):
+            if config_name.endswith(
+                    ".cfg") and not _cfg_has_config(config_name):
                 continue
 
             yield os.path.abspath(config_name)
