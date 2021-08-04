@@ -39,7 +39,7 @@ inspecode:
       thresholds: { num-issues: 13 }
 
     jscpd:
-      thresholds: { num-issues: 25 }
+      thresholds: { num-issues: 28 }
 
     misspell:
       auto-fix: true
@@ -67,14 +67,14 @@ inspecode:
 
     pylint:
     - ignore: 'tests/functional/'
-      thresholds: { num-issues: 371 }
+      thresholds: { num-issues: 372 }
     - input:  'tests/functional/[a-i]*/'
-      thresholds: { num-issues: 621 }
+      thresholds: { num-issues: 619 }
     - input:  'tests/functional/[j-r]*/'
       thresholds: { num-issues: 360 }
     - input:  'tests/functional/[s-z]*/'
       ignore: 'tests/functional/u/unknown_encoding_*.py'
-      thresholds: { num-issues: 571 }
+      thresholds: { num-issues: 570 }
     #- input:
     #  - tests/functional/u/unknown_encoding_*.py
     #  thresholds: { num-issues: 999 }
@@ -106,4 +106,4 @@ inspecode:
 
     yapf:
       auto-fix: true
-      thresholds: { num-issues: 525 }
+      thresholds: { num-issues: 527 }
