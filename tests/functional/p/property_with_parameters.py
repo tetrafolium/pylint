@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractproperty
 
 class Cls:
     @property
-    def attribute(self, param, param1): # [property-with-parameters]
+    def attribute(self, param, param1):  # [property-with-parameters]
         return param + param1
 
 

@@ -41,7 +41,8 @@ def _process_relations(relations):
     result = []
     for rel_type, rels in relations.items():
         for rel in rels:
-            result.append((rel_type, rel.from_object.title, rel.to_object.title))
+            result.append(
+                (rel_type, rel.from_object.title, rel.to_object.title))
     result.sort()
     return result
 

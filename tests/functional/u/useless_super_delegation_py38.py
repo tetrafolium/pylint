@@ -13,5 +13,6 @@ class Spam(Egg):
 
 
 class Ham(Egg):
-    def __init__(self, first: Any, /, second: Any) -> None:  # [useless-super-delegation]
+    # [useless-super-delegation]
+    def __init__(self, first: Any, /, second: Any) -> None:
         super().__init__(first, second)

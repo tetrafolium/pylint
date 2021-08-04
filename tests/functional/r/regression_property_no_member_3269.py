@@ -1,6 +1,7 @@
 """Calling a super property"""
 # pylint: disable=too-few-public-methods,invalid-name
 
+
 class A:
     """A parent class"""
 

@@ -101,12 +101,14 @@ def setup():
 @pytest.mark.usefixtures("setup")
 @pytest.mark.parametrize("generated_file", DOT_FILES)
 def test_dot_files(generated_file):
-    expected_file = os.path.join(os.path.dirname(__file__), "data", generated_file)
+    expected_file = os.path.join(
+        os.path.dirname(__file__), "data", generated_file)
     generated = _file_lines(generated_file)
     expected = _file_lines(expected_file)
     generated = "\n".join(generated)
     expected = "\n".join(expected)
-    files = "\n *** expected : %s, generated : %s \n" % (expected_file, generated_file)
+    files = "\n *** expected : %s, generated : %s \n" % (
+        expected_file, generated_file)
     assert expected == generated, "%s%s" % (
         files,
         "\n".join(
@@ -123,7 +125,8 @@ def test_dot_files(generated_file):
         (["__g_", "____dsf", "__23_9"], "private"),
         (["simple"], "public"),
         (
-            ["_", "__", "___", "____", "_____", "___e__", "_nextsimple", "_filter_it_"],
+            ["_", "__", "___", "____", "_____",
+                "___e__", "_nextsimple", "_filter_it_"],
             "protected",
         ),
     ],

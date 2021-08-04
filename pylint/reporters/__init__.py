@@ -33,4 +33,5 @@ def initialize(linter):
     utils.register_plugins(linter, __path__[0])
 
 
-__all__ = ["BaseReporter", "ReportsHandlerMixIn", "JSONReporter", "CollectingReporter"]
+__all__ = ["BaseReporter", "ReportsHandlerMixIn",
+           "JSONReporter", "CollectingReporter"]

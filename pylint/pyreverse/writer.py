@@ -129,7 +129,8 @@ class DotWriter(DiagramWriter):
             label = r"%s|%s\l|" % (label, r"\l".join(obj.attrs))
             for func in obj.methods:
                 if func.args.args:
-                    args = [arg.name for arg in func.args.args if arg.name != "self"]
+                    args = [
+                        arg.name for arg in func.args.args if arg.name != "self"]
                 else:
                     args = []
                 label = r"%s%s(%s)\l" % (label, func.name, ", ".join(args))

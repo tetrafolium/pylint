@@ -91,7 +91,7 @@ class _ManHelpFormatter(optparse.HelpFormatter):
         long_desc = "\n".join(line.lstrip() for line in long_desc.splitlines())
         long_desc = long_desc.replace("\n.\n", "\n\n")
         if long_desc.lower().startswith(pgm):
-            long_desc = long_desc[len(pgm) :]
+            long_desc = long_desc[len(pgm):]
         return """.SH DESCRIPTION
 .B %s
 %s

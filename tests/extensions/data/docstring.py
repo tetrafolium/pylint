@@ -6,8 +6,10 @@ def check_messages(*messages):
     docstring"""
     return messages
 
+
 def function2():
     """Test Ok"""
+
 
 class FFFF:
     """

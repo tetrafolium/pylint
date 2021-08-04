@@ -182,7 +182,8 @@ class TestSuperfluousParentheses(CheckerTestCase):
         ]
         for msg, code, offset in cases:
             with self.assertAddsMessages(msg):
-                self.checker._check_keyword_parentheses(_tokenize_str(code), offset)
+                self.checker._check_keyword_parentheses(
+                    _tokenize_str(code), offset)
 
     def testNoSuperfluousParensWalrusOperatorIf(self):
         """Parenthesis change the meaning of assignment in the walrus operator
@@ -190,7 +191,8 @@ class TestSuperfluousParentheses(CheckerTestCase):
         code = "if (odd := is_odd(i))"
         offset = 0
         with self.assertNoMessages():
-            self.checker._check_keyword_parentheses(_tokenize_str(code), offset)
+            self.checker._check_keyword_parentheses(
+                _tokenize_str(code), offset)
 
     def testPositiveSuperfluousParensWalrusOperatorIf(self):
         """Test positive superfluous parens with the walrus operator"""
@@ -209,7 +211,8 @@ class TestSuperfluousParentheses(CheckerTestCase):
         cases = [("if (foo):", 0), ("assert (1 == 1)", 0)]
 
         for code, offset in cases:
-            self.checker._check_keyword_parentheses(_tokenize_str(code), offset)
+            self.checker._check_keyword_parentheses(
+                _tokenize_str(code), offset)
             got = self.linter.release_messages()
             assert isinstance(got[-1].args, str)
 
@@ -225,7 +228,8 @@ print('Hello world!')
     def testKeywordParensFalsePositive(self):
         code = "if 'bar' in (DICT or {}):"
         with self.assertNoMessages():
-            self.checker._check_keyword_parentheses(_tokenize_str(code), start=2)
+            self.checker._check_keyword_parentheses(
+                _tokenize_str(code), start=2)
 
 
 class TestCheckSpace(CheckerTestCase):

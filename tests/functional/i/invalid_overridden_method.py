@@ -20,6 +20,7 @@ class SuperClass(metaclass=abc.ABCMeta):
     def method_b(self):
         pass
 
+
 class ValidDerived(SuperClass):
     @property
     def prop(self):
@@ -34,19 +35,21 @@ class ValidDerived(SuperClass):
     def method_b(self):
         pass
 
+
 class InvalidDerived(SuperClass):
     def prop(self):  # [invalid-overridden-method]
         return None
 
-    def async_method(self): # [invalid-overridden-method]
+    def async_method(self):  # [invalid-overridden-method]
         return None
 
     @property
-    def method_a(self): # [invalid-overridden-method]
+    def method_a(self):  # [invalid-overridden-method]
         return None
 
-    async def method_b(self): # [invalid-overridden-method]
+    async def method_b(self):  # [invalid-overridden-method]
         return None
+
 
 class Property:
 

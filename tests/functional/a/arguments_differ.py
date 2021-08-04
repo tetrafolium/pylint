@@ -1,6 +1,7 @@
 """Test that we are emitting arguments-differ when the arguments are different."""
 # pylint: disable=missing-docstring, too-few-public-methods, unused-argument,useless-super-delegation, useless-object-inheritance
 
+
 class Parent(object):
 
     def test(self):
@@ -9,7 +10,7 @@ class Parent(object):
 
 class Child(Parent):
 
-    def test(self, arg): # [arguments-differ]
+    def test(self, arg):  # [arguments-differ]
         pass
 
 
@@ -18,9 +19,10 @@ class ParentDefaults(object):
     def test(self, arg=None, barg=None):
         pass
 
+
 class ChildDefaults(ParentDefaults):
 
-    def test(self, arg=None): # [arguments-differ]
+    def test(self, arg=None):  # [arguments-differ]
         pass
 
 
@@ -38,7 +40,7 @@ class Classmethod(object):
 class ClassmethodChild(Classmethod):
 
     @staticmethod
-    def func(): # [arguments-differ]
+    def func():  # [arguments-differ]
         pass
 
     @classmethod
@@ -65,10 +67,10 @@ class Varargs(object):
 
 class VarargsChild(Varargs):
 
-    def has_kwargs(self, arg): # [arguments-differ]
+    def has_kwargs(self, arg):  # [arguments-differ]
         "Not okay to lose capabilities."
 
-    def no_kwargs(self, arg, **kwargs): # [arguments-differ]
+    def no_kwargs(self, arg, **kwargs):  # [arguments-differ]
         "Not okay to add extra capabilities."
 
 
@@ -128,6 +130,7 @@ class Property(object):
     def close(self):
         pass
 
+
 class PropertySetter(Property):
 
     @property
@@ -169,7 +172,7 @@ class FirstHasArgs(object):
 
 class SecondChangesArgs(FirstHasArgs):
 
-    def test(self, first, second, *args): # [arguments-differ]
+    def test(self, first, second, *args):  # [arguments-differ]
         pass
 
 
@@ -186,6 +189,7 @@ class PositionalChild(Positional):
         Acceptable use of vararg in subclass because it does not violate LSP.
         """
         super().test(args[0], args[1])
+
 
 class Mixed(object):
 

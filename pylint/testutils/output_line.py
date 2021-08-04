@@ -9,7 +9,8 @@ from pylint.testutils.constants import UPDATE_OPTION
 
 
 class Message(
-    collections.namedtuple("Message", ["msg_id", "line", "node", "args", "confidence"])
+    collections.namedtuple(
+        "Message", ["msg_id", "line", "node", "args", "confidence"])
 ):
     def __new__(cls, msg_id, line=None, node=None, args=None, confidence=None):
         return tuple.__new__(cls, (msg_id, line, node, args, confidence))
@@ -40,7 +41,7 @@ class MalformedOutputLineException(Exception):
         i = 0
         for i, column in enumerate(row):
             reconstructed_row += "\t{}='{}' ?\n".format(expected[i], column)
-        for missing in expected[i + 1 :]:
+        for missing in expected[i + 1:]:
             reconstructed_row += "\t{}= Nothing provided !\n".format(missing)
         msg = """\
 {exception}
@@ -61,7 +62,8 @@ Try updating it with: 'python tests/test_functional.py {update_option}'""".forma
 
 class OutputLine(
     collections.namedtuple(
-        "OutputLine", ["symbol", "lineno", "column", "object", "msg", "confidence"]
+        "OutputLine", ["symbol", "lineno",
+                       "column", "object", "msg", "confidence"]
     )
 ):
     @classmethod

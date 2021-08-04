@@ -11,7 +11,8 @@ def f():
 
 
 def g():
-    import os, sys  # [import-outside-toplevel]
+    import os
+    import sys  # [import-outside-toplevel]
 
 
 def h():
@@ -19,7 +20,8 @@ def h():
 
 
 def i():
-    import random as rand, socket as sock  # [import-outside-toplevel]
+    import random as rand
+    import socket as sock  # [import-outside-toplevel]
 
 
 class C:
@@ -35,7 +37,7 @@ def k(flag):
 
 
 def j():
-    from collections import defaultdict # [import-outside-toplevel]
+    from collections import defaultdict  # [import-outside-toplevel]
 
 
 def m():

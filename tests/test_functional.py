@@ -62,7 +62,8 @@ class LintModuleOutputUpdate(testutils.LintModuleTest):
 
 
 def get_tests():
-    input_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "functional")
+    input_dir = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), "functional")
     suite = []
     for dirpath, _, filenames in os.walk(input_dir):
         if dirpath.endswith("__pycache__"):

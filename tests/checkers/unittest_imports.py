@@ -57,7 +57,8 @@ class TestImportsChecker(CheckerTestCase):
             self.checker.visit_import(node)
 
     @set_config(
-        ignored_modules=("external_module", "fake_module.submodule", "foo", "bar")
+        ignored_modules=("external_module",
+                         "fake_module.submodule", "foo", "bar")
     )
     def test_import_error_skipped(self):
         """Make sure that imports do not emit an 'import-error' when the
@@ -143,7 +144,8 @@ class TestImportsChecker(CheckerTestCase):
             self.checker.visit_importfrom(module.body[2].body[0])
 
     def test_wildcard_import_init(self):
-        module = astroid.MANAGER.ast_from_module_name("init_wildcard", REGR_DATA)
+        module = astroid.MANAGER.ast_from_module_name(
+            "init_wildcard", REGR_DATA)
         import_from = module.body[0]
 
         with self.assertNoMessages():

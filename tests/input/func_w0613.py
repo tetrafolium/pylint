@@ -14,6 +14,7 @@ class AAAA(object):
     def method(self, arg):
         """dummy method"""
         print(self)
+
     def __init__(self, *unused_args, **unused_kwargs):
         pass
 
@@ -27,12 +28,14 @@ class AAAA(object):
         """return a fake result set for a particular entity type"""
         rset = AAAA([('A',)]*size, '%s X' % etype,
                     description=[(etype,)]*size)
+
         def inner(row, col=0, etype=etype, req=self, rset=rset):
             """inner using all its argument"""
             # pylint: disable = E1103
             return req.vreg.etype_class(etype)(req, rset, row, col)
         # pylint: disable = W0201
         rset.get_entity = inner
+
 
 class BBBB(object):
     """dummy class"""

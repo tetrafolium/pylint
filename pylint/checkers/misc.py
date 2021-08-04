@@ -63,7 +63,8 @@ class ByIdManagedMessagesChecker(BaseChecker):
                     txt = "Id '{ident}' is used to enable '{symbol}' message emission".format(
                         ident=msg_id, symbol=msg_symbol
                     )
-                self.add_message("use-symbolic-message-instead", line=lineno, args=txt)
+                self.add_message("use-symbolic-message-instead",
+                                 line=lineno, args=txt)
         MessagesHandlerMixIn.clear_by_id_managed_msgs()
 
 
@@ -154,7 +155,8 @@ class EncodingChecker(BaseChecker):
             token_info for token_info in tokens if token_info.type == tokenize.COMMENT
         )
         for comment in comments:
-            comment_text = comment.string[1:].lstrip()  # trim '#' and whitespaces
+            # trim '#' and whitespaces
+            comment_text = comment.string[1:].lstrip()
 
             # handle pylint disable clauses
             disable_option_match = OPTION_PO.search(comment_text)

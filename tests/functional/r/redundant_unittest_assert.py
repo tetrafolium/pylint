@@ -8,6 +8,7 @@ it should emit a warning message.
 
 import unittest
 
+
 @unittest.skip("don't run this")
 class Tests(unittest.TestCase):
     def test_something(self):

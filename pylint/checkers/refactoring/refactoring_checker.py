@@ -323,7 +323,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
     def open(self):
         # do this in open since config not fully initialized in __init__
-        self._never_returning_functions = set(self.config.never_returning_functions)
+        self._never_returning_functions = set(
+            self.config.never_returning_functions)
 
     @decorators.cachedproperty
     def _dummy_rgx(self):
@@ -420,7 +421,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             #     The original form is easier to grasp.
             return
 
-        self.add_message("simplifiable-if-statement", node=node, args=(reduced_to,))
+        self.add_message("simplifiable-if-statement",
+                         node=node, args=(reduced_to,))
 
     def process_tokens(self, tokens):
         # Process tokens and look for 'if' or 'elif'
@@ -436,7 +438,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                 self._elifs.extend([tokens[index][2], tokens[index + 1][2]])
             elif _is_trailing_comma(tokens, index):
                 if self.linter.is_message_enabled("trailing-comma-tuple"):
-                    self.add_message("trailing-comma-tuple", line=token.start[0])
+                    self.add_message("trailing-comma-tuple",
+                                     line=token.start[0])
 
     def leave_module(self, _):
         self._init()
@@ -500,7 +503,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
 
         if _if_statement_is_always_returning(node, returning_node_class):
             orelse = node.orelse[0]
-            followed_by_elif = (orelse.lineno, orelse.col_offset) in self._elifs
+            followed_by_elif = (
+                orelse.lineno, orelse.col_offset) in self._elifs
             self.add_message(
                 msg_id, node=node, args="elif" if followed_by_elif else "else"
             )
@@ -560,7 +564,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         if isinstance(slice_value, astroid.Index):
             slice_value = slice_value.value
         if not (
-            self._type_and_name_are_equal(stmt.value.value, node.test.ops[0][1])
+            self._type_and_name_are_equal(
+                stmt.value.value, node.test.ops[0][1])
             and self._type_and_name_are_equal(slice_value, node.test.left)
         ):
             return False
@@ -628,7 +633,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         else:
             return
 
-        self.add_message("simplifiable-if-expression", node=node, args=(reduced_to,))
+        self.add_message("simplifiable-if-expression",
+                         node=node, args=(reduced_to,))
 
     @utils.check_messages(
         "too-many-nested-blocks", "inconsistent-return-statements", "useless-return"
@@ -666,7 +672,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     @staticmethod
     def _check_exception_inherit_from_stopiteration(exc):
         """Return True if the exception node in argument inherit from StopIteration"""
-        stopiteration_qname = "{}.StopIteration".format(utils.EXCEPTIONS_MODULE)
+        stopiteration_qname = "{}.StopIteration".format(
+            utils.EXCEPTIONS_MODULE)
         return any(_class.qname() == stopiteration_qname for _class in exc.mro())
 
     def _check_consider_using_comprehension_constructor(self, node):
@@ -701,7 +708,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def _has_exit_in_scope(scope):
         exit_func = scope.locals.get("exit")
         return bool(
-            exit_func and isinstance(exit_func[0], (astroid.ImportFrom, astroid.Import))
+            exit_func and isinstance(
+                exit_func[0], (astroid.ImportFrom, astroid.Import))
         )
 
     def _check_quit_exit_call(self, node):
@@ -895,8 +903,10 @@ class RefactoringChecker(checkers.BaseTokenChecker):
         comprehension = "in" if node.op == "or" else "not in"
         values = list(collections.OrderedDict.fromkeys(values))
         values.remove(common_variable)
-        values_string = ", ".join(values) if len(values) != 1 else values[0] + ","
-        suggestion = "%s %s (%s)" % (common_variable, comprehension, values_string)
+        values_string = ", ".join(values) if len(
+            values) != 1 else values[0] + ","
+        suggestion = "%s %s (%s)" % (
+            common_variable, comprehension, values_string)
 
         self.add_message("consider-using-in", node=node, args=(suggestion,))
 
@@ -944,7 +954,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
                 _find_lower_upper_bounds(comparison_node, uses)
 
         for _, bounds in uses.items():
-            num_shared = len(bounds["lower_bound"].intersection(bounds["upper_bound"]))
+            num_shared = len(
+                bounds["lower_bound"].intersection(bounds["upper_bound"]))
             num_lower_bounds = len(bounds["lower_bound"])
             num_upper_bounds = len(bounds["upper_bound"])
             if num_shared < num_lower_bounds and num_shared < num_upper_bounds:
@@ -989,7 +1000,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
             else child
             for child in children
         ]
-        result = self._apply_boolean_simplification_rules(bool_op.op, intermediate)
+        result = self._apply_boolean_simplification_rules(
+            bool_op.op, intermediate)
         if len(result) < len(children):
             self._can_simplify_bool_op = True
         if len(result) == 1:
@@ -1050,7 +1062,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def _check_swap_variables(self, node):
         if not node.next_sibling() or not node.next_sibling().next_sibling():
             return
-        assignments = [node, node.next_sibling(), node.next_sibling().next_sibling()]
+        assignments = [node, node.next_sibling(
+        ), node.next_sibling().next_sibling()]
         if not all(self._is_simple_assignment(node) for node in assignments):
             return
         if any(node in self._reported_swap_nodes for node in assignments):
@@ -1070,7 +1083,8 @@ class RefactoringChecker(checkers.BaseTokenChecker):
     def visit_assign(self, node):
         self._check_swap_variables(node)
         if self._is_and_or_ternary(node.value):
-            cond, truth_value, false_value = self._and_or_ternary_arguments(node.value)
+            cond, truth_value, false_value = self._and_or_ternary_arguments(
+                node.value)
         else:
             return
 

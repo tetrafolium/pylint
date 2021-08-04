@@ -270,11 +270,13 @@ class TestNameChecker(CheckerTestCase):
         ):
             self.checker.visit_assignname(ast[1].targets[0])
         with self.assertAddsMessages(
-            Message(msg_id="assign-to-new-keyword", node=ast[2], args=("async", "3.7"))
+            Message(msg_id="assign-to-new-keyword",
+                    node=ast[2], args=("async", "3.7"))
         ):
             self.checker.visit_functiondef(ast[2])
         with self.assertAddsMessages(
-            Message(msg_id="assign-to-new-keyword", node=ast[3], args=("async", "3.7"))
+            Message(msg_id="assign-to-new-keyword",
+                    node=ast[3], args=("async", "3.7"))
         ):
             self.checker.visit_classdef(ast[3])
 
@@ -299,7 +301,8 @@ class TestMultiNamingStyle(CheckerTestCase):
         message = Message(
             "invalid-name",
             node=classes[0],
-            args=("Class", "classb", "'(?:(?P<UP>[A-Z]+)|(?P<down>[a-z]+))$' pattern"),
+            args=("Class", "classb",
+                  "'(?:(?P<UP>[A-Z]+)|(?P<down>[a-z]+))$' pattern"),
         )
         with self.assertAddsMessages(message):
             cls = None
@@ -367,7 +370,8 @@ class TestMultiNamingStyle(CheckerTestCase):
         message = Message(
             "invalid-name",
             node=function_defs[1],
-            args=("Function", "FUNC", "'(?:(?P<UP>[A-Z]+)|(?P<down>[a-z]+))$' pattern"),
+            args=("Function", "FUNC",
+                  "'(?:(?P<UP>[A-Z]+)|(?P<down>[a-z]+))$' pattern"),
         )
         with self.assertAddsMessages(message):
             func = None
@@ -377,7 +381,8 @@ class TestMultiNamingStyle(CheckerTestCase):
                 self.checker.leave_module(func.root)
 
     @set_config(
-        function_rgx=re.compile("(?:(?P<ignore>FOO)|(?P<UP>[A-Z]+)|(?P<down>[a-z]+))$")
+        function_rgx=re.compile(
+            "(?:(?P<ignore>FOO)|(?P<UP>[A-Z]+)|(?P<down>[a-z]+))$")
     )
     def test_multi_name_detection_exempt(self):
         function_defs = astroid.extract_node(
@@ -446,7 +451,8 @@ class TestComparison(CheckerTestCase):
 
         node = astroid.extract_node("True == foo")
         messages = (
-            Message("misplaced-comparison-constant", node=node, args=("foo == True",)),
+            Message("misplaced-comparison-constant",
+                    node=node, args=("foo == True",)),
             Message(
                 "singleton-comparison",
                 node=node,
@@ -461,7 +467,8 @@ class TestComparison(CheckerTestCase):
 
         node = astroid.extract_node("False == foo")
         messages = (
-            Message("misplaced-comparison-constant", node=node, args=("foo == False",)),
+            Message("misplaced-comparison-constant",
+                    node=node, args=("foo == False",)),
             Message(
                 "singleton-comparison",
                 node=node,
@@ -476,7 +483,8 @@ class TestComparison(CheckerTestCase):
 
         node = astroid.extract_node("None == foo")
         messages = (
-            Message("misplaced-comparison-constant", node=node, args=("foo == None",)),
+            Message("misplaced-comparison-constant",
+                    node=node, args=("foo == None",)),
             Message(
                 "singleton-comparison",
                 node=node,
@@ -488,9 +496,11 @@ class TestComparison(CheckerTestCase):
 
 
 class TestNamePresets(unittest.TestCase):
-    SNAKE_CASE_NAMES = {"tést_snake_case", "test_snake_case11", "test_https_200"}
+    SNAKE_CASE_NAMES = {"tést_snake_case",
+                        "test_snake_case11", "test_https_200"}
     CAMEL_CASE_NAMES = {"téstCamelCase", "testCamelCase11", "testHTTP200"}
-    UPPER_CASE_NAMES = {"TÉST_UPPER_CASE", "TEST_UPPER_CASE11", "TEST_HTTP_200"}
+    UPPER_CASE_NAMES = {"TÉST_UPPER_CASE",
+                        "TEST_UPPER_CASE11", "TEST_HTTP_200"}
     PASCAL_CASE_NAMES = {"TéstPascalCase", "TestPascalCase11", "TestHTTP200"}
     ALL_NAMES = (
         SNAKE_CASE_NAMES | CAMEL_CASE_NAMES | UPPER_CASE_NAMES | PASCAL_CASE_NAMES
@@ -559,7 +569,8 @@ class TestNamePresets(unittest.TestCase):
             self._test_name_is_correct_for_all_name_types(naming_style, name)
         for name in self.ALL_NAMES - self.UPPER_CASE_NAMES:
             self._test_name_is_incorrect_for_all_name_types(naming_style, name)
-        self._test_name_is_incorrect_for_all_name_types(naming_style, "UPPERcase")
+        self._test_name_is_incorrect_for_all_name_types(
+            naming_style, "UPPERcase")
 
         self._test_should_always_pass(naming_style)
 
@@ -625,10 +636,12 @@ Basic checker Messages
 
 """
         self.assertEqual(str(basic), expected_beginning + expected_end)
-        self.assertEqual(repr(basic), "Checker 'basic' (responsible for 'W0001')")
+        self.assertEqual(
+            repr(basic), "Checker 'basic' (responsible for 'W0001')")
         less_basic = LessBasicChecker()
 
         self.assertEqual(
-            str(less_basic), expected_beginning + expected_middle + expected_end
+            str(less_basic), expected_beginning +
+            expected_middle + expected_end
         )
         self.assertEqual(repr(less_basic), repr(basic))

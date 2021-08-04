@@ -4,11 +4,14 @@ but not on new/old class object
 """
 from __future__ import print_function
 
+
 class Aaaa:
     """old class"""
+
     def __init__(self):
         print(self.__name__)  # [no-member]
         print(self.__class__.__name__)
+
 
 class NewClass(object):
     """new class"""

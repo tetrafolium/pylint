@@ -16,7 +16,8 @@ class CheckerTestCase:
 
     def setup_method(self):
         self.linter = UnittestLinter()
-        self.checker = self.CHECKER_CLASS(self.linter)  # pylint: disable=not-callable
+        self.checker = self.CHECKER_CLASS(
+            self.linter)  # pylint: disable=not-callable
         for key, value in self.CONFIG.items():
             setattr(self.checker.config, key, value)
         self.checker.open()

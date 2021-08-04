@@ -11,9 +11,11 @@
 """
 from __future__ import generators, print_function
 
+
 def func_no_return():
     """function without return"""
     print('dougloup')
+
 
 A = func_no_return()
 
@@ -23,12 +25,14 @@ def func_return_none():
     print('dougloup')
     return None
 
+
 A = func_return_none()
 
 
 def func_implicit_return_none():
     """Function returning None from bare return statement."""
     return
+
 
 A = func_implicit_return_none()
 
@@ -40,13 +44,17 @@ def func_return_none_and_smth():
         return None
     return 3
 
+
 A = func_return_none_and_smth()
+
 
 def generator():
     """no problemo"""
     yield 2
 
+
 A = generator()
+
 
 class Abstract(object):
     """bla bla"""

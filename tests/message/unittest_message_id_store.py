@@ -43,7 +43,8 @@ def test_register_message_definitions(empty_msgid_store, message_definitions):
 
 def test_add_msgid_and_symbol(empty_msgid_store):
     empty_msgid_store.add_msgid_and_symbol("E1235", "new-sckiil")
-    empty_msgid_store.add_legacy_msgid_and_symbol("C1235", "old-sckiil", "E1235")
+    empty_msgid_store.add_legacy_msgid_and_symbol(
+        "C1235", "old-sckiil", "E1235")
     assert len(empty_msgid_store) == 2
     message_ids = empty_msgid_store.get_active_msgids("E1235")
     assert len(message_ids) == 1

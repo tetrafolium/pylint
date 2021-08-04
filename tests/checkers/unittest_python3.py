@@ -239,7 +239,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         with self.assertNoMessages():
             self.checker.visit_call(iterating.value)
 
-        message = testutils.Message("dict-keys-not-iterating", node=not_iterating.value)
+        message = testutils.Message(
+            "dict-keys-not-iterating", node=not_iterating.value)
         with self.assertAddsMessages(message):
             self.checker.visit_call(not_iterating.value)
 
@@ -662,7 +663,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         from itertools import izip #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("deprecated-itertools-function", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_importfrom(node)
@@ -673,7 +675,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         from types import StringType #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("deprecated-types-field", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_importfrom(node)
@@ -684,7 +687,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         from sys import maxint #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("sys-max-int", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_importfrom(node)
@@ -705,7 +709,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         import urllib2, sys #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("bad-python3-import", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_import(node)
@@ -717,7 +722,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         turtle.Turtle()
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         with self.assertAddsMessages(absolute_import_message):
             self.checker.visit_import(node)
 
@@ -728,7 +734,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         open_("dummy.db")
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         with self.assertAddsMessages(absolute_import_message):
             self.checker.visit_importfrom(node)
 
@@ -740,7 +747,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
             import urllib2 #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         with self.assertAddsMessages(absolute_import_message):
             self.checker.visit_import(node)
 
@@ -753,7 +761,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
             import sha #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         with self.assertAddsMessages(absolute_import_message):
             self.checker.visit_import(node)
 
@@ -768,7 +777,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
             pass
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         with self.assertAddsMessages(absolute_import_message):
             self.checker.visit_import(node)
 
@@ -781,7 +791,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
             import queue
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("bad-python3-import", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_import(node)
@@ -792,7 +803,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         from cStringIO import StringIO #@
         """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("bad-python3-import", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_importfrom(node)
@@ -875,7 +887,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
            foo(bar for bar in exc.bar)
         """
         )
-        message = testutils.Message("exception-escape", node=module.body[1].value)
+        message = testutils.Message(
+            "exception-escape", node=module.body[1].value)
         with self.assertAddsMessages(message):
             self.checker.visit_excepthandler(module.body[0].handlers[0])
         with self.assertNoMessages():
@@ -906,7 +919,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
         """
         )
         for node in nodes:
-            message = testutils.Message("deprecated-urllib-function", node=node)
+            message = testutils.Message(
+                "deprecated-urllib-function", node=node)
             with self.assertAddsMessages(message):
                 self.checker.visit_attribute(node)
 
@@ -957,7 +971,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
          from string import atoi #@
          """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         message = testutils.Message("deprecated-string-function", node=node)
         with self.assertAddsMessages(absolute_import_message, message):
             self.checker.visit_importfrom(node)
@@ -968,7 +983,8 @@ class TestPython3Checker(testutils.CheckerTestCase):
          from string import digits #@
          """
         )
-        absolute_import_message = testutils.Message("no-absolute-import", node=node)
+        absolute_import_message = testutils.Message(
+            "no-absolute-import", node=node)
         with self.assertAddsMessages(absolute_import_message):
             self.checker.visit_importfrom(node)
 

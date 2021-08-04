@@ -13,16 +13,20 @@ def ctx_manager():
 class ContextManager(object):
     def __enter__(self):
         pass
+
     def __exit__(self, *args):
         pass
+
 
 class PartialAsyncContextManager(object):
     def __aenter__(self):
         pass
 
+
 class SecondPartialAsyncContextManager(object):
     def __aexit__(self, *args):
         pass
+
 
 class UnknownBases(Portocala):
     def __aenter__(self):
@@ -32,15 +36,19 @@ class UnknownBases(Portocala):
 class AsyncManagerMixin(object):
     pass
 
+
 class GoodAsyncManager(object):
     def __aenter__(self):
         pass
+
     def __aexit__(self, *args):
         pass
+
 
 class InheritExit(object):
     def __aexit__(self, *args):
         pass
+
 
 class SecondGoodAsyncManager(InheritExit):
     def __aenter__(self):
@@ -48,15 +56,16 @@ class SecondGoodAsyncManager(InheritExit):
 
 
 async def bad_coro():
-    async with 42: # [not-async-context-manager]
+    async with 42:  # [not-async-context-manager]
         pass
-    async with ctx_manager(): # [not-async-context-manager]
+    async with ctx_manager():  # [not-async-context-manager]
         pass
-    async with ContextManager(): # [not-async-context-manager]
+    async with ContextManager():  # [not-async-context-manager]
         pass
-    async with PartialAsyncContextManager(): # [not-async-context-manager]
+    async with PartialAsyncContextManager():  # [not-async-context-manager]
         pass
-    async with SecondPartialAsyncContextManager(): # [not-async-context-manager]
+    # [not-async-context-manager]
+    async with SecondPartialAsyncContextManager():
         pass
 
 

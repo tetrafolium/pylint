@@ -2,16 +2,17 @@
 # pylint: disable=redefined-outer-name, invalid-name, redefine-in-handler
 
 def test_redefined_in_with(name):
-    with open('something') as name: # [redefined-argument-from-local]
+    with open('something') as name:  # [redefined-argument-from-local]
         pass
-    with open('something') as (second, name): # [redefined-argument-from-local]
+    # [redefined-argument-from-local]
+    with open('something') as (second, name):
         pass
-    with open('something') as (second, (name, third)): # [redefined-argument-from-local]
+    # [redefined-argument-from-local]
+    with open('something') as (second, (name, third)):
         pass
     other = None
     with open('something') as other:
         pass
-
 
 
 def test_not_redefined_in_with(name):
@@ -19,13 +20,12 @@ def test_not_redefined_in_with(name):
         pass
 
 
-
 def test_redefined_in_for(name):
-    for name in []: # [redefined-argument-from-local]
+    for name in []:  # [redefined-argument-from-local]
         pass
-    for (name, is_) in []: # [redefined-argument-from-local]
+    for (name, is_) in []:  # [redefined-argument-from-local]
         pass
-    for (is_, (name, _)) in []: # [redefined-argument-from-local]
+    for (is_, (name, _)) in []:  # [redefined-argument-from-local]
         pass
     for _ in []:
         pass
@@ -45,7 +45,7 @@ def test_not_redefined_in_for(name):
 def test_redefined_in_except_handler(name):
     try:
         1 / 0
-    except ZeroDivisionError as name: # [redefined-argument-from-local]
+    except ZeroDivisionError as name:  # [redefined-argument-from-local]
         pass
 
 

@@ -3,6 +3,7 @@
 """Test external access to protected class members."""
 from __future__ import print_function
 
+
 class MyClass(object):
     """Class with protected members."""
     _cls_protected = 5
@@ -35,6 +36,7 @@ class Subclass(MyClass):
         MyClass._protected = 5
         super()._private_method()
 
+
 INST = Subclass()
 INST.attr = 1
 print(INST.attr)
@@ -61,6 +63,7 @@ class Issue1031(object):
 
 class Issue1802(object):
     """Test for GitHub issue 1802"""
+
     def __init__(self, value):
         self._foo = value
         self.__private = 2 * value
@@ -69,7 +72,8 @@ class Issue1802(object):
         """Test a correct access as the access to protected member is in a special method"""
         if isinstance(other, self.__class__):
             answer = self._foo == other._foo
-            return answer and self.__private == other.__private  # [protected-access]
+            # [protected-access]
+            return answer and self.__private == other.__private
         return False
 
     def not_in_special(self, other):

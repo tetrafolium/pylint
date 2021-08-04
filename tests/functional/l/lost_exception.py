@@ -11,8 +11,8 @@ def insidious_break_and_return():
             return my_var
         finally:
             if i > -2:
-                break # [lost-exception]
-            return my_var # [lost-exception]
+                break  # [lost-exception]
+            return my_var  # [lost-exception]
     return None
 
 

@@ -386,7 +386,8 @@ class StdlibChecker(BaseChecker):
                 if since_vers <= sys.version_info and any(
                     name in func_list for name in (qname, func_name)
                 ):
-                    self.add_message("deprecated-method", node=node, args=(func_name,))
+                    self.add_message("deprecated-method",
+                                     node=node, args=(func_name,))
                     break
 
     def _check_redundant_assert(self, node, infer):
@@ -416,7 +417,8 @@ class StdlibChecker(BaseChecker):
     def _check_open_mode(self, node):
         """Check that the mode argument of an open or file call is valid."""
         try:
-            mode_arg = utils.get_argument_from_call(node, position=1, keyword="mode")
+            mode_arg = utils.get_argument_from_call(
+                node, position=1, keyword="mode")
         except utils.NoSuchArgumentError:
             return
         if mode_arg:
@@ -424,7 +426,8 @@ class StdlibChecker(BaseChecker):
             if isinstance(mode_arg, astroid.Const) and not _check_mode_str(
                 mode_arg.value
             ):
-                self.add_message("bad-open-mode", node=node, args=mode_arg.value)
+                self.add_message("bad-open-mode", node=node,
+                                 args=mode_arg.value)
 
     def _check_env_function(self, node, infer):
         env_name_kwarg = "key"
@@ -477,9 +480,11 @@ class StdlibChecker(BaseChecker):
             elif not isinstance(call_arg.value, str):
                 emit = True
             if emit:
-                self.add_message(message, node=node, args=(name, call_arg.pytype()))
+                self.add_message(message, node=node,
+                                 args=(name, call_arg.pytype()))
         else:
-            self.add_message(message, node=node, args=(name, call_arg.pytype()))
+            self.add_message(message, node=node,
+                             args=(name, call_arg.pytype()))
 
 
 def register(linter):

@@ -20,7 +20,8 @@ def _get_py_files(scanpath):
 
     filepaths = []
     for dirpath, dirnames, filenames in os.walk(scanpath):
-        dirnames[:] = [dirname for dirname in dirnames if dirname != "__pycache__"]
+        dirnames[:] = [
+            dirname for dirname in dirnames if dirname != "__pycache__"]
         filepaths.extend(
             [
                 os.path.join(dirpath, filename)

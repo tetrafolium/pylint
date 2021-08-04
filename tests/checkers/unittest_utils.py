@@ -39,7 +39,8 @@ def testIsBuiltin(name, expected):
 
 @pytest.mark.parametrize(
     "fn,kw",
-    [("foo(3)", {"keyword": "bar"}), ("foo(one=a, two=b, three=c)", {"position": 1})],
+    [("foo(3)", {"keyword": "bar"}),
+     ("foo(one=a, two=b, three=c)", {"position": 1})],
 )
 def testGetArgumentFromCallError(fn, kw):
     with pytest.raises(utils.NoSuchArgumentError):
@@ -48,7 +49,8 @@ def testGetArgumentFromCallError(fn, kw):
 
 
 @pytest.mark.parametrize(
-    "fn,kw", [("foo(bar=3)", {"keyword": "bar"}), ("foo(a, b, c)", {"position": 1})]
+    "fn,kw", [("foo(bar=3)", {"keyword": "bar"}),
+              ("foo(a, b, c)", {"position": 1})]
 )
 def testGetArgumentFromCallExists(fn, kw):
     node = astroid.extract_node(fn)

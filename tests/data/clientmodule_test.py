@@ -1,6 +1,7 @@
 """ docstring for file clientmodule.py """
 from data.suppliermodule_test import Interface, DoNothing
 
+
 class Ancestor:
     """ Ancestor method """
     __implements__ = (Interface,)
@@ -18,6 +19,7 @@ class Ancestor:
     def set_value(self, value):
         self.__value = value
         return 'this method shouldn\'t have a docstring'
+
 
 class Specialization(Ancestor):
     TYPE = 'final class'

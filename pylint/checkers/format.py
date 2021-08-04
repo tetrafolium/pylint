@@ -343,7 +343,8 @@ class FormatChecker(BaseTokenChecker):
     def new_line(self, tokens, line_end, line_start):
         """a new line has been encountered, process it if necessary"""
         if _last_token_on_line_is(tokens, line_end, ";"):
-            self.add_message("unnecessary-semicolon", line=tokens.start_line(line_end))
+            self.add_message("unnecessary-semicolon",
+                             line=tokens.start_line(line_end))
 
         line_num = tokens.start_line(line_start)
         line = tokens.line(line_start)
@@ -526,7 +527,8 @@ class FormatChecker(BaseTokenChecker):
                 "too-many-lines"
             )[0]
             names = (message_definition.msgid, "too-many-lines")
-            line = next(filter(None, map(self.linter._pragma_lineno.get, names)), 1)
+            line = next(
+                filter(None, map(self.linter._pragma_lineno.get, names)), 1)
             self.add_message(
                 "too-many-lines",
                 args=(line_num, self.config.max_module_lines),
@@ -553,7 +555,8 @@ class FormatChecker(BaseTokenChecker):
         expected = self.config.expected_line_ending_format
         if expected:
             # reduce multiple \n\n\n\n to one \n
-            line_ending = reduce(lambda x, y: x + y if x != y else x, line_ending, "")
+            line_ending = reduce(lambda x, y: x + y if x !=
+                                 y else x, line_ending, "")
             line_ending = "LF" if line_ending == "\n" else "CRLF"
             if line_ending != expected:
                 self.add_message(
@@ -577,7 +580,8 @@ class FormatChecker(BaseTokenChecker):
         # by taking the last line of the body and adding 1, which
         # should be the line of finally:
         elif (
-            isinstance(node.parent, nodes.TryFinally) and node in node.parent.finalbody
+            isinstance(
+                node.parent, nodes.TryFinally) and node in node.parent.finalbody
         ):
             prev_line = node.parent.body[0].tolineno + 1
         else:
@@ -648,7 +652,7 @@ class FormatChecker(BaseTokenChecker):
             return
         # exclude \f (formfeed) from the rstrip
         stripped_line = line.rstrip("\t\n\r\v ")
-        if line[len(stripped_line) :] not in ("\n", "\r\n"):
+        if line[len(stripped_line):] not in ("\n", "\r\n"):
             self.add_message(
                 "trailing-whitespace", line=i, col_offset=len(stripped_line)
             )
@@ -661,7 +665,8 @@ class FormatChecker(BaseTokenChecker):
         ignore_long_line = self.config.ignore_long_lines
         line = line.rstrip()
         if len(line) > max_chars and not ignore_long_line.search(line):
-            self.add_message("line-too-long", line=i, args=(len(line), max_chars))
+            self.add_message("line-too-long", line=i,
+                             args=(len(line), max_chars))
 
     @staticmethod
     def remove_pylint_option_from_lines(options_pattern_obj) -> str:
@@ -671,7 +676,7 @@ class FormatChecker(BaseTokenChecker):
         lines = options_pattern_obj.string
         purged_lines = (
             lines[: options_pattern_obj.start(1)].rstrip()
-            + lines[options_pattern_obj.end(1) :]
+            + lines[options_pattern_obj.end(1):]
         )
         return purged_lines
 
@@ -787,7 +792,8 @@ class FormatChecker(BaseTokenChecker):
             self.add_message(
                 "bad-indentation",
                 line=line_num,
-                args=(level * unit_size + len(suppl), i_type, expected * unit_size),
+                args=(level * unit_size + len(suppl),
+                      i_type, expected * unit_size),
             )
 
 

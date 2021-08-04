@@ -285,7 +285,8 @@ class Linker(IdGeneratorMixIn, utils.LocalsVisitor):
         module = node.root()
         context_name = module.name
         if relative:
-            mod_path = "%s.%s" % (".".join(context_name.split(".")[:-1]), mod_path)
+            mod_path = "%s.%s" % (
+                ".".join(context_name.split(".")[:-1]), mod_path)
         if self.compute_module(context_name, mod_path):
             # handle dependencies
             if not hasattr(module, "depends"):

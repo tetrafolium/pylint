@@ -1,6 +1,7 @@
 """Checks the maximum block level is smaller than 6 in function definitions"""
 
-#pylint: disable=using-constant-test, missing-docstring, too-many-return-statements,no-else-return
+# pylint: disable=using-constant-test, missing-docstring, too-many-return-statements,no-else-return
+
 
 def my_function():
     if 1:  # [too-many-nested-blocks]
@@ -32,6 +33,7 @@ def my_function():
 
     nested_func()
 
+
 def more_complex_function():
     attr1 = attr2 = attr3 = [1, 2, 3]
     if attr1:
@@ -54,6 +56,7 @@ def more_complex_function():
                 return 'doh'
             return None
 
+
 def elif_function():
     arg = None
     if arg == 1:
@@ -71,6 +74,7 @@ def elif_function():
     elif arg == 7:
         return 7
     return None
+
 
 def else_if_function():
     arg = None

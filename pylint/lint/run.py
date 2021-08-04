@@ -265,7 +265,8 @@ group are mutually exclusive.",
         # load command line plugins
         linter.load_plugin_modules(self._plugins)
         # add some help section
-        linter.add_help_section("Environment variables", config.ENV_HELP, level=1)
+        linter.add_help_section("Environment variables",
+                                config.ENV_HELP, level=1)
         linter.add_help_section(
             "Output",
             "Using the default text output, the message format is :                          \n"
@@ -309,11 +310,13 @@ group are mutually exclusive.",
         # run init hook, if present, before loading plugins
         if config_parser.has_option("MASTER", "init-hook"):
             cb_init_hook(
-                "init-hook", utils._unquote(config_parser.get("MASTER", "init-hook"))
+                "init-hook", utils._unquote(
+                    config_parser.get("MASTER", "init-hook"))
             )
         # is there some additional plugins in the file configuration, in
         if config_parser.has_option("MASTER", "load-plugins"):
-            plugins = utils._splitstrip(config_parser.get("MASTER", "load-plugins"))
+            plugins = utils._splitstrip(
+                config_parser.get("MASTER", "load-plugins"))
             linter.load_plugin_modules(plugins)
         # now we can load file config and command line, plugins (which can
         # provide options) have been registered

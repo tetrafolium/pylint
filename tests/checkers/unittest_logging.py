@@ -102,10 +102,12 @@ class TestLoggingModuleDetection(CheckerTestCase):
         )
         self.checker.visit_module(None)
         self.checker.visit_import(stmts[0])
-        messages = [Message(msg, node=stmts[1], args=args, confidence=UNDEFINED)]
+        messages = [Message(msg, node=stmts[1], args=args,
+                            confidence=UNDEFINED)]
         if with_too_many:
             messages.append(
-                Message("logging-too-many-args", node=stmts[1], confidence=UNDEFINED)
+                Message("logging-too-many-args",
+                        node=stmts[1], confidence=UNDEFINED)
             )
         with self.assertAddsMessages(*messages):
             self.checker.visit_call(stmts[1])
@@ -123,8 +125,10 @@ class TestLoggingModuleDetection(CheckerTestCase):
         self._assert_logging_format_no_messages("('{}', 1)")
         self._assert_logging_format_no_messages("('{0}', 1)")
         self._assert_logging_format_no_messages("('{named}', {'named': 1})")
-        self._assert_logging_format_no_messages("('{} {named}', 1, {'named': 1})")
-        self._assert_logging_format_no_messages("('{0} {named}', 1, {'named': 1})")
+        self._assert_logging_format_no_messages(
+            "('{} {named}', 1, {'named': 1})")
+        self._assert_logging_format_no_messages(
+            "('{0} {named}', 1, {'named': 1})")
 
     @set_config(logging_format_style="new")
     def test_brace_format_style_too_few_args(self):
@@ -134,15 +138,18 @@ class TestLoggingModuleDetection(CheckerTestCase):
             "('{named1}, {named2}', {'named1': 1})"
         )
         self._assert_logging_format_too_few_args("('{0}, {named}', 1)")
-        self._assert_logging_format_too_few_args("('{}, {named}', {'named': 1})")
-        self._assert_logging_format_too_few_args("('{0}, {named}', {'named': 1})")
+        self._assert_logging_format_too_few_args(
+            "('{}, {named}', {'named': 1})")
+        self._assert_logging_format_too_few_args(
+            "('{0}, {named}', {'named': 1})")
 
     @set_config(logging_format_style="new")
     def test_brace_format_style_not_enough_arguments(self):
         self._assert_logging_format_too_many_args("('constant string', 1, 2)")
         self._assert_logging_format_too_many_args("('{}', 1, 2)")
         self._assert_logging_format_too_many_args("('{0}', 1, 2)")
-        self._assert_logging_format_too_many_args("('{}, {named}', 1, 2, {'named': 1})")
+        self._assert_logging_format_too_many_args(
+            "('{}, {named}', 1, 2, {'named': 1})")
         self._assert_logging_format_too_many_args(
             "('{0}, {named}', 1, 2, {'named': 1})"
         )

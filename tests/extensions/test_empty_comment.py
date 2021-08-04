@@ -21,7 +21,8 @@ def disable():
 
 
 def test_comment_base_case(linter):
-    comment_test = str(Path(__file__).parent.joinpath("data", "empty_comment.py"))
+    comment_test = str(Path(__file__).parent.joinpath(
+        "data", "empty_comment.py"))
     linter.check([comment_test])
     msgs = linter.reporter.messages
     assert len(msgs) == 4

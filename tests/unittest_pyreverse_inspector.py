@@ -64,7 +64,8 @@ def test_instance_attrs_resolution(project):
     assert len(type_dict) == 2
     keys = sorted(type_dict.keys())
     assert keys == ["_id", "relation"]
-    assert isinstance(type_dict["relation"][0], bases.Instance), type_dict["relation"]
+    assert isinstance(type_dict["relation"][0],
+                      bases.Instance), type_dict["relation"]
     assert type_dict["relation"][0].name == "DoNothing"
     assert type_dict["_id"][0] is astroid.Uninferable
 

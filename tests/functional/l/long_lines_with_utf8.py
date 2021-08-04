@@ -4,4 +4,5 @@
 
 THIS_IS_A_LONG_VARIABLE_NAME = 'Существительное Частица'  # but the line is okay
 
-THIS_IS_A_VERY_LONG_VARIABLE_NAME = 'Существительное Частица'  # and the line is not okay  # [line-too-long]
+# and the line is not okay  # [line-too-long]
+THIS_IS_A_VERY_LONG_VARIABLE_NAME = 'Существительное Частица'

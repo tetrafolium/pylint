@@ -1,4 +1,4 @@
-#pylint: disable=C0103,R0904,R0903,W0201,no-absolute-import, useless-object-inheritance
+# pylint: disable=C0103,R0904,R0903,W0201,no-absolute-import, useless-object-inheritance
 """
 This module demonstrates a possible problem of pyLint with calling __init__ s
 from inherited classes.
@@ -9,6 +9,7 @@ self.cookedq.
 from __future__ import print_function
 
 import telnetlib
+
 
 class SeeTelnet(telnetlib.Telnet):
     """
@@ -38,6 +39,7 @@ class SeeTelnet(telnetlib.Telnet):
             if len(match) > maxLength:
                 maxLength = len(match)
 
+
 class Base(object):
     """bla bla"""
     dougloup_papa = None
@@ -45,9 +47,11 @@ class Base(object):
     def __init__(self):
         self._var = False
 
+
 class Derived(Base):
     """derived blabla"""
     dougloup_moi = None
+
     def Work(self):
         """do something"""
         # E0203 - Access to member '_var' before its definition
@@ -80,10 +84,12 @@ class QoSALConnection(object):
     def __init__(self):
         pass
 
+
 class DefinedOutsideInit(object):
     """use_attr is seen as the method defining attr because its in
     first position
     """
+
     def __init__(self):
         self.reset()
 

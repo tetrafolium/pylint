@@ -9,7 +9,7 @@ def is_line_commented(line):
     if comment_idx == -1:
         return False
     if comment_part_of_string(line, comment_idx):
-        return is_line_commented(line[:comment_idx] + line[comment_idx + 1 :])
+        return is_line_commented(line[:comment_idx] + line[comment_idx + 1:])
     return True
 
 

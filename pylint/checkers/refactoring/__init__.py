@@ -41,7 +41,8 @@ from pylint.checkers.refactoring.not_checker import NotChecker
 from pylint.checkers.refactoring.recommendation_checker import RecommendationChecker
 from pylint.checkers.refactoring.refactoring_checker import RefactoringChecker
 
-__all__ = ["LenChecker", "NotChecker", "RecommendationChecker", "RefactoringChecker"]
+__all__ = ["LenChecker", "NotChecker",
+           "RecommendationChecker", "RefactoringChecker"]
 
 
 def register(linter):

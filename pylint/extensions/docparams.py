@@ -206,7 +206,8 @@ class DocstringParameterChecker(BaseChecker):
         :param node: Node for a function or method definition in the AST
         :type node: :class:`astroid.scoped_nodes.Function`
         """
-        node_doc = utils.docstringify(node.doc, self.config.default_docstring_type)
+        node_doc = utils.docstringify(
+            node.doc, self.config.default_docstring_type)
 
         # skip functions that match the 'no-docstring-rgx' config option
         no_docstring_rgx = get_global_option(self, "no-docstring-rgx")
@@ -231,7 +232,8 @@ class DocstringParameterChecker(BaseChecker):
                 class_doc = utils.docstringify(
                     class_node.doc, self.config.default_docstring_type
                 )
-                self.check_single_constructor_params(class_doc, node_doc, class_node)
+                self.check_single_constructor_params(
+                    class_doc, node_doc, class_node)
 
                 # __init__ or class docstrings can have no parameters documented
                 # as long as the other documents them.
@@ -290,7 +292,8 @@ class DocstringParameterChecker(BaseChecker):
             if property_:
                 func_node = property_
 
-        doc = utils.docstringify(func_node.doc, self.config.default_docstring_type)
+        doc = utils.docstringify(
+            func_node.doc, self.config.default_docstring_type)
         if not doc.is_valid():
             if doc.doc:
                 self._handle_no_raise_doc(expected_excs, func_node)
@@ -299,7 +302,8 @@ class DocstringParameterChecker(BaseChecker):
         found_excs_full_names = doc.exceptions()
 
         # Extract just the class name, e.g. "error" from "re.error"
-        found_excs_class_names = {exc.split(".")[-1] for exc in found_excs_full_names}
+        found_excs_class_names = {
+            exc.split(".")[-1] for exc in found_excs_full_names}
         missing_excs = expected_excs - found_excs_class_names
         self._add_raise_message(missing_excs, func_node)
 
@@ -311,7 +315,8 @@ class DocstringParameterChecker(BaseChecker):
         if not isinstance(func_node, astroid.FunctionDef):
             return
 
-        doc = utils.docstringify(func_node.doc, self.config.default_docstring_type)
+        doc = utils.docstringify(
+            func_node.doc, self.config.default_docstring_type)
         if not doc.is_valid() and self.config.accept_no_return_doc:
             return
 
@@ -331,7 +336,8 @@ class DocstringParameterChecker(BaseChecker):
         if not isinstance(func_node, astroid.FunctionDef):
             return
 
-        doc = utils.docstringify(func_node.doc, self.config.default_docstring_type)
+        doc = utils.docstringify(
+            func_node.doc, self.config.default_docstring_type)
         if not doc.is_valid() and self.config.accept_no_yields_doc:
             return
 
@@ -504,11 +510,13 @@ class DocstringParameterChecker(BaseChecker):
 
         # Collect the function arguments.
         expected_argument_names = {arg.name for arg in arguments_node.args}
-        expected_argument_names.update(arg.name for arg in arguments_node.kwonlyargs)
+        expected_argument_names.update(
+            arg.name for arg in arguments_node.kwonlyargs)
         not_needed_type_in_docstring = self.not_needed_param_in_docstring.copy()
 
         expected_but_ignored_argument_names = set()
-        ignored_argument_names = get_global_option(self, "ignored-argument-names")
+        ignored_argument_names = get_global_option(
+            self, "ignored-argument-names")
         if ignored_argument_names:
             expected_but_ignored_argument_names = {
                 arg

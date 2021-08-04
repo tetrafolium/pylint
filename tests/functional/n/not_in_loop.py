@@ -5,34 +5,36 @@
 
 while True:
     def ala():
-        continue # [not-in-loop]
+        continue  # [not-in-loop]
 
 while True:
     pass
 else:
-    continue # [not-in-loop]
+    continue  # [not-in-loop]
+
 
 def lala():
-    continue # [not-in-loop]
+    continue  # [not-in-loop]
+
 
 while True:
     class A(object):
-        continue # [not-in-loop]
+        continue  # [not-in-loop]
 
 for _ in range(10):
     pass
 else:
-    continue # [not-in-loop]
+    continue  # [not-in-loop]
 
 for _ in range(42):
     pass
 else:
-    break # [not-in-loop]
+    break  # [not-in-loop]
 
 if True:
-    continue # [not-in-loop]
+    continue  # [not-in-loop]
 else:
-    break # [not-in-loop]
+    break  # [not-in-loop]
 
 for _ in range(10):
     for _ in range(20):

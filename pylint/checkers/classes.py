@@ -835,7 +835,8 @@ a metaclass class method.",
             if not isinstance(ancestor, astroid.ClassDef) or _is_invalid_base_class(
                 ancestor
             ):
-                self.add_message("inherit-non-class", args=base.as_string(), node=node)
+                self.add_message("inherit-non-class",
+                                 args=base.as_string(), node=node)
 
             if ancestor.name == object.__name__:
                 self.add_message(
@@ -974,7 +975,8 @@ a metaclass class method.",
                         return
                 try:
                     if (
-                        isinstance(inferred, (astroid.Instance, astroid.ClassDef))
+                        isinstance(
+                            inferred, (astroid.Instance, astroid.ClassDef))
                         and inferred.getattr("__get__")
                         and inferred.getattr("__set__")
                     ):
@@ -1147,7 +1149,8 @@ a metaclass class method.",
                 node=function_node,
             )
 
-        parent_is_async = isinstance(parent_function_node, astroid.AsyncFunctionDef)
+        parent_is_async = isinstance(
+            parent_function_node, astroid.AsyncFunctionDef)
         current_is_async = isinstance(function_node, astroid.AsyncFunctionDef)
 
         if parent_is_async and not current_is_async:
@@ -1314,7 +1317,8 @@ a metaclass class method.",
                     slots, node.parent.value
                 ):
                     return
-                self.add_message("assigning-non-slot", args=(node.attrname,), node=node)
+                self.add_message("assigning-non-slot",
+                                 args=(node.attrname,), node=node)
 
     @check_messages(
         "protected-access", "no-classmethod-decorator", "no-staticmethod-decorator"
@@ -1555,7 +1559,8 @@ a metaclass class method.",
                 or first_arg in self.config.valid_classmethod_first_arg
                 or first_arg in self.config.valid_metaclass_classmethod_first_arg
             ):
-                self.add_message("bad-staticmethod-argument", args=first, node=node)
+                self.add_message("bad-staticmethod-argument",
+                                 args=first, node=node)
                 return
             self._first_attrs[-1] = None
         # class / regular method with no args
@@ -1630,7 +1635,8 @@ a metaclass class method.",
             if name in node.locals:
                 # it is redefined as an attribute or with a descriptor
                 continue
-            self.add_message("abstract-method", node=node, args=(name, owner.name))
+            self.add_message("abstract-method", node=node,
+                             args=(name, owner.name))
 
     def _check_init(self, node):
         """check that the __init__ method call super or ancestors'__init__
@@ -1689,7 +1695,8 @@ a metaclass class method.",
             cls = node_frame_class(method)
             if klass.name == "object" or (cls and cls.name == "object"):
                 continue
-            self.add_message("super-init-not-called", args=klass.name, node=node)
+            self.add_message("super-init-not-called",
+                             args=klass.name, node=node)
 
     def _check_signature(self, method1, refmethod, class_type, cls):
         """check that the signature of the two given methods match"""

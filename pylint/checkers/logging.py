@@ -322,7 +322,7 @@ class LoggingChecker(checkers.BaseChecker):
           node (astroid.node_classes.NodeNG): AST node to be checked.
           format_arg (int): Index of the format string in the node arguments.
         """
-        num_args = _count_supplied_tokens(node.args[format_arg + 1 :])
+        num_args = _count_supplied_tokens(node.args[format_arg + 1:])
         if not num_args:
             # If no args were supplied the string is not interpolated and can contain
             # formatting characters - it's used verbatim. Don't check any further.
@@ -350,7 +350,8 @@ class LoggingChecker(checkers.BaseChecker):
                     ) = utils.parse_format_method_string(format_string)
 
                     keyword_args_cnt = len(
-                        {k for k, l in keyword_arguments if not isinstance(k, int)}
+                        {k for k, l in keyword_arguments if not isinstance(
+                            k, int)}
                     )
                     required_num_args = (
                         keyword_args_cnt + implicit_pos_args + explicit_pos_args

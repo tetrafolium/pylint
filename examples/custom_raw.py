@@ -30,7 +30,8 @@ class MyRawChecker(BaseChecker):
         with node.stream() as stream:
             for (lineno, line) in enumerate(stream):
                 if line.rstrip().endswith("\\"):
-                    self.add_message("backslash-line-continuation", line=lineno)
+                    self.add_message(
+                        "backslash-line-continuation", line=lineno)
 
 
 def register(linter):

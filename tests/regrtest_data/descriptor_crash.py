@@ -2,6 +2,7 @@
 
 import urllib
 
+
 class Page(object):
     _urlOpen = staticmethod(urllib.urlopen)
 
@@ -10,9 +11,10 @@ class Page(object):
         data = handle.read()
         handle.close()
         return data
-    #_getPage
+    # _getPage
 
-#Page
+# Page
+
 
 if __name__ == "__main__":
     import sys

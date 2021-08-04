@@ -61,7 +61,7 @@ class FourthBadHash(object):
 class AmbigousHash(object):
     """ Uninferable return value """
 
-    __hash__ = lambda self: Missing
+    def __hash__(self): return Missing
 
 
 class AnotherAmbiguousHash(object):

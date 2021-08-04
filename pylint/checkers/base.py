@@ -128,7 +128,8 @@ class CamelCaseStyle(NamingStyle):
     MOD_NAME_RGX = re.compile(r"[^\W\dA-Z][^\W_]*$")
     CONST_NAME_RGX = re.compile(r"([^\W\dA-Z][^\W_]*|__.*__)$")
     COMP_VAR_RGX = re.compile(r"[^\W\dA-Z][^\W_]*$")
-    DEFAULT_NAME_RGX = re.compile(r"([^\W\dA-Z][^\W_]{2,}|__[^\W\dA-Z_]\w+__)$")
+    DEFAULT_NAME_RGX = re.compile(
+        r"([^\W\dA-Z][^\W_]{2,}|__[^\W\dA-Z_]\w+__)$")
     CLASS_ATTRIBUTE_RGX = re.compile(r"([^\W\dA-Z][^\W_]{2,}|__.*__)$")
 
 
@@ -139,7 +140,8 @@ class PascalCaseStyle(NamingStyle):
     MOD_NAME_RGX = re.compile(r"[^\W\da-z][^\W_]+$")
     CONST_NAME_RGX = re.compile(r"([^\W\da-z][^\W_]*|__.*__)$")
     COMP_VAR_RGX = re.compile(r"[^\W\da-z][^\W_]+$")
-    DEFAULT_NAME_RGX = re.compile(r"([^\W\da-z][^\W_]{2,}|__[^\W\dA-Z_]\w+__)$")
+    DEFAULT_NAME_RGX = re.compile(
+        r"([^\W\da-z][^\W_]{2,}|__[^\W\dA-Z_]\w+__)$")
     CLASS_ATTRIBUTE_RGX = re.compile(r"[^\W\da-z][^\W_]{2,}$")
 
 
@@ -150,7 +152,8 @@ class UpperCaseStyle(NamingStyle):
     MOD_NAME_RGX = re.compile(r"[^\W\da-z][^\Wa-z]+$")
     CONST_NAME_RGX = re.compile(r"([^\W\da-z][^\Wa-z]*|__.*__)$")
     COMP_VAR_RGX = re.compile(r"[^\W\da-z][^\Wa-z]+$")
-    DEFAULT_NAME_RGX = re.compile(r"([^\W\da-z][^\Wa-z]{2,}|__[^\W\dA-Z_]\w+__)$")
+    DEFAULT_NAME_RGX = re.compile(
+        r"([^\W\da-z][^\Wa-z]{2,}|__[^\W\dA-Z_]\w+__)$")
     CLASS_ATTRIBUTE_RGX = re.compile(r"[^\W\da-z][^\Wa-z]{2,}$")
 
 
@@ -413,7 +416,8 @@ def report_by_type_stats(sect, stats, _):
                 nice_stats[node_type]["percent_badname"] = "%.2f" % percent
             except KeyError:
                 nice_stats[node_type]["percent_badname"] = "NC"
-    lines = ("type", "number", "old number", "difference", "%documented", "%badname")
+    lines = ("type", "number", "old number",
+             "difference", "%documented", "%badname")
     for node_type in ("module", "class", "method", "function"):
         new = stats[node_type]
         lines += (
@@ -594,7 +598,8 @@ class BasicErrorChecker(_BasicChecker):
             # them for this check.
             return
         if isinstance(
-            node.parent, (astroid.List, astroid.Tuple, astroid.Set, astroid.Dict)
+            node.parent, (astroid.List, astroid.Tuple,
+                          astroid.Set, astroid.Dict)
         ):
             # PEP 448 unpacking.
             return
@@ -621,7 +626,8 @@ class BasicErrorChecker(_BasicChecker):
         if not redefined_by_decorator(
             node
         ) and not utils.is_registered_in_singledispatch_function(node):
-            self._check_redefinition(node.is_method() and "method" or "function", node)
+            self._check_redefinition(
+                node.is_method() and "method" or "function", node)
         # checks for max returns, branch, return in __init__
         returns = node.nodes_of_class(
             astroid.Return, skip_klass=(astroid.FunctionDef, astroid.ClassDef)
@@ -746,7 +752,8 @@ class BasicErrorChecker(_BasicChecker):
             and isinstance(node.operand, astroid.UnaryOp)
             and (node.operand.op == node.op)
         ):
-            self.add_message("nonexistent-operator", node=node, args=node.op * 2)
+            self.add_message("nonexistent-operator",
+                             node=node, args=node.op * 2)
 
     def _check_nonlocal_without_binding(self, node, name):
         current_scope = node.scope()
@@ -755,7 +762,8 @@ class BasicErrorChecker(_BasicChecker):
                 break
 
             if not isinstance(current_scope, (astroid.ClassDef, astroid.FunctionDef)):
-                self.add_message("nonlocal-without-binding", args=(name,), node=node)
+                self.add_message("nonlocal-without-binding",
+                                 args=(name,), node=node)
                 return
 
             if name not in current_scope.locals:
@@ -766,7 +774,8 @@ class BasicErrorChecker(_BasicChecker):
             return
 
         if not isinstance(current_scope, astroid.FunctionDef):
-            self.add_message("nonlocal-without-binding", args=(name,), node=node)
+            self.add_message("nonlocal-without-binding",
+                             args=(name,), node=node)
 
     @utils.check_messages("nonlocal-without-binding")
     def visit_nonlocal(self, node):
@@ -1085,7 +1094,8 @@ class BasicChecker(_BasicChecker):
     def open(self):
         """initialize visit variables and statistics"""
         self._tryfinallys = []
-        self.stats = self.linter.add_stats(module=0, function=0, method=0, class_=0)
+        self.stats = self.linter.add_stats(
+            module=0, function=0, method=0, class_=0)
 
     @utils.check_messages("using-constant-test", "missing-parentheses-for-call-in-test")
     def visit_if(self, node):
@@ -1201,7 +1211,8 @@ class BasicChecker(_BasicChecker):
         # side effects), else pointless-statement
         if (
             isinstance(
-                expr, (astroid.Yield, astroid.Await, astroid.Ellipsis, astroid.Call)
+                expr, (astroid.Yield, astroid.Await,
+                       astroid.Ellipsis, astroid.Call)
             )
             or (
                 isinstance(node.parent, astroid.TryExcept)
@@ -1315,7 +1326,8 @@ class BasicChecker(_BasicChecker):
 
     def _check_dangerous_default(self, node):
         # check for dangerous default values as arguments
-        is_iterable = lambda n: isinstance(n, (astroid.List, astroid.Set, astroid.Dict))
+        def is_iterable(n): return isinstance(
+            n, (astroid.List, astroid.Set, astroid.Dict))
         defaults = node.args.defaults or [] + node.args.kw_defaults or []
         for default in defaults:
             if not default:
@@ -1352,7 +1364,8 @@ class BasicChecker(_BasicChecker):
                         default.as_string(),
                         DEFAULT_ARGUMENT_SYMBOLS[value.qname()],
                     )
-                self.add_message("dangerous-default-value", node=node, args=(msg,))
+                self.add_message("dangerous-default-value",
+                                 node=node, args=(msg,))
 
     @utils.check_messages("unreachable", "lost-exception")
     def visit_return(self, node):
@@ -1452,7 +1465,8 @@ class BasicChecker(_BasicChecker):
                 when = "never"
             else:
                 when = "always"
-            self.add_message("assert-on-string-literal", node=node, args=(when,))
+            self.add_message("assert-on-string-literal",
+                             node=node, args=(when,))
 
     @utils.check_messages("duplicate-key")
     def visit_dict(self, node):
@@ -1500,7 +1514,8 @@ class BasicChecker(_BasicChecker):
     def _check_reversed(self, node):
         """ check that the argument to `reversed` is a sequence """
         try:
-            argument = utils.safe_infer(utils.get_argument_from_call(node, position=0))
+            argument = utils.safe_infer(
+                utils.get_argument_from_call(node, position=0))
         except utils.NoSuchArgumentError:
             pass
         else:
@@ -1525,7 +1540,8 @@ class BasicChecker(_BasicChecker):
 
             if isinstance(argument, astroid.Instance):
                 if any(
-                    ancestor.name == "dict" and utils.is_builtin_object(ancestor)
+                    ancestor.name == "dict" and utils.is_builtin_object(
+                        ancestor)
                     for ancestor in itertools.chain(
                         (argument._proxied,), argument._proxied.ancestors()
                     )
@@ -1872,10 +1888,12 @@ class NameChecker(_BasicChecker):
             naming_style_option_name = "%s_naming_style" % (name_type,)
             naming_style_name = getattr(self.config, naming_style_option_name)
 
-            regexps[name_type] = NAMING_STYLES[naming_style_name].get_regex(name_type)
+            regexps[name_type] = NAMING_STYLES[naming_style_name].get_regex(
+                name_type)
 
             custom_regex_setting_name = "%s_rgx" % (name_type,)
-            custom_regex = getattr(self.config, custom_regex_setting_name, None)
+            custom_regex = getattr(
+                self.config, custom_regex_setting_name, None)
             if custom_regex is not None:
                 regexps[name_type] = custom_regex
 
@@ -1903,7 +1921,8 @@ class NameChecker(_BasicChecker):
             if len(groups[min_warnings]) > 1:
                 by_line = sorted(
                     groups[min_warnings],
-                    key=lambda group: min(warning[0].lineno for warning in group),
+                    key=lambda group: min(
+                        warning[0].lineno for warning in group),
                 )
                 warnings = itertools.chain(*by_line[1:])
             else:
@@ -2359,7 +2378,8 @@ class ComparisonChecker(_BasicChecker):
         else:
             return
 
-        singleton_comparison_example = {False: "'{} is {}'", True: "'{} is not {}'"}
+        singleton_comparison_example = {
+            False: "'{} is {}'", True: "'{} is not {}'"}
 
         # True/False singletons have a special-cased message in case the user is
         # mistakenly using == or != to check for truthiness
@@ -2418,7 +2438,8 @@ class ComparisonChecker(_BasicChecker):
             return
         operator = REVERSED_COMPS.get(operator, operator)
         suggestion = "%s %s %r" % (right.as_string(), operator, left.value)
-        self.add_message("misplaced-comparison-constant", node=node, args=(suggestion,))
+        self.add_message("misplaced-comparison-constant",
+                         node=node, args=(suggestion,))
 
     def _check_logical_tautology(self, node):
         """Check if identifier is compared against itself.
@@ -2445,7 +2466,8 @@ class ComparisonChecker(_BasicChecker):
 
         if left_operand == right_operand:
             suggestion = "%s %s %s" % (left_operand, operator, right_operand)
-            self.add_message("comparison-with-itself", node=node, args=(suggestion,))
+            self.add_message("comparison-with-itself",
+                             node=node, args=(suggestion,))
 
     def _check_callable_comparison(self, node):
         operator = node.ops[0][0]
@@ -2506,7 +2528,8 @@ class ComparisonChecker(_BasicChecker):
         """Check for expressions like type(x) == Y."""
         left_func = utils.safe_infer(left.func)
         if not (
-            isinstance(left_func, astroid.ClassDef) and left_func.qname() == TYPE_QNAME
+            isinstance(
+                left_func, astroid.ClassDef) and left_func.qname() == TYPE_QNAME
         ):
             return
 
